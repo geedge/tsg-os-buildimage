@@ -1,0 +1,46 @@
+- name: "copy framework rpms to destination server"
+  copy:
+    src: "{{ role_path }}/files/"
+    dest: "/tmp/ansible_deploy/"
+
+- name: "install framework packages"
+  yum:
+    name: "{{ packages }}"
+    state: present
+    skip_broken: yes
+  vars:
+    packages:
+      - /tmp/ansible_deploy/libcjson-1.7.10.ab2896f-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libdocumentanalyze-2.0.6.2d1abe0-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libmaatframe-3.1.14.673eeb9-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libMESA_field_stat-1.0.2.6d45eed-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libMESA_field_stat2-2.9.10.72ac4f1-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libMESA_handle_logger-2.0.7.cb4ad71-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libMESA_htable-3.10.12.cf4ccfc-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libMESA_prof_load-1.0.6.c6da36a-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/librdkafka-0.11.4-1.el7.x86_64.rpm
+      - /tmp/ansible_deploy/librulescan-2.2.2.e5a4457-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libtsglua-1.0.8.0dbf2e6-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libwiredcfg-2.0.6.67ae0ab-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libWiredLB-2.0.5.4629165-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/lz4-1.7.5-3.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libbreakpad_mini-1.0.2.a56ef00-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libaws-c-common-1.0.3.fa2adf0-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libaws-c-event-stream-1.0.6.67fd944-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libaws-checksums-1.0.6.8b09ac1-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libaws-cpp-sdk-core-1.0.8.a3fe079-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libaws-cpp-sdk-s3-2.0.0.f3c33ea-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/libhos-client-cpp-1.0.24.20e6f94-2.el7.x86_64.rpm  
+
+- name: "mkdir /etc/ld.so.conf.d/"
+  file:
+    path: /etc/ld.so.conf.d/
+    state: directory
+
+- name: "copy framework.conf to destination server"
+  copy:
+    src: "{{ role_path }}/files/framework.conf"
+    dest: /etc/ld.so.conf.d/
+
+- name: "update ld"
+  command: ldconfig

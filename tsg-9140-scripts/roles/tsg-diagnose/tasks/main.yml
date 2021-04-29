@@ -1,0 +1,38 @@
+- name: "Tsg-diagnose:copy file to device"
+  copy:
+    src: '{{ role_path }}/files/'
+    dest: /tmp/ansible_deploy/
+
+- name: "Install tsg-diagnose rpm package"
+  yum:
+    name:
+      - "/tmp/ansible_deploy/tsg-diagnose-21.03.01.39beba7-1.el7.x86_64.rpm"
+    state: present
+
+- name: "Templates tsg-diagnose.config"
+  template:
+    src: "{{role_path}}/templates/tsg-diagnose.config.j2"
+    dest: /opt/tsg/tsg-diagnose/etc/tsg-diagnose.config
+  tags: template
+
+- name: "tsg-diagnose:mkdir -p .badssl_cert_dict"
+  file:
+    path: /opt/tsg/tsg-diagnose/.badssl_cert_dict
+    state: directory
+
+
+- name: "tsg-diagnose: unarchive certs"
+  unarchive:
+    src: /tmp/ansible_deploy/tsg-diagnose-certs.tgz
+    dest: /opt/tsg/tsg-diagnose/.badssl_cert_dict
+    remote_src: yes
+
+#- name: 'Tsg-diagnose service start'
+#  systemd:
+#    name: tsg-diagnose
+#    enabled: yes
+#    daemon_reload: yes
+#    state: started
+
+- name: "tsg-diagnose init rsync deamon"
+  shell: /bin/sh /opt/tsg/tsg-diagnose/deploy/rsync/init_rsyncd.sh

@@ -1,0 +1,18 @@
+- name: "redis rpm install:copy file to device"
+  copy:
+    src: '{{ role_path }}/files/'
+    dest: /tmp/ansible_deploy/
+
+
+- name: "redis rpm install:install redis"
+  yum:
+    name:
+      - "/tmp/ansible_deploy/jemalloc-3.6.0-1.el7.x86_64.rpm"
+      - "/tmp/ansible_deploy/redis40u-4.0.14-1.ius.centos7.x86_64.rpm"
+    state: present
+
+- name: "redis exporter"
+  copy:
+    src: '{{ role_path }}/files/'
+    dest: /usr/bin/
+    mode: 0755

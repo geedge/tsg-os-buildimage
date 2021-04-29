@@ -56,8 +56,9 @@ package_to_install="@base @core @debugging @directory-client @guest-agents
 
 setopt="group_package_types=mandatory,default,optional"
 
+enabled_repos="base,extras,updates"
+
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install
-yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
 
 cat > "$target"/etc/sysconfig/network <<EOF
 NETWORKING=yes
@@ -98,7 +99,8 @@ fi
 
 #tar --numeric-owner -c -C "$target" . | docker import - $name:$version
 #docker run -i -t $name:$version echo success
-
+ansible-playbook -i /root/tsg-9140-scripts/install_config/tsg_9140_host /root/tsg-9140-scripts/tsg_9140_deploy.yml
+yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
 tar --numeric-owner -c -C centos_mkroot/ . | bzip2 > input/centos-7-chroot.tar.bz2
 
 #rm -rf "$target"

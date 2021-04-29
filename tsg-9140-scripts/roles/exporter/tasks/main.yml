@@ -1,0 +1,72 @@
+- name: "copy freeipmi tools"
+  copy:
+    src: '{{ role_path }}/files/freeipmi-1.5.7-3.el7.x86_64.rpm'
+    dest: /tmp/ansible_deploy/
+
+- name: "Install freeipmi rpm package"
+  yum:
+    name:
+      - "/tmp/ansible_deploy/freeipmi-1.5.7-3.el7.x86_64.rpm"
+    state: present
+
+- name: "mkdir /opt/exporter/"
+  file:
+    path: /opt/exporter/
+    state: directory
+
+- name: "copy node_exporter"
+  copy:
+    src: '{{ role_path }}/files/node_exporter'
+    dest: /opt/exporter/node_exporter
+    mode: 0755
+
+- name: "copy systemd_exporter"
+  copy:
+    src: '{{ role_path }}/files/systemd_exporter'
+    dest: /opt/exporter/systemd_exporter
+    mode: 0755
+
+- name: "copy ipmi_exporter"
+  copy:
+    src: '{{ role_path }}/files/ipmi_exporter'
+    dest: /opt/exporter/ipmi_exporter
+    mode: 0755
+
+- name: "templates atca-exporter-node.service"
+  template:
+    src: "{{role_path}}/templates/exporter-node.service.j2"
+    dest: /usr/lib/systemd/system/exporter-node.service
+  tags: template
+
+- name: "templates atca-exporter-systemd.service"
+  template:
+    src: "{{role_path}}/templates/exporter-systemd.service.j2"
+    dest: /usr/lib/systemd/system/exporter-systemd.service
+  tags: template
+
+- name: "templates atca-exporter-ipmi.service"
+  template:
+    src: "{{role_path}}/templates/exporter-ipmi.service.j2"
+    dest: /usr/lib/systemd/system/exporter-ipmi.service
+  tags: template
+
+#- name: 'atca-exporter-node service start'
+#  systemd:
+#    name: atca-exporter-node
+#    enabled: yes
+#    daemon_reload: yes
+#    state: started
+#
+#- name: 'atca-exporter-systemd service start'
+#  systemd:
+#    name: atca-exporter-systemd
+#    enabled: yes
+#    daemon_reload: yes
+#    state: restarted
+#
+#- name: 'atca-exporter-ipmi service start'
+#  systemd:
+#    name: atca-exporter-ipmi
+#    enabled: yes
+#    daemon_reload: yes
+#    state: restarted

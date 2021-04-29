@@ -1,0 +1,92 @@
+---
+- name: "copy mrzcpd to destination server"
+  copy:
+    src: "{{ role_path }}/files/"
+    dest: "/tmp/ansible_deploy/"
+
+- name: "install mrzcpd"
+  yum:
+    name: /tmp/ansible_deploy/mrzcpd-4.3.30.4627eb7-1.el7.x86_64.rpm
+    state: present
+
+- name: "update sysconfig/mrzcpd"
+  template:
+    src: "{{ role_path }}/templates/mrzcpd.j2"
+    dest: /etc/sysconfig/mrzcpd
+
+- name: "update mrglobal.conf - TSG9140"
+  template:
+    src: "{{ role_path }}/templates/tsg_9140/mrglobal.conf.tsg_9140.j2"
+    dest: /opt/mrzcpd/etc/mrglobal.conf
+
+- name: "copy mrapp.sapp4.conf to destination server"
+  template:
+    src: "{{ role_path }}/templates/mrapp.sapp4.conf"
+    dest: /opt/mrzcpd/etc/mrapp.sapp4.conf
+
+- name: "update mrtunnat.conf.adc_inline"
+  template:
+    src: "{{ role_path }}/templates/tsg_9140/mrtunnat.conf.tsg_9140.j2"
+    dest: /opt/mrzcpd/etc/mrtunnat.conf
+
+#- name: "enable mrenv"
+#  systemd:
+#    name: mrenv
+#    enabled: yes
+#    daemon_reload: yes
+#  when:
+#    - tsg_access_type != 0
+#
+#- name: "enable mrzcpd"
+#  systemd:
+#    name: mrzcpd
+#    enabled: yes
+#    daemon_reload: yes
+#  when:
+#    - tsg_access_type != 0
+#
+#- name: "enable prometheus output - monit_device"
+#  systemd:
+#    name: mrapm_device
+#    enabled: yes
+#    daemon_reload: yes
+#
+#- name: "enable prometheus output - monit_stream"
+#  systemd:
+#    name: mrapm_stream
+#    enabled: yes
+#    daemon_reload: yes
+#
+#- name: "enable mrtunnat on master"
+#  systemd:
+#    name: mrtunnat
+#    enabled: no
+#    daemon_reload: yes
+#  when:
+#    - nic_traffic_mirror is not defined
+#    - tsg_access_type != 0
+#
+#- name: "disable mrtunnat on slave"
+#  systemd:
+#    name: mrtunnat
+#    enabled: no
+#    daemon_reload: yes
+#  when: nic_traffic_mirror is defined
+#
+#- name: "mask mrzcpd on server_tun_mode"
+#  systemd:
+#    name: mrzcpd
+#    enabled: no
+#    masked: yes
+#    daemon_reload: yes
+#  when:
+#    - tsg_access_type == 0
+#
+#- name: "mask mrtunnat on server_tun_mode"
+#  systemd:
+#    name: mrtunnat
+#    enabled: no
+#    masked: yes
+#    daemon_reload: yes
+#  when:
+#    - tsg_access_type == 0

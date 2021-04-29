@@ -1,0 +1,16 @@
+---
+- name: "copy tsg_app rpms to destination server"
+  copy:
+    src: "{{ role_path }}/files/"
+    dest: /tmp/ansible_deploy/
+
+- name: "install tsg_app packages"
+  yum:
+    name: "{{ app_packages }}"
+    state: present
+    skip_broken: yes
+  vars:
+    app_packages:
+      - /tmp/ansible_deploy/app_sketch_local-2.0.2.edf4fb0-2.el7.x86_64.rpm
+#  when: tsg_app_enable == 1
+

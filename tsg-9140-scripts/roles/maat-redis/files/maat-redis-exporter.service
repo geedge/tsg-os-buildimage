@@ -1,0 +1,11 @@
+[Unit]
+Description=Redis Exporter for MAAT-REDIS
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/redis_exporter -redis.addr=redis://localhost:7002 -redis-only-metrics
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
+
