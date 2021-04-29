@@ -1,0 +1,203 @@
+###################################################################################################
+# NOTE:
+#    The format of this file is toml (https://github.com/cktan/tomlc99)
+#    to make vim editor display colorful and human readable,
+#    you can create a symbolic links named sapp.ini to sapp.toml, ln -sf sapp.toml sapp.ini
+###################################################################################################
+
+[SYSTEM]
+instance_name = "sapp4"
+
+[CPU]
+worker_threads=22
+send_only_threads_max=1
+### note, bind_mask, if you do not want to bind thread to special CPU core, keep it empty as []
+#bind_mask=[14-27,42-51]
+#bind_mask=[14,15,16,17,18,19,20,21,22,23,24,25,26,27,42,43,44,45,46,47,48,49,50,51]
+bind_mask=[15,16,17,18,19,20,21,22,23,24,25,26,27,42,43,44,45,46,47,48,49,50,51]
+
+[MEM]
+dictator_enable=0
+
+[PACKET_IO]
+
+    [overlay_tunnel_definition]
+### note, since 2020-10-01, L2-L3 tunnel(VLAN,MPLS,PPPOE,etc.) is process and offload by mrtunnat,
+### after 2020-10-01, sapp support L2-L3 tunnel(VLAN,MPLS,PPPOE,etc.) without mrtunnat.
+    l2_l3_tunnel_support=1
+
+### note, optional value is [none, vxlan]
+        overlay_mode=vxlan
+        stream_compare_layer_cfg_file="etc/stream_compare_layer.conf"
+    vlan_flipping_cfg_file="etc/vlan_flipping_map.conf"
+    asymmetric_presence_layer_cfg_file="etc/asymmetric_presence_layer.conf"
+    asymmetric_addr_layer_cfg_file="etc/asymmetric_addr_layer.conf"
+    prune_inject_layer_cfg_file="etc/prune_inject_layer.conf"
+
+    [packet_io.feature]
+
+		### note, used to represent inbound or outbound direction value,
+	### because it comes from Third party device, so it needs to be specified manually,
+	### if inbound_route_dir=1, then outbound_route_dir=0, vice versa,
+	### in other words, outbound_route_dir = 1 ^ inbound_route_dir;
+	inbound_route_dir=1
+
+### note, BSD_packet_filter, if you do not want to set any filter rule, keep it empty as ""
+    BSD_packet_filter=""
+
+### note, same as tcpdump -Q/-P arg, possible values are `in', `out' and `inout', default is "in"
+    pcap_capture_direction="in"
+
+
+### note, depolyment.mode options: [sys_route, vxlan_by_inline_device, raw_ethernet_single_gateway, raw_ethernet_multi_gateway]
+### sys_route: send ip(ipv6) packet by system route table, this is default mode in mirror mode;
+### vxlan_by_inline_device: encapsulation inject packet with vxlan, and then send to inline device by udp socket.
+### raw_ethernet_single_gateway: send layer2 ethernet packet to specific gateway in same broadcast domain.
+### raw_ethernet_multi_gateway: send layer2 ethernet packet to multiple gateway in same broadcast domain.
+    inject_pkt_mode=sys_route
+
+### note, this config is valid if inject_pkt_mode==vxlan_by_inline_device, means udp socket src port.
+    inject_mode_inline_device_sport=54789
+
+### note, this config is valid if inject_pkt_mode==raw_ethernet_single_gateway.
+    inject_mode_single_gateway_device="eth1"
+### inject_mode_single_gateway_src_mac has lower priority than get smac from inject_mode_single_gateway_device
+    inject_mode_single_gateway_src_mac="00:11:22:77:88:99"
+    inject_mode_single_gateway_dst_mac="00:11:22:33:44:55"
+    dumpfile_sleep_time_before_exit=3
+
+### note, depolyment.mode options: [mirror, inline, transparent]
+    [packet_io.depolyment]
+        mode=inline
+
+### note, interface.type options: [pag,pcap,marsio]
+    [packet_io.internal.interface]
+        type=marsio
+        name=enp1s2
+
+    [packet_io.external.interface]
+        type=pcap
+    name=lo
+
+    [packet_io.polling]
+### note, polling_priority = call sapp_recv_pkt every call polling_entry times,
+    polling_priority=1
+
+[PROTOCOL_FEATURE]
+    ipv6_decapsulation_enabled=1
+    ipv6_send_packet_enabled=1
+    tcp_drop_pure_ack_pkt=0
+    tcp_syn_option_parse_enabled=1
+    skip_not_ip_layer_over_eth=0
+    treat_vlan_as_mac_in_mac=0
+    reverse_ethernet_addr=1
+
+
+[STREAM]
+### note, stream_id_base_time format is "%Y-%m-%d %H:%M:%S"
+    stream_id_base_time="2018-08-08 08:00:00"
+    [stream.tcp]
+    max=100000
+    timeout=30
+    syn_mandatory=1
+    reorder_pkt_max=128
+    analyse_option_enabled=1
+    tuple4_reuse_time_interval=30
+
+    meaningful_statistics_minimum_pkt=3
+    meaningful_statistics_minimum_byte=5
+
+        [stream.tcp.inject]
+        link_mss=1460
+
+        [stream.tcp.inject.rst]
+        auto_remedy=0
+        number=3
+        signature_enabled=1
+        signature_seed1=65535
+        signature_seed2=13
+        remedy_kill_tcp_by_inline_device=0
+
+    [stream.udp]
+    max=100000
+    timeout=60
+    meaningful_statistics_minimum_pkt=3
+    meaningful_statistics_minimum_byte=5
+
+
+[PROFILING]
+    [profiling.pkt_latency]
+    enabled=0
+### note, threshold unit is microseconds (us)
+    threshold=1000000
+
+    [profiling.sanity_check]
+    raw_pkt_broken_enabled=0
+    symbol_conflict_enabled=0
+
+    [profiling.log]
+    level=40
+    interval=5
+
+        [profiling.log.local]
+        enabled=1
+### note, if "file_truncate_open_enabled=1", file will be truncated, otherwise open the file for appending.
+        file_truncate_enabled = 1
+        log_file_name = "fs2_sysinfo.log"
+        log_conf_name = "etc/sapp_log.conf"
+        [profiling.log.remote]
+        enabled=1
+        server_ip=127.0.0.1
+        server_port=8100
+
+        [profiling.log.remote.field_stat2]
+### note, is valid when "remote_send_out_type=field_stat2"
+### note, metric_type option value: [default, json]
+        metric_type = default
+        app_name=sapp
+
+        [profiling.log.prometheus]
+        prometheus_enabled=1
+        prometheus_port=9273
+        prometheus_url_path="/metrics"
+
+[TOOLS]
+    [tools.pkt_dump]
+    enabled=1
+### note, mode options value:[storage, udp_socket]
+    mode=udp_socket
+    BSD_packet_filter=""
+
+        [tools.pkt_dump.threads]
+### note, if you want enable pkt dump in all thread, set dump_thread_all_enabled=1, then 'dump_thread_id' is obsoleted.
+###       if dump_thread_all_enabled=0, then use dump_thread_id to specify separate specified thread index.
+        all_threads_enabled=1
+
+### note, dump_thread_id start from 0, max is CPU.worker_threads-1
+        dump_thread_id=[0,1,2,3,4]
+
+        [tools.pkt_dump.udp]
+        command_port=9345
+
+        [tools.pkt_dump.storage]
+### note, file path must be double quotation mark extension, for example,  path="/dev/shm/pkt_dump"
+        path="/dev/shm/pkt_dump"
+### note, file size unit: MB
+        file_size_max_per_thread=10000
+
+### note:
+### These configurations format is complex and difficult to describe with toml grammar,
+### so, create a Independent config file to description specific information.
+[SPECIAL_CONFIG_LINK]
+    project_list_path="./etc/project_list.conf"
+    plugin_path="./etc/plugin.conf"
+    entrylist_path="./etc/entrylist.conf"
+    send_raw_pkt_path="./etc/send_raw_pkt.conf"
+    vxlan_sport_service_map_path="./etc/vxlan_sport_service_map.conf"
+
+[breakpad]
+    disable_coredump=1
+    enable_breakpad=1
+    breakpad_minidump_dir="/tmp/crashreport"
+    enable_breakpad_upload=1
+    breakpad_upload_url="http://127.0.0.1:9000/api/2/minidump/?sentry_key=3556bac347c74585a994eb6823faf5c6"

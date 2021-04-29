@@ -1,0 +1,11 @@
+[Unit]
+Description=IPMI Exporter
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/exporter/ipmi_exporter
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

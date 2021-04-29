@@ -1,0 +1,11 @@
+[Unit]
+Description=Systemd Exporter
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/exporter/systemd_exporter --web.disable-exporter-metrics
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

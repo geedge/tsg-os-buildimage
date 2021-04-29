@@ -1,0 +1,11 @@
+---
+- name: "copy x710 drive rpms to destination server"
+  copy:
+    src: "{{ role_path }}/files/"
+    dest: "/tmp/x710_drive/"
+
+- name: "install x710 drive"
+  yum:
+    name:
+      - /tmp/x710_drive/i40e-2.15.9-1.x86_64.rpm
+    state: present

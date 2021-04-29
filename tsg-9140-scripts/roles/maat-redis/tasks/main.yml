@@ -1,0 +1,31 @@
+- name: "copy maat-redis file to dest"
+  copy:
+    src: "{{ role_path }}/files/maat-redis.service"
+    dest: "/usr/lib/systemd/system"
+    mode: 0644
+
+- name: "copy maat-redis exporter file to dest"
+  copy:
+    src: "{{ role_path }}/files/maat-redis-exporter.service"
+    dest: "/usr/lib/systemd/system"
+    mode: 0644
+
+- name: "Template the maat-redis.conf"
+  template:
+    src: "{{ role_path }}/templates/maat-redis.conf.j2"
+    dest: /etc/maat-redis.conf
+  tags: template
+
+- name: "start maat-redis"
+  systemd:
+    name: maat-redis.service
+    state: started
+    daemon_reload: yes
+    enabled: yes
+
+#- name: "start maat-redis exporter"
+#  systemd:
+#    name: maat-redis-exporter.service
+#    state: started
+#    daemon_reload: yes
+#    enabled: yes
