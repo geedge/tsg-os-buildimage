@@ -1,6 +1,6 @@
 [tsg_9140]
 centos7 ansible_connection=docker
 [tsg_9140_init]
-192.168.40.85
+127.0.0.1
 [tsg_9140_chroot]
-/root/geedge-work/tsg-os-installer/centos_mkroot/  ansible_connection=chroot
+centos_mkroot/  ansible_connection=chroot

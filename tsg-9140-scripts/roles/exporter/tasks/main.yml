@@ -50,23 +50,4 @@
     dest: /usr/lib/systemd/system/exporter-ipmi.service
   tags: template
 
-#- name: 'atca-exporter-node service start'
-#  systemd:
-#    name: atca-exporter-node
-#    enabled: yes
-#    daemon_reload: yes
-#    state: started
-#
-#- name: 'atca-exporter-systemd service start'
-#  systemd:
-#    name: atca-exporter-systemd
-#    enabled: yes
-#    daemon_reload: yes
-#    state: restarted
-#
-#- name: 'atca-exporter-ipmi service start'
-#  systemd:
-#    name: atca-exporter-ipmi
-#    enabled: yes
-#    daemon_reload: yes
-#    state: restarted
+
