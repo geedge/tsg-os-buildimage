@@ -14,9 +14,8 @@ tmpfs                   /dev/shm                tmpfs   defaults        0 0
 devpts                  /dev/pts                devpts  gid=5,mode=620  0 0
 sysfs                   /sys                    sysfs   defaults        0 0
 proc                    /proc                   proc    defaults        0 0
-/dev/sda3               /config                 ext4    defaults        1 1
+${1}               	    /                       ext4    defaults        1 1
 /dev/sda4               /data                   ext4    defaults        1 1
-${1}               	/                       ext4    defaults        1 1
 EOF2
 ) > /etc/fstab
 

@@ -3,68 +3,54 @@
 blk_dev=/dev/sda
 random_dev=/dev/urandom
 root_disk=hd0
-distro_part=5
-distro_dev="/dev/sda${distro_part}"
+distro_part=3
+distro_dev="${blk_dev}${distro_part}"
 distro_mnt=/mnt/distro
 onie_root_dir=/mnt/onie-boot/onie
-distro_config_mnt=/mnt/distro_config
 kernel_args=""
 grub_serial_command=""
-
-vol_label_tsg_os_sysroot_primary="TSG-OS-SYSROOT-1"
-vol_label_tsg_os_sysroot_secondry="TSG-OS-SYSROOT-2"
-vol_label_tsg_os_config="TSG-OS-CONFIG"
-vol_label_tsg_os_data="TSG-OS-DATA"
-exp_part_tsg_os_config=3
-exp_part_tsg_os_data=4
-exp_part_tsg_os_sysroot_primary=5
-exp_part_tsg_os_sysroot_secondry=6
-size_part_tsg_os_config="128M"
-size_part_tsg_os_data="128M"
-size_part_tsg_os_sysroot_primary="6096M"
-size_part_tsg_os_sysroot_secondry="48M"
-dev_part_tsg_os_sysroot_primary="/dev/sda${exp_part_tsg_os_sysroot_primary}"
-dev_part_tsg_os_sysroot_secondry="/dev/sda${exp_part_tsg_os_sysroot_secondry}"
-dev_part_tsg_os_config="/dev/sda${exp_part_tsg_os_config}"
-dev_part_tsg_os_data="/dev/sda${exp_part_tsg_os_data}"
 
 DISTR0_VER="%%DISTR0_VER%%"
 MACHINE_ID="%%MACHINE_ID%%"
 CHROOT_PKG="%%CHROOT_PKG%%"
 
-check_is_upgrade() {
+vol_label_tsg_os_sysroot="TSG-OS-SYSROOT"
+vol_label_tsg_os_data="TSG-OS-DATA"
+exp_part_tsg_os_sysroot=3
+exp_part_tsg_os_data=4
+size_part_tsg_os_sysroot="6096M"
+size_part_tsg_os_data="128M"
+dev_part_tsg_os_sysroot="/dev/sda${exp_part_tsg_os_sysroot}"
+dev_part_tsg_os_data="/dev/sda${exp_part_tsg_os_data}"
+tsg_os_efi_prefix="TSG-OS"
+tsg_os_efi_label="TSG-OS: v${DISTR0_VER} (${MACHINE_ID})"
+
+# auto-detect whether BIOS or UEFI
+if [ -d "/sys/firmware/efi/efivars" ] ; then
+    firmware="uefi"
+else
+    firmware="bios"
+fi
+
+check_is_upgrade()
+{
+  part_tsg_os_sysroot=$(sgdisk -p $blk_dev | grep -e "$vol_label_tsg_os_sysroot" | awk '{print $1}')
   part_tsg_os_data=$(sgdisk -p $blk_dev | grep -e "$vol_label_tsg_os_data" | awk '{print $1}')
-  part_tsg_os_config=$(sgdisk -p $blk_dev | grep -e "$vol_label_tsg_os_config" | awk '{print $1}')
-  part_tsg_os_sysroot_primary=$(sgdisk -p $blk_dev | grep -e "$vol_label_tsg_os_sysroot_primary" | awk '{print $1}')
-  part_tsg_os_sysroot_secondry=$(sgdisk -p $blk_dev | grep -e "$vol_label_tsg_os_sysroot_secondry" | awk '{print $1}')
 
-  if [ "$part_tsg_os_data" != "$exp_part_tsg_os_data" ]; then return 1
-  elif [ "$part_tsg_os_config" != "$exp_part_tsg_os_config" ]; then return 1
-  elif [ "$part_tsg_os_sysroot_primary" != "$exp_part_tsg_os_sysroot_primary" ]; then return 1
-  elif [ "$part_tsg_os_sysroot_secondry" != "$exp_part_tsg_os_sysroot_secondry" ]; then return 1
+  if [ "$part_tsg_os_sysroot" != "$exp_part_tsg_os_sysroot" ]; then return 1
+  elif [ "$part_tsg_os_data" != "$exp_part_tsg_os_data" ]; then return 1
   fi
-
   return 0
 }
 
 format_sysroot_partitions() {
-  mkfs.ext4 -L "TGS-OS-SYSROOT-1" $dev_part_tsg_os_sysroot_primary || {
-    echo "ERROR: Unable to create file system on \$dev_part_tsg_os_sysroot_primary"
-    exit 1
-  }
-
-  mkfs.ext4 -L "TGS-OS-SYSROOT-2" $dev_part_tsg_os_sysroot_secondry || {
-    echo "ERROR: Unable to create file system on \$dev_part_tsg_os_sysroot_secondry"
+  mkfs.ext4 -L "TGS-OS-SYSROOT-1" $dev_part_tsg_os_sysroot || {
+    echo "ERROR: Unable to create file system on \$dev_part_tsg_os_sysroot"
     exit 1
   }
 }
 
 format_presistent_partitions() {
-  mkfs.ext4 -L "TSG-OS-CONFIG" $dev_part_tsg_os_config || {
-    echo "ERROR: Unable to create file system on \$dev_part_tsg_os_config"
-    exit 1
-  }
-
   mkfs.ext4 -L "TSG-OS-DATA" $dev_part_tsg_os_data || {
     echo "ERROR: Unable to create file system on \$dev_part_tsg_os_data"
     exit 1
@@ -80,11 +66,11 @@ create_gpt_partitions() {
 
   partprobe ${blk_dev}
 
-  echo "Create partition TSG-OS-CONFIG."
+  echo "Create partition TSG-OS-SYSROOT."
   begin=$(sgdisk -F $blk_dev)
-  sgdisk --new=${exp_part_tsg_os_config}:${begin}:+${size_part_tsg_os_config} \
-         --change-name=${exp_part_tsg_os_config}:"TSG-OS-CONFIG" ${blk_dev} || {
-        echo "ERROR: Unable to create partition TSG-OS-CONFIG on $blk_dev"
+  sgdisk --new=${exp_part_tsg_os_sysroot}:${begin}:+${size_part_tsg_os_sysroot} \
+         --change-name=${exp_part_tsg_os_sysroot}:"TSG-OS-SYSROOT" ${blk_dev} || {
+        echo "ERROR: Unable to create partition TSG-OS-SYSROOT on $blk_dev"
         exit 1
   }
 
@@ -96,27 +82,91 @@ create_gpt_partitions() {
         exit 1
   }
 
-  echo "Create partition TSG-OS-SYSROOT-1."
-  begin=$(sgdisk -F $blk_dev)
-  sgdisk --new=${exp_part_tsg_os_sysroot_primary}:${begin}:+${size_part_tsg_os_sysroot_primary} \
-         --change-name=${exp_part_tsg_os_sysroot_primary}:"TSG-OS-SYSROOT-1" ${blk_dev} || {
-        echo "ERROR: Unable to create partition TSG-OS-SYSROOT-1 on $blk_dev"
-        exit 1
-  }
-
-  echo "Create partition TSG-OS-SYSROOT-2."
-  begin=$(sgdisk -F $blk_dev)
-  sgdisk --new=${exp_part_tsg_os_sysroot_secondry}:${begin}:+${size_part_tsg_os_sysroot_secondry} \
-         --change-name=${exp_part_tsg_os_sysroot_secondry}:"TSG-OS-SYSROOT-2" ${blk_dev} || {
-        echo "ERROR: Unable to create partition TSG-OS-SYSROOT-2 on $blk_dev"
-        exit 1
-  }
-
   partprobe ${blk_dev}
 }
 
+# Install legacy BIOS GRUB for DEMO OS
+install_grub()
+{
+    local demo_mnt="$1"
+    local blk_dev="$2"
+
+    # get running machine from conf file
+    [ -r /etc/machine.conf ] && . /etc/machine.conf
+
+    local grub_target="i386-pc"
+
+    grub-install --target="$grub_target" \
+        --boot-directory="$demo_mnt" --recheck "$blk_dev" || {
+        echo "ERROR: grub-install failed on: $blk_dev"
+        exit 1
+    }
+}
+
+# Install UEFI BIOS GRUB for DEMO OS
+install_uefi_grub()
+{
+    local demo_mnt="$1"
+    local blk_dev="$2"
+
+    # get running machine from conf file
+    [ -r /etc/machine.conf ] && . /etc/machine.conf
+
+    # Look for the EFI system partition UUID on the same block device as
+    # the ONIE-BOOT partition.
+    local uefi_part=0
+    for p in $(seq 8) ; do
+        if sgdisk -i $p $blk_dev | grep -q C12A7328-F81F-11D2-BA4B-00A0C93EC93B ; then
+            uefi_part=$p
+            break
+        fi
+    done
+
+    [ $uefi_part -eq 0 ] && {
+        echo "ERROR: Unable to determine UEFI system partition"
+        exit 1
+    }
+
+    # erase any related EFI BootOrder variables from NVRAM.
+    for b in $(efibootmgr | grep "$tsg_os_efi_prefix" | awk '{ print $1 }') ; do
+        local num=${b#Boot}
+        # Remove trailing '*'
+        num=${num%\*}
+        efibootmgr -b $num -B > /dev/null 2>&1
+    done
+
+    # Regular GRUB install
+    grub_install_log=$(mktemp)
+    grub-install \
+        --no-nvram \
+        --bootloader-id="$tsg_os_efi_prefix" \
+        --efi-directory="/boot/efi" \
+        --boot-directory="$demo_mnt" \
+        --recheck \
+        "$blk_dev" > /$grub_install_log 2>&1 || {
+        echo "ERROR: grub-install failed on: $blk_dev"
+        cat $grub_install_log && rm -f $grub_install_log
+        exit 1
+    }
+    rm -f $grub_install_log
+
+    # Configure EFI NVRAM Boot variables.  --create also sets the
+    # new boot number as active.
+    efibootmgr --quiet --create \
+        --label "$tsg_os_efi_label" \
+        --disk $blk_dev --part $uefi_part \
+        --loader "/EFI/$tsg_os_efi_prefix/$onie_uefi_boot_loader" || {
+        echo "ERROR: efibootmgr failed to create new boot variable on: $blk_dev"
+        exit 1
+    }
+}
+
+
+############################### START AT HERE #########################################
+lib_dir="/lib/onie"
+. $lib_dir/onie-blkdev-common
+
 cd $(dirname $0)
-# bonk out on errors
 
 if check_is_upgrade; then
    echo "Upgrading TSG-OS, the config and data partitions will be keeped in $blk_dev."
@@ -156,6 +206,7 @@ mount -t ext4 -o defaults,rw $distro_dev $distro_mnt || {
     exit 1
 }
 
+# bonk out on errors
 set -ex
 
 cp -f distro-setup.sh ${distro_mnt}
@@ -171,8 +222,8 @@ mount -t sysfs sys ${distro_mnt}/sys
 cp -a ${blk_dev} ${distro_mnt}/${blk_dev}
 cp -a ${random_dev} ${distro_mnt}/${random_dev}
 
-mkdir -p ${distro_mnt}/config
-mount -t ext4 /dev/sda${exp_part_tsg_os_config} ${distro_mnt}/config
+mkdir -p ${distro_mnt}/data
+mount -t ext4 /dev/sda${exp_part_tsg_os_data} ${distro_mnt}/data
 
 echo "Setting up TSG-OS sysroot .."
 chroot ${distro_mnt} /distro-setup.sh ${distro_dev}
@@ -183,14 +234,16 @@ chroot ${distro_mnt} /distro-setup.sh ${distro_dev}
 
 umount ${distro_mnt}/proc
 umount ${distro_mnt}/sys
-umount ${distro_mnt}/config
+umount ${distro_mnt}/data
 
 # Install boot loader
 echo "Install GRUB2 bootloader .."
-grub-install --boot-directory="${distro_mnt}/boot" --recheck "${blk_dev}" || {
-        echo "ERROR: grub-install failed on: ${blk_dev}"
-        exit 1
-}
+
+if [ "$firmware" = "uefi" ] ; then
+    install_uefi_grub "${distro_mnt}" "$blk_dev"
+else
+    install_grub "${distro_mnt}" "$blk_dev"
+fi
 
 # Prepare boot loader configuration file
 grub_cfg=$(mktemp)
