@@ -1,4 +1,0 @@
-- hosts: tsg_9140_init
-  remote_user: root
-  roles:
-    - {role: tsg-9140-template-config, tags: tsg-9140-template-config}

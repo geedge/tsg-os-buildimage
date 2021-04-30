@@ -1,5 +1,33 @@
 ---
+- name: "set enp1s0 up and NM_CONTROLLED=no"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-enp1s0.toml.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-enp1s0
+  tags: template
+
+- name: "set enp130s0 up and NM_CONTROLLED=no"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-enp130s0.toml.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-enp130s0
+  tags: template
+
+- name: "set ifup-local "
+  template:
+    src: "{{ role_path }}/templates/ifup-local.toml.j2"
+    dest: /sbin/ifup-local
+    mode: 0777
+  tags: template
+
+- name: "set ifdown-local "
+  template:
+    src: "{{ role_path }}/templates/ifdown-local.toml.j2"
+    dest: /sbin/ifdown-local
+    mode: 0777
+  tags: template
+
 - name: "copy tsg_9140_system_init"
   copy:
     src: "{{ role_path }}/files/"
     dest: /root/
+
+

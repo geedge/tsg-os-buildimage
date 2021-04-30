@@ -1,0 +1,4 @@
+- hosts: tsg_9140_init
+  remote_user: root
+  roles:
+    - {role: tsg_9140_system_init, tags: tsg_9140_system_init}

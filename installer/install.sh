@@ -21,8 +21,8 @@ exp_part_tsg_os_sysroot_primary=5
 exp_part_tsg_os_sysroot_secondry=6
 size_part_tsg_os_config="128M"
 size_part_tsg_os_data="128M"
-size_part_tsg_os_sysroot_primary="4096M"
-size_part_tsg_os_sysroot_secondry="2048M"
+size_part_tsg_os_sysroot_primary="6096M"
+size_part_tsg_os_sysroot_secondry="48M"
 dev_part_tsg_os_sysroot_primary="/dev/sda${exp_part_tsg_os_sysroot_primary}"
 dev_part_tsg_os_sysroot_secondry="/dev/sda${exp_part_tsg_os_sysroot_secondry}"
 dev_part_tsg_os_config="/dev/sda${exp_part_tsg_os_config}"
@@ -43,7 +43,7 @@ check_is_upgrade() {
   elif [ "$part_tsg_os_sysroot_primary" != "$exp_part_tsg_os_sysroot_primary" ]; then return 1
   elif [ "$part_tsg_os_sysroot_secondry" != "$exp_part_tsg_os_sysroot_secondry" ]; then return 1
   fi
-  
+
   return 0
 }
 
@@ -120,7 +120,7 @@ cd $(dirname $0)
 
 if check_is_upgrade; then
    echo "Upgrading TSG-OS, the config and data partitions will be keeped in $blk_dev."
-  
+
    format_sysroot_partitions || {
        echo "ERROR: Unable to format sysroot partition on $blk_dev, TSG-OS install failed."
        exit 1
