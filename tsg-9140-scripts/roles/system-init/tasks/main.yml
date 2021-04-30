@@ -1,23 +1,4 @@
 ---
-- name: "get slot info"
-  shell: ipmitool picmg addrinfo
-  register: slot_info
-  ignore_errors: True
-
-- debug:
-    var: slot_info
-
-- name: "echo slot info"
-  shell: /bin/echo "{{ "192.168.1." }}" > /root/1.txt
-
-- name: "set atca interior netwok ip addr"
-  vars:
-      ipaddr: "{{ slot_info.stdout_lines[0][22] | int + 16}}"
-  template:
-    src: "{{ role_path }}/templates/ifcfg-enp131s0f0.toml.j2"
-    dest: /etc/sysconfig/network-scripts/ifcfg-enp131s0f0
-  tags: template
-
 - name: "set enp1s0 up and NM_CONTROLLED=no"
   template:
     src: "{{ role_path }}/templates/ifcfg-enp1s0.toml.j2"
@@ -43,3 +24,10 @@
     dest: /sbin/ifdown-local
     mode: 0777
   tags: template
+
+- name: "copy tsg_9140_system_init"
+  copy:
+    src: "{{ role_path }}/files/"
+    dest: /root/
+
+

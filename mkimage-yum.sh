@@ -52,7 +52,7 @@ done
 
 package_to_install="@base @core @debugging @directory-client @guest-agents
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management
-                    grub2 kernel kernel-devel"
+                    grub2 kernel kernel-devel epel-release ansible"
 
 setopt="group_package_types=mandatory,default,optional"
 
@@ -99,8 +99,12 @@ fi
 
 #tar --numeric-owner -c -C "$target" . | docker import - $name:$version
 #docker run -i -t $name:$version echo success
-ansible-playbook -i /root/tsg-9140-scripts/install_config/tsg_9140_host /root/tsg-9140-scripts/tsg_9140_deploy.yml
+cp -a /dev/urandom centos_mkroot/dev/
+cp -a /dev/random centos_mkroot/dev/
+#tar zcvf centos_mkroot.tar.gz centos_mkroot/
+ansible-playbook -i tsg-9140-scripts/install_config/tsg_9140_host tsg-9140-scripts/tsg_9140_deploy.yml
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
+rm -rf centos_mkroot/tmp/*
 tar --numeric-owner -c -C centos_mkroot/ . | bzip2 > input/centos-7-chroot.tar.bz2
 
 #rm -rf "$target"

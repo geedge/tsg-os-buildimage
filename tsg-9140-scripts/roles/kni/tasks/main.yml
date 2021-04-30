@@ -17,8 +17,4 @@
     dest: /home/mesasoft/sapp_run/etc/kni/kni.conf
   tags: template
 
-#- name: "enable sapp"
-#  systemd:
-#    name: sapp
-#    enabled: yes
-#    daemon_reload: yes
+

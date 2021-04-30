@@ -21,9 +21,4 @@
     dest: /usr/lib/systemd/system
     mode: 0644
 
-#- name: "Start telegraf"
-#  systemd:
-#    name: telegraf_statistic.service
-#    state: started
-#    enabled: yes
-#    daemon_reload: yes
+

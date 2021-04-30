@@ -1,0 +1,132 @@
+---
+##################### kernel #####################
+
+- name: "set kernel-ml as default kernel"
+  command: /usr/sbin/grub2-set-default 0
+#  when: t_kernel_ml.changed
+
+- name: "copy /etc/default/grub"
+  copy:
+    src: "{{ role_path }}/files/grub"
+    dest: "/etc/default"
+#  when:
+#    - tsg_access_type == 4 or tsg_access_type == 5
+#    - t_kernel_ml.changed
+
+- name: "BIOS:grub2-mkconfig"
+  shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+#  when:
+#    - tsg_access_type == 4 or tsg_access_type == 5
+#    - t_kernel_ml.changed
+
+- name: "UEFI:grub2-mkconfig"
+  shell: grub2-mkconfig  -o /boot/efi/EFI/centos/grub.cfg
+#  when:
+#    - tsg_access_type == 4 or tsg_access_type == 5
+#    - t_kernel_ml.changed
+
+
+##################### mrzcpd #####################
+- name: "enable mrenv"
+  systemd:
+    name: mrenv
+    enabled: yes
+    daemon_reload: yes
+
+- name: "enable mrzcpd"
+  systemd:
+    name: mrzcpd
+    enabled: yes
+    daemon_reload: yes
+
+- name: "enable prometheus output - monit_device"
+  systemd:
+    name: mrapm_device
+    enabled: yes
+    daemon_reload: yes
+
+- name: "enable prometheus output - monit_stream"
+  systemd:
+    name: mrapm_stream
+    enabled: yes
+    daemon_reload: yes
+
+##################### sapp #####################
+- name: "enable sapp"
+  systemd:
+    name: sapp
+    enabled: yes
+    daemon_reload: yes
+
+##################### kni #####################
+- name: "enable sapp"
+  systemd:
+    name: sapp
+    enabled: yes
+    daemon_reload: yes
+
+##################### certstore #####################
+- name: "start certstore"
+  systemd:
+    name: certstore.service
+    state: started
+    enabled: yes
+    daemon_reload: yes
+
+##################### cert-redis #####################
+- name: "start cert-redis"
+  systemd:
+    name: cert-redis.service
+    state: started
+    daemon_reload: yes
+    enabled: yes
+
+##################### tfe #####################
+- name: "enable tfe-env"
+  systemd:
+    name: tfe-env
+    enabled: yes
+    daemon_reload: yes
+
+- name: "enable tfe"
+  systemd:
+    name: tfe
+    enabled: yes
+    daemon_reload: yes
+
+##################### telegraf #####################
+- name: "Start telegraf"
+  systemd:
+    name: telegraf_statistic.service
+    state: started
+    enabled: yes
+    daemon_reload: yes
+
+##################### exporter #####################
+- name: 'atca-exporter-node service start'
+  systemd:
+    name: atca-exporter-node
+    enabled: yes
+    daemon_reload: yes
+    state: started
+
+- name: 'atca-exporter-systemd service start'
+  systemd:
+    name: atca-exporter-systemd
+    enabled: yes
+    daemon_reload: yes
+    state: restarted
+
+- name: 'atca-exporter-ipmi service start'
+  systemd:
+    name: atca-exporter-ipmi
+    enabled: yes
+    daemon_reload: yes
+    state: restarted
+##################### Tsg-diagnose #####################
+- name: 'Tsg-diagnose service start'
+  systemd:
+    name: tsg-diagnose
+    enabled: yes
+    daemon_reload: yes
+    state: started

@@ -29,9 +29,4 @@
     dest: /etc/systemd/system/certstore.service.d/
     mode: 0644
 
-#- name: "start certstore"
-#  systemd:
-#    name: certstore.service
-#    state: started
-#    enabled: yes
-#    daemon_reload: yes
+
