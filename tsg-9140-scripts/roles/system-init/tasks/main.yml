@@ -11,6 +11,12 @@
     dest: /etc/sysconfig/network-scripts/ifcfg-enp130s0
   tags: template
 
+- name: "set enp131s0f0 up and NM_CONTROLLED=no"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-enp131s0f0.toml.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-enp131s0f0
+  tags: template
+
 - name: "set ifup-local "
   template:
     src: "{{ role_path }}/templates/ifup-local.toml.j2"
@@ -29,5 +35,10 @@
   copy:
     src: "{{ role_path }}/files/"
     dest: /root/
+
+- name: "enable sshd"
+  systemd:
+    name: sshd
+    enabled: yes
 
 

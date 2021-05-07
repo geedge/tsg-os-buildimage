@@ -105,6 +105,6 @@ cp -a /dev/random centos_mkroot/dev/
 ansible-playbook -i tsg-9140-scripts/install_config/tsg_9140_host tsg-9140-scripts/tsg_9140_deploy.yml
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
 rm -rf centos_mkroot/tmp/*
-tar --numeric-owner -c -C centos_mkroot/ . | bzip2 > input/centos-7-chroot.tar.bz2
+tar --numeric-owner -c -C centos_mkroot/ . | pbzip2 -p9 > input/centos-7-chroot.tar.bz2
 
 #rm -rf "$target"
