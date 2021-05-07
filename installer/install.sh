@@ -240,9 +240,9 @@ umount ${distro_mnt}/data
 echo "Install GRUB2 bootloader .."
 
 if [ "$firmware" = "uefi" ] ; then
-    install_uefi_grub "${distro_mnt}" "$blk_dev"
+    install_uefi_grub "${distro_mnt}/boot" "$blk_dev"
 else
-    install_grub "${distro_mnt}" "$blk_dev"
+    install_grub "${distro_mnt}/boot" "$blk_dev"
 fi
 
 # Prepare boot loader configuration file
