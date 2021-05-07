@@ -7,8 +7,8 @@ distro_part=3
 distro_dev="${blk_dev}${distro_part}"
 distro_mnt=/mnt/distro
 onie_root_dir=/mnt/onie-boot/onie
-kernel_args=""
-grub_serial_command="console=tty0 console=ttyS0,115200"
+kernel_args="console=ttyS0,115200n8 intel_iommu=on iommu=pt pci=realloc,assign-busses isolcpus=1,14-27,42-55"
+grub_serial_command=""
 
 DISTR0_VER="%%DISTR0_VER%%"
 MACHINE_ID="%%MACHINE_ID%%"
