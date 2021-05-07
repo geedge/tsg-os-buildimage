@@ -8,7 +8,7 @@ distro_dev="${blk_dev}${distro_part}"
 distro_mnt=/mnt/distro
 onie_root_dir=/mnt/onie-boot/onie
 kernel_args=""
-grub_serial_command=""
+grub_serial_command="console=tty0 console=ttyS0,115200"
 
 DISTR0_VER="%%DISTR0_VER%%"
 MACHINE_ID="%%MACHINE_ID%%"
