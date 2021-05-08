@@ -1,0 +1,54 @@
+#!/bin/bash
+
+#
+#  Copyright (C) 2017 Rajendra Dendukuri <rajendra.dendukuri@broadcom.com>
+#
+#  SPDX-License-Identifier:     GPL-2.0
+#
+
+# Make an ONIE installer using CentOS 7 chroot environment
+#
+# inputs: cento7 chroot package
+# output: ONIE compatible OS installer image
+#
+# Comments: This script expects that yumbootsstrap is installed on
+#           on the Linux host where it is executed.
+
+#!/bin/sh
+
+set -e
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+INPUT_DIR=$1
+WORK_DIR=$2
+TARGET_BINARY=$3
+
+echo -n "Creating $TARGET_BINARY: ."
+
+# Repackage $INSTALLDIR into a self-extracting installer image
+sharch="$WORK_DIR/sharch.tar"
+tar --exclude=*~ --exclude-backups --owner=root --group=root -C $INPUT_DIR -cf $sharch installer || {
+    echo "Error: Problems creating $sharch archive"
+    exit 1
+}
+
+[ -f "$sharch" ] || {
+    echo "Error: $sharch not found"
+    exit 1
+}
+
+echo -n "."
+
+sha1=$(cat $sharch | sha1sum | awk '{print $1}')
+echo -n "."
+
+cp $SCRIPT_DIR/sharch_body.sh $TARGET_BINARY || {
+    echo "Error: Problems copying sharch_body.sh"
+    exit 1
+}
+
+# Replace variables in the sharch template
+sed -i -e "s/%%IMAGE_SHA1%%/$sha1/" $TARGET_BINARY
+echo -n "."
+cat $sharch >> $TARGET_BINARY
+echo " Done."

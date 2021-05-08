@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+#
+# Create a base CentOS Docker image.
+#
+# This script is useful on systems with yum installed (e.g., building
+# a CentOS image on CentOS).  See contrib/mkimage-rinse.sh for a way
+# to build CentOS images on other systems.
+
+yum_config=$1
+target=$2
+
+set -ex
+
+package_to_install="@base @core @debugging @directory-client @guest-agents
+                    @hardware-monitoring @network-file-system-client @performance @remote-system-management
+                    grub2 kernel kernel-devel epel-release ansible"
+
+setopt="group_package_types=mandatory,default,optional"
+yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install
+
+cat > "$target"/etc/sysconfig/network <<EOF
+NETWORKING=yes
+HOSTNAME=localhost.localdomain
+EOF
+
+# effectively: febootstrap-minimize --keep-zoneinfo --keep-rpmdb
+# --keep-services "$target".  Stolen from mkimage-rinse.sh
+#  locales
+# rm -rf "$target"/usr/{{lib,share}/locale,{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive}
+#  docs
+# rm -rf "$target"/usr/share/{man,doc,info,gnome/help}
+#  cracklib
+# rm -rf "$target"/usr/share/cracklib
+#  i18n
+# rm -rf "$target"/usr/share/i18n
+#  sln
+# rm -rf "$target"/sbin/sln
+
+#  ldconfig
+rm -rf "$target"/etc/ld.so.cache
+rm -rf "$target"/var/cache/ldconfig/*
+
+cd $target/boot
+ln -sf $(ls -1 vmlinuz-* | tail -1) vmlinuz
+ln -sf $(ls -1 initramfs-* | tail -1) initrd.img
+cd -
+
+cp -a /dev/console $target/dev/
+cp -a /dev/null $target/dev/
+cp -a /dev/zero $target/dev/
+cp -a /dev/urandom $target/dev/
+cp -a /dev/random $target/dev/
+
+# ansible-playbook -i tsg-9140-scripts/install_config/tsg_9140_host tsg-9140-scripts/tsg_9140_deploy.yml
+yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
+
+rm -rf $target/tmp/*
+
+# tar --numeric-owner -c -C centos_mkroot/ . | pbzip2 -p9 > input/centos-7-chroot.tar.bz2
+
+#rm -rf "$target"

@@ -7,19 +7,19 @@ distro_part=3
 distro_dev="${blk_dev}${distro_part}"
 distro_mnt=/mnt/distro
 onie_root_dir=/mnt/onie-boot/onie
-kernel_args="console=ttyS0,115200n8 intel_iommu=on iommu=pt pci=realloc,assign-busses isolcpus=1,14-27,42-55"
-grub_serial_command=""
 
+kernel_args="%%KERNAL_ARGS%%"
+grub_serial_command="%%GRUB_SERIAL_COMMAND%%"
 DISTR0_VER="%%DISTR0_VER%%"
 MACHINE_ID="%%MACHINE_ID%%"
 CHROOT_PKG="%%CHROOT_PKG%%"
+size_part_tsg_os_sysroot="%%SIZE_PART_SYSROOT%%"
+size_part_tsg_os_data="%%SIZE_PART_DATA%%"
 
 vol_label_tsg_os_sysroot="TSG-OS-SYSROOT"
 vol_label_tsg_os_data="TSG-OS-DATA"
 exp_part_tsg_os_sysroot=3
 exp_part_tsg_os_data=4
-size_part_tsg_os_sysroot="6096M"
-size_part_tsg_os_data="128M"
 dev_part_tsg_os_sysroot="/dev/sda${exp_part_tsg_os_sysroot}"
 dev_part_tsg_os_data="/dev/sda${exp_part_tsg_os_data}"
 tsg_os_efi_prefix="TSG-OS"

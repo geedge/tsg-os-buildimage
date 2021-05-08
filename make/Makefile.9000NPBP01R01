@@ -1,0 +1,59 @@
+
+PROFILE_ID 				:= 9000-NPB-P01R01
+SUPPORTED_MACHINE_ID 	:= 9000-NPB-P01R01
+CHROOT_PKG 				:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID}-chroot.tar.bz2
+CHROOT_BIN 				:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID}-ONIE.bin
+
+TARGET_BUILD_DIR 		:= $(BUILDDIR_BASE)/$(PROFILE_ID)
+TARGET_INSTALLER_DIR 	:= $(TARGET_BUILD_DIR)/installer
+TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
+
+KERNEL_ARGS 			:= console=ttyS0,115200n8 intel_iommu=on iommu=pt pci=realloc,assign-busses isolcpus=1,14-27,42-55
+GRUB_SERIAL_COMMAND 	:=
+SIZE_PART_SYSROOT		:= 7000M
+SIZE_PART_DATA			:= 128M
+
+.PHONY: all builddir installer sysroot-base sysroot-ansible sysroot-cleanup sysroot-archive sysroot-binary clean
+
+all: sysroot-binary
+
+builddir:
+	mkdir -p $(TARGET_BUILD_DIR)
+
+installer: builddir
+	mkdir -p $(TARGET_INSTALLER_DIR)
+	cp $(INSTALLERDIR)/install.sh $(TARGET_INSTALLER_DIR)/install.sh
+	cp $(INSTALLERDIR)/distro-setup.sh $(TARGET_INSTALLER_DIR)/distro-setup.sh
+	chmod +x $(TARGET_INSTALLER_DIR)/install.sh
+	chmod +x $(TARGET_INSTALLER_DIR)/distro-setup.sh
+
+	sed -i -e "s/%%DISTR0_VER%%/$(OS_RELEASE_VER)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%MACHINE_ID%%/$(SUPPORTED_MACHINE_ID)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%CHROOT_PKG%%/$(CHROOT_PKG)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%KERNAL_ARGS%%/$(KERNEL_ARGS)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%GRUB_SERIAL_COMMAND%%/$(GRUB_SERIAL_COMMAND)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%SIZE_PART_SYSROOT%%/$(SIZE_PART_SYSROOT)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%SIZE_PART_DATA%%/$(SIZE_PART_DATA)/" $(TARGET_INSTALLER_DIR)/install.sh
+
+sysroot-base: builddir
+	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum.conf $(TARGET_SYSROOT_DIR)
+
+sysroot-ansible: sysroot-base
+
+sysroot-cleanup:
+	rm -rf $(TARGET_SYSROOT_DIR)/tmp/*
+	rm -rf $(TARGET_SYSROOT_DIR)/dev/*
+
+sysroot-archive: installer sysroot-ansible sysroot-cleanup
+	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_SYSROOT_DIR) . | pbzip2 > $(TARGET_INSTALLER_DIR)/$(CHROOT_PKG)
+
+INPUT_DIR=$1
+WORK_DIR=$2
+TARGET_BINARY=$3
+
+sysroot-binary: sysroot-archive 
+	mkdir -p $(TARGET_BUILD_DIR)/cook-bits
+	$(TOOLSDIR)/cook-bits $(TARGET_BUILD_DIR) $(TARGET_BUILD_DIR)/cook-bits $(TARGET_BUILD_DIR)/$(CHROOT_BIN)
+
+clean:
+	rm -rf $(TARGET_BUILD_DIR)
