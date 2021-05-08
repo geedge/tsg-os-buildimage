@@ -1,53 +1,11 @@
 #!/bin/sh
 
-IN="$1"
-if [ "$1" == "enp1s0" ]
-then
-logger "$0: Interface $1 UP,Set $1 VF And Vlan ..."
-modprobe 8021q
-echo 3 > /sys/class/net/enp1s0/device/sriov_numvfs
-sleep 0.5
-echo add 0,3813,3814 > /sys/class/net/enp1s0/device/sriov/0/trunk
-ip link set enp1s0 vf 1 vlan 3813
-ip link set enp1s0 vf 2 vlan 3814
-ip link set enp1s0 vf 0 trust on
-ip link set enp1s0 vf 1 trust on
-ip link set enp1s0 vf 2 trust on
-ip link set enp1s0 vf 0 spoofchk off
-ip link set enp1s0 vf 0 mac 00:0e:c6:d6:72:c1
-ip link set enp1s0 vf 1 mac fe:65:b7:03:50:bd
-sleep 1
-ip link set enp1s2 up
-ip link set enp1s2f1 up
-ip link set enp1s2f2 up
-
-elif [ "$1" == "enp130s0" ]
-then
-logger "$0: Interface $1 UP,Set $1 VF And Vlan ..."
-echo 4 > /sys/class/net/enp130s0/device/sriov_numvfs
-sleep 0.5
-ip link set enp130s0 vf 0 vlan 4095
-ip link set enp130s0 vf 1 vlan 4095
-ip link set enp130s0 vf 2 vlan 3816
-ip link set enp130s0 vf 3 vlan 3817
-ip link set enp130s0 vf 0 trust on
-ip link set enp130s0 vf 1 trust on
-ip link set enp130s0 vf 2 trust on
-ip link set enp130s0 vf 3 trust on
-ip link set enp130s0 vf 0 spoofchk off
-sleep 1
-ip link set enp130s2 up
-ip link set enp130s2f1 up
-ip link set enp130s2f2 up
-ip link set enp130s2f3 up
-elif [ "$1" == "enp131s0f0" ]
-then
-output=$(ipmitool picmg addrinfo)
-echo $output
-substr=${output:22:1}
-echo $substr
-num=$((16#${substr}+16))
-ipaddr='10.254.'$num'.1'
-ifconfig enp131s0f0 $ipaddr netmask 255.255.0.0
-fi
+INF="$1"
+STA="$2"
+logger "$0 called for interface named $INF with $STA ..."
+case "$INF" in
+        enp1s0) logger "Setting $STA $INF VF And Vlan ..."; /sbin/setup.enp1s0.ips $INF $STA;;
+        enp130s0) logger "Setting $STA $INF VF And Vlan ..."; /sbin/setup.enp130s0.ips $INF $STA;;
+        enp131s0f0) logger "Setting $STA $INF ipaddr ..."; /sbin/setup.enp131s0f0.ips $INF $STA;;
+esac
 exit 0

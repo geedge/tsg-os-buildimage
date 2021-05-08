@@ -1,16 +1,11 @@
 #!/bin/sh
 
-IN="$1"
-if [ "$1" == "enp1s0" ]
-then
-logger "$0: Interface $1 Down,Rmove $1 VF And Vlan ..."
-echo 0 >/sys/class/net/enp1s0/device/sriov_numvfs
-elif [ "$1" == "enp130s0" ]
-then
-logger "$0: Interface $1 Down,Rmove $1 VF And Vlan ..."
-echo 0 > /sys/class/net/enp130s0/device/sriov_numvfs
-elif [ "$1" == "enp131s0f0" ]
-then
-logger "$0: Interface $1 Down"
-fi
+INF="$1"
+STA="$2"
+logger "$0 called for interface named $INF with $STA ..."
+case "$INF" in
+        enp1s0) logger "Setting $STA $INF VF And Vlan ..."; /sbin/setdown.enp1s0.ips $INF $STA;;
+        enp130s0) logger "Setting $STA $INF VF And Vlan ..."; /sbin/setdown.enp130s0.ips $INF $STA;;
+        enp131s0f0) logger " $INF is  $STA ...";
+esac
 exit 0

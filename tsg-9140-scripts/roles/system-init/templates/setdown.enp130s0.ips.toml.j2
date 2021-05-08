@@ -1,0 +1,12 @@
+#!/bin/bash
+
+INF="$1"
+STA="$2"
+
+logger "$0 called for interface named $INF with $STA ..."
+
+if [ "$INF" == "enp130s0" ]
+then
+  logger "$0: Interface $INF with $STA,Rmove $INF VF And Vlan ..."
+  echo 0 > /sys/class/net/enp130s0/device/sriov_numvfs
+fi
