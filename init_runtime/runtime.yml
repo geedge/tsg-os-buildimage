@@ -1,0 +1,26 @@
+- hosts: tsg_9140_chroot
+  remote_user: root
+  vars_files:
+    - install_config/group_vars/tsg_9140_docker.yml
+  roles:
+    #- {role: init-env, tags: init-env}
+    - {role: framework, tags: framework}
+    - {role: kernel-ml, tags: kernel-ml}
+    - {role: mrzcpd, tags: mrzcpd}
+    - {role: tsg-9140-env, tags: tsg-9140-env}
+    - {role: sapp, tags: sapp}
+    - {role: tsg_master, tags: tsg_master}
+    - {role: kni, tags: kni}
+    - {role: firewall, tags: firewall}
+    - {role: tsg_app, tags: tsg_app}
+    #- {role: http_healthcheck,tags: http_healthcheck}
+    - {role: x710-drive, tags: x710-drive}
+    - {role: certstore, tags: certstore}
+    - {role: redis, tags: redis}
+    - {role: cert-redis, tags: cert-redis}
+    #83上没有- {role: maat-redis, tags: maat-redis, when: deploy_mode == "cluster"}
+    - {role: tfe, tags: tfe}
+    - {role: telegraf_statistic, tags: telegraf_statistic}
+    - {role: exporter, tags: exporter}
+    - {role: tsg-diagnose, tags: tsg-diagnose}
+    - {role: system-init, tags: system-init}

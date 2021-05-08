@@ -15,8 +15,8 @@
 
 - name: template certstore configure file
   template:
-    src: "{{ role_path }}/templates/cert_store.ini.j2"
-    dest: /opt/tsg/certstore/conf/cert_store.ini
+    src: "{{ role_path }}/templates/cert_store.ini.j2.j2"
+    dest: /opt/tsg/init_runtime/roles/certstore/templates/cert_store.ini.j2
 
 - name: template certstore zlog file
   template:

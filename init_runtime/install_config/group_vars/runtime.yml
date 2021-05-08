@@ -1,0 +1,26 @@
+maat_redis_server:
+  address: "192.168.100.1"
+  port: 7002
+  port_num: 1
+  db: 0
+
+dynamic_maat_redis_server:
+  address: "192.168.100.1"
+  port: 7002
+  port_num: 1
+  db: 1
+
+breakpad_upload_url: http://10.4.63.4:9000/api/2/minidump/?sentry_key=3203b43fd5384a7dbe6a48ecb1f3c595
+data_center: Kyzylorda
+tsg_master_entrance_id: 9
+
+
+log_kafkabrokers:
+  address: ['1.1.1.1:9092','2.2.2.2:9092']
+
+
+firewall:
+  hos_serverip: "192.168.40.223"
+  hos_serverport: 9098
+  APP_SKETCH_PUBLISH_TOPIC: "APP_SIGNATURE_ID"
+  APP_SKETCH_BROKER_LIST: "tcp://192.168.40.161:1883"

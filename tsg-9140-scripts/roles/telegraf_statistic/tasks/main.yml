@@ -11,8 +11,8 @@
 
 - name: "Templates telegraf.conf"
   template:
-    src: "{{role_path}}/templates/telegraf_statistic.conf.j2"
-    dest: /etc/telegraf/telegraf_statistic.conf
+    src: "{{role_path}}/templates/telegraf_statistic.conf.j2.j2"
+    dest: /opt/tsg/init_runtime/roles/telegraf_statistic/templates/telegraf_statistic.conf.j2
   tags: template
 
 - name: "copy telegraf_statistic.service to destination server"
@@ -20,5 +20,3 @@
     src: "{{ role_path }}/files/telegraf_statistic.service"
     dest: /usr/lib/systemd/system
     mode: 0644
-
-

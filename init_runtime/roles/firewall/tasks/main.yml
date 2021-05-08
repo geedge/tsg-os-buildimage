@@ -1,0 +1,63 @@
+---
+- name: "copy firewall rpms to destination server"
+  copy:
+    src: "{{ role_path }}/files/"
+    dest: /tmp/ansible_deploy/
+
+- name: "install firewall packages"
+  yum:
+    name: "{{ fw_packages }}"
+    state: present
+    skip_broken: yes
+  vars:
+    fw_packages:
+      - /tmp/ansible_deploy/capture_packet_plug-3.0.6.a2db4a4-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/conn_telemetry-1.0.2.8d6da43-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/dns-2.0.11.2265b5c-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/ftp-1.0.8.13d5fda-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/fw_dns_plug-3.0.2.dab58fa-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/fw_ftp_plug-3.0.1.0a78573-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/fw_http_plug-3.1.5.69f6482-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/fw_mail_plug-3.0.2.7401550-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/fw_quic_plug-3.0.4.947ef77-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/fw_ssl_plug-3.0.6.a121701-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/http-2.0.5.c61ad9a-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/mail-1.0.9.c1d3bde-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/quic-1.1.17.8c22b4d-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/ssl-1.0.12.16b8fb5-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/tsg_conn_sketch-2.1.4.f333054-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/rtp-1.0.4.91b4ab7-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/mesa_sip-1.0.9.ede6893-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/fw_voip_plug-1.0.2.090e5da-2.el7.x86_64.rpm
+      - /tmp/ansible_deploy/app_proto_identify-1.0.9.a6581a6-2.el7.x86_64.rpm
+
+- name: "Template the tsgconf/main.conf"
+  template:
+    src: "{{ role_path }}/templates/main.conf.j2.j2"
+    dest: /opt/tsg/init_runtime/roles/firewall/templates/main.conf.j2
+  tags: template
+
+
+- name: "Template the tsgconf/maat.conf"
+  template:
+    src: "{{ role_path }}/templates/maat.conf.j2.j2"
+    dest: /opt/tsg/init_runtime/roles/firewall/templates/maat.conf.j2
+  tags: template
+
+- name: "Template the conf/capture_packet_plug.conf.j2"
+  template:
+    src: "{{ role_path }}/templates/capture_packet_plug.conf.j2"
+    dest: /home/mesasoft/sapp_run/conf/capture_packet_plug.conf
+  tags: template
+
+- name: "Template the tsgconf/app_l7_proto_id.conf"
+  template:
+    src: "{{ role_path }}/templates/app_l7_proto_id.conf.j2"
+    dest: /home/mesasoft/sapp_run/tsgconf/app_l7_proto_id.conf
+ 
+- name: "Template the /home/mesasoft/sapp_run/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf"
+  template:
+    src: "{{ role_path }}/templates/tsg_conn_sketch.inf.j2"
+    dest: /home/mesasoft/sapp_run/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf
+  tags: template
+

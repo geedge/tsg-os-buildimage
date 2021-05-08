@@ -33,15 +33,15 @@
 
 - name: "Template the tsgconf/main.conf"
   template:
-    src: "{{ role_path }}/templates/main.conf.j2"
-    dest: /home/mesasoft/sapp_run/tsgconf/main.conf
+    src: "{{ role_path }}/templates/main.conf.j2.j2"
+    dest: /opt/tsg/init_runtime/roles/firewall/templates/main.conf.j2
   tags: template
 
 
 - name: "Template the tsgconf/maat.conf"
   template:
-    src: "{{ role_path }}/templates/maat.conf.j2"
-    dest: /home/mesasoft/sapp_run/tsgconf/maat.conf
+    src: "{{ role_path }}/templates/maat.conf.j2.j2"
+    dest: /opt/tsg/init_runtime/roles/firewall/templates/maat.conf.j2
   tags: template
 
 - name: "Template the conf/capture_packet_plug.conf.j2"

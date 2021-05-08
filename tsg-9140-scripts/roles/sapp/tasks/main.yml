@@ -30,8 +30,8 @@
 
 - name: Template the sapp.toml
   template:
-    src: "{{ role_path }}/templates/sapp.toml.j2"
-    dest: /home/mesasoft/sapp_run/etc/sapp.toml
+    src: "{{ role_path }}/templates/sapp.toml.j2.j2"
+    dest: /opt/tsg/init_runtime/roles/sapp/templates/sapp.toml.j2
   tags: template
 
 - name: Template the project_list.conf
