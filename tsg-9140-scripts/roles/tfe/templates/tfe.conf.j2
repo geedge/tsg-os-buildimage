@@ -7,7 +7,9 @@ enable_kni_v2=1
 disable_coredump=0
 enable_breakpad=1
 enable_breakpad_upload=1
-breakpad_upload_url=http://127.0.0.1:9000/api/2/minidump/?sentry_key=3556bac347c74585a994eb6823faf5c6
+{% raw %}
+breakpad_upload_url={{ breakpad_upload_url }}
+{% endraw %}
 # must be /run/tfe/crashreport，due to tmpfile limit
 breakpad_minidump_dir=/run/tfe/crashreport
 
@@ -80,7 +82,9 @@ key_log_file=log/sslkeylog.log
 # mid cert cache
 mc_cache_enable=1
 mc_cache_eth=enp131s0f2
-mc_cache_broker_list=192.168.44.12:9092
+{% raw %}
+mc_cache_broker_list={{ log_kafkabrokers.address | join(",") }}
+{% endraw %}
 mc_cache_topic=PXY-EXCH-INTERMEDIA-CERT
 
 ssl_ja3_table=PXY_SSL_FINGERPRINT
@@ -150,7 +154,9 @@ stat_file=log/traffic_mirror.status
 [kafka]
 enable=1
 NIC_NAME=enp131s0f2
-kafka_brokerlist=192.168.44.12:9092
+{% raw %}
+kafka_brokerlist={{ log_kafkabrokers.address | join(",") }}
+{% endraw %}
 kafka_topic=PROXY-EVENT-LOG
 device_id_filepath=/opt/tsg/etc/tsg_sn.json
 
@@ -169,9 +175,11 @@ deferred_load_on=0
 json_cfg_file=resource/pangu/pangu_http.json
 
 # redis mode conf iterm
-maat_redis_server=192.168.44.72
-maat_redis_port_range=7002
-maat_redis_db_index=0
+{% raw %}
+maat_redis_server={{ maat_redis_server.address }}
+maat_redis_port_range={{ maat_redis_server.port }}
+maat_redis_db_index={{ maat_redis_server.db }}
+{% endraw %}
 
 # iris mode conf iterm
 full_cfg_dir=pangu_policy/full/index/

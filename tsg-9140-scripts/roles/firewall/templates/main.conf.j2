@@ -43,7 +43,9 @@ NIC_NAME="enp131s0f3"
 MAX_SERVICE=1
 LOG_LEVEL=30
 LOG_PATH="./tsglog/tsglog"
-BROKER_LIST="192.168.44.12:9092"
+{% raw %}
+BROKER_LIST="{{ log_kafkabrokers.address | join(",") }}"
+{% endraw %}
 COMMON_FIELD_FILE="tsgconf/tsg_log_field.conf"
 
 [STATISTIC]
@@ -62,7 +64,9 @@ APP_NAME="tsg_master"
 
 [SYSTEM]
 NIC_NAME="enp131s0f3"
-ENTRANCE_ID=0
+{% raw %}
+ENTRANCE_ID={{ tsg_master_entrance_id }}
+{% endraw %}
 LOG_LEVEL=30
 LOG_PATH="./tsglog/tsg_master"
 POLICY_PRIORITY_LABEL="POLICY_PRIORITY"
@@ -73,8 +77,10 @@ log_service=2
 
 
 [HOS_CONF]
-hos_serverip="192.168.40.223"
-hos_serverport=9098
+{% raw %}
+hos_serverip="{{ firewall.hos_serverip }}"
+hos_serverport={{ firewall.hos_serverport }}
+{% endraw %}
 hos_accesskeyid="default"
 hos_secretkey="default"
 hos_poolsize=100
@@ -92,4 +98,6 @@ L7_PROTOCOL_LABEL="BASIC_PROTO_LABEL"
 QOS=1
 PUBLISH_TOPIC="APP_SIGNATURE_ID"
 #CLIENT_ID=
-BROKER_LIST="tcp://192.168.40.161:1883"
+{% raw %}
+BROKER_LIST="{{ firewall.APP_SKETCH_BROKER_LIST }}"
+{% endraw %}

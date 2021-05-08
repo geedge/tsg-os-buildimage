@@ -22,7 +22,9 @@
    rotation_max_archives = 5
 
 [[outputs.kafka]]
-   brokers = [ "192.168.44.12:9092" ]
+{% raw %}
+   brokers = [ "{{ log_kafkabrokers.address | join("\",\"") }}" ]
+{% endraw %}
    topic = "TRAFFIC-METRICS-LOG"
    data_format = "json"
 [[inputs.tcp_listener]]

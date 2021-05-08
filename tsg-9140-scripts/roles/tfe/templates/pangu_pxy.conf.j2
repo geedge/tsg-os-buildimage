@@ -2,13 +2,15 @@
 enable_plugin=1
 
 [log]
-entrance_id=0
 # default 1, if enable "en_sendlog", the iterm "tfe.conf [kafka] enable" must set 1
 en_sendlog=1
+entrance_id=0
 
 #Addresses of hos, Bucket name in hos. Format is defined by WiredLB.
-cache_ip_list=192.168.44.67;
-cache_listen_port=9098
+{% raw %}
+cache_ip_list = {{ pangu_pxy.log_cache.address }}
+cache_listen_port = {{ pangu_pxy.log_cache.port }}
+{% endraw %}
 cache_bucket_name=hos/proxy_hos_bucket
 cache_token=c21f969b5f03d33d43e04f8f136e7682
 
@@ -17,21 +19,23 @@ max_used_memroy_size_mb=5120
 cache_default_ttl_second=3600
 cache_object_key_hash_switch=1
 
-#Refer to the pangu_cahche definition
 cache_store_object_way=0
 redis_cache_object_size=1024000
-redis_cluster_addrs=10.4.20.211:9001,10.4.20.212:9001,10.4.20.213:9001,10.4.20.214:9001,10.4.20.215:9001,10.4.20.216:9001,10.4.20.217:9001,10.4.20.218:9001
+
+#If CACHE_STORE_OBJECT_WAY is not 0, we will use redis to store meta and object.
+redis_cluster_ip_list=192.168.10.62-63;
+redis_cluster_port_range=6379
+#wired load balancer configuration
 
 #Configs of WiredLB for Minios load balancer.
 wiredlb_override=1
-wiredlb_health_port=42310
 wiredlb_topic=MinioFileLog
 wiredlb_datacenter=k18consul-tse
-wiredlb_health_port=52102
+wiredlb_health_port=8560
 wiredlb_group=FileLog
 
 log_fsstat_appname=tango_log_file
-log_fsstat_filepath=./log/tango_log_file.fs2
+log_fsstat_filepath=./tango_log_file.fs
 log_fsstat_interval=10
 log_fsstat_trig=1
 log_fsstat_dst_ip=10.4.20.202
@@ -41,17 +45,18 @@ log_fsstat_dst_port=8125
 #hijack flow control
 enable=0
 token_name=ratelimit
-redis_server=192.168.40.137
-redis_port=6379
-redis_db_index=5
+{% raw %}
+redis_server={{ maat_redis_server.address }}
+redis_port={{ maat_redis_server.port }}
+redis_db_index=6
+{% endraw %}
 
 [tango_cache]
 enable_cache=0
-min_cache_obj_size=512
-#hos ip, as wiredlb required
-cache_ip_list=10.4.35.1-14;
+cache_ip_list=192.168.10.61-64;
 cache_listen_port=9000
-cache_bucket_name=proxybucket
+cache_bucket_name=hos/proxy_hos_bucket
+cache_token=c21f969b5f03d33d43e04f8f136e7682
 
 max_cnnt_pipeline_num=20
 #Maximum size of memory used by tango_cache_client. Upload will fail if the current size of memory used exceeds this value.
@@ -65,12 +70,22 @@ cache_store_object_way=2
 #If CACHE_STORE_OBJECT_WAY is 2 and the size of a object is not bigger than this value, object will be stored in redis.
 redis_cache_object_size=102400
 #If CACHE_STORE_OBJECT_WAY is not 0, we will use redis to store meta and object.
-redis_cluster_addrs=10.4.35.15:9001,10.4.35.16:9001,10.4.35.17:9001,10.4.35.18:9001,10.4.35.19:9001,10.4.35.20:9001,10.4.35.21:9001,10.4.35.22:9001,10.4.35.23:9001,10.4.35.24:9001,10.4.35.25:9001,10.4.35.26:9001,10.4.35.27:9001,10.4.35.28:9001,10.4.35.29:9001,10.4.35.30:9001,10.4.35.31:9001,10.4.35.32:9001
+redis_cluster_ip_list=192.168.10.62-63;
+redis_cluster_port_range=6379
 
 #Configs of WiredLB for Minios load balancer.Refer to the definition at log
 
 cache_undefined_obj=1
 query_undefined_obj=0
-statsd_server=10.4.20.201
-statsd_port=8125
+statsd_server=192.168.10.72
+statsd_port=8126
 histogram_bins=0.20,0.40,0.6,0.8
+
+log_fsstat_appname=tango_cache
+log_fsstat_filepath=./tango_cache_client.fs
+log_fsstat_interval=10
+log_fsstat_trig=1
+log_fsstat_dst_ip=10.4.20.201
+log_fsstat_dst_port=8125
+
+

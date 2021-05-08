@@ -8,8 +8,9 @@ disable_coredump=0
 enable_breakpad=1
 breakpad_minidump_dir=/tmp/certstore/crashreport
 enable_breakpad_upload=1
-breakpad_upload_url= http://127.0.0.1:9000/api/2/minidump/?sentry_key=3556bac347c74585a994eb6823faf5c6
-
+{% raw %}
+breakpad_upload_url= {{ breakpad_upload_url }}
+{% endraw %}
 [CONFIG]
 #Number of running threads
 thread-nu = 4
@@ -50,9 +51,11 @@ port = 6379
 
 [MAAT_REDIS]
 #Maat monitors the Redsi server IP address and port number
-ip = 192.168.44.72
-port = 7002
-dbindex =  0
+{% raw %}
+ip = {{ maat_redis_server.address }}
+port = {{ maat_redis_server.port }}
+dbindex =  {{ maat_redis_server.db }}
+{% endraw %}
 [stat]
 statsd_server=127.0.0.1
 statsd_port=8100

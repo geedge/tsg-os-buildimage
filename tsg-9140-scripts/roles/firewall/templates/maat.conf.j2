@@ -6,10 +6,12 @@ PERF_SWITCH=1
 TABLE_INFO=tsgconf/tsg_static_tableinfo.conf
 STAT_FILE=tsg_static_maat.status
 EFFECT_INTERVAL_S=1
-REDIS_IP=192.168.44.72
-REDIS_PORT_NUM=1
-REDIS_PORT=7002
-REDIS_INDEX=0
+{% raw %}
+REDIS_IP={{ maat_redis_server.address }}
+REDIS_PORT_NUM={{ maat_redis_server.port_num }}
+REDIS_PORT={{ maat_redis_server.port }}
+REDIS_INDEX={{ maat_redis_server.db }}
+{% endraw %}
 JSON_CFG_FILE=tsgconf/tsg_maat.json
 INC_CFG_DIR=tsgrule/inc/index/
 FULL_CFG_DIR=tsgrule/full/index/
@@ -23,10 +25,12 @@ PERF_SWITCH=1
 TABLE_INFO=tsgconf/tsg_dynamic_tableinfo.conf
 STAT_FILE=tsg_dynamic_maat.status
 EFFECT_INTERVAL_S=1
-REDIS_IP=192.168.44.72
-REDIS_PORT_NUM=1
-REDIS_PORT=7002
-REDIS_INDEX=1
+{% raw %}
+REDIS_IP={{ dynamic_maat_redis_server.address }}
+REDIS_PORT_NUM={{ dynamic_maat_redis_server.port_num }}
+REDIS_PORT={{ dynamic_maat_redis_server.port }}
+REDIS_INDEX={{ dynamic_maat_redis_server.db }}
+{% endraw %}
 JSON_CFG_FILE=tsgconf/tsg_maat.json
 INC_CFG_DIR=tsgrule/inc/index/
 FULL_CFG_DIR=tsgrule/full/index/
@@ -39,14 +43,18 @@ PERF_SWITCH=1
 TABLE_INFO=tsgconf/app_sketch_tableinfo.conf
 STAT_FILE=app_sketch_maat.status
 EFFECT_INTERVAL_S=1
-REDIS_IP=192.168.44.72
-REDIS_PORT_NUM=1
-REDIS_PORT=7002
-REDIS_INDEX=0
+{% raw %}
+REDIS_IP={{ maat_redis_server.address }}
+REDIS_PORT_NUM={{ maat_redis_server.port_num }}
+REDIS_PORT={{ maat_redis_server.port }}
+REDIS_INDEX={{ maat_redis_server.db }}
+{% endraw %}
 JSON_CFG_FILE=tsgconf/app_sketch_maat.json
 INC_CFG_DIR=tsgrule/inc/index/
 FULL_CFG_DIR=tsgrule/full/index/
 EFFECTIVE_RANGE_FILE=/opt/tsg/etc/tsg_device_tag.json
 
 [MAAT]
-ACCEPT_TAGS={"tags":[{"tag":"data_center","value":"Beijing"}]}
+{% raw %}
+ACCEPT_TAGS={"tags":[{"tag":"data_center","value":"{{ data_center }}"}]}
+{% endraw %}
