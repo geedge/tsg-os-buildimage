@@ -1,0 +1,77 @@
+---
+- name: "copy tfe program to destination server"
+  copy:
+    src: "{{ role_path }}/files/"
+    dest: /tmp/ansible_deploy/
+
+- name: "copy tfe.service to destination server"
+  copy:
+    src: "{{ role_path }}/files/tfe.service"
+    dest: /usr/lib/systemd/system/
+    mode: 0644
+
+- name: "install tfe rpms from localhost"
+  yum:
+    name:
+      #- /tmp/ansible_deploy/tfe-kmod-v1.0.5.20200408-1dkms.noarch.rpm
+      - /tmp/ansible_deploy/tfe-4.3.30.62dde9e-1.el7.x86_64.rpm
+    state: present
+
+- name: "tfe:copy cert file to device"
+  copy:
+    src: '{{ role_path }}/files/tsg_diagnose_ca.pem'
+    dest: /opt/tsg/tfe/resource/tfe/
+
+- name: "template tfe-env config"
+  template:
+    src: "{{ role_path }}/templates/tfe-env-config.j2"
+    dest: /etc/sysconfig/tfe-env-config
+
+- name: "template the tfe.conf"
+  template:
+    src: "{{ role_path }}/templates/tfe.conf.j2.j2"
+    dest: /opt/tsg/init_runtime/roles/tfe/templates/tfe.conf.j2
+
+- name: "template the zlog.conf"
+  template:
+    src: "{{ role_path }}/templates/zlog.conf.j2"
+    dest: /opt/tsg/tfe/conf/tfe/zlog.conf
+
+- name: "template the future.conf"
+  template:
+    src: "{{ role_path }}/templates/future.conf.j2"
+    dest: /opt/tsg/tfe/conf/tfe/future.conf
+
+- name: "template the pangu_pxy.conf"
+  template:
+    src: "{{ role_path }}/templates/pangu_pxy.conf.j2.j2"
+    dest: /opt/tsg/init_runtime/roles/tfe/templates/pangu_pxy.conf.j2
+
+- name: "create conf/doh/"
+  file:
+    path: /opt/tsg/tfe/conf/doh/
+    state: directory
+
+- name: "template the doh.conf"
+  template:
+    src: "{{ role_path }}/templates/doh.conf.j2"
+    dest: /opt/tsg/tfe/conf/doh/doh.conf
+
+- name: "create a override conf - first step, create dir"
+  file:
+    path: /etc/systemd/system/tfe.service.d/
+    state: directory
+    mode: '0755'
+
+- name: "create a override conf - second step, copy a override service file"
+  template:
+    src: "{{ role_path }}/templates/require-mrzcpd.conf.j2"
+    dest: /etc/systemd/system/tfe.service.d/require-mrzcpd.conf
+
+- name: "copy memory limit file to tfe.service.d"
+  copy:
+    src: "{{ role_path }}/files/memory.conf"
+    dest: /etc/systemd/system/tfe.service.d/
+    mode: 0644
+
+
