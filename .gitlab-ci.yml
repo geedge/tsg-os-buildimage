@@ -1,0 +1,13 @@
+image: "git.mesalab.cn:7443/mesa_platform/build-env:master"
+variables:
+  GIT_STRATEGY: "clone"
+
+build:
+    stage: build
+    script:
+      - yum -y install ansible
+      - make
+    tags:
+    - share
+    except:
+    - tags
