@@ -24,3 +24,9 @@ firewall:
   hos_serverport: 9098
   APP_SKETCH_PUBLISH_TOPIC: "APP_SIGNATURE_ID"
   APP_SKETCH_BROKER_LIST: "tcp://192.168.40.161:1883"
+
+
+pangu_pxy:
+  log_cache:
+    address: "10.9.62.253"
+    port: 9090
