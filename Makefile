@@ -27,7 +27,36 @@ PROJECTDIR		=  $(abspath )
 BUILDDIR_BASE	=  $(abspath ./build)
 IMAGEDIR_BASE	=  $(abspath ./images)
 
-OS_RELEASE_VER = 20.04.1
+CREATE_BUILD_DIR_TMP := $(shell mkdir -p $(BUILDDIR_BASE))
+CREATE_IMAGE_DIR_TMP := $(shell mkdir -p $(IMAGEDIR_BASE))
+
+# autorevision
+REVISON_TMP := $(shell $(TOOLSDIR)/autorevision.sh -t sh > $(BUILDDIR_BASE)/version.make)
+include $(BUILDDIR_BASE)/version.make
+
+ifeq ($(DALIY_BUILD_VERSION),1)
+VCS_TAG="0.0.0"
+endif
+
+OS_BUILD_TIME := $(VCS_DATE)
+OS_BUILD_TIME := $(subst -,$e,$(OS_BUILD_TIME))
+OS_BUILD_TIME := $(subst :,$e,$(OS_BUILD_TIME))
+OS_BUILD_TIME := $(subst T,$e,$(OS_BUILD_TIME))
+OS_BUILD_TIME := $(subst Z,$e,$(OS_BUILD_TIME))
+OS_BUILD_TIME := $(subst ",$e,$(OS_BUILD_TIME))
+
+OS_BUILD_HASH := $(subst ",$e,$(VCS_SHORT_HASH))
+OS_BUILD_TAG  := $(subst ",$e,$(VCS_TAG))
+
+ifeq ($(OS_BUILD_TAG),)
+OS_BUILD_TAG := UN-$(OS_BUILD_TIME)
+endif
+
+ifdef DALIY_BUILD_VERSION
+OS_RELEASE_VER = 0.0.0-$(OS_BUILD_TIME)-$(OS_BUILD_HASH)
+else
+OS_RELEASE_VER = $(OS_BUILD_TAG)-$(OS_BUILD_HASH)
+endif
 
 ifndef PROFILE_LIST
 PROFILE_LIST := 9000NPBP01R01
@@ -44,9 +73,6 @@ export OS_RELEASE_VER
 .PHONY: all clean $(PROFILE_LIST)
 
 all: $(PROFILE_LIST)
-	mkdir -p $(BUILDDIR_BASE)
-	mkdir -p $(IMAGEDIR_BASE)
-
 	$(Q) echo "=== Building $< $(OS_RELEASE_VER) ==="
 	$(Q) $(MAKE) -f make/Makefile.$< all
 
