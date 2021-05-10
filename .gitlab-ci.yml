@@ -11,7 +11,3 @@ build:
     - share
     except:
     - tags
-    artifacts:
-      name: "tsg-os-build-$CI_COMMIT_REF_NAME"
-      paths:
-        - images/*.bin
