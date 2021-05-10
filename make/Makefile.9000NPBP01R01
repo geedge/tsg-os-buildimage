@@ -8,7 +8,7 @@ TARGET_BUILD_DIR 		:= $(BUILDDIR_BASE)/$(PROFILE_ID)
 TARGET_INSTALLER_DIR 	:= $(TARGET_BUILD_DIR)/installer
 TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
 
-KERNEL_ARGS 			:= console=ttyS0,115200n8 intel_iommu=on iommu=pt pci=realloc,assign-busses isolcpus=1,14-27,42-55
+KERNEL_ARGS 			:= console=ttyS0,115200n8 crashkernel=auto intel_iommu=on iommu=pt pci=realloc,assign-busses isolcpus=1,14-27,42-55
 GRUB_SERIAL_COMMAND 	:=
 SIZE_PART_SYSROOT		:= 7000M
 SIZE_PART_DATA			:= 128M
