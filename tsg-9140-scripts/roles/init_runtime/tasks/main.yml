@@ -1,0 +1,5 @@
+- name: "init_runtime: copy init_runtime scripts to docker"
+  copy:
+    src: "{{ role_path }}/files/init_runtime"
+    dest: /opt/tsg/
+    mode: 0644
