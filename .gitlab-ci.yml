@@ -5,7 +5,7 @@ variables:
 build:
     stage: build
     script:
-      - yum -y install ansible
+      - yum -y install ansible pbzip2
       - make
     tags:
     - share
