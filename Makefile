@@ -25,7 +25,7 @@ INSTALLERDIR = $(realpath ./installer)
 
 PROJECTDIR		=  $(abspath )
 BUILDDIR_BASE	=  $(abspath ./build)
-IMAGEDIR_BASE	=  $(BUILDDIR)/images
+IMAGEDIR_BASE	=  $(abspath ./images)
 
 OS_RELEASE_VER = 20.04.1
 
@@ -44,6 +44,9 @@ export OS_RELEASE_VER
 .PHONY: all clean $(PROFILE_LIST)
 
 all: $(PROFILE_LIST)
+	mkdir -p $(BUILDDIR_BASE)
+	mkdir -p $(IMAGEDIR_BASE)
+
 	$(Q) echo "=== Building $< $(OS_RELEASE_VER) ==="
 	$(Q) $(MAKE) -f make/Makefile.$< all
 

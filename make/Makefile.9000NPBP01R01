@@ -47,13 +47,9 @@ sysroot-cleanup:
 sysroot-archive: installer sysroot-ansible sysroot-cleanup
 	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_SYSROOT_DIR) . | pbzip2 > $(TARGET_INSTALLER_DIR)/$(CHROOT_PKG)
 
-INPUT_DIR=$1
-WORK_DIR=$2
-TARGET_BINARY=$3
-
 sysroot-binary: sysroot-archive 
 	mkdir -p $(TARGET_BUILD_DIR)/cook-bits
-	$(TOOLSDIR)/cook-bits $(TARGET_BUILD_DIR) $(TARGET_BUILD_DIR)/cook-bits $(TARGET_BUILD_DIR)/$(CHROOT_BIN)
+	$(TOOLSDIR)/cook-bits $(TARGET_BUILD_DIR) $(TARGET_BUILD_DIR)/cook-bits $(IMAGEDIR_BASE)/$(CHROOT_BIN)
 
 clean:
 	rm -rf $(TARGET_BUILD_DIR)
