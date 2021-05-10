@@ -45,7 +45,6 @@ ln -sf $(ls -1 vmlinuz-* | tail -1) vmlinuz
 ln -sf $(ls -1 initramfs-* | tail -1) initrd.img
 cd -
 
-cp -a /dev/console $target/dev/
 cp -a /dev/null $target/dev/
 cp -a /dev/zero $target/dev/
 cp -a /dev/urandom $target/dev/
