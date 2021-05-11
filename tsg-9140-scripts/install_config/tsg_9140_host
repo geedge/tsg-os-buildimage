@@ -1,6 +1,2 @@
-[tsg_9140]
-centos7 ansible_connection=docker
-[tsg_9140_init]
-127.0.0.1
 [tsg_9140_chroot]
-centos_mkroot/  ansible_connection=chroot
+/root/geedge-work/onie-5-10/tsg-os-installer/build/9000-NPB-P01R01/sysroot  ansible_connection=chroot

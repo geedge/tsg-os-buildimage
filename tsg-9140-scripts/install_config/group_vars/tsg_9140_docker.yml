@@ -28,10 +28,10 @@ breakpad_upload_url: http://127.0.0.1:9000/api/2/minidump/?sentry_key=3556bac347
 inline_device_config:
   keepalive_ip: 10.254.19.1
   keepalive_mask: 255.255.255.252
-  data_incoming: enp131s0f3
+  data_incoming: enp130s2f3
 
 nic_mgr:
-  name: enp131s0f3
+  name: enp130s2f3
 
 kni_log_level: 10
 
