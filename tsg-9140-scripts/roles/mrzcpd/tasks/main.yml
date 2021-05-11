@@ -6,7 +6,7 @@
 
 - name: "install mrzcpd"
   yum:
-    name: /tmp/ansible_deploy/mrzcpd-4.3.30.4627eb7-1.el7.x86_64.rpm
+    name: /tmp/ansible_deploy/mrzcpd-4.4.0.21fa879-1.el7.x86_64.rpm
     state: present
 
 - name: "update sysconfig/mrzcpd"
@@ -18,16 +18,6 @@
   template:
     src: "{{ role_path }}/templates/tsg_9140/mrglobal.conf.tsg_9140.j2"
     dest: /opt/mrzcpd/etc/mrglobal.conf
-
-- name: "copy mrapp.sapp4.conf to destination server"
-  template:
-    src: "{{ role_path }}/templates/mrapp.sapp4.conf"
-    dest: /opt/mrzcpd/etc/mrapp.sapp4.conf
-
-- name: "update mrtunnat.conf.adc_inline"
-  template:
-    src: "{{ role_path }}/templates/tsg_9140/mrtunnat.conf.tsg_9140.j2"
-    dest: /opt/mrzcpd/etc/mrtunnat.conf
 
 #- name: "enable mrenv"
 #  systemd:
