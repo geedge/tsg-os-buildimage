@@ -10,8 +10,8 @@ TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
 
 KERNEL_ARGS 			:= console=ttyS0,115200n8 crashkernel=auto intel_iommu=on iommu=pt pci=realloc,assign-busses isolcpus=1,14-27,42-55
 GRUB_SERIAL_COMMAND 	:=
-SIZE_PART_SYSROOT		:= 7000M
-SIZE_PART_DATA			:= 128M
+SIZE_PART_SYSROOT		:= 65536M
+SIZE_PART_DATA			:= 4096M
 
 .PHONY: all builddir installer sysroot-base sysroot-ansible sysroot-cleanup sysroot-archive sysroot-binary clean
 
@@ -39,15 +39,16 @@ sysroot-base: builddir
 	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum.conf $(TARGET_SYSROOT_DIR)
 
 sysroot-ansible: sysroot-base
+	$(TOOLSDIR)/ansible-stage-one $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR)
 
 sysroot-cleanup:
 	rm -rf $(TARGET_SYSROOT_DIR)/tmp/*
 	rm -rf $(TARGET_SYSROOT_DIR)/dev/*
 
 sysroot-archive: installer sysroot-ansible sysroot-cleanup
-	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_SYSROOT_DIR) . | pbzip2 > $(TARGET_INSTALLER_DIR)/$(CHROOT_PKG)
+	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_SYSROOT_DIR) . | pbzip2 -p9 > $(TARGET_INSTALLER_DIR)/$(CHROOT_PKG)
 
-sysroot-binary: sysroot-archive 
+sysroot-binary: sysroot-archive
 	mkdir -p $(TARGET_BUILD_DIR)/cook-bits
 	$(TOOLSDIR)/cook-bits $(TARGET_BUILD_DIR) $(TARGET_BUILD_DIR)/cook-bits $(IMAGEDIR_BASE)/$(CHROOT_BIN)
 

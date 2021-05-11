@@ -13,7 +13,8 @@ set -ex
 
 package_to_install="@base @core @debugging @directory-client @guest-agents
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management
-                    grub2 kernel kernel-devel epel-release ansible"
+                    grub2 kernel kernel-devel epel-release ansible yum-utils ipmitool docker-ce docker-ce-cli containerd.io"
+
 
 setopt="group_package_types=mandatory,default,optional"
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install

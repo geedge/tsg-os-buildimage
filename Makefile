@@ -14,7 +14,7 @@ SHELL = bash
 V ?= 0
 Q = @
 ifneq ($V,0)
-	Q = 
+	Q =
 endif
 
 PATCHDIR     = $(realpath ./patches)
@@ -23,7 +23,7 @@ CONFDIR	     = $(realpath ./conf)
 TOOLSDIR     = $(realpath ./tools)
 INSTALLERDIR = $(realpath ./installer)
 
-PROJECTDIR		=  $(abspath )
+PROJECTDIR		=  $(abspath ./)
 BUILDDIR_BASE	=  $(abspath ./build)
 IMAGEDIR_BASE	=  $(abspath ./images)
 

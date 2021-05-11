@@ -1,0 +1,13 @@
+#!/bin/sh
+
+PROFILE_ID=$1
+PROJECTDIR=$2
+TARGET_SYSROOT_DIR=$3
+
+echo "-----------------------------  Ansible Stage 1  ----------------------------"
+echo "$PROFILE_ID"
+
+echo "[tsg_9140_chroot]" > $PROJECTDIR/tsg-9140-scripts/install_config/tsg_9140_host
+echo "$TARGET_SYSROOT_DIR  ansible_connection=chroot" >> $PROJECTDIR/tsg-9140-scripts/install_config/tsg_9140_host
+
+ansible-playbook -i $PROJECTDIR/tsg-9140-scripts/install_config/tsg_9140_host $PROJECTDIR/tsg-9140-scripts/tsg_9140_deploy.yml
