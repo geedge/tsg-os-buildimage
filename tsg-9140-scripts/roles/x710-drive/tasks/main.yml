@@ -9,3 +9,9 @@
     name:
       - /tmp/x710_drive/i40e-2.15.9-1.x86_64.rpm
     state: present
+
+- name: "update  initramfs"
+  shell: depmod -v 5.4.113-1.el7.elrepo.x86_64
+
+- name: "update  initramfs"
+  shell: dracut --force -v /boot/initramfs-5.4.113-1.el7.elrepo.x86_64.img 5.4.113-1.el7.elrepo.x86_64
