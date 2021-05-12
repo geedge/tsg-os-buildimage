@@ -1,0 +1,21 @@
+---
+- name: "Restart certstore"
+  systemd:
+    name: certstore
+    state: restarted
+  listen: "Restart certstore"
+
+- name: "Restart sapp"
+  systemd:
+    name: sapp
+    state: restarted
+
+- name: "Restart telegraf_statistic"
+  systemd:
+    name: telegraf_statistic
+    state: restarted
+
+- name: "Restart tfe"
+  systemd:
+    name: tfe
+    state: restarted

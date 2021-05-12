@@ -1,0 +1,70 @@
+---
+- hosts: local
+  tasks:
+    - name: "rollback_conf: rollback certstore configure file"
+      copy:
+        src: /data/init_runtime/backup/cert_store.ini
+        dest: /opt/tsg/certstore/conf/cert_store.ini
+      notify:
+      - Restart certstore
+      tags: certstore
+  
+    - name: "rollback_conf: rollback the tsgconf/main.conf"
+      copy:
+        src: /data/init_runtime/backup/main.conf
+        dest: /home/mesasoft/sapp_run/tsgconf/main.conf 
+      notify:
+      - Restart sapp
+      tags: firewall
+  
+    - name: "rollback_conf: rollback the tsgconf/maat.conf"
+      copy:
+        src: /data/init_runtime/backup/maat.conf
+        dest: /home/mesasoft/sapp_run/tsgconf/maat.conf
+      notify:
+      - Restart sapp
+      tags: firewall
+  
+    - name: "rollback_conf: rollback the conf/capture_packet_plug.conf"
+      copy:
+        src: /data/init_runtime/backup/capture_packet_plug.conf
+        dest: /home/mesasoft/sapp_run/conf/capture_packet_plug.conf
+      notify:
+      - Restart sapp
+      tags: firewall
+  
+    - name: "rollback_conf: rollback the sapp.toml"
+      copy:
+        src: /data/init_runtime/backup/sapp.toml
+        dest: /home/mesasoft/sapp_run/etc/sapp.toml 
+      notify:
+      - Restart sapp
+      tags: sapp
+  
+    - name: "rollback_conf: rollback telegraf.conf"
+      copy:
+        src: /data/init_runtime/backup/telegraf_statistic.conf
+        dest: /etc/telegraf/telegraf_statistic.conf 
+      notify:
+      - Restart telegraf_statistic
+      tags: telegraf_statistic
+  
+    - name: "rollback_conf: rollback the tfe.conf"
+      copy:
+        src: /data/init_runtime/backup/tfe.conf
+        dest: /opt/tsg/tfe/conf/tfe/tfe.conf
+      notify:
+      - Restart tfe
+      tags: tfe
+  
+    - name: "rollback_conf: rollback the pangu_pxy.conf"
+      copy:
+        src: /data/init_runtime/backup/pangu_pxy.conf
+        dest: /opt/tsg/tfe/conf/pangu/pangu_pxy.conf 
+      notify:
+      - Restart tfe
+      tags: tfe
+
+  handlers:
+    - include: ../handlers/restart_service.yml
+  

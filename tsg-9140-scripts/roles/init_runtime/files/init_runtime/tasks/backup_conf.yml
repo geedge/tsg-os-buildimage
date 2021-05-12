@@ -1,0 +1,51 @@
+---
+- hosts: local
+  tasks:
+    - name: "backup_conf: backup certstore configure file"
+      copy:
+        src: /opt/tsg/certstore/conf/cert_store.ini
+        dest: /data/init_runtime/backup/
+      tags: certstore
+  
+    - name: "backup_conf: backup the tsgconf/main.conf"
+      copy:
+        src: /home/mesasoft/sapp_run/tsgconf/main.conf
+        dest: /data/init_runtime/backup/ 
+      tags: firewall
+  
+    - name: "backup_conf: backup the tsgconf/maat.conf"
+      copy:
+        src: /home/mesasoft/sapp_run/tsgconf/maat.conf
+        dest: /data/init_runtime/backup/ 
+      tags: firewall
+  
+    - name: "backup_conf: backup the conf/capture_packet_plug.conf"
+      copy:
+        src: /home/mesasoft/sapp_run/conf/capture_packet_plug.conf
+        dest: /data/init_runtime/backup/ 
+      tags: firewall
+  
+    - name: "backup_conf: backup the sapp.toml"
+      copy:
+        src: /home/mesasoft/sapp_run/etc/sapp.toml
+        dest: /data/init_runtime/backup/ 
+      tags: sapp
+  
+    - name: "backup_conf: backup telegraf.conf"
+      copy:
+        src: /etc/telegraf/telegraf_statistic.conf
+        dest: /data/init_runtime/backup/ 
+      tags: telegraf_statistic
+  
+    - name: "backup_conf: backup the tfe.conf"
+      copy:
+        src: /opt/tsg/tfe/conf/tfe/tfe.conf
+        dest: /data/init_runtime/backup/ 
+      tags: tfe
+  
+    - name: "backup_conf: backup the pangu_pxy.conf"
+      copy:
+        src: /opt/tsg/tfe/conf/pangu/pangu_pxy.conf
+        dest: /data/init_runtime/backup/ 
+      tags: tfe
+  

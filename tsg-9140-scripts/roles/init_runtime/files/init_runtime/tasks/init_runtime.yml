@@ -3,87 +3,70 @@
   vars_files:
   - '{{var_files_path}}'
   tasks:
-  - name: "init_runtime: template certstore configure file"
-    template:
-      src: "../templates/cert_store.ini.j2"
-      dest: /opt/tsg/certstore/conf/cert_store.ini
-    tags: certstore
-    notify:
-    - Restart certstore
-
-  - name: "init_runtime: Template the tsgconf/main.conf"
-    template:
-      src: "../templates/main.conf.j2"
-      dest: /home/mesasoft/sapp_run/tsgconf/main.conf
-    tags: firewall
-    notify:
-    - Restart sapp
-
-  - name: "init_runtime: Template the tsgconf/maat.conf"
-    template:
-      src: "../templates/maat.conf.j2"
-      dest: /home/mesasoft/sapp_run/tsgconf/maat.conf
-    tags: firewall
-    notify:
-    - Restart sapp
-
-  - name: "init_runtime: Template the conf/capture_packet_plug.conf"
-    template:
-      src: "../templates/maat.conf.j2"
-      dest: /home/mesasoft/sapp_run/conf/capture_packet_plug.conf
-    tags: firewall
-    notify:
-    - Restart sapp
-
-  - name: "init_runtime: Template the sapp.toml"
-    template:
-      src: "../templates/sapp.toml.j2"
-      dest: /home/mesasoft/sapp_run/etc/sapp.toml
-    tags: sapp
-    notify:
-    - Restart sapp
-
-  - name: "init_runtime: Templates telegraf.conf"
-    template:
-      src: "../templates/telegraf_statistic.conf.j2"
-      dest: /etc/telegraf/telegraf_statistic.conf
-    tags: telegraf_statistic
-    notify:
-    - Restart telegraf_statistic
-
-  - name: "init_runtime: template the tfe.conf"
-    template:
-      src: "../templates/tfe.conf.j2"
-      dest: /opt/tsg/tfe/conf/tfe/tfe.conf
-    tags: tfe
-    notify:
-    - Restart tfe
-
-  - name: "init_runtime: template the pangu_pxy.conf"
-    template:
-      src: "../templates/pangu_pxy.conf.j2"
-      dest: /opt/tsg/tfe/conf/pangu/pangu_pxy.conf
-    tags: tfe
-    notify:
-    - Restart tfe
+    - name: "init_runtime: template certstore configure file"
+      template:
+        src: "../templates/cert_store.ini.j2"
+        dest: /opt/tsg/certstore/conf/cert_store.ini
+      tags: certstore
+      notify:
+      - Restart certstore
+  
+    - name: "init_runtime: Template the tsgconf/main.conf"
+      template:
+        src: "../templates/main.conf.j2"
+        dest: /home/mesasoft/sapp_run/tsgconf/main.conf
+      tags: firewall
+      notify:
+      - Restart sapp
+  
+    - name: "init_runtime: Template the tsgconf/maat.conf"
+      template:
+        src: "../templates/maat.conf.j2"
+        dest: /home/mesasoft/sapp_run/tsgconf/maat.conf
+      tags: firewall
+      notify:
+      - Restart sapp
+  
+    - name: "init_runtime: Template the conf/capture_packet_plug.conf"
+      template:
+        src: "../templates/maat.conf.j2"
+        dest: /home/mesasoft/sapp_run/conf/capture_packet_plug.conf
+      tags: firewall
+      notify:
+      - Restart sapp
+  
+    - name: "init_runtime: Template the sapp.toml"
+      template:
+        src: "../templates/sapp.toml.j2"
+        dest: /home/mesasoft/sapp_run/etc/sapp.toml
+      tags: sapp
+      notify:
+      - Restart sapp
+  
+    - name: "init_runtime: Templates telegraf.conf"
+      template:
+        src: "../templates/telegraf_statistic.conf.j2"
+        dest: /etc/telegraf/telegraf_statistic.conf
+      tags: telegraf_statistic
+      notify:
+      - Restart telegraf_statistic
+  
+    - name: "init_runtime: template the tfe.conf"
+      template:
+        src: "../templates/tfe.conf.j2"
+        dest: /opt/tsg/tfe/conf/tfe/tfe.conf
+      tags: tfe
+      notify:
+      - Restart tfe
+  
+    - name: "init_runtime: template the pangu_pxy.conf"
+      template:
+        src: "../templates/pangu_pxy.conf.j2"
+        dest: /opt/tsg/tfe/conf/pangu/pangu_pxy.conf
+      tags: tfe
+      notify:
+      - Restart tfe
 
   handlers:
-    - name: "Restart certstore"
-      systemd:
-        name: certstore
-        state: restarted
+    - include: ../handlers/restart_service.yml
 
-    - name: "Restart sapp"
-      systemd:
-        name: sapp
-        state: restarted
-
-    - name: "Restart telegraf_statistic"
-      systemd:
-        name: telegraf_statistic
-        state: restarted
-
-    - name: "Restart tfe"
-      systemd:
-        name: tfe
-        state: restarted
