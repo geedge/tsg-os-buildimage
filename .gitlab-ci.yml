@@ -11,7 +11,3 @@ build:
     - tsg-os-installer
     except:
     - tags
-    artifacts:
-      name: "tsg-os-$CI_COMMIT_REF_NAME"
-      paths:
-        - images/*.bin
