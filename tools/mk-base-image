@@ -8,15 +8,19 @@
 
 yum_config=$1
 target=$2
+projectdir=$3
+kernel_version="5.4.113-1.el7.elrepo.x86_64"
 
 set -ex
 
 package_to_install="@base @core @debugging @directory-client @guest-agents
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management
-                    grub2 kernel kernel-devel epel-release ansible yum-utils ipmitool docker-ce docker-ce-cli containerd.io"
-
+                    grub2 epel-release ansible yum-utils ipmitool docker-ce docker-ce-cli containerd.io"
+locak_package_to_install="$projectdir/package/kernel-lt-$kernel_version.rpm
+                          $projectdir/package/kernel-lt-devel-$kernel_version.rpm"
 
 setopt="group_package_types=mandatory,default,optional"
+yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $locak_package_to_install
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install
 
 cat > "$target"/etc/sysconfig/network <<EOF
@@ -42,7 +46,7 @@ rm -rf "$target"/etc/ld.so.cache
 rm -rf "$target"/var/cache/ldconfig/*
 
 cd $target/boot
-ln -sf $(ls -1 vmlinuz-* | tail -1) vmlinuz
+ln -sf vmlinuz-$kernel_version vmlinuz
 ln -sf $(ls -1 initramfs-* | tail -1) initrd.img
 cd -
 

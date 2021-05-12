@@ -36,7 +36,7 @@ installer: builddir
 	sed -i -e "s/%%SIZE_PART_DATA%%/$(SIZE_PART_DATA)/" $(TARGET_INSTALLER_DIR)/install.sh
 
 sysroot-base: builddir
-	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum.conf $(TARGET_SYSROOT_DIR)
+	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum.conf $(TARGET_SYSROOT_DIR) $(PROJECTDIR)
 
 sysroot-ansible: sysroot-base
 	$(TOOLSDIR)/ansible-stage-one $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR)
