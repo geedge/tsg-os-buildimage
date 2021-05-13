@@ -10,6 +10,12 @@
       - /tmp/x710_drive/i40e-2.15.9-1.x86_64.rpm
     state: present
 
+- name: "install iavf"
+  yum:
+    name:
+      - /tmp/x710_drive/iavf-4.1.1-1.x86_64.rpm
+    state: present
+
 - name: "update  depmod"
   shell: depmod -v 5.4.113-1.el7.elrepo.x86_64
 
