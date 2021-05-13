@@ -13,6 +13,9 @@ mkdir -p /data/overlay/rootfs_etc/work
 mkdir -p /data/overlay/rootfs_var/rw
 mkdir -p /data/overlay/rootfs_var/work
 
+# presistent journald
+mkdir -p /var/log/journal
+
 # Setup o/s mount points
 (cat <<EOF2
 tmpfs                   /tmp                    tmpfs   defaults        0 0
