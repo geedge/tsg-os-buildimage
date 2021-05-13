@@ -1,9 +1,4 @@
 ---
-- name: "copy kni to destination server"
-  copy:
-    src: "{{ role_path }}/files/"
-    dest: /tmp/ansible_deploy/
-
 - name: "install kni rpms from localhost"
   yum:
     name:

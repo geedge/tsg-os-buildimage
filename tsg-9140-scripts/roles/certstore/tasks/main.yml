@@ -1,8 +1,3 @@
-- name: "copy certstore rpm to destination"
-  copy:
-    src: "{{ role_path }}/files/"
-    dest: "/tmp/ansible_deploy/"
-
 - name: Ensures /opt/tsg exists
   file: path=/opt/tsg state=directory
   tags: mkdir

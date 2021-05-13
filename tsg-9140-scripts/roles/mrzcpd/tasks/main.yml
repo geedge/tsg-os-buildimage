@@ -1,9 +1,4 @@
 ---
-- name: "copy mrzcpd to destination server"
-  copy:
-    src: "{{ role_path }}/files/"
-    dest: "/tmp/ansible_deploy/"
-
 - name: "install mrzcpd"
   yum:
     name: "{{ mrzcpd_rpm_version }}"
