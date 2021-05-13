@@ -44,12 +44,13 @@ OS_BUILD_TIME := $(subst :,$e,$(OS_BUILD_TIME))
 OS_BUILD_TIME := $(subst T,$e,$(OS_BUILD_TIME))
 OS_BUILD_TIME := $(subst Z,$e,$(OS_BUILD_TIME))
 OS_BUILD_TIME := $(subst ",$e,$(OS_BUILD_TIME))
+OS_BUILD_TIME := $(subst +,$e,$(OS_BUILD_TIME))
 
 OS_BUILD_HASH := $(subst ",$e,$(VCS_SHORT_HASH))
 OS_BUILD_TAG  := $(subst ",$e,$(VCS_TAG))
 
 ifeq ($(OS_BUILD_TAG),)
-OS_BUILD_TAG := UN-$(OS_BUILD_TIME)
+OS_BUILD_TAG := $(OS_BUILD_TIME)
 endif
 
 ifdef DALIY_BUILD_VERSION
