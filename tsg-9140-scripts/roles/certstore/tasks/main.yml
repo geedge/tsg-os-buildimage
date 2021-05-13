@@ -10,7 +10,7 @@
 - name: install certstore
   yum:
     name:
-      - /tmp/ansible_deploy/certstore-2.1.6.20201215.f2e9ba7-1.el7.x86_64.rpm
+      - "{{ certstore_rpm_version }}"
     state: present
 
 - name: template certstore configure file
@@ -28,5 +28,3 @@
     src: "{{ role_path }}/files/memory.conf"
     dest: /etc/systemd/system/certstore.service.d/
     mode: 0644
-
-

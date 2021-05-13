@@ -6,11 +6,8 @@
 
 - name: "install tsg_app packages"
   yum:
-    name: "{{ app_packages }}"
+    name: "{{ tsg_app_rpm_version }}"
     state: present
     skip_broken: yes
-  vars:
-    app_packages:
-      - /tmp/ansible_deploy/app_sketch_local-2.0.2.edf4fb0-2.el7.x86_64.rpm
 #  when: tsg_app_enable == 1
 

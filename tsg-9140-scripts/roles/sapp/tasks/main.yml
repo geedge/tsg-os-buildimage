@@ -10,18 +10,11 @@
     dest: /usr/local/bin
     mode: 0755
 
-- name: "install sapp rpms from localhost"
+- name: "install sapp and tcpdump_mesa rpms from localhost"
   yum:
-    name:
-      - /tmp/ansible_deploy/sapp-4.2.26.fc1a6aa-2.el7.x86_64.rpm
+    name: "{{ item.value }}"
     state: present
-
-- name: "install tcpdump_mesa rpms from localhost"
-  yum:
-    name:
-      - /tmp/ansible_deploy/tcpdump_mesa-1.0.2.0c5a950-2.el7.x86_64.rpm
-    state: present
-    skip_broken: yes
+  with_dict: "{{ sapp_rpm_version }}"
 
 - name: "mkdir tsgconf"
   file:

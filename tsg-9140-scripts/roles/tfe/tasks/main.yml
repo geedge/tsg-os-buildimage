@@ -14,7 +14,7 @@
   yum:
     name:
       #- /tmp/ansible_deploy/tfe-kmod-v1.0.5.20200408-1dkms.noarch.rpm
-      - /tmp/ansible_deploy/tfe-4.3.30.62dde9e-1.el7.x86_64.rpm
+      - "{{ tfe_rpm_version }}"
     state: present
 
 - name: "tfe:copy cert file to device"

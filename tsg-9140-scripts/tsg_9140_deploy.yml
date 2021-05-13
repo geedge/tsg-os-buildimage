@@ -2,6 +2,7 @@
   remote_user: root
   vars_files:
     - install_config/group_vars/tsg_9140_docker.yml
+    - install_config/group_vars/rpm_version.yml
   roles:
     #- {role: init-env, tags: init-env}
     - {role: init_runtime, tags: init_runtime}
