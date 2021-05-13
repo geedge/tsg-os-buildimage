@@ -1,13 +1,6 @@
 ---
-- name: "copy tsg_app rpms to destination server"
-  copy:
-    src: "{{ role_path }}/files/"
-    dest: /tmp/ansible_deploy/
-
 - name: "install tsg_app packages"
   yum:
     name: "{{ tsg_app_rpm_version }}"
+    conf_file: "{{ rpm_repo_config_path }}"
     state: present
-    skip_broken: yes
-#  when: tsg_app_enable == 1
-

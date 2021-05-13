@@ -44,7 +44,7 @@ framework_rpm_version:
   libaws-cpp-sdk-s3: libaws-cpp-sdk-s3-2.0.0.f3c33ea
   libhos-client-cpp: libhos-client-cpp-1.0.24.20e6f94
 
-kni_rpm_version: kni-21.03.01.916999f
+kni_rpm_version: kni-21.03.03.3cd5031
 
 mrzcpd_rpm_version: mrzcpd-4.3.30.4627eb7
 

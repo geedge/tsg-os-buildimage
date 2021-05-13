@@ -7,6 +7,7 @@
   yum:
     name:
       - "{{ tsg_diagnose_rpm_version }}"
+    conf_file: "{{ rpm_repo_config_path }}"
     state: present
 
 - name: "Templates tsg-diagnose.config"

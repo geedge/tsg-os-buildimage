@@ -3,8 +3,8 @@
   yum:
     name:
       - "{{ kni_rpm_version }}"
+    conf_file: "{{ rpm_repo_config_path }}"
     state: present
-#    skip_broken: yes
 
 - name: Template the kni.conf
   template:

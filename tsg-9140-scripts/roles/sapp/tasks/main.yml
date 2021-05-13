@@ -13,6 +13,7 @@
 - name: "install sapp and tcpdump_mesa rpms from localhost"
   yum:
     name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
     state: present
   with_dict: "{{ sapp_rpm_version }}"
 

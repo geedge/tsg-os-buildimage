@@ -7,7 +7,7 @@
   yum:
     name: "{{ item.value }}"
     state: present
-    skip_broken: yes
+    conf_file: "{{ rpm_repo_config_path }}"
   with_dict: "{{ framework_rpm_version }}"
 
 - name: "mkdir /etc/ld.so.conf.d/"
@@ -19,6 +19,3 @@
   copy:
     src: "{{ role_path }}/files/framework.conf"
     dest: /etc/ld.so.conf.d/
-
-- name: "update ld"
-  command: ldconfig

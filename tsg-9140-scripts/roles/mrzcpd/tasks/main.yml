@@ -2,6 +2,7 @@
 - name: "install mrzcpd"
   yum:
     name: "{{ mrzcpd_rpm_version }}"
+    conf_file: "{{ rpm_repo_config_path }}"
     state: present
 
 - name: "update sysconfig/mrzcpd"

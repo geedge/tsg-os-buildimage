@@ -9,7 +9,7 @@
     - {role: framework, tags: framework}
     #- {role: kernel-ml, tags: kernel-ml}
     - {role: mrzcpd, tags: mrzcpd}
-    - {role: tsg-9140-env, tags: tsg-9140-env}
+    #- {role: tsg-9140-env, tags: tsg-9140-env}
     - {role: sapp, tags: sapp}
     - {role: tsg_master, tags: tsg_master}
     - {role: kni, tags: kni}

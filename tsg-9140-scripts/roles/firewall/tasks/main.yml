@@ -1,14 +1,9 @@
 ---
-- name: "copy firewall rpms to destination server"
-  copy:
-    src: "{{ role_path }}/files/"
-    dest: /tmp/ansible_deploy/
-
 - name: "install firewall packages"
   yum:
     name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
     state: present
-    skip_broken: yes
   with_dict: "{{ firewall_rpm_version }}"
 
 - name: "Template the tsgconf/main.conf"

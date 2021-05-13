@@ -13,8 +13,8 @@
 - name: "install tfe rpms from localhost"
   yum:
     name:
-      #- /tmp/ansible_deploy/tfe-kmod-v1.0.5.20200408-1dkms.noarch.rpm
       - "{{ tfe_rpm_version }}"
+    conf_file: "{{ rpm_repo_config_path }}"
     state: present
 
 - name: "tfe:copy cert file to device"

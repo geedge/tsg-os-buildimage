@@ -1,11 +1,6 @@
-- name: "copy tsg_master rpm to destination server"
-  copy:
-    src: "{{ role_path }}/files/"
-    dest: /tmp/ansible_deploy/
-
 - name: "install tsg_master from localhost"
   yum:
     name:
       - "{{ tsg_master_rpm_version }}"
+    conf_file: "{{ rpm_repo_config_path }}"
     state: present
-    skip_broken: yes
