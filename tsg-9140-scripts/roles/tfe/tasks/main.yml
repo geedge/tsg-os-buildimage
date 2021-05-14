@@ -59,19 +59,19 @@
 
 - name: "create a override conf - first step, create dir"
   file:
-    path: /etc/systemd/system/tfe.service.d/
+    path: /usr/lib/systemd/system/tfe.service.d/
     state: directory
     mode: '0755'
 
 - name: "create a override conf - second step, copy a override service file"
   template:
     src: "{{ role_path }}/templates/require-mrzcpd.conf.j2"
-    dest: /etc/systemd/system/tfe.service.d/require-mrzcpd.conf
+    dest: /usr/lib/systemd/system/tfe.service.d/require-mrzcpd.conf
 
 - name: "copy memory limit file to tfe.service.d"
   copy:
     src: "{{ role_path }}/files/memory.conf"
-    dest: /etc/systemd/system/tfe.service.d/
+    dest: /usr/lib/system/tfe.service.d/
     mode: 0644
 
 

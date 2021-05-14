@@ -22,5 +22,5 @@
 - name: "copy memory limit file to certstore.service.d"
   copy:
     src: "{{ role_path }}/files/memory.conf"
-    dest: /etc/systemd/system/certstore.service.d/
+    dest: /usr/lib/systemd/system/certstore.service.d/
     mode: 0644

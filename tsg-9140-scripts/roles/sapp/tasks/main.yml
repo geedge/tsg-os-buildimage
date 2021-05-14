@@ -52,15 +52,15 @@
     dest: /etc/tmpfiles.d/sapp_tmpfile.conf
   tags: template
 
-- name: "Template sapp.service destination server"
+- name: "sapp: service adapts runtimes"
   template:
     src: "{{ role_path }}/templates/sapp.service.j2"
-    dest: /usr/lib/systemd/system/sapp.service
-    mode: 0755
+    dest: /usr/lib/systemd/system/sapp.service.d/
+    mode: 0644
 
 - name: "copy memory limit file to sapp.service.d"
   copy:
     src: "{{ role_path }}/files/memory.conf"
-    dest: /etc/systemd/system/sapp.service.d/
+    dest: /usr/lib/systemd/system/sapp.service.d/
     mode: 0644
 
