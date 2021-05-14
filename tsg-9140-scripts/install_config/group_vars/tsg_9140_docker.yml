@@ -49,6 +49,3 @@ kni:
     tfe0_enabled: 1
     tfe1_enabled: 0
     tfe2_enabled: 0
-
-######rpm repo config path##############
-rpm_repo_config_path: "/tmp/yum.conf"

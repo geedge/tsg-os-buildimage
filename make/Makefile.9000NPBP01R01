@@ -45,8 +45,9 @@ sysroot-verfile: sysroot-base
 	sed -i -e "s/^PRETTY_NAME=.*/PRETTY_NAME=\"TSG-OS v$(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
 
 sysroot-ansible: sysroot-verfile sysroot-base
-	cp $(CONFDIR) $(TARGET_SYSROOT_DIR)/tmp/
-	$(TOOLSDIR)/ansible-stage-one $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR)
+	cp $(CONFDIR)/yum.conf $(TARGET_SYSROOT_DIR)/tmp/ -r
+	cp $(CONFDIR)/resolv.conf $(TARGET_SYSROOT_DIR)/etc/ -r
+	$(TOOLSDIR)/ansible-stage-one $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR) /tmp/yum.conf
 
 sysroot-cleanup:
 	rm -rf $(TARGET_SYSROOT_DIR)/tmp/*

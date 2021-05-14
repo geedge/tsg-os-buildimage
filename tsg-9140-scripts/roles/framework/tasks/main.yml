@@ -3,6 +3,16 @@
     src: "{{ role_path }}/files/"
     dest: "/tmp/ansible_deploy/"
 
+- name: "install framework packages by rpm packages"
+  yum:
+    name: "{{ packages }}"
+    state: present
+    skip_broken: yes
+  vars:
+    packages:
+      - /tmp/ansible_deploy/librdkafka-0.11.4-1.el7.x86_64.rpm
+      - /tmp/ansible_deploy/lz4-1.7.5-3.el7.x86_64.rpm
+
 - name: "install framework packages"
   yum:
     name: "{{ item.value }}"
