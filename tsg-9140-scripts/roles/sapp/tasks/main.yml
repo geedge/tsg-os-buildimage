@@ -54,7 +54,7 @@
 
 - name: "sapp: service adapts runtimes"
   template:
-    src: "{{ role_path }}/templates/sapp.service.j2"
+    src: "{{ role_path }}/templates/adapt_runtimes.j2"
     dest: /usr/lib/systemd/system/sapp.service.d/
     mode: 0644
 
