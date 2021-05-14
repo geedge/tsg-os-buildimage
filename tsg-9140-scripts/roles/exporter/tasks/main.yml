@@ -5,9 +5,9 @@
 
 - name: "Install freeipmi rpm package"
   yum:
-    name:
-      - "/tmp/ansible_deploy/freeipmi-1.5.7-3.el7.x86_64.rpm"
-    state: present
+    name: freeipmi
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: latest
 
 - name: "mkdir /opt/exporter/"
   file:
