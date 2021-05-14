@@ -17,9 +17,10 @@
     - {role: tsg_app, tags: tsg_app}
     #- {role: http_healthcheck,tags: http_healthcheck}
     - {role: x710-drive, tags: x710-drive}
-    - {role: certstore, tags: certstore}
     - {role: redis, tags: redis}
-    - {role: cert-redis, tags: cert-redis}
+    - {role: certstore, tags: certstore}
+    #- {role: redis, tags: redis}
+    #- {role: cert-redis, tags: cert-redis}
     #83上没有- {role: maat-redis, tags: maat-redis, when: deploy_mode == "cluster"}
     - {role: tfe, tags: tfe}
     - {role: telegraf_statistic, tags: telegraf_statistic}
