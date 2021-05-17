@@ -47,7 +47,10 @@ sysroot-verfile: sysroot-base
 sysroot-ansible: sysroot-verfile sysroot-base
 	cp $(CONFDIR)/yum.conf $(TARGET_SYSROOT_DIR)/tmp/ -r
 	cp $(CONFDIR)/resolv.conf $(TARGET_SYSROOT_DIR)/etc/ -r
+	cp $(TARGET_SYSROOT_DIR)/etc/hosts $(TARGET_SYSROOT_DIR)/tmp/ -r
+	cp /etc/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
 	$(TOOLSDIR)/ansible-stage-one $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR) /tmp/yum.conf
+	cp $(TARGET_SYSROOT_DIR)/tmp/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
 
 sysroot-cleanup:
 	rm -rf $(TARGET_SYSROOT_DIR)/tmp/*

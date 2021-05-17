@@ -52,6 +52,12 @@
     dest: /etc/tmpfiles.d/sapp_tmpfile.conf
   tags: template
 
+- name: Template the gdev.conf
+  template:
+    src: "{{ role_path }}/templates/gdev.conf.j2"
+    dest: /home/mesasoft/sapp_run/etc/gdev.conf
+  tags: template
+
 - name: "sapp: service adapts runtimes"
   template:
     src: "{{ role_path }}/templates/adapt_runtimes.j2"
