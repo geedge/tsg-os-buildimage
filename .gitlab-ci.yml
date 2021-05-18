@@ -1,4 +1,4 @@
-image: "git.mesalab.cn:7443/mesa_platform/build-env:feature-pulp-file"
+image: "git.mesalab.cn:7443/mesa_platform/build-env:master"
 variables:
   GIT_STRATEGY: "clone"
 
