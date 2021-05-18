@@ -1,13 +1,32 @@
-image: "git.mesalab.cn:7443/mesa_platform/build-env:master"
+image: "git.mesalab.cn:7443/mesa_platform/build-env:feature-pulp-file"
 variables:
   GIT_STRATEGY: "clone"
 
-build:
-    stage: build
-    script:
-      - yum -y install ansible pbzip2
-      - make
-    tags:
+.build_tsg-buildimage:
+  script:
+    - yum -y install ansible pbzip2
+    - make
+    - chmod +x ./tools/upload.sh
+    - ./tools/upload.sh 
+  tags:
     - tsg-os-installer
-    except:
+
+debug_build:
+  stage: build
+  extends: .build_tsg-buildimage
+  variables:
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-testing
+    PULP3_FILE_DIST_NAME: tsg-os-images-testing
+  except:
+    - tags
+
+release_build:
+  stage: build
+  extends: .build_tsg-buildimage
+  variables:
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-stable
+    PULP3_FILE_DIST_NAME: tsg-os-images-stable
+  only:
     - tags
