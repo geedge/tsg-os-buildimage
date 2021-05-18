@@ -99,7 +99,7 @@
 - name: "set if-pre-down "
   template:
     src: "{{ role_path }}/templates/if-pre-down.toml.j2"
-    dest: /etc/NetworkManager/dispatcher.d/pre-up.d/if-pre-down
+    dest: /etc/NetworkManager/dispatcher.d/pre-down.d/if-pre-down
     mode: 0755
   tags: template
 
