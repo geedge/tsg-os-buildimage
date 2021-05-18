@@ -47,17 +47,59 @@
     dest: /etc/sysconfig/network-scripts/ifcfg-enp131s0f3
   tags: template
 
-- name: "set ifup-local "
+- name: "set enp1s2"
   template:
-    src: "{{ role_path }}/templates/ifup-local.toml.j2"
-    dest: /etc/NetworkManager/dispatcher.d/ifup-local
+    src: "{{ role_path }}/templates/ifcfg-enp1s2.toml.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-enp1s2
+  tags: template
+
+- name: "set enp1s2f1"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-enp1s2f1.toml.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-enp1s2f1
+  tags: template
+
+- name: "set enp1s2f2"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-enp1s2f2.toml.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-enp1s2f2
+  tags: template
+
+- name: "set enp130s2"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-enp130s2.toml.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-enp130s2
+  tags: template
+
+- name: "set enp130s2f1"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-enp130s2f1.toml.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-enp130s2f1
+  tags: template
+
+- name: "set enp130s2f2"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-enp130s2f2.toml.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-enp130s2f2
+  tags: template
+
+- name: "set enp130s2f3"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-enp130s2f3.toml.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-enp130s2f3
+  tags: template
+
+- name: "set if-pre-up "
+  template:
+    src: "{{ role_path }}/templates/if-pre-up.toml.j2"
+    dest: /etc/NetworkManager/dispatcher.d/pre-up.d/if-pre-up
     mode: 0755
   tags: template
 
-- name: "set ifdown-local "
+- name: "set if-pre-down "
   template:
-    src: "{{ role_path }}/templates/ifdown-local.toml.j2"
-    dest: /etc/NetworkManager/dispatcher.d/ifdown-local
+    src: "{{ role_path }}/templates/if-pre-down.toml.j2"
+    dest: /etc/NetworkManager/dispatcher.d/pre-up.d/if-pre-down
     mode: 0755
   tags: template
 
