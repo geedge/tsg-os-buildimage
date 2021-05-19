@@ -1,7 +1,8 @@
 [system]
-nr_worker_threads=32
+nr_worker_threads=26
 enable_kni_v1=0
-enable_kni_v2=1
+enable_kni_v2=0
+enable_kni_v3=1
 
 # Only when (disable_coredump == 1 || (enable_breakpad == 1 && enable_breakpad_upload == 1)) is satisfied, the core will not be generated locally
 disable_coredump=0
@@ -16,11 +17,18 @@ breakpad_minidump_dir=/run/tfe/crashreport
 # ask for at least (1 + nr_worker_threads) masks
 # the first  mask for acceptor thread
 # the others mask for worker   thread
-enable_cpu_affinity=0
-cpu_affinity_mask=25-50
+enable_cpu_affinity=1
+cpu_affinity_mask=1-13,28-41
 
 # LEAST_CONN = 0; ROUND_ROBIN = 1
 load_balance=1
+
+# for enable kni v3
+[nfq]
+queue_id=1
+queue_maxlen=655350
+queue_rcvbufsiz=983025000
+queue_no_enobufs=1
 
 [kni]
 # kni v1
@@ -30,7 +38,7 @@ load_balance=1
 
 # send cmsg
 send_switch=1
-ip=192.168.100.1
+ip=127.0.0.1
 cmsg_port=2475
 
 # watch dog
@@ -94,7 +102,7 @@ ssl_ja3_table=PXY_SSL_FINGERPRINT
 #0 on cache 1 off cache
 no_cache=0
 mode=normal
-cert_store_host=192.168.100.1
+cert_store_host=127.0.0.1
 cert_store_port=9991
 ca_path=resource/tfe/tango-ca-v3-trust-ca.pem
 untrusted_ca_path=resource/tfe/tango-ca-v3-untrust-ca.pem
@@ -144,7 +152,7 @@ statsd_set_prometheus_port=9001
 statsd_set_prometheus_url_path=/metrics
 
 [traffic_mirror]
-enable=1
+enable=0
 device=lo
 # 0:TRAFFIC_MIRROR_ETHDEV_AF_PACKET; 1:TRAFFIC_MIRROR_ETHDEV_MARSIO
 type=0
