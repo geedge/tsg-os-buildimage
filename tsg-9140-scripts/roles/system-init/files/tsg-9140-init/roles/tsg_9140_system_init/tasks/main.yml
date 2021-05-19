@@ -26,12 +26,6 @@
     name: sapp
     enabled: yes
 
-##################### kni #####################
-- name: "enable sapp"
-  systemd:
-    name: sapp
-    enabled: yes
-
 ##################### certstore #####################
 - name: "start certstore"
   systemd:
@@ -82,9 +76,3 @@
     name: exporter-ipmi
     enabled: yes
     state: restarted
-##################### Tsg-diagnose #####################
-- name: 'Tsg-diagnose service start'
-  systemd:
-    name: tsg-diagnose
-    enabled: yes
-    state: started
