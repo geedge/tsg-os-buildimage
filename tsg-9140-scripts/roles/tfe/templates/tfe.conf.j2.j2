@@ -89,7 +89,7 @@ key_log_file=log/sslkeylog.log
 
 # mid cert cache
 mc_cache_enable=1
-mc_cache_eth=enp131s0f2
+mc_cache_eth=enp130s2f3
 {% raw %}
 mc_cache_broker_list={{ log_kafkabrokers.address | join(",") }}
 {% endraw %}
@@ -161,7 +161,7 @@ stat_file=log/traffic_mirror.status
 
 [kafka]
 enable=1
-NIC_NAME=enp131s0f2
+NIC_NAME=enp130s2f3
 {% raw %}
 kafka_brokerlist={{ log_kafkabrokers.address | join(",") }}
 {% endraw %}
