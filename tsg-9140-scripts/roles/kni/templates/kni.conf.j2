@@ -10,15 +10,15 @@ dst_mac_addr = fe:65:b7:03:50:bd
 [tfe0]
 enabled = 1
 dev_eth_symbol = enp130s2
-ip_addr = 192.168.100.1
+ip_addr = 127.0.0.1
 
 [tfe_cmsg_receiver]
-listen_eth = enp1s2f1
+listen_eth = lo
 listen_port = 2475
 
 [watch_dog]
 switch = 1
-listen_eth = enp1s2f1
+listen_eth = lo
 listen_port = 2476
 keepalive_idle = 2
 keepalive_intvl = 1
