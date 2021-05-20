@@ -76,9 +76,17 @@
     dest: /usr/lib/systemd/system/sapp.service.d/
     mode: 0644
 
+- name: "Create /home/mesasoft/sapp_run/log/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /home/mesasoft/sapp_run/log
+
 - name: "Create a symbolic link for sapp logs"
   file:
-    src: /home/mesasoft/sapp_run/log/
-    dest: /var/log/sapp/
+    src: /home/mesasoft/sapp_run/log
+    dest: /var/log/sapp
     state: link
 
