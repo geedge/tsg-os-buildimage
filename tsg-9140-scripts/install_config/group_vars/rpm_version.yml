@@ -46,7 +46,7 @@ framework_rpm_version:
 
 kni_rpm_version: kni-21.03.03.3cd5031
 
-mrzcpd_rpm_version: mrzcpd-4.3.30.4627eb7
+mrzcpd_rpm_version: mrzcpd-4.4.4.3d81e36
 
 sapp_rpm_version:
   sapp: sapp-4.2.32.91bc8e3
