@@ -90,3 +90,8 @@
     dest: /var/log/sapp
     state: link
 
+##################### sapp #####################
+- name: "enable sapp"
+  systemd:
+    name: sapp
+    enabled: yes

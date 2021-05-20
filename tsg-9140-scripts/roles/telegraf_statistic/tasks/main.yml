@@ -20,3 +20,10 @@
     src: "{{ role_path }}/files/telegraf_statistic.service"
     dest: /usr/lib/systemd/system
     mode: 0644
+
+##################### telegraf #####################
+- name: "Start telegraf"
+  systemd:
+    name: telegraf_statistic.service
+    state: started
+    enabled: yes

@@ -74,4 +74,13 @@
     dest: /usr/lib/system/tfe.service.d/
     mode: 0644
 
+##################### tfe #####################
+- name: "enable tfe-env"
+  systemd:
+    name: tfe-env
+    enabled: yes
 
+- name: "enable tfe"
+  systemd:
+    name: tfe
+    enabled: yes

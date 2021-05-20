@@ -15,64 +15,23 @@
     src: "{{ role_path }}/templates/tsg_9140/mrglobal.conf.tsg_9140.j2"
     dest: /opt/mrzcpd/etc/mrglobal.conf
 
-#- name: "enable mrenv"
-#  systemd:
-#    name: mrenv
-#    enabled: yes
-#    daemon_reload: yes
-#  when:
-#    - tsg_access_type != 0
-#
-#- name: "enable mrzcpd"
-#  systemd:
-#    name: mrzcpd
-#    enabled: yes
-#    daemon_reload: yes
-#  when:
-#    - tsg_access_type != 0
-#
-#- name: "enable prometheus output - monit_device"
-#  systemd:
-#    name: mrapm_device
-#    enabled: yes
-#    daemon_reload: yes
-#
-#- name: "enable prometheus output - monit_stream"
-#  systemd:
-#    name: mrapm_stream
-#    enabled: yes
-#    daemon_reload: yes
-#
-#- name: "enable mrtunnat on master"
-#  systemd:
-#    name: mrtunnat
-#    enabled: no
-#    daemon_reload: yes
-#  when:
-#    - nic_traffic_mirror is not defined
-#    - tsg_access_type != 0
-#
-#- name: "disable mrtunnat on slave"
-#  systemd:
-#    name: mrtunnat
-#    enabled: no
-#    daemon_reload: yes
-#  when: nic_traffic_mirror is defined
-#
-#- name: "mask mrzcpd on server_tun_mode"
-#  systemd:
-#    name: mrzcpd
-#    enabled: no
-#    masked: yes
-#    daemon_reload: yes
-#  when:
-#    - tsg_access_type == 0
-#
-#- name: "mask mrtunnat on server_tun_mode"
-#  systemd:
-#    name: mrtunnat
-#    enabled: no
-#    masked: yes
-#    daemon_reload: yes
-#  when:
-#    - tsg_access_type == 0
+##################### mrzcpd #####################
+- name: "enable mrenv"
+  systemd:
+    name: mrenv
+    enabled: yes
+
+- name: "enable mrzcpd"
+  systemd:
+    name: mrzcpd
+    enabled: yes
+
+- name: "enable prometheus output - monit_device"
+  systemd:
+    name: mrapm_device
+    enabled: yes
+
+- name: "enable prometheus output - monit_stream"
+  systemd:
+    name: mrapm_stream
+    enabled: yes

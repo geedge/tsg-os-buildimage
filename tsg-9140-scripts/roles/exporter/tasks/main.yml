@@ -45,4 +45,21 @@
     dest: /usr/lib/systemd/system/exporter-ipmi.service
   tags: template
 
+##################### exporter #####################
+- name: 'exporter-node service start'
+  systemd:
+    name: exporter-node
+    enabled: yes
+    state: started
 
+- name: 'exporter-systemd service start'
+  systemd:
+    name: exporter-systemd
+    enabled: yes
+    state: restarted
+
+- name: 'exporter-ipmi service start'
+  systemd:
+    name: exporter-ipmi
+    enabled: yes
+    state: restarted
