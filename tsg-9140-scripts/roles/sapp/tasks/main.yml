@@ -40,6 +40,12 @@
     dest: /home/mesasoft/sapp_run/plug/conflist.inf
   tags: template
 
+- name: Template the necessary_plug_list.conf
+  template:
+    src: "{{ role_path }}/templates/necessary_plug_list.conf.j2"
+    dest: /home/mesasoft/sapp_run/etc/necessary_plug_list.conf
+  tags: template
+
 - name: Template the sapp_log.conf
   template:
     src: "{{ role_path }}/templates/sapp_log.conf.j2"
