@@ -20,6 +20,9 @@ mkdir -p /var/log/journal
 rm -rf /boot/grub2
 ln -sf /boot/grub /boot/grub2
 
+# treat grub2* as grub*
+ln -sf /usr/bin/grub2-editenv /usr/bin/grub-editenv
+
 # Setup o/s mount points
 (cat <<EOF2
 tmpfs                   /tmp                    tmpfs   defaults        0 0
@@ -29,6 +32,7 @@ sysfs                   /sys                    sysfs   defaults        0 0
 proc                    /proc                   proc    defaults        0 0
 ${1}               	    /                       ext4    defaults        1 1
 /dev/sda4               /data                   ext4    defaults        1 1
+/dev/sda2               /mnt/onie-boot/         ext4    defaults        1 1
 overlay                 /etc                    overlay x-systemd.requires=/,x-systemd.requires=/data,lowerdir=/etc,upperdir=/data/overlay/rootfs_etc/rw,workdir=/data/overlay/rootfs_etc/work 0 0
 overlay                 /var                    overlay x-systemd.requires=/,x-systemd.requires=/data,lowerdir=/var,upperdir=/data/overlay/rootfs_var/rw,workdir=/data/overlay/rootfs_var/work 0 0
 EOF2

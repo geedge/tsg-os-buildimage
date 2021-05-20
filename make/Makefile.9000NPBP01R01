@@ -22,6 +22,7 @@ builddir:
 	mkdir -p $(TARGET_BUILD_DIR)
 
 installer: builddir
+	rm -rf $(TARGET_INSTALLER_DIR)
 	mkdir -p $(TARGET_INSTALLER_DIR)
 	cp $(INSTALLERDIR)/install.sh $(TARGET_INSTALLER_DIR)/install.sh
 	cp $(INSTALLERDIR)/distro-setup.sh $(TARGET_INSTALLER_DIR)/distro-setup.sh

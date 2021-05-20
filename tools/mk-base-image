@@ -15,7 +15,8 @@ set -ex
 
 package_to_install="@base @core @debugging @directory-client @guest-agents
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management
-                    grub2 epel-release ansible yum-utils ipmitool docker-ce docker-ce-cli containerd.io"
+                    grub2 epel-release efibootmgr ansible yum-utils ipmitool docker-ce docker-ce-cli containerd.io"
+                    
 locak_package_to_install="$projectdir/package/kernel-lt-$kernel_version.rpm
                           $projectdir/package/kernel-lt-devel-$kernel_version.rpm"
 
@@ -54,6 +55,10 @@ cp -a /dev/null $target/dev/
 cp -a /dev/zero $target/dev/
 cp -a /dev/urandom $target/dev/
 cp -a /dev/random $target/dev/
+
+# install ONIE helpers
+cp -rf $projectdir/rootconf/sysroot-bin/* $target/bin/
+cp -rf $projectdir/rootconf/sysroot-lib/* $target/lib/
 
 # ansible-playbook -i tsg-9140-scripts/install_config/tsg_9140_host tsg-9140-scripts/tsg_9140_deploy.yml
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
