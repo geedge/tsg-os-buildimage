@@ -1,0 +1,4 @@
+- name: "docker: copy daemon.json to target"
+  copy:
+    src: '{{ role_path }}/files/daemon.json'
+    dest: /etc/docker/

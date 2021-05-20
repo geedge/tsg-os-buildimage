@@ -25,5 +25,6 @@
     - {role: tfe, tags: tfe}
     - {role: telegraf_statistic, tags: telegraf_statistic}
     - {role: exporter, tags: exporter}
+    - {role: docker, tags: docker}
     - {role: tsg-diagnose, tags: tsg-diagnose}
     - {role: system-init, tags: system-init}
