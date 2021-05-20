@@ -16,6 +16,12 @@
     dest: /opt/tsg/tsg-diagnose/etc/tsg-diagnose.config
   tags: template
 
+- name: "Templates docker-compose.yml"
+  template:
+    src: "{{role_path}}/templates/docker-compose.yml.j2"
+    dest: /opt/tsg/tsg-diagnose/compose/docker-compose.yml
+  tags: template
+
 - name: "tsg-diagnose:mkdir -p .badssl_cert_dict"
   file:
     path: /opt/tsg/tsg-diagnose/.badssl_cert_dict
