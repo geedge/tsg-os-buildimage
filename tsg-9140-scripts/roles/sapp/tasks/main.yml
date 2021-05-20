@@ -76,3 +76,9 @@
     dest: /usr/lib/systemd/system/sapp.service.d/
     mode: 0644
 
+- name: "Create a symbolic link for sapp logs"
+  file:
+    src: /home/mesasoft/sapp_run/log/
+    dest: /var/log/sapp/
+    state: link
+
