@@ -16,6 +16,10 @@ mkdir -p /data/overlay/rootfs_var/work
 # presistent journald
 mkdir -p /var/log/journal
 
+# treat /boot/grub2 as /boot/grub
+rm -rf /boot/grub2
+ln -sf /boot/grub /boot/grub2
+
 # Setup o/s mount points
 (cat <<EOF2
 tmpfs                   /tmp                    tmpfs   defaults        0 0
