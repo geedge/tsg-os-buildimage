@@ -3,6 +3,41 @@
   vars_files:
   - '{{var_files_path}}'
   tasks:
+    - name: "init_runtime: obtain result_exec_obtain_keepalive_subnet"
+      shell: ipmitool picmg addrinfo | grep "Hardware Address" | sed 's/^Hardware Address.*0x4\(.*\)/\1/' | awk '{print strtonum("0x"$1)+16'}
+      register: result_exec_obtain_keepalive_subnet
+
+    - name: "init_runtime: output results that executes command that gets the result_exec_obtain_keepalive_subnet"
+      debug:
+        msg: "{{ result_exec_obtain_keepalive_subnet }}"
+
+    - name: "init_runtime: check result_exec_obtain_keepalive_subnet"
+      assert:
+        that:
+          - result_exec_obtain_keepalive_subnet.rc == 0
+          - result_exec_obtain_keepalive_subnet.failed == False
+          - result_exec_obtain_keepalive_subnet.stdout_lines | length == 1
+          - result_exec_obtain_keepalive_subnet.stdout_lines[0] | int >= 16
+          - result_exec_obtain_keepalive_subnet.stdout_lines[0] | int <= 31
+        fail_msg: "error:{{ result_exec_obtain_keepalive_subnet.stderr }},stdout:{{ result_exec_obtain_keepalive_subnet.stdout_lines }}"
+        success_msg: "{{ result_exec_obtain_keepalive_subnet.stdout_lines[0] }}"
+
+    - name: "init_runtime: Set fact for field keepalive_subnet_ip"
+      set_fact:
+        keepalive_subnet_ip: "{{ result_exec_obtain_keepalive_subnet.stdout_lines[0] }}"
+
+    - name: "init_runtime: template gdev.conf file"
+      template:
+        src: "../templates/gdev.conf.j2"
+        dest: /home/mesasoft/sapp_run/etc/gdev.conf
+      tags: sapp
+
+    - name: "init_runtime: template mrglobal.conf file"
+      template:
+        src: "../templates/mrglobal.conf.j2"
+        dest: /opt/mrzcpd/etc/mrglobal.conf
+      tags: mrzcpd
+
     - name: "init_runtime: template certstore configure file"
       template:
         src: "../templates/cert_store.ini.j2"
@@ -50,6 +85,12 @@
         src: "../templates/pangu_pxy.conf.j2"
         dest: /opt/tsg/tfe/conf/pangu/pangu_pxy.conf
       tags: tfe
+
+    - name: "Restart mrzcpd"
+      systemd:
+        name: mrzcpd
+        state: restarted
+      tags: mrzcpd
 
     - name: "Restart certstore"
       systemd:

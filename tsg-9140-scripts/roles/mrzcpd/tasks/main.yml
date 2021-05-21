@@ -12,8 +12,8 @@
 
 - name: "update mrglobal.conf - TSG9140"
   template:
-    src: "{{ role_path }}/templates/tsg_9140/mrglobal.conf.tsg_9140.j2"
-    dest: /opt/mrzcpd/etc/mrglobal.conf
+    src: "{{ role_path }}/templates/tsg_9140/mrglobal.conf.tsg_9140.j2.j2"
+    dest: /opt/tsg/init_runtime/templates/mrglobal.conf.j2
 
 ##################### mrzcpd #####################
 - name: "enable mrenv"
