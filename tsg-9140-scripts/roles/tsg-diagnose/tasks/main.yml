@@ -33,3 +33,9 @@
     src: /tmp/ansible_deploy/tsg-diagnose-certs.tgz
     dest: /opt/tsg/tsg-diagnose/.badssl_cert_dict
     remote_src: yes
+
+- name: "copy prestart file to tsg-diagnose.service.d"
+  copy:
+    src: "{{ role_path }}/files/prestart"
+    dest: /usr/lib/systemd/system/tsg-diagnose.service.d/
+    mode: 0644
