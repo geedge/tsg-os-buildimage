@@ -138,14 +138,3 @@
     mode: 0777
   tags: template
 
-- name: "copy tsg_9140_system_init"
-  copy:
-    src: "{{ role_path }}/files/"
-    dest: /root/
-
-- name: "enable sshd"
-  systemd:
-    name: sshd
-    enabled: yes
-
-
