@@ -9,20 +9,20 @@
 - name: "Template the tsgconf/main.conf"
   template:
     src: "{{ role_path }}/templates/main.conf.j2.j2"
-    dest: /opt/tsg/init_runtime/templates/main.conf.j2
+    dest: /opt/tsg/tsg-os-provision/templates/main.conf.j2
   tags: template
 
 
 - name: "Template the tsgconf/maat.conf"
   template:
     src: "{{ role_path }}/templates/maat.conf.j2.j2"
-    dest: /opt/tsg/init_runtime/templates/maat.conf.j2
+    dest: /opt/tsg/tsg-os-provision/templates/maat.conf.j2
   tags: template
 
 - name: "Template the conf/capture_packet_plug.conf.j2"
   template:
     src: "{{ role_path }}/templates/capture_packet_plug.conf.j2.j2"
-    dest: /opt/tsg/init_runtime/templates/capture_packet_plug.conf.j2
+    dest: /opt/tsg/tsg-os-provision/templates/capture_packet_plug.conf.j2
   tags: template
  
 - name: "Template the /home/mesasoft/sapp_run/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf"

@@ -5,7 +5,7 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     #- {role: init-env, tags: init-env}
-    - {role: init_runtime, tags: init_runtime}
+    - {role: tsg-os-provision, tags: tsg-os-provision}
     - {role: framework, tags: framework}
     #- {role: kernel-ml, tags: kernel-ml}
     - {role: mrzcpd, tags: mrzcpd}

@@ -1,0 +1,15 @@
+[Unit]
+Description=tsg os provision convertor
+Requires=network.target
+After=network.target
+Before=tsg-os-provision.service
+
+[Service]
+ExecStart=/bin/sh -c "echo \'provision-convertor start\'"
+ExecStop=/bin/sh -c "echo \'provision-convertor stop\'"
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+RequiredBy=tsg-os-provision.service

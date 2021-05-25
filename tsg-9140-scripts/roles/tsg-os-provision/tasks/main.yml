@@ -1,0 +1,12 @@
+- name: "tsg-os-provision: copy tsg-os-provision scripts to dest"
+  copy:
+    src: "{{ role_path }}/files/tsg-os-provision"
+    dest: /opt/tsg/
+    mode: 0644
+
+- name: "tsg-os-provision: chmod 0755 for provison.sh"
+  file:
+    path: "{{ item }}"
+    mode: '0755'
+  with_items:
+    - /opt/tsg/tsg-os-provision/provision.sh

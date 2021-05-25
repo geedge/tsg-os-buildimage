@@ -30,7 +30,7 @@
 - name: "template the tfe.conf"
   template:
     src: "{{ role_path }}/templates/tfe.conf.j2.j2"
-    dest: /opt/tsg/init_runtime/templates/tfe.conf.j2
+    dest: /opt/tsg/tsg-os-provision/templates/tfe.conf.j2
 
 - name: "template the zlog.conf"
   template:
@@ -45,7 +45,7 @@
 - name: "template the pangu_pxy.conf"
   template:
     src: "{{ role_path }}/templates/pangu_pxy.conf.j2.j2"
-    dest: /opt/tsg/init_runtime/templates/pangu_pxy.conf.j2
+    dest: /opt/tsg/tsg-os-provision/templates/pangu_pxy.conf.j2
 
 - name: "create conf/doh/"
   file:

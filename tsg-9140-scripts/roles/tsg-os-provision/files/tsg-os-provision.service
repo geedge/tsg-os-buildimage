@@ -1,0 +1,14 @@
+[Unit]
+Description=Tsg os provision
+Requires=network.target tsg-os-provision-convertor.service
+After=network.target sg-os-provision-convertor.service
+Before=tfe-env.service mrenv.service
+
+[Service]
+ExecStart=/bin/sh -c "/opt/tsg/tsg-os-provison/provision.sh"
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+RequiredBy=tfe-env.service mrenv.service
