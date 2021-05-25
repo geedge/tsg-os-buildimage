@@ -2,6 +2,6 @@
 pcapdevice={{ nic_mgr.name }}
 sendto_gdev_card={{ nic_mgr.name }}
 {% raw %}
-sendto_gdev_ip={{ keepalive_subnet_ip }}
+sendto_gdev_ip=10.253.{{ keepalive_subnet_ip }}.1
 {% endraw %}
 gdev_status_switch=1
