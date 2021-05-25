@@ -1,4 +1,11 @@
 ---
+- name: "set 90-9000NPBP01R01.rules"
+  template:
+    src: "{{ role_path }}/templates/90-9000NPBP01R01.rules.j2"
+    dest: /usr/lib/udev/rules.d/90-9000NPBP01R01.rules
+    mode: 0644
+  tags: template
+
 - name: "set enp1s0 up "
   template:
     src: "{{ role_path }}/templates/ifcfg-enp1s0.toml.j2"
@@ -103,20 +110,6 @@
     mode: 0755
   tags: template
 
-- name: "set setup.enp1s0.ips"
-  template:
-    src: "{{ role_path }}/templates/setup.enp1s0.ips.toml.j2"
-    dest: /sbin/setup.enp1s0.ips
-    mode: 0777
-  tags: template
-
-- name: "set setup.enp130s0.ips"
-  template:
-    src: "{{ role_path }}/templates/setup.enp130s0.ips.toml.j2"
-    dest: /sbin/setup.enp130s0.ips
-    mode: 0777
-  tags: template
-
 - name: "set setup.enp131s0f0.ips"
   template:
     src: "{{ role_path }}/templates/setup.enp131s0f0.ips.toml.j2"
@@ -135,6 +128,13 @@
   template:
     src: "{{ role_path }}/templates/setdown.enp130s0.ips.toml.j2"
     dest: /sbin/setdown.enp130s0.ips
+    mode: 0777
+  tags: template
+
+- name: "set enp130s2f1"
+  template:
+    src: "{{ role_path }}/templates/setup.enp130s2f1.ips.toml.j2"
+    dest: /sbin/setup.enp130s2f1.ips
     mode: 0777
   tags: template
 
