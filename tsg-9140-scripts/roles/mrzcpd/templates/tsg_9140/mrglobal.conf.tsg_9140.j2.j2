@@ -1,12 +1,13 @@
 [device]
 device=enp1s2,enp130s2,vxlan_user,vxlan_fwd
 sz_tunnel=8192
-sz_buffer=32
+sz_buffer=0
 
 [device:enp1s2]
 mtu=4096
 clear_tx_flags=1
 hw_strip_crc=1
+vlan-strip=1
 {% raw %}
 in_addr=10.253.{{ keepalive_subnet_ip }}.1
 {% endraw %}
