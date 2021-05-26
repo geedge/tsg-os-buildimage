@@ -24,11 +24,6 @@
     src: "{{ role_path }}/templates/capture_packet_plug.conf.j2.j2"
     dest: /opt/tsg/init_runtime/templates/capture_packet_plug.conf.j2
   tags: template
-
-- name: "Template the tsgconf/app_l7_proto_id.conf"
-  template:
-    src: "{{ role_path }}/templates/app_l7_proto_id.conf.j2"
-    dest: /home/mesasoft/sapp_run/tsgconf/app_l7_proto_id.conf
  
 - name: "Template the /home/mesasoft/sapp_run/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf"
   template:
