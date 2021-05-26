@@ -12,14 +12,14 @@ init_runtime_exit_code=0
 rollback_exit_code=0
 
 
-ansible-playbook -i ${hosts_path} ${backup_path} 2>&1>>/tmp/init_runtime.log
+ansible-playbook -i ${hosts_path} ${backup_path} 
 backup_exit_code=$?
 if [ $backup_exit_code -ne 0 ]; then
   echo "Error: backup files failed,return code:${backup_exit_code}"
   exit 1
 fi
 
-ansible-playbook -i ${hosts_path} ${init_runtime_path} -e "var_files_path=${config_path}" 2>&1>>/tmp/init_runtime.log
+ansible-playbook -i ${hosts_path} ${init_runtime_path} -e "var_files_path=${config_path}" 
 init_runtime_exit_code=$?
 if [ $init_runtime_exit_code -ne 0 ];then
   exit 1

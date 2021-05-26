@@ -86,7 +86,13 @@
         dest: /opt/tsg/tfe/conf/pangu/pangu_pxy.conf
       tags: tfe
 
-    - name: "Restart mrzcpd"
+    - name: "Stop mrzcpd"
+      systemd:
+        name: mrzcpd
+        state: restarted
+      tags: mrzcpd
+  
+    - name: "Start mrzcpd"
       systemd:
         name: mrzcpd
         state: restarted
