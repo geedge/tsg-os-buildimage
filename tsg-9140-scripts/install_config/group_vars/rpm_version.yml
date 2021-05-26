@@ -7,31 +7,31 @@ firewall_rpm_version:
   ftp: ftp-1.0.8.13d5fda
   fw_dns_plug: fw_dns_plug-3.0.5.2a25c20
   fw_ftp_plug: fw_ftp_plug-3.0.1.0a78573
-  fw_http_plug: fw_http_plug-3.1.11.b0f7b8f
-  fw_mail_plug: fw_mail_plug-3.0.9.d496513
+  fw_http_plug: fw_http_plug-3.2.3.6b8c95d
+  fw_mail_plug: fw_mail_plug-3.1.1.777fa90
   fw_quic_plug: fw_quic_plug-3.0.4.947ef77
-  fw_ssl_plug: fw_ssl_plug-3.0.6.a121701
+  fw_ssl_plug: fw_ssl_plug-3.1.0.10d88fa
   http: http-2.0.5.c61ad9a
   mail: mail-1.0.9.c1d3bde
   quic: quic-1.1.17.8c22b4d
-  ssl: ssl-1.0.12.16b8fb5
-  tsg_conn_sketch: tsg_conn_sketch-2.1.16.7b1b2d5
+  ssl: ssl-2.0.0.eaa9479
+  tsg_conn_sketch: tsg_conn_sketch-2.1.31.57551ea
   rtp: rtp-1.0.4.91b4ab7
-  mesa_sip: mesa_sip-1.0.15.77d2f1a
+  mesa_sip: mesa_sip-1.1.0.cfebc76
   fw_voip_plug: fw_voip_plug-1.0.6.341fe83
-  app_proto_identify: app_proto_identify-1.0.10.1eeff1d
+  app_proto_identify: app_proto_identify-2.0.1.dd683eb
 
 framework_rpm_version:
   libcjson: libcjson-1.7.10.ab2896f
   libdocumentanalyze: libdocumentanalyze-2.0.6.2d1abe0
-  libmaatframe: libmaatframe-3.1.19.66c294f
+  libmaatframe: libmaatframe-3.1.20.85daf06
   libMESA_field_stat: libMESA_field_stat-1.0.2.6d45eed
   libMESA_field_stat2: libMESA_field_stat2-2.9.10.72ac4f1
   libMESA_handle_logger: libMESA_handle_logger-2.0.7.cb4ad71
   libMESA_htable: libMESA_htable-3.10.12.cf4ccfc
   libMESA_prof_load: libMESA_prof_load-1.0.6.c6da36a
   librdkafka: /tmp/ansible_deploy/librdkafka-0.11.4-1.el7.x86_64.rpm
-  librulescan: librulescan-2.2.2.e5a4457
+  librulescan: librulescan-2.2.3.93a68a2
   libtsglua: libtsglua-1.0.8.0dbf2e6
   libwiredcfg: libwiredcfg-2.0.6.67ae0ab
   libWiredLB: libWiredLB-2.0.5.4629165
@@ -44,18 +44,18 @@ framework_rpm_version:
   libaws-cpp-sdk-s3: libaws-cpp-sdk-s3-2.0.0.f3c33ea
   libhos-client-cpp: libhos-client-cpp-1.0.24.20e6f94
 
-kni_rpm_version: kni-21.03.03.3cd5031
+kni_rpm_version: kni-21.05.01.e7573e5
 
 mrzcpd_rpm_version: mrzcpd-4.4.4.3d81e36
 
 sapp_rpm_version:
-  sapp: sapp-4.2.32.91bc8e3
+  sapp: sapp-4.2.35.b0d7518
   tcpdump_mesa: tcpdump_mesa-1.0.4.4ef2936
 
 tfe_rpm_version: tfe-4.5.01.91facad
 
-tsg_app_rpm_version: app_sketch_local-2.0.5.ff1622f
+tsg_app_rpm_version: app_sketch_local-3.0.3.5bd9bf8
   
-tsg_master_rpm_version: tsg_master-3.4.12.441b0d1
+tsg_master_rpm_version: tsg_master-4.1.5.51d977c
 
 tsg_diagnose_rpm_version: tsg-diagnose-21.03.01.39beba7
