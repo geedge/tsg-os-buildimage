@@ -6,8 +6,6 @@ ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:
 ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 1 trust on"
 ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 2 trust on"
 ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 0 spoofchk off"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 0 mac 00:0e:c6:d6:72:c1"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 1 mac fe:65:b7:03:50:bd"
 
 ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",ATTR{device/sriov_numvfs}="4"
 ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 0 vlan 4095"
@@ -18,5 +16,5 @@ ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:
 ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 1 trust on"
 ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 2 trust on"
 ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 3 trust on"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 0 spoofchk off"
-
+ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 0 mac 00:0e:c6:d6:72:c1"
+ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 1 mac fe:65:b7:03:50:bd"
