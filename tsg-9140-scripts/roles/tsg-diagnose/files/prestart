@@ -1,4 +1,0 @@
-[Service]
-ExecStartPre=/usr/bin/docker load < /opt/tsg/tsg-diagnose/images/badssl.tar
-ExecStartPre=/usr/bin/docker load < /opt/tsg/tsg-diagnose/images/unittest.tar
-ExecStartPre=/usr/bin/docker load < /opt/tsg/tsg-diagnose/images/wpr.tar

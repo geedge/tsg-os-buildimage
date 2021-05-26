@@ -34,8 +34,15 @@
     dest: /opt/tsg/tsg-diagnose/.badssl_cert_dict
     remote_src: yes
 
+- name: "copy tsg-diagnose.service file to dest"
+  copy:
+    src: "{{ role_path }}/files/tsg-diagnose.service"
+    dest: /usr/lib/systemd/system/tsg-diagnose.service
+    mode: 0644
+
+
 - name: "copy prestart file to tsg-diagnose.service.d"
   copy:
-    src: "{{ role_path }}/files/prestart"
+    src: "{{ role_path }}/files/prestart.conf"
     dest: /usr/lib/systemd/system/tsg-diagnose.service.d/
     mode: 0644
