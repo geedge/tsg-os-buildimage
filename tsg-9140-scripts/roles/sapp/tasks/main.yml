@@ -40,10 +40,34 @@
     dest: /home/mesasoft/sapp_run/plug/conflist.inf
   tags: template
 
+- name: Template the entrylist.conf.j2
+  template:
+    src: "{{ role_path }}/templates/entrylist.conf.j2"
+    dest: /home/mesasoft/sapp_run/etc/entrylist.conf
+  tags: template
+
+- name: Template the asymmetric_addr_layer.conf.j2
+  template:
+    src: "{{ role_path }}/templates/asymmetric_addr_layer.conf.j2"
+    dest: /home/mesasoft/sapp_run/etc/asymmetric_addr_layer.conf
+  tags: template
+
+- name: Template the asymmetric_presence_layer.conf.j2
+  template:
+    src: "{{ role_path }}/templates/asymmetric_presence_layer.conf.j2"
+    dest: /home/mesasoft/sapp_run/etc/asymmetric_presence_layer.conf
+  tags: template
+
 - name: Template the necessary_plug_list.conf
   template:
     src: "{{ role_path }}/templates/necessary_plug_list.conf.j2"
     dest: /home/mesasoft/sapp_run/etc/necessary_plug_list.conf
+  tags: template
+
+- name: Template the vlan_flipping_map.conf
+  template:
+    src: "{{ role_path }}/templates/vlan_flipping_map.conf.j2"
+    dest: /home/mesasoft/sapp_run/etc/vlan_flipping_map.conf
   tags: template
 
 - name: Template the sapp_log.conf
@@ -76,19 +100,6 @@
     dest: /usr/lib/systemd/system/sapp.service.d/
     mode: 0644
 
-- name: "Create /home/mesasoft/sapp_run/log/ directory if it does not exist"
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: '0755'
-  with_items:
-    - /home/mesasoft/sapp_run/log
-
-- name: "Create a symbolic link for sapp logs"
-  file:
-    src: /home/mesasoft/sapp_run/log
-    dest: /var/log/sapp
-    state: link
 
 ##################### sapp #####################
 - name: "enable sapp"

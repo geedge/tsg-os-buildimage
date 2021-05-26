@@ -17,7 +17,7 @@ send_only_threads_max=1
 bind_mask=[15,16,17,18,19,20,21,22,23,24,25,26,27,42,43,44,45,46,47,48,49,50,51]
 
 [MEM]
-dictator_enable=0
+dictator_enable=1
 
 [PACKET_IO]
 
@@ -93,7 +93,10 @@ dictator_enable=0
     reverse_ethernet_addr=1
 
 [DUPLICATE_PKT]
-    duplicate_pkt_distinguish=0
+    duplicate_pkt_distinguish=1
+    bloom_capacity=1000000
+    bloom_error_rate=0.00001
+    bloom_timeout=10
 	
 [STREAM]
 ### note, stream_id_base_time format is "%Y-%m-%d %H:%M:%S" 
