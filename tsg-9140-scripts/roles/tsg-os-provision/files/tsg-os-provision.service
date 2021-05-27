@@ -5,7 +5,7 @@ After=network.target sg-os-provision-convertor.service
 Before=tfe-env.service mrenv.service
 
 [Service]
-ExecStart=/bin/sh -c "/opt/tsg/tsg-os-provison/provision.sh"
+ExecStart=/bin/sh -c "/opt/tsg/tsg-os-provision/provision.sh"
 Type=oneshot
 RemainAfterExit=yes
 

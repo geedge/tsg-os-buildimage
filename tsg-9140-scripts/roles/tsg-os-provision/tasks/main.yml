@@ -4,9 +4,30 @@
     dest: /opt/tsg/
     mode: 0644
 
+- name: "tsg-os-provision: copy tsg-os-provision-convertor.service file to dest"
+  copy:
+    src: "{{ role_path }}/files/tsg-os-provision-convertor.service"
+    dest: /usr/lib/systemd/system/tsg-os-provision-convertor.service
+    mode: 0644
+
+- name: "tsg-os-provision: copy tsg-os-provision.service file to dest"
+  copy:
+    src: "{{ role_path }}/files/tsg-os-provision.service"
+    dest: /usr/lib/systemd/system/tsg-os-provision.service
+    mode: 0644
+
 - name: "tsg-os-provision: chmod 0755 for provison.sh"
   file:
     path: "{{ item }}"
     mode: '0755'
   with_items:
     - /opt/tsg/tsg-os-provision/provision.sh
+
+
+- name: "tsg-os-provision: enable tsg-os-provison and tsg-os-provison-convertor"
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+  with_items:
+    - tsg-os-provision
+    - tsg-os-provision-convertor
