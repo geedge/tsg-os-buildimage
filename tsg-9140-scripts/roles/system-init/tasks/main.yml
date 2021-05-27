@@ -138,3 +138,7 @@
     mode: 0777
   tags: template
 
+- name: "enable sshd"
+  systemd:
+    name: sshd
+    enabled: yes
