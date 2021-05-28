@@ -70,8 +70,8 @@
 
 - name: "copy memory limit file to tfe.service.d"
   copy:
-    src: "{{ role_path }}/files/memory.conf"
-    dest: /usr/lib/system/tfe.service.d/
+    src: "{{ role_path }}/templates/service_override_memsw_limit.conf.j2"
+    dest: /usr/lib/systemd/system/tfe.service.d/service_override_memsw_limit.conf
     mode: 0644
 
 ##################### tfe #####################
