@@ -30,7 +30,7 @@
 - name: "copy memory limit file to certstore.service.d"
   copy:
     src: "{{ role_path }}/templates/service_override_memsw_limit.conf.j2"
-    dest: /usr/lib/systemd/system/certstore.service.d/service_override_memsw_limit.confd
+    dest: /usr/lib/systemd/system/certstore.service.d/service_override_memsw_limit.conf
     mode: 0644
 
 - name: "copy cert-redis file to dest"
