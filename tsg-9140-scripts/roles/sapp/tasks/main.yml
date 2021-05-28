@@ -88,16 +88,25 @@
     dest: /opt/tsg/tsg-os-provision/templates/gdev.conf.j2
   tags: template
 
-- name: "sapp: service adapts runtimes"
+- name: "Create /usr/lib/systemd/system/sapp.service.d/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/sapp.service.d
+
+
+- name: "sapp: service override timeoutsec"
   template:
-    src: "{{ role_path }}/templates/adapt_runtimes.j2"
-    dest: /usr/lib/systemd/system/sapp.service.d/
+    src: "{{ role_path }}/templates/service_override_timeoutsec.conf.j2"
+    dest: /usr/lib/systemd/system/sapp.service.d/service_override_timeoutsec.conf
     mode: 0644
 
 - name: "copy memory limit file to sapp.service.d"
   copy:
-    src: "{{ role_path }}/files/memory.conf"
-    dest: /usr/lib/systemd/system/sapp.service.d/
+    src: "{{ role_path }}/templates/service_override_memsw_limit.conf.j2"
+    dest: /usr/lib/systemd/system/sapp.service.d/service_override_memsw_limit.conf
     mode: 0644
 
 
