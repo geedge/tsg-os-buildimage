@@ -19,10 +19,18 @@
     src: "{{ role_path }}/templates/zlog.conf.j2"
     dest: /opt/tsg/certstore/conf/zlog.conf
 
+- name: "Create /usr/lib/systemd/system/certstore.service.d directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/certstore.service.d
+
 - name: "copy memory limit file to certstore.service.d"
   copy:
-    src: "{{ role_path }}/files/memory.conf"
-    dest: /usr/lib/systemd/system/certstore.service.d/
+    src: "{{ role_path }}/templates/service_override_memsw_limit.conf.j2"
+    dest: /usr/lib/systemd/system/certstore.service.d/service_override_memsw_limit.confd
     mode: 0644
 
 - name: "copy cert-redis file to dest"
