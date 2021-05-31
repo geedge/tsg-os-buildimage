@@ -1,7 +1,7 @@
 [Unit]
 Description=Tsg os provision
 Requires=network.target tsg-os-provision-convertor.service
-After=network.target sg-os-provision-convertor.service
+After=network.target tsg-os-provision-convertor.service
 Before=tfe-env.service mrenv.service
 
 [Service]
