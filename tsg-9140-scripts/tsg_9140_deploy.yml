@@ -16,7 +16,7 @@
     - {role: firewall, tags: firewall}
     - {role: tsg_app, tags: tsg_app}
     #- {role: http_healthcheck,tags: http_healthcheck}
-    - {role: x710-drive, tags: x710-drive}
+    - {role: i40e-drive, tags: i40e-drive}
     - {role: redis, tags: redis}
     - {role: certstore, tags: certstore}
     #- {role: redis, tags: redis}

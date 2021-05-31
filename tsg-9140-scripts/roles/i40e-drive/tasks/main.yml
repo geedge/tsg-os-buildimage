@@ -1,19 +1,19 @@
 ---
-- name: "copy x710 drive rpms to destination server"
+- name: "copy i40e drive rpms to destination server"
   copy:
     src: "{{ role_path }}/files/"
-    dest: "/tmp/x710_drive/"
+    dest: "/tmp/i40e_drive/"
 
-- name: "install x710 drive"
+- name: "install i40e drive"
   yum:
     name:
-      - /tmp/x710_drive/i40e-2.11.29-1.x86_64.rpm
+      - /tmp/i40e_drive/i40e-2.11.29-1.x86_64.rpm
     state: present
 
 - name: "install iavf"
   yum:
     name:
-      - /tmp/x710_drive/iavf-4.1.1-1.x86_64.rpm
+      - /tmp/i40e_drive/iavf-4.1.1-1.x86_64.rpm
     state: present
 
 - name: "update  depmod"
