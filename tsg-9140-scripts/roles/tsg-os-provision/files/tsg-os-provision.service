@@ -2,7 +2,7 @@
 Description=Tsg os provision
 Requires=network.target tsg-os-provision-convertor.service
 After=network.target tsg-os-provision-convertor.service
-Before=tfe-env.service mrenv.service
+Before=tfe-env.service mrenv.service certstore.service telegraf_statistic.service cert-redis.service
 
 [Service]
 ExecStart=/bin/sh -c "/opt/tsg/tsg-os-provision/provision.sh"
@@ -11,4 +11,4 @@ RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
-RequiredBy=tfe-env.service mrenv.service
+RequiredBy=tfe-env.service mrenv.service certstore.service telegraf_statistic.service cert-redis.service
