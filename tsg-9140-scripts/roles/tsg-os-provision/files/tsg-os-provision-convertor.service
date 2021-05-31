@@ -6,7 +6,7 @@ Before=tsg-os-provision.service
 
 [Service]
 ExecStart=/bin/sh -c "echo \'provision-convertor start\'"
-ExecStop=/bin/sh -c "echo \'provision-convertor stop\'"
+ExecStop=/bin/sh -c "echo \'tsg-os-provision-convertor stop\'"
 Type=oneshot
 RemainAfterExit=yes
 

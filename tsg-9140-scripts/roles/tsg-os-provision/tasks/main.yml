@@ -31,3 +31,8 @@
   with_items:
     - tsg-os-provision
     - tsg-os-provision-convertor
+
+- name: "tsg-os-provision: install yaml module using pip3"
+  pip:
+    name: PyYAML
+    executable: pip3
