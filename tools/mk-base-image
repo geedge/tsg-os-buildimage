@@ -64,6 +64,7 @@ cp -rf $projectdir/rootconf/sysroot-lib/* $target/lib/
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
 
 rm -rf $target/tmp/*
+rm -rf $target/core.*
 
 # tar --numeric-owner -c -C centos_mkroot/ . | pbzip2 -p9 > input/centos-7-chroot.tar.bz2
 
