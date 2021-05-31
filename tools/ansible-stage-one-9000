@@ -1,0 +1,14 @@
+#!/bin/sh
+
+PROFILE_ID=$1
+PROJECTDIR=$2
+TARGET_SYSROOT_DIR=$3
+YUM_CONF_PATH=$4
+
+echo "-----------------------------  Ansible Stage 1  ----------------------------"
+echo "$PROFILE_ID"
+
+echo "[tsg_9140_chroot]" > $PROJECTDIR/ansible/install_config/tsg_9140_host
+echo "$TARGET_SYSROOT_DIR  ansible_connection=chroot" >> $PROJECTDIR/ansible/install_config/tsg_9140_host
+
+ansible-playbook -i $PROJECTDIR/ansible/install_config/tsg_9140_host $PROJECTDIR/ansible/tsg_9140_deploy.yml -e "rpm_repo_config_path=$YUM_CONF_PATH"
