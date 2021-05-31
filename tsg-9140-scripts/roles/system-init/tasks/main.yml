@@ -121,3 +121,4 @@
   systemd:
     name: sshd
     enabled: yes
+    daemon_reload: yes

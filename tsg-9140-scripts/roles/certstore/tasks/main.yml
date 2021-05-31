@@ -46,12 +46,12 @@
 - name: "start certstore"
   systemd:
     name: certstore.service
-    state: started
     enabled: yes
+    daemon_reload: yes
 
 ##################### cert-redis #####################
 - name: "start cert-redis"
   systemd:
     name: cert-redis.service
-    state: started
     enabled: yes
+    daemon_reload: yes

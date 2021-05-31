@@ -79,8 +79,10 @@
   systemd:
     name: tfe-env
     enabled: yes
+    daemon_reload: yes
 
 - name: "enable tfe"
   systemd:
     name: tfe
     enabled: yes
+    daemon_reload: yes

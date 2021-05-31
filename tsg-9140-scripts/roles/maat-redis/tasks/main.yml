@@ -19,7 +19,6 @@
 - name: "start maat-redis"
   systemd:
     name: maat-redis.service
-    state: started
     daemon_reload: yes
     enabled: yes
 

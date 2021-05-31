@@ -50,16 +50,16 @@
   systemd:
     name: exporter-node
     enabled: yes
-    state: started
+    daemon_reload: yes
 
 - name: 'exporter-systemd service start'
   systemd:
     name: exporter-systemd
     enabled: yes
-    state: restarted
+    daemon_reload: yes
 
 - name: 'exporter-ipmi service start'
   systemd:
     name: exporter-ipmi
     enabled: yes
-    state: restarted
+    daemon_reload: yes

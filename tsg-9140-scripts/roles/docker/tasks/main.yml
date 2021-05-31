@@ -19,3 +19,4 @@
   systemd:
     name: docker
     enabled: yes
+    daemon_reload: yes
