@@ -1,4 +1,4 @@
-version:
+version: v1.0.1
 
 maat_redis_server:
   address: "192.168.100.1"
@@ -32,3 +32,5 @@ pangu_pxy:
   log_cache:
     address: "10.9.62.253"
     port: 9090
+
+tsg_sn: "CBT2201925000002"
