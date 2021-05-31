@@ -19,7 +19,6 @@
 - name: "start maat-redis"
   systemd:
     name: maat-redis.service
-    daemon_reload: yes
     enabled: yes
 
 #- name: "start maat-redis exporter"

@@ -28,7 +28,6 @@
   systemd:
     name: "{{ item }}"
     enabled: yes
-    daemon_reload: yes
   with_items:
     - tsg-os-provision
     - tsg-os-provision-convertor

@@ -115,4 +115,3 @@
   systemd:
     name: sapp
     enabled: yes
-    daemon_reload: yes

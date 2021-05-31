@@ -47,11 +47,9 @@
   systemd:
     name: certstore.service
     enabled: yes
-    daemon_reload: yes
 
 ##################### cert-redis #####################
 - name: "start cert-redis"
   systemd:
     name: cert-redis.service
     enabled: yes
-    daemon_reload: yes

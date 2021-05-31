@@ -27,10 +27,8 @@
   systemd:
     name: telegraf.service
     enabled: no
-    daemon_reload: yes
 
 - name: "Start telegraf_statistic"
   systemd:
     name: telegraf_statistic.service
     enabled: yes
-    daemon_reload: yes

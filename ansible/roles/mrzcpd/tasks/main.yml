@@ -20,22 +20,18 @@
   systemd:
     name: mrenv
     enabled: yes
-    daemon_reload: yes
 
 - name: "enable mrzcpd"
   systemd:
     name: mrzcpd
     enabled: yes
-    daemon_reload: yes
 
 - name: "enable prometheus output - monit_device"
   systemd:
     name: mrapm_device
     enabled: yes
-    daemon_reload: yes
 
 - name: "enable prometheus output - monit_stream"
   systemd:
     name: mrapm_stream
     enabled: yes
-    daemon_reload: yes
