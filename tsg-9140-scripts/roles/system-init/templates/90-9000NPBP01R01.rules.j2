@@ -1,5 +1,5 @@
 ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",ATTR{device/sriov_numvfs}="3"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",ATTR{device/sriov/0/trunk}="add 0,3813,3814"
+ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",ATTR{device/sriov/0/trunk}="add 0,4000,4001"
 ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 1 vlan 3813"
 ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 2 vlan 3814"
 ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 0 trust on"
