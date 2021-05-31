@@ -1,7 +1,0 @@
----
-- hosts: local
-  tasks:
-    - name: "backup_conf: backup the stage2 config files"
-      copy:
-        src: /data/init_runtime/runtime.yml
-        dest: /data/init_runtime/backup/
