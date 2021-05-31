@@ -6,6 +6,8 @@
   roles:
     #- {role: init-env, tags: init-env}
     - {role: tsg-os-provision, tags: tsg-os-provision}
+    - {role: tsg_device_tag, tags: tsg_device_tag}
+    - {role: tsg_sn, tags: tsg_sn}
     - {role: framework, tags: framework}
     #- {role: kernel-ml, tags: kernel-ml}
     - {role: mrzcpd, tags: mrzcpd}

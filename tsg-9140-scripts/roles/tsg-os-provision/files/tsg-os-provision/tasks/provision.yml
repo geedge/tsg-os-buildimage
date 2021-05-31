@@ -86,6 +86,23 @@
         dest: /opt/tsg/tfe/conf/pangu/pangu_pxy.conf
       tags: tfe
 
+    - name: "mkdir /opt/tsg/etc/"
+      file:
+        path: /opt/tsg/etc
+        state: directory
+
+    - name: "tsg-os-provision: template the tsg_device_tag"
+      template:
+        src: "../templates/tsg_device_tag.json.j2"
+        dest: /opt/tsg/etc/tsg_device_tag.json
+      tags: tsg_device_tag
+
+    - name: "tsg-os-provision: template the tsg_sn"
+      template:
+        src: "../templates/tsg_sn.json.j2"
+        dest: /opt/tsg/etc/tsg_sn.json
+      tags: tsg_sn
+
     - name: "tsg-os-provision: snapshot the stage2 config files"
       copy:
         src: /data/tsg-os-provision/provision.yml
