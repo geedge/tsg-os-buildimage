@@ -22,7 +22,14 @@
     mode: 0644
 
 ##################### telegraf #####################
-- name: "Start telegraf"
+
+- name: "disable telegraf"
+  systemd:
+    name: telegraf.service
+    enabled: no
+    daemon_reload: yes
+
+- name: "Start telegraf_statistic"
   systemd:
     name: telegraf_statistic.service
     state: started
