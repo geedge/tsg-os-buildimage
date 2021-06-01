@@ -42,6 +42,8 @@ framework_rpm_version:
   libaws-cpp-sdk-core: libaws-cpp-sdk-core-1.0.8.a3fe079
   libaws-cpp-sdk-s3: libaws-cpp-sdk-s3-2.0.0.f3c33ea
   libhos-client-cpp: libhos-client-cpp-1.0.24.20e6f94
+  gtp: gtp-1.0.3.b494fc7
+  gtp_signaling_plug: gtp_signaling_plug-1.0.1.6e51cc4
 
 kni_rpm_version:
   kni: kni-21.05.01.e7573e5
