@@ -4,7 +4,6 @@
 CURRENT_PATH=`dirname $0`
 TP_SVR=192.168.100.5
 TP_PORT=10000
-REMOTE_CONTROL_BIN=switch_control_client_non_block
 
 function get_netdev_by_pci()
 {
