@@ -63,4 +63,4 @@ tsg_master_rpm_version:
   tsg_master: tsg_master-4.2.3.6c3f53d
 
 tsg_diagnose_rpm_version:
-  tsg-diagnose: tsg-diagnose-21.03.01.39beba7
+  tsg_diagnose: tsg-diagnose-21.03.01.39beba7
