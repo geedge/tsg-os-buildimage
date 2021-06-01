@@ -1,0 +1,115 @@
+#!/bin/bash
+# set -x
+
+CURRENT_PATH=`dirname $0`
+TP_SVR=192.168.100.5
+TP_PORT=10000
+REMOTE_CONTROL_BIN=switch_control_client_non_block
+modprobe 8021q
+
+function get_netdev_by_pci()
+{
+  DEV_LIST=`ifconfig -a |grep flags |awk -F: '{print $1}'`
+  for i in ${DEV_LIST}
+  do
+    ethtool -i ${i} |grep bus-info |grep "$1" > /dev/null 2>&1
+    if [ $? -eq 0 ];then
+      TARGET=${i}
+      break
+    fi
+  done
+
+  echo ${TARGET}
+}
+
+function pf_setup()
+{
+  ifconfig ens8 up
+  vconfig add ens8 100
+  vconfig set_flag ens8.100 1 1
+  ifconfig ens8.100 192.168.100.3 netmask 255.255.255.0 up
+  sleep 1
+}
+
+function vf_setup()
+{
+  echo 4 > /sys/class/net/ens8/device/sriov_numvfs
+  sleep 5
+
+  ifconfig ens8f3 up
+  ip link set ens8 vf 2 vlan 200
+  ifconfig ens8f3 192.168.200.3 netmask 255.255.255.0
+
+  ifconfig ens8f1 up
+  ifconfig ens8f2 up
+  ifconfig ens8f3 up
+  ifconfig ens8f4 up
+  sleep 5
+}
+
+function bring_down_pfvf()
+{
+  echo 0 > /sys/class/net/ens8/device/sriov_numvfs
+  ifconfig ens8 down
+  sleep 3
+}
+
+# Main loop
+while :
+do
+  FAIL_FLAG=0
+
+  # Make sure PF is valid
+  ping ${TP_SVR} -c 1 
+  if [ $? -ne 0 ];then
+    echo "Please make sure switch board is up."
+    bring_down_pfvf
+    pf_setup
+    continue
+  fi
+
+  # Make sure TestPoint is up.
+  echo "show version" | nc ${TP_SVR} ${TP_PORT}
+  if [ $? -ne 0 ];then
+    echo "Cannot reach TestPoint!"
+    echo "Please make sure TestPoint is up and in remote-listen mode."
+    sleep 5
+    continue
+  fi
+
+  # Create VFs and get MAC addresses
+  vf_setup
+
+  PF=`get_netdev_by_pci 85:00.0`
+  VF1=`get_netdev_by_pci 85:00.1`
+  VF2=`get_netdev_by_pci 85:00.2`
+  VF3=`get_netdev_by_pci 85:00.3`
+  VF4=`get_netdev_by_pci 85:00.4`
+
+  MAC0=`ifconfig ${PF} |grep ether |awk -F' ' '{print $2}'`
+  MAC1=`ifconfig ${VF1} |grep ether |awk -F' ' '{print $2}'`
+  MAC2=`ifconfig ${VF2} |grep ether |awk -F' ' '{print $2}'`
+  MAC3=`ifconfig ${VF3} |grep ether |awk -F' ' '{print $2}'`
+  MAC4=`ifconfig ${VF4} |grep ether |awk -F' ' '{print $2}'`
+
+  # Make sure VFs are valid
+  MAC_TABLE=$(echo "show mac table all" | nc ${TP_SVR} ${TP_PORT})
+
+  for i in ${MAC0} ${MAC1} ${MAC2} ${MAC3} ${MAC4}
+  do 
+    echo ${MAC_TABLE} |grep ${i} > /dev/null 2>&1
+    if [ $? -ne 0 ];then
+      echo "MAC ${i} is not in table!"
+      FAIL_FLAG=1
+      break
+    fi
+  done
+
+  if [ ${FAIL_FLAG} -eq 1 ];then
+      bring_down_pfvf
+      continue
+  fi
+
+  echo "PF/VF setup successful."
+  exit 0
+done

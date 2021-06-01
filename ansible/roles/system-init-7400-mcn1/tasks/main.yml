@@ -1,0 +1,24 @@
+---
+- name: "copy setup script"
+  copy:
+    src: "{{ role_path }}/files/setup"
+    dest: "/opt/tsg/env/"
+    mode: 0755
+    
+- name: "copy tsg-env.service"
+  copy:
+    src: "{{ role_path }}/files/tsg-env.service"
+    dest: "/usr/lib/systemd/system/"
+    mode: 0644
+    
+- name: "copy tsg-env_stop"
+  copy:
+    src: "{{ role_path }}/files/tsg-env_stop"
+    dest: "/opt/tsg/env/"
+    mode: 0755
+
+- name: "enable tsg-env"
+  systemd:
+    name: tsg-env
+    enabled: yes
+    daemon_reload: yes

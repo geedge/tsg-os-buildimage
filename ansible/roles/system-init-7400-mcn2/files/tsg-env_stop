@@ -1,0 +1,6 @@
+#!/bin/bash
+#
+echo 0 >/sys/class/net/ens8/device/sriov_numvfs
+ifconfig ens8.100 down
+vconfig rem ens8.100
+ifconfig ens8 down
