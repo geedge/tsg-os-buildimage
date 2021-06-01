@@ -21,4 +21,3 @@
   systemd:
     name: tsg-env
     enabled: yes
-    daemon_reload: yes
