@@ -1,6 +1,6 @@
 ---
 - name: "install tsg_app packages"
   yum:
-    name: "{{ tsg_app_rpm_version }}"
+    name: "{{ tsg_app_rpm_version.app_sketch_local }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present

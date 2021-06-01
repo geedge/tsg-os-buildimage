@@ -1,6 +1,6 @@
 - name: "install tsg_master from localhost"
   yum:
     name:
-      - "{{ tsg_master_rpm_version }}"
+      - "{{ tsg_master_rpm_version.tsg_master }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present

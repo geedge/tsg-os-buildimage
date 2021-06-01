@@ -2,7 +2,7 @@
 - name: "install kni rpms from localhost"
   yum:
     name:
-      - "{{ kni_rpm_version }}"
+      - "{{ kni_rpm_version.kni }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 

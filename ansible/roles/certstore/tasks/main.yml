@@ -5,7 +5,7 @@
 - name: install certstore
   yum:
     name:
-      - "{{ certstore_rpm_version }}"
+      - "{{ certstore_rpm_version.certstore }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 

@@ -6,7 +6,7 @@
 - name: "Install tsg-diagnose rpm package"
   yum:
     name:
-      - "{{ tsg_diagnose_rpm_version }}"
+      - "{{ tsg_diagnose_rpm_version.tsg-diagnose }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 

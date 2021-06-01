@@ -13,7 +13,7 @@
 - name: "install tfe rpms from localhost"
   yum:
     name:
-      - "{{ tfe_rpm_version }}"
+      - "{{ tfe_rpm_version.tfe }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 

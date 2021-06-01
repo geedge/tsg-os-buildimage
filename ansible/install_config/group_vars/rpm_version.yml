@@ -1,4 +1,5 @@
-certstore_rpm_version: certstore-2.1.6.20201215.f2e9ba7
+certstore_rpm_version:
+  certstore: certstore-2.1.6.20201215.f2e9ba7
 
 firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-3.0.6.a2db4a4
@@ -42,18 +43,24 @@ framework_rpm_version:
   libaws-cpp-sdk-s3: libaws-cpp-sdk-s3-2.0.0.f3c33ea
   libhos-client-cpp: libhos-client-cpp-1.0.24.20e6f94
 
-kni_rpm_version: kni-21.05.01.e7573e5
+kni_rpm_version:
+  kni: kni-21.05.01.e7573e5
 
-mrzcpd_rpm_version: mrzcpd-4.4.4.3d81e36
+mrzcpd_rpm_version:
+  mrzcpd: mrzcpd-4.4.4.3d81e36
 
 sapp_rpm_version:
   sapp: sapp-4.2.35.b0d7518
   tcpdump_mesa: tcpdump_mesa-1.0.4.4ef2936
 
-tfe_rpm_version: tfe-4.5.01.91facad
+tfe_rpm_version:
+  tfe: tfe-4.5.01.91facad
 
-tsg_app_rpm_version: app_sketch_local-3.0.5.92c645f
+tsg_app_rpm_version:
+  app_sketch_local: app_sketch_local-3.0.5.92c645f
   
-tsg_master_rpm_version: tsg_master-4.2.3.6c3f53d
+tsg_master_rpm_version:
+  tsg_master: tsg_master-4.2.3.6c3f53d
 
-tsg_diagnose_rpm_version: tsg-diagnose-21.03.01.39beba7
+tsg_diagnose_rpm_version:
+  tsg-diagnose: tsg-diagnose-21.03.01.39beba7
