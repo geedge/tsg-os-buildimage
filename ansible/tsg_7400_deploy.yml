@@ -32,4 +32,4 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}
-    - {role: system-init-7400-mcn03, tags: system-init-7400-mcn3}
+    - {role: system-init-7400-mcn3, tags: system-init-7400-mcn3}
