@@ -1,6 +1,6 @@
 
-PROFILE_ID 				:= 7400-MCN-P01R01
-SUPPORTED_MACHINE_ID 	:= 7400-MCN-P01R01
+PROFILE_ID 				:= 7400-MCN0-P01R01
+SUPPORTED_MACHINE_ID 	:= 7400-MCN0-P01R01
 KERNEL_ARGS 			:= console=ttyS0,115200n8 crashkernel=auto intel_iommu=on iommu=pt pci=realloc,assign-busses
 GRUB_SERIAL_COMMAND 	:=
 SIZE_PART_SYSROOT		:= 16384M
@@ -50,7 +50,7 @@ sysroot-ansible: sysroot-verfile sysroot-base
 	cp $(CONFDIR)/resolv.conf $(TARGET_SYSROOT_DIR)/etc/ -r
 	cp $(TARGET_SYSROOT_DIR)/etc/hosts $(TARGET_SYSROOT_DIR)/tmp/ -r
 	cp /etc/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
-	$(TOOLSDIR)/ansible-stage-one-7400-mcn0 $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR) /tmp/yum.conf
+	$(TOOLSDIR)/ansible-stage-one-7400 $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR) /tmp/yum.conf
 	cp $(TARGET_SYSROOT_DIR)/tmp/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
 
 sysroot-cleanup:
