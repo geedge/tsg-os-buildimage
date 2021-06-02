@@ -11,10 +11,55 @@ variables:
   tags:
     - tsg-os-installer
 
-debug_build:
+debug_build_7400_mcn0:
   stage: build
   extends: .build_tsg-buildimage
   variables:
+    PROFILE_LIST: 7400MCN0P01R01
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-testing
+    PULP3_FILE_DIST_NAME: tsg-os-images-testing
+  except:
+    - tags
+
+debug_build_7400_mcn1:
+  stage: build
+  extends: .build_tsg-buildimage
+  variables:
+    PROFILE_LIST: 7400MCN1P01R01
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-testing
+    PULP3_FILE_DIST_NAME: tsg-os-images-testing
+  except:
+    - tags
+
+debug_build_7400_mcn2:
+  stage: build
+  extends: .build_tsg-buildimage
+  variables:
+    PROFILE_LIST: 7400MCN2P01R01
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-testing
+    PULP3_FILE_DIST_NAME: tsg-os-images-testing
+  except:
+    - tags
+
+debug_build_7400_mcn3:
+  stage: build
+  extends: .build_tsg-buildimage
+  variables:
+    PROFILE_LIST: 7400MCN3P01R01
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-testing
+    PULP3_FILE_DIST_NAME: tsg-os-images-testing
+  except:
+    - tags
+
+debug_build_9000:
+  stage: build
+  extends: .build_tsg-buildimage
+  variables:
+    PROFILE_LIST: 9000NPBP01R01
     UPLOAD_TO_FILE_REPO: 1
     PULP3_FILE_REPO_NAME: tsg-os-images-testing
     PULP3_FILE_DIST_NAME: tsg-os-images-testing
@@ -25,6 +70,7 @@ release_build:
   stage: build
   extends: .build_tsg-buildimage
   variables:
+    PROFILE_LIST: 9000NPBP01R01
     UPLOAD_TO_FILE_REPO: 1
     PULP3_FILE_REPO_NAME: tsg-os-images-stable
     PULP3_FILE_DIST_NAME: tsg-os-images-stable
