@@ -22,40 +22,40 @@ function get_netdev_by_pci()
 
 function pf_setup()
 {
-  ifconfig ens1 up
+  ifconfig eth_pf up
 
   modprobe 8021q
-  vconfig add ens1 100
-  vconfig set_flag ens1.100 1 1
-  ifconfig ens1.100 192.168.100.1 netmask 255.255.255.0 up
+  vconfig add eth_pf 100
+  vconfig set_flag eth_mgnt 1 1
+  ifconfig eth_mgnt 192.168.100.1 netmask 255.255.255.0 up
   sleep 1
 }
 
 function vf_setup()
 {
-  echo 8 > /sys/class/net/ens1/device/sriov_numvfs
+  echo 8 > /sys/class/net/eth_pf/device/sriov_numvfs
   sleep 5
 
-  ifconfig ens1f3 up
-  ip link set ens1 vf 2 vlan 200
-  ifconfig ens1f3 192.168.200.1 netmask 255.255.255.0
+  ifconfig eth_ctl up
+  ip link set eth_pf vf 2 vlan 200
+  ifconfig eth_ctl 192.168.200.1 netmask 255.255.255.0
 
-  ifconfig ens1f1 up
-  ifconfig ens1f2 up
-  ifconfig ens1f3 up
-  ifconfig ens1f4 up
-  ifconfig ens1f5 up
-  ifconfig ens1f6 up
-  ifconfig ens1f7 up
-  ifconfig enp1s1 up
+  ifconfig eth_dign_s up
+  ifconfig eth_rsv up
+  ifconfig eth_ctl up
+  ifconfig eth_raw up
+  ifconfig eth_mcn1 up
+  ifconfig eth_mcn2 up
+  ifconfig eth_mcn3 up
+  ifconfig eth_dign_c up
 
   sleep 5
 }
 
 function bring_down_pfvf()
 {
-  echo 0 > /sys/class/net/ens1/device/sriov_numvfs
-  ifconfig ens1 down
+  echo 0 > /sys/class/net/eth_pf/device/sriov_numvfs
+  ifconfig eth_pf down
   sleep 3
 }
 

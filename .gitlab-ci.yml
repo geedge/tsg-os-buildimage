@@ -22,33 +22,11 @@ debug_build_7400_mcn0:
   except:
     - tags
 
-debug_build_7400_mcn1:
+debug_build_7400_mcn123:
   stage: build
   extends: .build_tsg-buildimage
   variables:
-    PROFILE_LIST: 7400MCN1P01R01
-    UPLOAD_TO_FILE_REPO: 1
-    PULP3_FILE_REPO_NAME: tsg-os-images-testing
-    PULP3_FILE_DIST_NAME: tsg-os-images-testing
-  except:
-    - tags
-
-debug_build_7400_mcn2:
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN2P01R01
-    UPLOAD_TO_FILE_REPO: 1
-    PULP3_FILE_REPO_NAME: tsg-os-images-testing
-    PULP3_FILE_DIST_NAME: tsg-os-images-testing
-  except:
-    - tags
-
-debug_build_7400_mcn3:
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN3P01R01
+    PROFILE_LIST: 7400MCN123P01R01
     UPLOAD_TO_FILE_REPO: 1
     PULP3_FILE_REPO_NAME: tsg-os-images-testing
     PULP3_FILE_DIST_NAME: tsg-os-images-testing

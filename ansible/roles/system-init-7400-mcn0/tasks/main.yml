@@ -1,4 +1,17 @@
 ---
+- name: "set 60-7400MCN0P01R01.rules"
+  template:
+    src: "{{ role_path }}/templates/60-7400MCN0P01R01.rules.j2"
+    dest: /usr/lib/udev/rules.d/60-7400MCN0P01R01.rules
+    mode: 0644
+  tags: template
+
+- name: "set eth_pf"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-eth_pf.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth_pf
+  tags: template
+
 - name: "copy setup script"
   copy:
     src: "{{ role_path }}/files/setup"

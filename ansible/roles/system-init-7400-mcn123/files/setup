@@ -11,7 +11,7 @@ function get_netdev_by_pci()
   DEV_LIST=`ifconfig -a |grep flags |awk -F: '{print $1}'`
   for i in ${DEV_LIST}
   do
-    ethtool -i ${i} |grep bus-info |grep "$1" > /dev/null 2>&1
+    ethtool -i ${i} |grep bus-info |grep -E "$1" > /dev/null 2>&1
     if [ $? -eq 0 ];then
       TARGET=${i}
       break
@@ -23,33 +23,33 @@ function get_netdev_by_pci()
 
 function pf_setup()
 {
-  ifconfig ens8 up
-  vconfig add ens8 100
-  vconfig set_flag ens8.100 1 1
-  ifconfig ens8.100 192.168.100.4 netmask 255.255.255.0 up
+  ifconfig eth_pf up
+  vconfig add eth_pf 100
+  vconfig set_flag eth_mgnt 1 1
+  ifconfig eth_mgnt 192.168.100.$1 netmask 255.255.255.0 up
   sleep 1
 }
 
 function vf_setup()
 {
-  echo 4 > /sys/class/net/ens8/device/sriov_numvfs
+  echo 4 > /sys/class/net/eth_pf/device/sriov_numvfs
   sleep 5
 
-  ifconfig ens8f3 up
-  ip link set ens8 vf 2 vlan 200
-  ifconfig ens8f3 192.168.200.4 netmask 255.255.255.0
+  ifconfig eth_ctrl up
+  ip link set eth_pf vf 2 vlan 200
+  ifconfig eth_ctrl 192.168.200.$1 netmask 255.255.255.0
 
-  ifconfig ens8f1 up
-  ifconfig ens8f2 up
-  ifconfig ens8f3 up
-  ifconfig ens8f4 up
+  ifconfig eth_pxy up
+  ifconfig eth_mirr_d up
+  ifconfig eth_ctrl up
+  ifconfig eth_rsv up
   sleep 5
 }
 
 function bring_down_pfvf()
 {
-  echo 0 > /sys/class/net/ens8/device/sriov_numvfs
-  ifconfig ens8 down
+  echo 0 > /sys/class/net/eth_pf/device/sriov_numvfs
+  ifconfig eth_pf down
   sleep 3
 }
 
@@ -57,13 +57,38 @@ function bring_down_pfvf()
 while :
 do
   FAIL_FLAG=0
+  # 1:mcn0; 2:mcn1; 3:mcn2; 4:mcn3
+  mcn_mgnt_id=0
+
+  card_info=$(ipmitool raw 0x2e 0x32 0x13 0x5f 0x00 | awk '{print $NF}')
+  case ${card_info} in
+    90)
+        # mcn0
+        mcn_mgnt_id=1
+        ;;
+    80)
+        # mcn1
+        mcn_mgnt_id=2
+        ;;
+    98)
+        # mcn2
+        mcn_mgnt_id=3
+        ;;
+    88)
+        # mcn3
+        mcn_mgnt_id=4
+        ;;
+    *)
+        echo "ipmitool get unknown card id"
+        ;;
+  esac
 
   # Make sure PF is valid
   ping ${TP_SVR} -c 1 
   if [ $? -ne 0 ];then
     echo "Please make sure switch board is up."
     bring_down_pfvf
-    pf_setup
+    pf_setup ${mcn_mgnt_id}
     continue
   fi
 
@@ -77,13 +102,13 @@ do
   fi
 
   # Create VFs and get MAC addresses
-  vf_setup
+  vf_setup ${mcn_mgnt_id}
 
-  PF=`get_netdev_by_pci 85:00.0`
-  VF1=`get_netdev_by_pci 85:00.1`
-  VF2=`get_netdev_by_pci 85:00.2`
-  VF3=`get_netdev_by_pci 85:00.3`
-  VF4=`get_netdev_by_pci 85:00.4`
+  PF=`get_netdev_by_pci "01:00.0|85:00.0"`
+  VF1=`get_netdev_by_pci "01:00.1|85:00.1"`
+  VF2=`get_netdev_by_pci "01:00.2|85:00.2"`
+  VF3=`get_netdev_by_pci "01:00.3|85:00.3"`
+  VF4=`get_netdev_by_pci "01:00.4|85:00.4"`
 
   MAC0=`ifconfig ${PF} |grep ether |awk -F' ' '{print $2}'`
   MAC1=`ifconfig ${VF1} |grep ether |awk -F' ' '{print $2}'`
