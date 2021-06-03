@@ -5,6 +5,7 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}
+    - {role: system-init, tags: system-init}
     - {role: system-init-7400-mcn0, tags: system-init-7400-mcn0}
 
 - hosts: 7400-MCN123-P01R01
@@ -14,4 +15,5 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}
+    - {role: system-init, tags: system-init}
     - {role: system-init-7400-mcn123, tags: system-init-7400-mcn123}
