@@ -17,13 +17,12 @@ feature_branch_build_7400_mcn0:
   extends: .build_tsg-buildimage
   variables:
     PROFILE_LIST: 7400MCN0P01R01
-    UPLOAD_TO_FILE_REPO: 0
     DALIY_BUILD_VERSION: 1
+    UPLOAD_TO_FILE_REPO: 0
   except:
     - tags
     - /^dev-.*$/i
     - /^rel-.*$/i
-    - tags
 
 feature_branch_build_7400_mcn123:
   stage: build
@@ -31,10 +30,19 @@ feature_branch_build_7400_mcn123:
   variables:
     PROFILE_LIST: 7400MCN123P01R01
     DALIY_BUILD_VERSION: 1
-    DALIY_BUILD_VERSION: 1
+    UPLOAD_TO_FILE_REPO: 0
+  except:
+    - tags
+    - /^dev-.*$/i
+    - /^rel-.*$/i
+
+feature_branch_build_9000:
+  stage: build
+  extends: .build_tsg-buildimage
+  variables:
+    PROFILE_LIST: 9000NPBP01R01
     DALIY_BUILD_VERSION: 1
     UPLOAD_TO_FILE_REPO: 0
-    DALIY_BUILD_VERSION: 1
   except:
     - tags
     - /^dev-.*$/i
@@ -75,28 +83,6 @@ rc_build_9000:
     PULP3_FILE_DIST_NAME: tsg-os-images-rc
   only:
     - /^.*-rc.*$/i
-
-release_build_7400_mcn0:
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN0P01R01
-    UPLOAD_TO_FILE_REPO: 1
-    PULP3_FILE_REPO_NAME: tsg-os-images-stable
-    PULP3_FILE_DIST_NAME: tsg-os-images-stable
-  only:
-    - tags
-
-release_build_7400_mcn123:
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN123P01R01
-    UPLOAD_TO_FILE_REPO: 1
-    PULP3_FILE_REPO_NAME: tsg-os-images-stable
-    PULP3_FILE_DIST_NAME: tsg-os-images-stable
-  only:
-    - tags
 
 release_build_9000:
   stage: build
