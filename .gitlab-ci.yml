@@ -44,7 +44,29 @@ debug_build_9000:
   except:
     - tags
 
-release_build:
+release_build_7400_mcn0:
+  stage: build
+  extends: .build_tsg-buildimage
+  variables:
+    PROFILE_LIST: 7400MCN0P01R01
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-stable
+    PULP3_FILE_DIST_NAME: tsg-os-images-stable
+  only:
+    - tags
+
+release_build_7400_mcn123:
+  stage: build
+  extends: .build_tsg-buildimage
+  variables:
+    PROFILE_LIST: 7400MCN123P01R01
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-stable
+    PULP3_FILE_DIST_NAME: tsg-os-images-stable
+  only:
+    - tags
+
+release_build_9000:
   stage: build
   extends: .build_tsg-buildimage
   variables:
