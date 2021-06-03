@@ -1,6 +1,6 @@
 #!/bin/bash
 #
 echo 0 >/sys/class/net/eth_pf/device/sriov_numvfs
-ifconfig eth_mgnt down
-vconfig rem eth_mgnt
+ifconfig eth_pf.100 down
+vconfig rem eth_pf.100
 ifconfig eth_pf down

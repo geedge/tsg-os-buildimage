@@ -6,6 +6,11 @@
     mode: 0644
   tags: template
 
+- name: "disable NetworkManager"
+  systemd:
+    name: NetworkManager.service
+    enabled: no
+
 - name: "set eth_pf"
   template:
     src: "{{ role_path }}/templates/ifcfg-eth_pf.j2"

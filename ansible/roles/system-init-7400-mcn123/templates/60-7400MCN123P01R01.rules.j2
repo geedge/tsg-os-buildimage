@@ -2,9 +2,6 @@
 ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:00.0", NAME:="eth_pf"
 ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:85:00.0", NAME:="eth_pf"
 
-# rename ens1.100/ens8.100 to eth_mgnt
-???
-
 # rename ens1f1/ens8f1 to eth_pxy
 ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:00.1", NAME:="eth_pxy"
 ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:85:00.1", NAME:="eth_pxy"

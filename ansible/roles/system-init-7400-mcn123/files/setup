@@ -25,8 +25,8 @@ function pf_setup()
 {
   ifconfig eth_pf up
   vconfig add eth_pf 100
-  vconfig set_flag eth_mgnt 1 1
-  ifconfig eth_mgnt 192.168.100.$1 netmask 255.255.255.0 up
+  vconfig set_flag eth_pf.100 1 1
+  ifconfig eth_pf.100 192.168.100.$1 netmask 255.255.255.0 up
   sleep 1
 }
 
@@ -35,13 +35,13 @@ function vf_setup()
   echo 4 > /sys/class/net/eth_pf/device/sriov_numvfs
   sleep 5
 
-  ifconfig eth_ctrl up
+  ifconfig eth_ctl up
   ip link set eth_pf vf 2 vlan 200
-  ifconfig eth_ctrl 192.168.200.$1 netmask 255.255.255.0
+  ifconfig eth_ctl 192.168.200.$1 netmask 255.255.255.0
 
   ifconfig eth_pxy up
   ifconfig eth_mirr_d up
-  ifconfig eth_ctrl up
+  ifconfig eth_ctl up
   ifconfig eth_rsv up
   sleep 5
 }

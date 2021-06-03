@@ -26,8 +26,8 @@ function pf_setup()
 
   modprobe 8021q
   vconfig add eth_pf 100
-  vconfig set_flag eth_mgnt 1 1
-  ifconfig eth_mgnt 192.168.100.1 netmask 255.255.255.0 up
+  vconfig set_flag eth_pf.100 1 1
+  ifconfig eth_pf.100 192.168.100.1 netmask 255.255.255.0 up
   sleep 1
 }
 
