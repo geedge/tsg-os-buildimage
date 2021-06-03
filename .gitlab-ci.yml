@@ -5,7 +5,7 @@ variables:
 .build_tsg-buildimage:
   script:
     - yum -y install ansible pbzip2
-    - make
+    - make DALIY_BUILD_VERSION=$DALIY_BUILD_VERSION
     - chmod +x ./tools/upload.sh
     - ./tools/upload.sh 
   tags:
@@ -17,7 +17,11 @@ feature_branch_build_7400_mcn0:
   variables:
     PROFILE_LIST: 7400MCN0P01R01
     UPLOAD_TO_FILE_REPO: 0
+    DALIY_BUILD_VERSION: 1
   except:
+    - tags
+    - /^dev-.*$/i
+    - /^rel-.*$/i
     - tags
 
 feature_branch_build_7400_mcn123:
@@ -25,7 +29,11 @@ feature_branch_build_7400_mcn123:
   extends: .build_tsg-buildimage
   variables:
     PROFILE_LIST: 7400MCN123P01R01
+    DALIY_BUILD_VERSION: 1
+    DALIY_BUILD_VERSION: 1
+    DALIY_BUILD_VERSION: 1
     UPLOAD_TO_FILE_REPO: 0
+    DALIY_BUILD_VERSION: 1
   except:
     - tags
     - /^dev-.*$/i
@@ -39,6 +47,7 @@ develop_build_9000:
     UPLOAD_TO_FILE_REPO: 1
     PULP3_FILE_REPO_NAME: tsg-os-images-develop
     PULP3_FILE_DIST_NAME: tsg-os-images-develop
+    DALIY_BUILD_VERSION: 1
   only:
     - /^dev-.*$/i
 
@@ -50,6 +59,7 @@ testing_build_9000:
     UPLOAD_TO_FILE_REPO: 1
     PULP3_FILE_REPO_NAME: tsg-os-images-testing
     PULP3_FILE_DIST_NAME: tsg-os-images-testing
+    DALIY_BUILD_VERSION: 1
   only:
     - /^rel-.*$/i
 
@@ -59,6 +69,7 @@ rc_build_9000:
   variables:
     PROFILE_LIST: 9000NPBP01R01
     UPLOAD_TO_FILE_REPO: 1
+    DALIY_BUILD_VERSION: 0
     PULP3_FILE_REPO_NAME: tsg-os-images-rc
     PULP3_FILE_DIST_NAME: tsg-os-images-rc
   only:
@@ -92,6 +103,7 @@ release_build_9000:
   variables:
     PROFILE_LIST: 9000NPBP01R01
     UPLOAD_TO_FILE_REPO: 1
+    DALIY_BUILD_VERSION: 0
     PULP3_FILE_REPO_NAME: tsg-os-images-stable
     PULP3_FILE_DIST_NAME: tsg-os-images-stable
   only:
