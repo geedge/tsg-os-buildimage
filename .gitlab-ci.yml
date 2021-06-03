@@ -4,6 +4,7 @@ variables:
 
 .build_tsg-buildimage:
   script:
+    - env | sort
     - yum -y install ansible pbzip2
     - make DALIY_BUILD_VERSION=$DALIY_BUILD_VERSION
     - chmod +x ./tools/upload.sh
