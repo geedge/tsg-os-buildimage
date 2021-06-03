@@ -25,11 +25,22 @@ FUNC_NAME=tsg_record_http_entry
 FUNC_FLAG=SSL_CLIENT_HELLO,SSL_SERVER_HELLO,SSL_APPLICATION_DATA,SSL_CERTIFICATE_DETAIL
 FUNC_NAME=tsg_record_ssl_entry
 
-#[DNS]
-#FUNC_FLAG=ALL
-#FUNC_NAME=tsg_record_dns_entry
+[DNS]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_dns_entry
 
 [MAIL]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_mail_entry
 
+[RTP]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_rtp_entry
+
+[SIP]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_sip_entry
+
+[FTP]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_ftp_entry
