@@ -95,3 +95,5 @@ release_build_9000:
     PULP3_FILE_DIST_NAME: tsg-os-images-stable
   only:
     - tags
+  except:
+    - /^.*-rc.*$/i
