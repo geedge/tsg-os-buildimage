@@ -110,10 +110,17 @@
     mode: 0777
   tags: template
 
-- name: "set enp130s2f1"
+- name: "set setup.enp130s2f1.ips"
   template:
     src: "{{ role_path }}/templates/setup.enp130s2f1.ips.toml.j2"
     dest: /sbin/setup.enp130s2f1.ips
+    mode: 0777
+  tags: template
+
+- name: "set set-enp1s2-macaddr.sh"
+  template:
+    src: "{{ role_path }}/templates/set-enp1s2-macaddr.sh.toml.j2"
+    dest: /usr/bin/set-enp1s2-macaddr.sh
     mode: 0777
   tags: template
 
