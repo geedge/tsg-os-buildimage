@@ -18,11 +18,11 @@ feature_branch_build_7400_mcn0:
   variables:
     PROFILE_LIST: 7400MCN0P01R01
     DALIY_BUILD_VERSION: 1
-    UPLOAD_TO_FILE_REPO: 0
   except:
     - tags
     - /^dev-.*$/i
     - /^rel-.*$/i
+    - /^update-.*$/i
 
 feature_branch_build_7400_mcn123:
   stage: build
@@ -30,11 +30,11 @@ feature_branch_build_7400_mcn123:
   variables:
     PROFILE_LIST: 7400MCN123P01R01
     DALIY_BUILD_VERSION: 1
-    UPLOAD_TO_FILE_REPO: 0
   except:
     - tags
     - /^dev-.*$/i
     - /^rel-.*$/i
+    - /^update-.*$/i
 
 feature_branch_build_9000:
   stage: build
@@ -42,11 +42,11 @@ feature_branch_build_9000:
   variables:
     PROFILE_LIST: 9000NPBP01R01
     DALIY_BUILD_VERSION: 1
-    UPLOAD_TO_FILE_REPO: 0
   except:
     - tags
     - /^dev-.*$/i
     - /^rel-.*$/i
+    - /^update-.*$/i
 
 develop_build_9000:
   stage: build
