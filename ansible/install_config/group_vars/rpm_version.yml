@@ -1,5 +1,5 @@
 certstore_rpm_version:
-  certstore: certstore-2.1.6.20201215.f2e9ba7
+  certstore: certstore-2.1.8.20210604.8077136
 
 firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-3.0.6.a2db4a4
@@ -57,7 +57,7 @@ sapp_rpm_version:
   tcpdump_mesa: tcpdump_mesa-1.0.5.793bb53
 
 tfe_rpm_version:
-  tfe: tfe-4.5.01.91facad
+  tfe: tfe-4.5.02.bd01e15 
 
 tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-3.0.5.92c645f
