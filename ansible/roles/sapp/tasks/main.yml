@@ -4,12 +4,6 @@
     src: "{{ role_path }}/files/"
     dest: /tmp/ansible_deploy/
 
-- name: "copy maat_redis_tool to destination server"
-  copy:
-    src: "{{ role_path }}/files/maat_redis_tool"
-    dest: /usr/local/bin
-    mode: 0755
-
 - name: "install sapp and tcpdump_mesa rpms from localhost"
   yum:
     name: "{{ item.value }}"
