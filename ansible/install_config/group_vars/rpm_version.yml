@@ -47,7 +47,7 @@ framework_rpm_version:
   gtp_signaling_plug: gtp_signaling_plug-1.0.1.6e51cc4
 
 kni_rpm_version:
-  kni: kni-21.05.01.e7573e5
+  kni: kni-21.05.02.d64fa9a
 
 mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.4.5.cebe25a
