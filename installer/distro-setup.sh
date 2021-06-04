@@ -13,6 +13,9 @@ mkdir -p /data/overlay/rootfs_etc/work
 mkdir -p /data/overlay/rootfs_var/rw
 mkdir -p /data/overlay/rootfs_var/work
 
+# app_proto_engine's license
+mkdir -p /data/app_proto_engine/license
+
 # presistent journald
 mkdir -p /var/log/journal
 
