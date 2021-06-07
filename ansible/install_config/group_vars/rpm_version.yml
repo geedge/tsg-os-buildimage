@@ -8,25 +8,27 @@ firewall_rpm_version:
   ftp: ftp-1.0.8.13d5fda
   fw_dns_plug: fw_dns_plug-3.0.5.2a25c20
   fw_ftp_plug: fw_ftp_plug-3.0.1.0a78573
-  fw_http_plug: fw_http_plug-3.2.3.6b8c95d
+  fw_http_plug: fw_http_plug-3.2.4.8add122
   fw_mail_plug: fw_mail_plug-3.1.1.777fa90
   fw_quic_plug: fw_quic_plug-3.0.4.947ef77
   fw_ssl_plug: fw_ssl_plug-3.1.0.10d88fa
   http: http-2.0.5.c61ad9a
-  mail: mail-1.0.9.c1d3bde
+  mail: mail-1.0.10.cc2661f
   quic: quic-1.1.17.8c22b4d
-  ssl: ssl-2.0.0.eaa9479
+  ssl: ssl-2.0.1.a181c95
   tsg_conn_sketch: tsg_conn_sketch-2.1.38.80298dc
   rtp: rtp-1.0.4.91b4ab7
-  mesa_sip: mesa_sip-1.1.0.cfebc76
+  mesa_sip: mesa_sip-1.1.1.0721ead
   fw_voip_plug: fw_voip_plug-1.0.6.341fe83
   app_proto_identify: app_proto_identify-2.0.1.dd683eb
   app_proto_engine: app_proto_engine-2.0.3.e152e60
+  gtp: gtp-1.0.3.b494fc7
+  gtp_signaling_plug: gtp_signaling_plug-1.0.2.2dfced5
 
 framework_rpm_version:
   libcjson: libcjson-1.7.10.ab2896f
   libdocumentanalyze: libdocumentanalyze-2.0.6.2d1abe0
-  libmaatframe: libmaatframe-3.1.22.3.1.22.3.1.22.6b91622
+  libmaatframe: libmaatframe-3.1.24.fe73ef1
   libMESA_field_stat: libMESA_field_stat-1.0.2.6d45eed
   libMESA_field_stat2: libMESA_field_stat2-2.9.10.72ac4f1
   libMESA_handle_logger: libMESA_handle_logger-2.0.7.cb4ad71
@@ -43,8 +45,6 @@ framework_rpm_version:
   libaws-cpp-sdk-core: libaws-cpp-sdk-core-1.0.8.a3fe079
   libaws-cpp-sdk-s3: libaws-cpp-sdk-s3-2.0.0.f3c33ea
   libhos-client-cpp: libhos-client-cpp-1.0.26.a8573f5
-  gtp: gtp-1.0.3.b494fc7
-  gtp_signaling_plug: gtp_signaling_plug-1.0.1.6e51cc4
 
 kni_rpm_version:
   kni: kni-21.05.02.d64fa9a
@@ -60,7 +60,7 @@ tfe_rpm_version:
   tfe: tfe-4.5.02.bd01e15 
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-3.0.5.92c645f
+  app_sketch_local: app_sketch_local-3.0.6.6977511
   
 tsg_master_rpm_version:
   tsg_master: tsg_master-4.2.4.1f24c96 

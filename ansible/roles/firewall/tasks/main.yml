@@ -31,3 +31,9 @@
     dest: /home/mesasoft/sapp_run/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf
   tags: template
 
+- name: "Template the conf/http/http.conf"
+  template:
+    src: "{{ role_path }}/templates/http.conf.j2"
+    dest:  /home/mesasoft/sapp_run/conf/http/http.conf
+  tags: template
+
