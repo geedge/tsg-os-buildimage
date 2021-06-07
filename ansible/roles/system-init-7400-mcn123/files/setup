@@ -23,6 +23,7 @@ function get_netdev_by_pci()
 
 function pf_setup()
 {
+  echo 1 > /proc/sys/net/ipv6/conf/eth_pf/disable_ipv6
   ifconfig eth_pf up
   vconfig add eth_pf 100
   vconfig set_flag eth_pf.100 1 1
