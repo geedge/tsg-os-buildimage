@@ -11,6 +11,19 @@
     name: NetworkManager.service
     enabled: no
 
+- name: "set 90-7400-dracut.rules"
+  template:
+    src: "{{ role_path }}/templates/90-7400-dracut.rules.j2"
+    dest: /usr/lib/dracut/dracut.conf.d/90-7400-dracut.conf
+    mode: 0644
+  tags: template
+
+- name: "update depmod"
+  shell: depmod -v 5.4.113-1.el7.elrepo.x86_64
+
+- name: "update initramfs"
+  shell: dracut --force -v /boot/initramfs-5.4.113-1.el7.elrepo.x86_64.img 5.4.113-1.el7.elrepo.x86_64
+
 - name: "set eth_pf"
   template:
     src: "{{ role_path }}/templates/ifcfg-eth_pf.j2"
