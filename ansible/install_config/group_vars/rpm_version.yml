@@ -22,7 +22,7 @@ firewall_rpm_version:
   fw_voip_plug: fw_voip_plug-1.0.6.341fe83
   app_proto_identify: app_proto_identify-2.0.1.dd683eb
   app_proto_engine: app_proto_engine-2.0.3.e152e60
-  gtp: gtp-1.0.3.b494fc7
+  gtp: gtp-1.0.4.8804e43
   gtp_signaling_plug: gtp_signaling_plug-1.0.2.2dfced5
 
 framework_rpm_version:
