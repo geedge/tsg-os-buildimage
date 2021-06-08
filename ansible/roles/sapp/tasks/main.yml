@@ -90,7 +90,6 @@
   with_items:
     - /usr/lib/systemd/system/sapp.service.d
 
-
 - name: "sapp: service override timeoutsec"
   template:
     src: "{{ role_path }}/templates/service_override_timeoutsec.conf.j2"
@@ -103,6 +102,11 @@
     dest: /usr/lib/systemd/system/sapp.service.d/service_override_memsw_limit.conf
     mode: 0644
 
+- name: "copy env conf to sapp.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_env.conf.j2"
+    dest: /usr/lib/systemd/system/sapp.service.d/service_env.conf
+    mode: 0644
 
 ##################### sapp #####################
 - name: "enable sapp"
