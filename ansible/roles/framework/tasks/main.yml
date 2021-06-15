@@ -29,3 +29,9 @@
   copy:
     src: "{{ role_path }}/files/framework.conf"
     dest: /etc/ld.so.conf.d/
+
+- name: "copy maat_redis_tool to destination"
+  copy:
+    src: "{{ role_path }}/files/maat_redis_tool"
+    dest: /opt/MESA/bin/
+    mode: 0755
