@@ -4,9 +4,9 @@ certstore_rpm_version:
 firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-3.0.6.a2db4a4
   conn_telemetry: conn_telemetry-1.0.2.8d6da43
-  dns: dns-2.0.11.2265b5c
+  dns: dns-2.0.12.e083fec
   ftp: ftp-1.0.8.13d5fda
-  fw_dns_plug: fw_dns_plug-3.0.5.2a25c20
+  fw_dns_plug: fw_dns_plug-3.0.6.57c2feb
   fw_ftp_plug: fw_ftp_plug-3.0.1.0a78573
   fw_http_plug: fw_http_plug-3.2.4.8add122
   fw_mail_plug: fw_mail_plug-3.1.1.777fa90
@@ -15,7 +15,7 @@ firewall_rpm_version:
   http: http-2.0.5.c61ad9a
   mail: mail-1.0.10.cc2661f
   quic: quic-1.1.17.8c22b4d
-  ssl: ssl-2.0.1.a181c95
+  ssl: ssl-2.0.2.1389716
   tsg_conn_sketch: tsg_conn_sketch-2.1.40.e9a138c
   rtp: rtp-1.0.4.91b4ab7
   mesa_sip: mesa_sip-1.1.1.0721ead
