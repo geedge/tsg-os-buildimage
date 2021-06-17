@@ -12,6 +12,7 @@
     - {role: docker, tags: docker}
     - {role: framework, tags: framework}
     - {role: mrzcpd, tags: mrzcpd}
+    - {role: sapp, tags: sapp}
     - {role: tsg_master, tags: tsg_master}
     - {role: kni, tags: kni}
     - {role: firewall, tags: firewall}
@@ -34,6 +35,7 @@
     - {role: system-init, tags: system-init}
     - {role: system-init-7400-mcn123, tags: system-init-7400-mcn123}
     - {role: tsg_device_tag, tags: tsg_device_tag}
+    - {role: framework, tags: framework}
     - {role: mrzcpd, tags: mrzcpd}
     - {role: exporter, tags: exporter}
     - {role: tsg_sn, tags: tsg_sn}

@@ -1,0 +1,8 @@
+#layer name definition:  ipv4, ipv6, ethernet,vlan, arp, gre, mpls, pppoe, tcp, udp, l2tp, ppp, pptp, gtp
+#pattern: asymmetric_layer_name    under_of_this_asymmetric_layer[layer_index]   upper_of_this_asymmetric_layer[layer_index]
+{% raw %}
+{% if NPB_device == 'tera' %}
+mpls    ethernet[0]    ipv4[1]
+mpls    ethernet[0]    ipv6[1]
+{% endif %}
+{% endraw %}

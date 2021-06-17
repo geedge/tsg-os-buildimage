@@ -1,7 +1,27 @@
 [Module]
-pcapdevice={{ nic_mgr.name }}
-sendto_gdev_card={{ nic_mgr.name }}
+{% if PROFILE_ID == '9000-NPB-P01R01' %}
+pcapdevice=enp1s2
+sendto_gdev_card=enp1s2
+{% endif %}
+{% if PROFILE_ID == '7400-MCN0-P01R01' %}
+pcapdevice=eth_raw
+sendto_gdev_card=eth_raw
+{% endif %}
+
+{% if PROFILE_ID == '9000-NPB-P01R01' %}
 {% raw %}
 sendto_gdev_ip=10.253.{{ keepalive_subnet_ip }}.1
 {% endraw %}
+{% endif %}
+
+{% if PROFILE_ID == '7400-MCN0-P01R01' %}
+{% raw %}
+{% if NPB_device == 'tera' %}
+sendto_gdev_ip=192.0.2.253
+{% endif %}
+{% if NPB_device == 'inline_device' %}
+sendto_gdev_ip={{ keep_alive_ip }}
+{% endif %}
+{% endraw %}
+{% endif %}
 gdev_status_switch=1
