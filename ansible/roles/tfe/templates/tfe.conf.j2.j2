@@ -1,10 +1,5 @@
 [system]
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-nr_worker_threads=26
-{% endif %}
-{% if PROFILE_ID == '7400-MCN123-P01R01' %}
-nr_worker_threads=32
-{% endif %}
+nr_worker_threads={{ tfe.tfe_conf.system.nr_worker_threads }}
 enable_kni_v1=0
 enable_kni_v2=0
 enable_kni_v3=1
@@ -22,12 +17,7 @@ breakpad_minidump_dir=/run/tfe/crashreport
 # ask for at least (1 + nr_worker_threads) masks
 # the first  mask for acceptor thread
 # the others mask for worker   thread
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-enable_cpu_affinity=1
-{% endif %}
-{% if PROFILE_ID == '7400-MCN123-P01R01' %}
-enable_cpu_affinity=0
-{% endif %}
+enable_cpu_affinity={{ tfe.tfe_conf.system.enable_cpu_affinity }}
 cpu_affinity_mask=1-13,28-41
 
 # LEAST_CONN = 0; ROUND_ROBIN = 1
@@ -48,12 +38,7 @@ queue_no_enobufs=1
 
 # send cmsg
 send_switch=1
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-ip=127.0.0.1
-{% endif %}
-{% if PROFILE_ID == '7400-MCN123-P01R01' %}
-ip=192.168.100.1
-{% endif %}
+ip={{ tfe.tfe_conf.kni.ip }}
 cmsg_port=2475
 
 # watch dog
@@ -104,12 +89,7 @@ key_log_file=log/sslkeylog.log
 
 # mid cert cache
 mc_cache_enable=1
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-mc_cache_eth=enp130s2f3
-{% endif %}
-{% if PROFILE_ID == '7400-MCN123-P01R01' %}
-mc_cache_eth=eth_ctl
-{% endif %}
+mc_cache_eth={{ tfe.tfe_conf.ssl.mc_cache_eth }}
 {% raw %}
 mc_cache_broker_list={{ log_kafkabrokers.address | join(",") }}
 {% endraw %}
@@ -122,12 +102,7 @@ ssl_ja3_table=PXY_SSL_FINGERPRINT
 #0 on cache 1 off cache
 no_cache=0
 mode=normal
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-cert_store_host=127.0.0.1
-{% endif %}
-{% if PROFILE_ID == '7400-MCN123-P01R01'%}
-cert_store_host=192.168.100.1
-{% endif %}
+cert_store_host={{ tfe.tfe_conf.key_keeper.cert_store_host }}
 cert_store_port=9991
 ca_path=resource/tfe/tango-ca-v3-trust-ca.pem
 untrusted_ca_path=resource/tfe/tango-ca-v3-untrust-ca.pem
@@ -201,12 +176,7 @@ stat_file=log/traffic_mirror.status
 
 [kafka]
 enable=1
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-NIC_NAME=enp130s2f3
-{% endif %}
-{% if PROFILE_ID == '7400-MCN123-P01R01' %}
-NIC_NAME=eth_ctl
-{% endif %}
+NIC_NAME={{ tfe.tfe_conf.kafka.NIC_NAME }}
 {% raw %}
 kafka_brokerlist={{ log_kafkabrokers.address | join(",") }}
 {% endraw %}

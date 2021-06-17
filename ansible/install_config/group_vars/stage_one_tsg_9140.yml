@@ -43,3 +43,20 @@ sapp:
     PACKET_IO:
       packet_io_internal_interface:
         name: enp1s2
+
+tfe:
+  tfe_env_config:
+    TFE_DEVICE_DATA_INCOMING: enp130s2f1
+    TFE_PEER_MAC_DATA_INCOMING: 00:0e:c6:d6:72:c1
+  tfe_conf:
+    system:
+      nr_worker_threads: 26
+      enable_cpu_affinity: 1
+    kni:
+      ip: 127.0.0.1
+    ssl:
+      mc_cache_eth: enp130s2f3
+    key_keeper:
+      cert_store_host: 127.0.0.1
+    kafka:
+      NIC_NAME: enp130s2f3
