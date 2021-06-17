@@ -24,3 +24,4 @@
     - {role: system-init-7400-mcn123, tags: system-init-7400-mcn123}
     - {role: tsg_device_tag, tags: tsg_device_tag}
     - {role: tsg_sn, tags: tsg_sn}
+    - {role: tfe, tags: tfe}
