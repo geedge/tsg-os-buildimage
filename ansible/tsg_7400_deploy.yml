@@ -9,8 +9,14 @@
     - {role: system-init-7400-mcn0, tags: system-init-7400-mcn0}
     - {role: tsg_device_tag, tags: tsg_device_tag}
     - {role: tsg_sn, tags: tsg_sn}
+    - {role: docker, tags: docker}
+    - {role: framework, tags: framework}
     - {role: tsg_master, tags: tsg_master}
     - {role: tsg_app, tags: tsg_app}
+    - {role: redis, tags: redis}
+    - {role: certstore, tags: certstore}
+    - {role: telegraf_statistic, tags: telegraf_statistic}
+    - {role: exporter, tags: exporter}
     - {role: tsg-diagnose, tags: tsg-diagnose}
 
 - hosts: 7400-MCN123-P01R01
@@ -23,5 +29,6 @@
     - {role: system-init, tags: system-init}
     - {role: system-init-7400-mcn123, tags: system-init-7400-mcn123}
     - {role: tsg_device_tag, tags: tsg_device_tag}
+    - {role: exporter, tags: exporter}
     - {role: tsg_sn, tags: tsg_sn}
     - {role: tfe, tags: tfe}
