@@ -16,17 +16,26 @@
     dest: /opt/tsg/tsg-diagnose/etc/tsg-diagnose.config
   tags: template
 
-- name: "Templates docker-compose.yml"
+- name: "Templates docker-compose.yml - TSG-9140"
   template:
-    src: "{{role_path}}/templates/docker-compose.yml.j2"
+    src: "{{role_path}}/templates/tsg_9140_docker-compose.yml.j2"
     dest: /opt/tsg/tsg-diagnose/compose/docker-compose.yml
   tags: template
+  when:
+    - PROFILE_ID == '9000-NPB-P01R01'
+
+- name: "Templates docker-compose.yml - TSG-7400"
+  template:
+    src: "{{role_path}}/templates/tsg_7400_docker-compose.yml.j2"
+    dest: /opt/tsg/tsg-diagnose/compose/docker-compose.yml
+  tags: template
+  when:
+    - PROFILE_ID == '7400-MCN0-P01R01'
 
 - name: "tsg-diagnose:mkdir -p .badssl_cert_dict"
   file:
     path: /opt/tsg/tsg-diagnose/.badssl_cert_dict
     state: directory
-
 
 - name: "tsg-diagnose: unarchive certs"
   unarchive:
@@ -43,6 +52,6 @@
 
 - name: "copy prestart file to tsg-diagnose.service.d"
   copy:
-    src: "{{ role_path }}/files/prestart.conf"
+    src: "{{ role_path }}/files/service_override_prestart.conf"
     dest: /usr/lib/systemd/system/tsg-diagnose.service.d/
     mode: 0644
