@@ -8,3 +8,22 @@ firewall:
   main_conf:
     TSG_LOG:
       NIC_NAME: eth_ctl
+
+kni:
+  kni_conf:
+    global:
+      tfe_node_count: 3
+      manage_eth: eth_ctl
+    tfe0:
+      dev_eth_symbol: eth_mcn1
+      ip_addr: 192.168.100.2
+    tfe1:
+      dev_eth_symbol: eth_mcn2
+      ip_addr: 192.168.100.3
+    tfe2:
+      dev_eth_symbol: eth_mcn3
+      ip_addr: 192.168.100.4
+    tfe_cmsg_receiver:
+      listen_eth: eth_pf.100
+    watch_dog:
+      listen_eth: eth_pf.100

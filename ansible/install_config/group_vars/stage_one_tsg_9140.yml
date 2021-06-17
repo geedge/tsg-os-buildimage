@@ -8,3 +8,16 @@ firewall:
   main_conf:
     TSG_LOG:
       NIC_NAME: enp130s2f3
+
+kni:
+  kni_conf:
+    global:
+      tfe_node_count: 1
+      manage_eth: enp130s2f3
+    tfe0:
+      dev_eth_symbol: enp130s2
+      ip_addr: 127.0.0.1
+    tfe_cmsg_receiver:
+      listen_eth: lo
+    watch_dog:
+      listen_eth: lo
