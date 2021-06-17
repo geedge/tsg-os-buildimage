@@ -60,3 +60,8 @@ tfe:
       cert_store_host: 127.0.0.1
     kafka:
       NIC_NAME: enp130s2f3
+
+tsg_diagnose:
+  docker_compose_yml:
+    virtual_server_nic: enp1s2f2
+    virtual_client_nic: enp1s2f1

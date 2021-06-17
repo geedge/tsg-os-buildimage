@@ -73,3 +73,8 @@ tfe:
       cert_store_host: 192.168.100.1
     kafka:
       NIC_NAME: eth_ctl
+
+tsg_diagnose:
+  docker_compose_yml:
+    virtual_server_nic: eth_dign_s
+    virtual_client_nic: eth_dign_c
