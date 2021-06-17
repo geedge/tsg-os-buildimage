@@ -15,6 +15,7 @@
     - {role: tsg_master, tags: tsg_master}
     - {role: tsg_app, tags: tsg_app}
     - {role: redis, tags: redis}
+    - {role: maat-redis, tags: maat-redis}
     - {role: certstore, tags: certstore}
     - {role: telegraf_statistic, tags: telegraf_statistic}
     - {role: exporter, tags: exporter}

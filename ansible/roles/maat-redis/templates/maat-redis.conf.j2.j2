@@ -89,8 +89,9 @@ protected-mode no
 
 # Accept connections on the specified port, default is 6379 (IANA #815344).
 # If port 0 is specified Redis will not listen on a TCP socket.
+{% raw %}
 port {{ maat_redis_city_server.port }}
-
+{% endraw %}
 # TCP listen() backlog.
 #
 # In high requests-per-second environments you need an high backlog in order
@@ -155,8 +156,9 @@ supervised no
 #
 # Creating a pid file is best effort: if Redis is not able to create it
 # nothing bad happens, the server will start and run normally.
+{% raw %}
 pidfile /var/run/redis_{{ maat_redis_city_server.port }}.pid
-
+{% endraw %}
 # Specify the server verbosity level.
 # This can be one of:
 # debug (a lot of information, useful for development/testing)
@@ -278,8 +280,9 @@ dir /var/lib/redis
 #    network partition slaves automatically try to reconnect to masters
 #    and resynchronize with them.
 #
+{% raw %}
  slaveof {{ maat_redis_city_server.address }} {{ maat_redis_city_server.port }}
-
+{% endraw %}
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
 # starting the replication synchronization process, otherwise the master will

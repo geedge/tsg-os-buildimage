@@ -12,18 +12,16 @@
 
 - name: "Template the maat-redis.conf"
   template:
-    src: "{{ role_path }}/templates/maat-redis.conf.j2"
-    dest: /etc/maat-redis.conf
+    src: "{{ role_path }}/templates/maat-redis.conf.j2.j2"
+    dest: /opt/tsg/tsg-os-provision/templates/gdev.conf.j2
   tags: template
 
-- name: "start maat-redis"
+- name: "enable maat-redis"
   systemd:
     name: maat-redis.service
     enabled: yes
 
-#- name: "start maat-redis exporter"
-#  systemd:
-#    name: maat-redis-exporter.service
-#    state: started
-#    daemon_reload: yes
-#    enabled: yes
+- name: "enable maat-redis exporter"
+  systemd:
+    name: maat-redis-exporter.service
+    enabled: yes
