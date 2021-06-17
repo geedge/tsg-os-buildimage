@@ -1,12 +1,6 @@
 [Module]
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-pcapdevice=enp1s2
-sendto_gdev_card=enp1s2
-{% endif %}
-{% if PROFILE_ID == '7400-MCN0-P01R01' %}
-pcapdevice=eth_raw
-sendto_gdev_card=eth_raw
-{% endif %}
+pcapdevice={{ sapp.gdev_conf.Module.pcapdevice }}
+sendto_gdev_card={{ sapp.gdev_conf.Module.sendto_gdev_card }}
 
 {% if PROFILE_ID == '9000-NPB-P01R01' %}
 {% raw %}

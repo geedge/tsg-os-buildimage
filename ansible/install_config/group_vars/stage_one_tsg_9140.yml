@@ -29,3 +29,17 @@ mrzcpd:
       nic_to_tfe: enp130s2
     service:
       iocore: 52,53,54,55
+
+sapp:
+  gdev_conf:
+    Module:
+      pcapdevice: enp1s2
+      sendto_gdev_card: enp1s2
+  sapp_toml:
+    CPU:
+      worker_threads: 22
+      send_only_threads_max: 1
+      bind_mask: 15,16,17,18,19,20,21,22,23,24,25,26,27,42,43,44,45,46,47,48,49,50,51
+    PACKET_IO:
+      packet_io_internal_interface:
+        name: enp1s2

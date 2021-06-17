@@ -10,16 +10,9 @@ instance_name = "sapp4"
 
 [CPU]
 ### note, bind_mask, if you do not want to bind thread to special CPU core, keep it empty as []
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-worker_threads=22
-send_only_threads_max=1
-bind_mask=[15,16,17,18,19,20,21,22,23,24,25,26,27,42,43,44,45,46,47,48,49,50,51]
-{% endif %}
-{% if PROFILE_ID == '7400-MCN0-P01R01' %}
-worker_threads=42
-send_only_threads_max=1
-bind_mask=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43]
-{% endif %}
+worker_threads={{ sapp.sapp_toml.CPU.worker_threads }}
+send_only_threads_max={{ sapp.sapp_toml.CPU.send_only_threads_max }}
+bind_mask=[{{ sapp.sapp_toml.CPU.bind_mask }}]
 
 [MEM]
 dictator_enable=1
@@ -85,12 +78,7 @@ dictator_enable=1
 ### note, interface.type options: [pag,pcap,marsio]
     [packet_io.internal.interface]
         type=marsio
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-        name=enp1s2
-{% endif %}
-{% if PROFILE_ID == '7400-MCN0-P01R01' %}
-        name=enp1s4
-{% endif %}
+        name={{ sapp.sapp_toml.PACKET_IO.packet_io_internal_interface.name }}
     [packet_io.external.interface]
         type=pcap
     name=lo
