@@ -1,0 +1,10 @@
+# TOD: TSG-6386 调整 TSG-OS 中的脚本， 适配 TSG-9140 硬件平台
+# variable format {role_name}.{configname}.{section}.{var}  configname 用 "_" 替代 "."
+
+firewall:
+  capture_packet_plug_conf:
+    LOG:
+      NIC_NAME: enp130s2f3
+  main_conf:
+    TSG_LOG:
+      NIC_NAME: enp130s2f3

@@ -39,12 +39,7 @@ IP_ADDR_TABLE="TSG_SECURITY_ADDR"
 
 [TSG_LOG]
 MODE=1
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-NIC_NAME="enp130s2f3"
-{% endif %}
-{% if PROFILE_ID == '7400-MCN0-P01R01' %}
-NIC_NAME="eth_ctl"
-{% endif %}
+NIC_NAME="{{ firewall.main_conf.TSG_LOG.NIC_NAME }}"
 MAX_SERVICE=1
 LOG_LEVEL=30
 LOG_PATH="./tsglog/tsglog"
