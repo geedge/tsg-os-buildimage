@@ -11,6 +11,7 @@
     - {role: tsg_sn, tags: tsg_sn}
     - {role: docker, tags: docker}
     - {role: framework, tags: framework}
+    - {role: mrzcpd, tags: mrzcpd}
     - {role: tsg_master, tags: tsg_master}
     - {role: tsg_app, tags: tsg_app}
     - {role: redis, tags: redis}
@@ -29,6 +30,7 @@
     - {role: system-init, tags: system-init}
     - {role: system-init-7400-mcn123, tags: system-init-7400-mcn123}
     - {role: tsg_device_tag, tags: tsg_device_tag}
+    - {role: mrzcpd, tags: mrzcpd}
     - {role: exporter, tags: exporter}
     - {role: tsg_sn, tags: tsg_sn}
     - {role: tfe, tags: tfe}
