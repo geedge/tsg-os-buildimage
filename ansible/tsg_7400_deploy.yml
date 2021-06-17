@@ -15,6 +15,7 @@
     - {role: tsg_master, tags: tsg_master}
     - {role: kni, tags: kni}
     - {role: tsg_app, tags: tsg_app}
+    - {role: http_healthcheck,tags: http_healthcheck}
     - {role: redis, tags: redis}
     - {role: maat-redis, tags: maat-redis}
     - {role: certstore, tags: certstore}

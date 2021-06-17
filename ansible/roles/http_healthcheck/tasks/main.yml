@@ -1,0 +1,5 @@
+- name: "install http_healthcheck from localhost"
+  yum:
+    name: "{{ http_healthcheck_rpm_version.http_healthcheck }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
