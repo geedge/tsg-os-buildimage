@@ -13,6 +13,7 @@
     - {role: framework, tags: framework}
     - {role: mrzcpd, tags: mrzcpd}
     - {role: tsg_master, tags: tsg_master}
+    - {role: kni, tags: kni}
     - {role: tsg_app, tags: tsg_app}
     - {role: redis, tags: redis}
     - {role: maat-redis, tags: maat-redis}

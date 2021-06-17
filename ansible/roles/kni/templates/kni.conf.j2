@@ -1,24 +1,59 @@
 [global]
 log_path = ./log/kni/kni.log
 log_level = 30
+{% if PROFILE_ID == '9000-NPB-P01R01' %}
 tfe_node_count = 1
 manage_eth = enp130s2f3
+{% endif %}
+{% if PROFILE_ID == '7400-MCN0-P01R01' %}
+tfe_node_count = 3
+manage_eth = eth_ctl
+{% endif %}
 deploy_mode = normal
 tun_name = tun_kni
 src_mac_addr = 00:0e:c6:d6:72:c1
 dst_mac_addr = fe:65:b7:03:50:bd
+{% if PROFILE_ID == '9000-NPB-P01R01' %}
 [tfe0]
 enabled = 1
 dev_eth_symbol = enp130s2
 ip_addr = 127.0.0.1
+{% endif %}
+
+{% if PROFILE_ID == '7400-MCN0-P01R01' %}
+[tfe0]
+enabled = 1
+dev_eth_symbol = eth_mcn1
+ip_addr = 192.168.100.2
+
+[tfe1]
+enabled = 1
+dev_eth_symbol = eth_mcn2
+ip_addr = 192.168.100.3
+
+[tfe2]
+enabled = 1
+dev_eth_symbol = eth_mcn3
+ip_addr = 192.168.100.4
+{% endif %}
 
 [tfe_cmsg_receiver]
+{% if PROFILE_ID == '9000-NPB-P01R01' %}
 listen_eth = lo
+{% endif %}
+{% if PROFILE_ID == '7400-MCN0-P01R01' %}
+listen_eth = eth_pf.100
+{% endif %}
 listen_port = 2475
 
 [watch_dog]
 switch = 1
+{% if PROFILE_ID == '9000-NPB-P01R01' %}
 listen_eth = lo
+{% endif %}
+{% if PROFILE_ID == '7400-MCN0-P01R01' %}
+listen_eth = eth_pf.100
+{% endif %}
 listen_port = 2476
 keepalive_idle = 2
 keepalive_intvl = 1
