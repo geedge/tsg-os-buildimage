@@ -1,9 +1,9 @@
 [device]
-device=enp1s2,enp130s2,vxlan_user,vxlan_fwd
+device={{ mrzcpd.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mrglobal_conf.device.nic_to_tfe }},vxlan_user,vxlan_fwd
 sz_tunnel=8192
 sz_buffer=0
 
-[device:enp1s2]
+[device:{{ mrzcpd.mrglobal_conf.device.nic_raw }}]
 mtu=4096
 clear_tx_flags=1
 hw_strip_crc=1
@@ -14,7 +14,7 @@ in_addr=10.253.{{ keepalive_subnet_ip }}.1
 in_mask=255.255.0.0
 rssmode=0
 
-[device:enp130s2]
+[device:{{ mrzcpd.mrglobal_conf.device.nic_to_tfe }}]
 mtu=4096
 clear_tx_flags=1
 vlan-filter=1
@@ -29,7 +29,7 @@ rssmode=0
 
 [service]
 # lcore id for i/o service, use comma to split
-iocore=55,54,53,52
+iocore={{ mrzcpd.mrglobal_conf.service.iocore }}
 distmode=2
 hashmode=0
 idle_threshold=10000
@@ -53,9 +53,9 @@ sz_data=4096
 
 [forward]
 nr_forward_rule=6
-forward_rule_0=pv,enp1s2,enp1s2
-forward_rule_1=vp,enp1s2,enp1s2
+forward_rule_0=pv,{{ mrzcpd.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mrglobal_conf.device.nic_raw }}
+forward_rule_1=vp,{{ mrzcpd.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mrglobal_conf.device.nic_raw }}
 forward_rule_2=vv,vxlan_fwd,vxlan_user
 forward_rule_3=vv,vxlan_user,vxlan_fwd
-forward_rule_4=pv,enp130s2,enp130s2
-forward_rule_5=vp,enp130s2,enp130s2
+forward_rule_4=pv,{{ mrzcpd.mrglobal_conf.device.nic_to_tfe }},{{ mrzcpd.mrglobal_conf.device.nic_to_tfe }}
+forward_rule_5=vp,{{ mrzcpd.mrglobal_conf.device.nic_to_tfe }},{{ mrzcpd.mrglobal_conf.device.nic_to_tfe }}

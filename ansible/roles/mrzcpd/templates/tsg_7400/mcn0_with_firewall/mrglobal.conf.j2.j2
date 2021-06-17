@@ -1,10 +1,9 @@
 [device]
-device=eth_raw,eth_mcn1,eth_mcn2,eth_mcn3,vxlan_user,vxlan_fwd
+device={{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn1 }},{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn2 }},{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn3 }},vxlan_user,vxlan_fwd
 sz_tunnel=8192
 sz_buffer=0
 
-[device:eth_raw]
-
+[device:{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_raw }}]
 {% raw %}
 {% if NPB_device == 'inline_device' %}
 in_addr={{inline_device_config.keepalive_ip}}
@@ -23,19 +22,19 @@ vlan-pvid=0
 vlan-pvid-mode=2
 promisc=1
 
-[device:eth_mcn1]
+[device:{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn1 }}]
 jumbo_frame=1
 max_rx_pkt_len=15360
 clear_tx_flags=1
 promisc=1
 
-[device:eth_mcn2]
+[device:{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn2 }}]
 jumbo_frame=1
 max_rx_pkt_len=15360
 clear_tx_flags=1
 promisc=1
 
-[device:eth_mcn3]
+[device:{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn3 }}]
 jumbo_frame=1
 max_rx_pkt_len=15360
 clear_tx_flags=1
@@ -43,7 +42,7 @@ promisc=1
 
 [service]
 # lcore id for i/o service, use comma to split
-iocore=52,53,54,55
+iocore={{ mrzcpd.mcn0_with_firewall.mrglobal_conf.service.iocore }}
 distmode=2
 hashmode=0
 
@@ -66,14 +65,14 @@ sz_data=4096
 
 [forward]
 nr_forward_rule=10
-forward_rule_0=pv,eth_raw,eth_raw
-forward_rule_1=vp,eth_raw,eth_raw
+forward_rule_0=pv,{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_raw }}
+forward_rule_1=vp,{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_raw }}
 forward_rule_2=vv,vxlan_fwd,vxlan_user
 forward_rule_3=vv,vxlan_user,vxlan_fwd
-forward_rule_4=pv,eth_mcn1,eth_mcn1
-forward_rule_5=vp,eth_mcn1,eth_mcn1
-forward_rule_6=pv,eth_mcn2,eth_mcn2
-forward_rule_7=vp,eth_mcn2,eth_mcn2
-forward_rule_8=pv,eth_mcn3,eth_mcn3
-forward_rule_9=vp,eth_mcn3,eth_mcn3
+forward_rule_4=pv,{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn1 }},{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn1 }}
+forward_rule_5=vp,{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn1 }},{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn1 }}
+forward_rule_6=pv,{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn2 }},{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn2 }}
+forward_rule_7=vp,{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn2 }},{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn2 }}
+forward_rule_8=pv,{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn3 }},{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn3 }}
+forward_rule_9=vp,{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn3 }},{{ mrzcpd.mcn0_with_firewall.mrglobal_conf.device.nic_mcn3 }}
 

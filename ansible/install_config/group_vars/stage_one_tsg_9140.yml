@@ -21,3 +21,11 @@ kni:
       listen_eth: lo
     watch_dog:
       listen_eth: lo
+
+mrzcpd:
+  mrglobal_conf:
+    device:
+      nic_raw: enp1s2
+      nic_to_tfe: enp130s2
+    service:
+      iocore: 52,53,54,55
