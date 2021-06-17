@@ -39,7 +39,12 @@ IP_ADDR_TABLE="TSG_SECURITY_ADDR"
 
 [TSG_LOG]
 MODE=1
+{% if PROFILE_ID == '9000-NPB-P01R01' %}
 NIC_NAME="enp130s2f3"
+{% endif %}
+{% if PROFILE_ID == '7400-MCN0-P01R01' %}
+NIC_NAME="eth_ctl"
+{% endif %}
 MAX_SERVICE=1
 LOG_LEVEL=30
 LOG_PATH="./tsglog/tsglog"
@@ -63,7 +68,12 @@ OUTPUT_PATH="./tsg_stat.log"
 APP_NAME="tsg_master"
 
 [SYSTEM]
+{% if PROFILE_ID == '9000-NPB-P01R01' %}
 NIC_NAME="enp130s2f3"
+{% endif %}
+{% if PROFILE_ID == '7400-MCN0-P01R01' %}
+NIC_NAME="eth_ctl"
+{% endif %}
 {% raw %}
 ENTRANCE_ID={{ tsg_master_entrance_id }}
 {% endraw %}

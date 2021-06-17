@@ -22,7 +22,12 @@ ACCEPT_TAGS={"tags":[{"tag":"data_center","value":"{{ data_center }}"}]}
 {% endraw %}
 
 [LOG]
+{% if PROFILE_ID == '9000-NPB-P01R01' %}
 NIC_NAME=enp130s2f3
+{% endif %}
+{% if PROFILE_ID == '7400-MCN0-P01R01' %}
+NIC_NAME=eth_ctl
+{% endif %}
 {% raw %}
 BROKER_LIST={{ log_kafkabrokers.address | join(",") }}
 {% endraw %}
