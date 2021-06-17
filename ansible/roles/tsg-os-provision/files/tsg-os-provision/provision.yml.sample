@@ -35,3 +35,21 @@ pangu_pxy:
     port: 9090
 
 tsg_sn: "CBT2201925000002"
+
+# NPB_device value in [inline_device, tera]
+NPB_device: inline_device
+
+access_vlan_id_list:
+  - 1000
+  - 1001
+
+keep_alive: 127.0.0.1
+
+
+inline_device_config:
+  keepalive_ip: 127.0.0.1
+  eepalive_mask: 255.255.255.0
+
+maat_redis_city_server:
+  address: "10.4.62.253"
+  port: 7002

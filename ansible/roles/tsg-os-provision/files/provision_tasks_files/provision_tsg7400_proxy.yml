@@ -1,0 +1,48 @@
+---
+- hosts: provision
+  vars_files:
+  - '{{var_files_path}}'
+  tasks:
+    - name: "mkdir /opt/tsg/etc/"
+      file:
+        path: /opt/tsg/etc
+        state: directory
+
+    - name: "tsg-os-provision: obtain sn from mxn and write sn to tsg_sn.json"
+      shell: /opt/tsg/tsg-os-provision/tsg7400_obtain_sn_from_mxn.sh
+      register: result_exec_obtain_sn_and_write_sn_in_file
+
+    - name: "tsg-os-provision: check result_exec_obtain_sn_and_write_sn_in_file"
+      assert:
+        that:
+          - result_exec_obtain_keepalive_subnet.rc == 0
+          - result_exec_obtain_keepalive_subnet.failed == False
+        fail_msg: "error:{{ result_exec_obtain_keepalive_subnet.stderr }},stdout:{{ result_exec_obtain_keepalive_subnet.stdout_lines }}"
+        success_msg: "Successded: obtain the sn from mxn and write sn into tsg_sn.json"
+
+    - name: "tsg-os-provision: template the tsg_device_tag"
+      template:
+        src: "../templates/tsg_device_tag.json.j2"
+        dest: /opt/tsg/etc/tsg_device_tag.json
+      tags: tsg_device_tag
+
+    - name: "tsg-os-provision: template the tfe.conf"
+      template:
+        src: "../templates/tfe.conf.j2"
+        dest: /opt/tsg/tfe/conf/tfe/tfe.conf
+      tags: tfe
+  
+    - name: "tsg-os-provision: template the pangu_pxy.conf"
+      template:
+        src: "../templates/pangu_pxy.conf.j2"
+        dest: /opt/tsg/tfe/conf/pangu/pangu_pxy.conf
+      tags: tfe
+
+    - name: 'tsg-os-provision: execute command - systemctl daemon-reload'
+      systemd:
+        daemon_reload: yes
+
+    - name: "tsg-os-provision: snapshot the stage2 config files"
+      copy:
+        src: /data/tsg-os-provision/provision.yml
+        dest: /data/tsg-os-provision/provision.yml.snapshot
