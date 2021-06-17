@@ -29,18 +29,16 @@ kni:
       listen_eth: eth_pf.100
 
 mrzcpd:
-  mcn0_with_firewall:
-    mrglobal_conf:
-      device:
-        nic_raw: eth_raw
-        nic_mcn1: eth_mcn1
-        nic_mcn2: eth_mcn2
-        nic_mcn3: eth_mcn3
-      service:
-        iocore: 52,53,54,55
-  mcn123_with_proxy:
-    mrglobal_conf:
-      device:
-        nic_mirr: eth_mirr_d
-      service:
-        iocore: 53,54 
+  mrglobal_conf_mcn0:
+    device:
+      nic_raw: eth_raw
+      nic_mcn1: eth_mcn1
+      nic_mcn2: eth_mcn2
+      nic_mcn3: eth_mcn3
+    service:
+      iocore: 52,53,54,55
+  mrglobal_conf_mcn123:
+    device:
+      nic_mirr: eth_mirr_d
+    service:
+      iocore: 53,54 
