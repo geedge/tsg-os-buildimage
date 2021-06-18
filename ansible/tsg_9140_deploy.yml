@@ -1,7 +1,7 @@
 - hosts: tsg_9140_chroot
   remote_user: root
   vars_files:
-    - install_config/group_vars/stage_one_tsg_9140.yml
+    - install_config/group_vars/stage_one_9000NPBP01R01.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     #- {role: init-env, tags: init-env}

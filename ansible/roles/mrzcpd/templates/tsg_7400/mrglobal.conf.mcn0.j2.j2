@@ -1,9 +1,9 @@
 [device]
-device={{ mrzcpd.mrglobal_conf_mcn0.device.nic_raw }},{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn1 }},{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn2 }},{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn3 }},vxlan_user,vxlan_fwd
+device={{ mrzcpd.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }},vxlan_user,vxlan_fwd
 sz_tunnel=8192
 sz_buffer=0
 
-[device:{{ mrzcpd.mrglobal_conf_mcn0.device.nic_raw }}]
+[device:{{ mrzcpd.mrglobal_conf.device.nic_raw }}]
 {% raw %}
 {% if NPB_device == 'inline_device' %}
 in_addr={{inline_device_config.keepalive_ip}}
@@ -22,19 +22,19 @@ vlan-pvid=0
 vlan-pvid-mode=2
 promisc=1
 
-[device:{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn1 }}]
+[device:{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }}]
 jumbo_frame=1
 max_rx_pkt_len=15360
 clear_tx_flags=1
 promisc=1
 
-[device:{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn2 }}]
+[device:{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }}]
 jumbo_frame=1
 max_rx_pkt_len=15360
 clear_tx_flags=1
 promisc=1
 
-[device:{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn3 }}]
+[device:{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }}]
 jumbo_frame=1
 max_rx_pkt_len=15360
 clear_tx_flags=1
@@ -42,7 +42,7 @@ promisc=1
 
 [service]
 # lcore id for i/o service, use comma to split
-iocore={{ mrzcpd.mrglobal_conf_mcn0.service.iocore }}
+iocore={{ mrzcpd.mrglobal_conf.service.iocore }}
 distmode=2
 hashmode=0
 
@@ -65,14 +65,14 @@ sz_data=4096
 
 [forward]
 nr_forward_rule=10
-forward_rule_0=pv,{{ mrzcpd.mrglobal_conf_mcn0.device.nic_raw }},{{ mrzcpd.mrglobal_conf_mcn0.device.nic_raw }}
-forward_rule_1=vp,{{ mrzcpd.mrglobal_conf_mcn0.device.nic_raw }},{{ mrzcpd.mrglobal_conf_mcn0.device.nic_raw }}
+forward_rule_0=pv,{{ mrzcpd.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mrglobal_conf.device.nic_raw }}
+forward_rule_1=vp,{{ mrzcpd.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mrglobal_conf.device.nic_raw }}
 forward_rule_2=vv,vxlan_fwd,vxlan_user
 forward_rule_3=vv,vxlan_user,vxlan_fwd
-forward_rule_4=pv,{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn1 }},{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn1 }}
-forward_rule_5=vp,{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn1 }},{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn1 }}
-forward_rule_6=pv,{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn2 }},{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn2 }}
-forward_rule_7=vp,{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn2 }},{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn2 }}
-forward_rule_8=pv,{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn3 }},{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn3 }}
-forward_rule_9=vp,{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn3 }},{{ mrzcpd.mrglobal_conf_mcn0.device.nic_mcn3 }}
+forward_rule_4=pv,{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }}
+forward_rule_5=vp,{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }}
+forward_rule_6=pv,{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }}
+forward_rule_7=vp,{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }}
+forward_rule_8=pv,{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }}
+forward_rule_9=vp,{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }}
 

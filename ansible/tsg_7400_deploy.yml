@@ -1,7 +1,7 @@
 - hosts: 7400-MCN0-P01R01
   remote_user: root
   vars_files:
-    - install_config/group_vars/stage_one_tsg_7400.yml
+    - install_config/group_vars/stage_one_7400MCN0P01R01.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}
@@ -28,7 +28,7 @@
 - hosts: 7400-MCN123-P01R01
   remote_user: root
   vars_files:
-    - install_config/group_vars/stage_one_tsg_7400.yml
+    - install_config/group_vars/stage_one_7400MCN123P01R01.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}

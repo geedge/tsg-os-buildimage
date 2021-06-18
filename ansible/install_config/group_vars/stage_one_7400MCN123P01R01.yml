@@ -1,0 +1,30 @@
+# TOD: TSG-6386 调整 TSG-OS 中的脚本， 适配 TSG-7400 硬件平台
+# variable format {role_name}.{configname}.{section}.{var}  configname 用 "_" 替代 "." 和
+
+mrzcpd:
+  mrglobal_conf:
+    device:
+      nic_mirr: eth_mirr_d
+    service:
+      iocore: 53,54 
+
+tfe:
+  tfe_env_config:
+    TFE_DEVICE_DATA_INCOMING: eth_pxy
+    TFE_PEER_MAC_DATA_INCOMING: aa:bb:cc:dd:ee:ff
+  tfe_conf:
+    system:
+      nr_worker_threads: 32
+      enable_cpu_affinity: 0
+    kni:
+      ip: 192.168.100.1
+    ssl:
+      mc_cache_eth: eth_ctl
+    key_keeper:
+      cert_store_host: 192.168.100.1
+    kafka:
+      NIC_NAME: eth_ctl
+    traffic_mirror:
+      enable: 1
+      device: eth_mirr_d
+      type: 1
