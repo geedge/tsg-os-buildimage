@@ -81,8 +81,8 @@ tfe:
       NIC_NAME: eth_ctl
     traffic_mirror:
       enable: 1
-      device: '{% raw %}{{ tfe_traffic_mirror_device }}{% endraw %}'
-      type: '{% raw %}{{ tfe_traffic_mirror_type }}{% endraw %}'
+      device: eth_mirr_d
+      type: 1
 
 tsg_diagnose:
   docker_compose_yml:

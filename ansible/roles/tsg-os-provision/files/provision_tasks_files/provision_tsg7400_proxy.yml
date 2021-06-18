@@ -8,15 +8,6 @@
         path: /opt/tsg/etc
         state: directory
 
-    - name: "set tfe.traffic_mirror device and type vars depend on NPB device"
-      set_fact:
-        tfe_traffic_mirror_device: item.tfe_traffic_mirror_device
-        tfe_traffic_mirror_type: item.tfe_traffic_mirror_type
-      when: NPB_device == item.NPB_device
-      with_items:
-        - { "tfe_traffic_mirror_device": eth_mirr_d, "tfe_traffic_mirror_type": 1, "NPB_device": tera }
-        - { "tfe_traffic_mirror_device": lo, "tfe_traffic_mirror_type": 0, "NPB_device": inline_device }
-
     - name: "tsg-os-provision: obtain sn from mxn and write sn to tsg_sn.json"
       shell: /opt/tsg/tsg-os-provision/tsg7400_obtain_sn_from_mxn.sh
       register: result_exec_obtain_sn_and_write_sn_in_file
