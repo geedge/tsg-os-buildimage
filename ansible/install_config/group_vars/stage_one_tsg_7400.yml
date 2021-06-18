@@ -8,6 +8,8 @@ firewall:
   main_conf:
     TSG_LOG:
       NIC_NAME: eth_ctl
+    SYSTEM:
+      NIC_NAME: eth_ctl
 
 kni:
   kni_conf:
@@ -48,6 +50,7 @@ sapp:
     Module:
       pcapdevice: eth_raw
       sendto_gdev_card: eth_raw
+      sendto_gdev_ip: '{% raw %}{{ keep_alive_ip }}{% endraw %}'
   sapp_toml:
     CPU:
       worker_threads: 42
@@ -56,6 +59,8 @@ sapp:
     PACKET_IO:
       packet_io_internal_interface:
         name: eth_raw
+      overlay_tunnel_definition:
+        overlay_mode: '{% raw %}{{ sapp_overlay_mode }}{% endraw %}'
 
 tfe:
   tfe_env_config:
@@ -73,6 +78,10 @@ tfe:
       cert_store_host: 192.168.100.1
     kafka:
       NIC_NAME: eth_ctl
+    traffic_mirror:
+      enable: 1
+      device: '{% raw %}{{ tfe_traffic_mirror_device }}{% endraw %}'
+      type: '{% raw %}{{ tfe_traffic_mirror_type }}{% endraw %}'
 
 tsg_diagnose:
   docker_compose_yml:

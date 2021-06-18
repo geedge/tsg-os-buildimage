@@ -8,6 +8,8 @@ firewall:
   main_conf:
     TSG_LOG:
       NIC_NAME: enp130s2f3
+    SYSTEM:
+      NIC_NAME: enp130s2f3
 
 kni:
   kni_conf:
@@ -35,6 +37,7 @@ sapp:
     Module:
       pcapdevice: enp1s2
       sendto_gdev_card: enp1s2
+      sendto_gdev_ip: '{% raw %}10.253.{{ keepalive_subnet_ip }}.1{% endraw %}'
   sapp_toml:
     CPU:
       worker_threads: 22
@@ -43,6 +46,8 @@ sapp:
     PACKET_IO:
       packet_io_internal_interface:
         name: enp1s2
+      overlay_tunnel_definition:
+        overlay_mode: vxlan
 
 tfe:
   tfe_env_config:
@@ -60,6 +65,10 @@ tfe:
       cert_store_host: 127.0.0.1
     kafka:
       NIC_NAME: enp130s2f3
+    traffic_mirror:
+      enable: 0
+      device: lo
+      type: 0
 
 tsg_diagnose:
   docker_compose_yml:

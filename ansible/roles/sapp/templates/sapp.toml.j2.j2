@@ -25,19 +25,7 @@ dictator_enable=1
     l2_l3_tunnel_support=1
 
 ### note, optional value is [none, vxlan]
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-        overlay_mode=vxlan
-{% endif %}
-{% if PROFILE_ID == '7400-MCN0-P01R01' %}
-{% raw %}
-{% if NPB_device == 'inline_device' %}
-        overlay_mode=vxlan
-{% endif %}
-{% if NPB_device == 'tera' %}
-        overlay_mode=none
-{% endif %}
-{% endraw %}
-{% endif %}
+        overlay_mode={{ sapp.sapp_toml.PACKET_IO.overlay_tunnel_definition.overlay_mode }}
 
     [packet_io.feature]
 	

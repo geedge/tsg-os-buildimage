@@ -1,21 +1,5 @@
 [Module]
 pcapdevice={{ sapp.gdev_conf.Module.pcapdevice }}
 sendto_gdev_card={{ sapp.gdev_conf.Module.sendto_gdev_card }}
-
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-{% raw %}
-sendto_gdev_ip=10.253.{{ keepalive_subnet_ip }}.1
-{% endraw %}
-{% endif %}
-
-{% if PROFILE_ID == '7400-MCN0-P01R01' %}
-{% raw %}
-{% if NPB_device == 'tera' %}
-sendto_gdev_ip=192.0.2.253
-{% endif %}
-{% if NPB_device == 'inline_device' %}
-sendto_gdev_ip={{ keep_alive_ip }}
-{% endif %}
-{% endraw %}
-{% endif %}
+sendto_gdev_ip={{ sapp.gdev_conf.Module.sendto_gdev_ip }}
 gdev_status_switch=1

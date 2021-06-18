@@ -152,23 +152,10 @@ statsd_set_prometheus_port=9001
 statsd_set_prometheus_url_path=/metrics
 
 [traffic_mirror]
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-enable=0
-device=lo
-type=0
-{% endif %}
-{% if PROFILE_ID == '7400-MCN123-P01R01' %}
-enable=1
-{% raw %}
-{% if NPB_device == 'tera' %}
-device=eth_mirr_d
-type=1
-{% else %}
-device=lo
-type=0
-{% endif %}
-{% endraw %}
-{% endif %}
+enable={{ tfe.tfe_conf.traffic_mirror.enable }}
+device={{ tfe.tfe_conf.traffic_mirror.device }}
+type={{ tfe.tfe_conf.traffic_mirror.type }}
+
 # 0:TRAFFIC_MIRROR_ETHDEV_AF_PACKET; 1:TRAFFIC_MIRROR_ETHDEV_MARSIO
 type=0
 table_info=resource/pangu/table_info_traffic_mirror.conf

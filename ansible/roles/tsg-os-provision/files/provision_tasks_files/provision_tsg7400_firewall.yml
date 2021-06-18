@@ -3,6 +3,14 @@
   vars_files:
   - '{{var_files_path}}'
   tasks:
+    - name: "set sapp_overlay_mode var depend on NPB device"
+      set_fact:
+        sapp_overlay_mode: item.sapp_overlay_mode
+      when: NPB_device == item.NPB_device
+      with_items:
+        - { "sapp_overlay_mode": none, "NPB_device": tera }
+        - { "sapp_overlay_mode": vxlan, "NPB_device": inline_device }
+
     - name: "tsg-os-provision: Template the asymmetric_presence_layer.conf.j2"
       template:
         src: ../templates/asymmetric_presence_layer.conf.j2
