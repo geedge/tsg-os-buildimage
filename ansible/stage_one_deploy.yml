@@ -40,3 +40,30 @@
     - {role: exporter, tags: exporter}
     - {role: tsg_sn, tags: tsg_sn}
     - {role: tfe, tags: tfe}
+
+- hosts: 9000-NPB-P01R01
+  remote_user: root
+  vars_files:
+    - install_config/group_vars/stage_one_9000NPBP01R01.yml
+    - install_config/group_vars/rpm_version.yml
+  roles:
+    - {role: tsg-os-provision, tags: tsg-os-provision}
+    - {role: tsg_device_tag, tags: tsg_device_tag}
+    - {role: tsg_sn, tags: tsg_sn}
+    - {role: framework, tags: framework}
+    - {role: mrzcpd, tags: mrzcpd}
+    - {role: sapp, tags: sapp}
+    - {role: tsg_master, tags: tsg_master}
+    - {role: kni, tags: kni}
+    - {role: firewall, tags: firewall}
+    - {role: tsg_app, tags: tsg_app}
+    - {role: i40e-drive, tags: i40e-drive}
+    - {role: redis, tags: redis}
+    - {role: certstore, tags: certstore}
+    - {role: tfe, tags: tfe}
+    - {role: telegraf_statistic, tags: telegraf_statistic}
+    - {role: exporter, tags: exporter}
+    - {role: docker, tags: docker}
+    - {role: tsg-diagnose, tags: tsg-diagnose}
+    - {role: system-init, tags: system-init}
+    - {role: system-init-9140, tags: system-init-9140}
