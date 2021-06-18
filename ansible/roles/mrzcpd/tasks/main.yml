@@ -26,7 +26,7 @@
 
 - name: "update mrglobal.conf - TSG7400 - mcn1 mcn2 mcn3"
   template:
-    src: "{{ role_path }}/templates/tsg_7400/mrglobal.conf.j2.7400MCN123P01R01"
+    src: "{{ role_path }}/templates/mrglobal.conf.j2.7400MCN123P01R01"
     dest: /opt/mrzcpd/etc/mrglobal.conf
   when:
     - PROFILE_ID == '7400-MCN123-P01R01'
