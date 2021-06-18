@@ -80,6 +80,7 @@ export OS_RELEASE_VER
 .PHONY: all clean $(PROFILE_LIST)
 
 all: $(PROFILE_LIST)
+	$(Q) chmod 0755 $(TOOLSDIR)/*
 	$(Q) echo "=== Building $< $(OS_RELEASE_VER) ==="
 	$(Q) $(MAKE) -f make/Makefile.$< all
 
