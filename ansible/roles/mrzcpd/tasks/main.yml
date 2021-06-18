@@ -12,21 +12,21 @@
 
 - name: "update mrglobal.conf - TSG9140"
   template:
-    src: "{{ role_path }}/templates/tsg_9140/mrglobal.conf.j2.j2"
+    src: "{{ role_path }}/templates/mrglobal.conf.j2.j2.9000NPBP01R01"
     dest: /opt/tsg/tsg-os-provision/templates/mrglobal.conf.j2
   when:
     - PROFILE_ID == '9000-NPB-P01R01'
 
 - name: "update mrglobal.conf - TSG7400 - mcn0"
   template:
-    src: "{{ role_path }}/templates/tsg_7400/mrglobal.conf.mcn0.j2.j2"
+    src: "{{ role_path }}/templates/mrglobal.conf.j2.j2.7400MCN0P01R01"
     dest: /opt/tsg/tsg-os-provision/templates/mrglobal.conf.j2
   when:
     - PROFILE_ID == '7400-MCN0-P01R01'
 
 - name: "update mrglobal.conf - TSG7400 - mcn1 mcn2 mcn3"
   template:
-    src: "{{ role_path }}/templates/tsg_7400/mrglobal.conf.mcn123.j2"
+    src: "{{ role_path }}/templates/tsg_7400/mrglobal.conf.j2.7400MCN123P01R01"
     dest: /opt/mrzcpd/etc/mrglobal.conf
   when:
     - PROFILE_ID == '7400-MCN123-P01R01'
