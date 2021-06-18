@@ -89,12 +89,6 @@
   when:
     - PROFILE_ID == '7400-MCN0-P01R01'
 
-- name: Template the necessary_plug_list.conf
-  template:
-    src: "{{ role_path }}/templates/necessary_plug_list.conf.j2"
-    dest: /home/mesasoft/sapp_run/etc/necessary_plug_list.conf
-  tags: template
-
 - name: Template the vlan_flipping_map.conf - tsg-9140
   template:
     src: "{{ role_path }}/templates/tsg_9140/vlan_flipping_map.conf.j2"
