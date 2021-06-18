@@ -8,7 +8,7 @@ firewall_rpm_version:
   ftp: ftp-1.0.8.13d5fda
   fw_dns_plug: fw_dns_plug-3.0.6.57c2feb
   fw_ftp_plug: fw_ftp_plug-3.0.1.0a78573
-  fw_http_plug: fw_http_plug-3.2.4.8add122
+  fw_http_plug: fw_http_plug-3.2.5.30df450
   fw_mail_plug: fw_mail_plug-3.1.1.777fa90
   fw_quic_plug: fw_quic_plug-3.0.4.947ef77
   fw_ssl_plug: fw_ssl_plug-3.1.0.10d88fa
@@ -60,7 +60,7 @@ tfe_rpm_version:
   tfe: tfe-4.5.3.d18b647
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-3.0.6.6977511
+  app_sketch_local: app_sketch_local-3.0.8.ea0c3d7
   
 tsg_master_rpm_version:
   tsg_master: tsg_master-4.2.5.8d03091 
