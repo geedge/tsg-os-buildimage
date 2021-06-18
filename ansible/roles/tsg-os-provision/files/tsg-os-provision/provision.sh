@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 config_path=/data/tsg-os-provision/provision.yml
 backup_config_path=/data/tsg-os-provision/provision.yml.bak
