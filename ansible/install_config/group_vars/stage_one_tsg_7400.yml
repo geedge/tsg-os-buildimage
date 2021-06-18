@@ -16,15 +16,16 @@ kni:
     global:
       tfe_node_count: 3
       manage_eth: eth_ctl
-    tfe0:
-      dev_eth_symbol: eth_mcn1
-      ip_addr: 192.168.100.2
-    tfe1:
-      dev_eth_symbol: eth_mcn2
-      ip_addr: 192.168.100.3
-    tfe2:
-      dev_eth_symbol: eth_mcn3
-      ip_addr: 192.168.100.4
+    tfe_node_list:
+      - node_id: 0 
+        dev_eth_symbol: eth_mcn1
+        ip_addr: 192.168.100.2
+      - node_id: 1 
+        dev_eth_symbol: eth_mcn2
+        ip_addr: 192.168.100.3
+      - node_id: 2 
+        dev_eth_symbol: eth_mcn3
+        ip_addr: 192.168.100.4     
     tfe_cmsg_receiver:
       listen_eth: eth_pf.100
     watch_dog:

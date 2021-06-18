@@ -7,29 +7,13 @@ deploy_mode = normal
 tun_name = tun_kni
 src_mac_addr = 00:0e:c6:d6:72:c1
 dst_mac_addr = fe:65:b7:03:50:bd
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
-[tfe0]
-enabled = 1
-dev_eth_symbol = {{ kni.kni_conf.tfe0.dev_eth_symbol }}
-ip_addr = {{ kni.kni_conf.tfe0.ip_addr }}
-{% endif %}
 
-{% if PROFILE_ID == '7400-MCN0-P01R01' %}
-[tfe0]
+{% for tfe_node_info in kni.kni_conf.tfe_node_list %}
+[tfe{{ tfe_node_info.node_id }}]
 enabled = 1
-dev_eth_symbol = {{ kni.kni_conf.tfe0.dev_eth_symbol }}
-ip_addr = {{ kni.kni_conf.tfe0.ip_addr }}
-
-[tfe1]
-enabled = 1
-dev_eth_symbol = {{ kni.kni_conf.tfe1.dev_eth_symbol }}
-ip_addr = {{ kni.kni_conf.tfe1.ip_addr }}
-
-[tfe2]
-enabled = 1
-dev_eth_symbol = {{ kni.kni_conf.tfe2.dev_eth_symbol }}
-ip_addr = {{ kni.kni_conf.tfe2.ip_addr }}
-{% endif %}
+dev_eth_symbol = {{ tfe_node_info.dev_eth_symbol }}
+ip_addr = {{ tfe_node_info.ip_addr }}
+{% endfor %}
 
 [tfe_cmsg_receiver]
 listen_eth = {{ kni.kni_conf.tfe_cmsg_receiver.listen_eth }}
