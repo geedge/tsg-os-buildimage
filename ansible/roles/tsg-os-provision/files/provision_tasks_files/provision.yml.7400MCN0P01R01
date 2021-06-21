@@ -10,6 +10,7 @@
       with_items:
         - { "sapp_overlay_mode": none, "NPB_device": tera }
         - { "sapp_overlay_mode": vxlan, "NPB_device": inline_device }
+        - { "sapp_overlay_mode": none, "NPB_device": direct }
 
     - name: "tsg-os-provision: Template the asymmetric_presence_layer.conf.j2"
       template:

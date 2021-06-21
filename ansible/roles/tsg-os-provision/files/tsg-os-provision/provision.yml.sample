@@ -36,12 +36,8 @@ pangu_pxy:
 
 tsg_sn: "CBT2201925000002"
 
-# NPB_device value in [inline_device, tera]
+# NPB_device value in [inline_device, tera,direct]
 NPB_device: inline_device
-
-access_vlan_id_list:
-  - 1000
-  - 1001
 
 vlan_flipping:
   - C_router_vlan_id: 1301

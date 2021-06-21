@@ -16,7 +16,10 @@ vlan-id-allow=1000,1001,4000,4001
 {{ mrzcpd_vlanid_allow_list.append(vlan_info.C_router_vlan_id) }}
 {{ mrzcpd_vlanid_allow_list.append(vlan_info.I_router_vlan_id) }}
 {% endfor %}
-vlan-id-allow= {{ mrzcpd_vlanid_allow_list | join(",") }},4000,4001
+vlan-id-allow={{ mrzcpd_vlanid_allow_list | join(",") }},4000,4001
+{% endif %}
+{% if NPB_device == 'direct' %}
+vlan-id-allow=1000,1001,2000,2001,4000,4001
 {% endif %}
 {% endraw %}
 jumbo_frame=1
