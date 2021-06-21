@@ -43,6 +43,12 @@ access_vlan_id_list:
   - 1000
   - 1001
 
+vlan_flipping:
+  - C_router_vlan_id: 1301
+    I_router_vlan_id: 1302
+  - C_router_vlan_id: 1201
+    I_router_vlan_id: 1202
+
 keep_alive: 127.0.0.1
 
 

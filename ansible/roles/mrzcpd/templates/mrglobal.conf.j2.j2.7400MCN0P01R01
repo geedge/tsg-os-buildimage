@@ -11,7 +11,12 @@ in_mask={{inline_device_config.keepalive_mask}}
 vlan-id-allow=1000,1001,4000,4001
 {% endif %}
 {% if NPB_device == 'tera' %}
-vlan-id-allow= {{ access_vlan_id_list | join(",") }},4000,4001
+{% set mrzcpd_vlanid_allow_list = [] %}
+{% for vlan_info in vlan_flipping %}
+{{ mrzcpd_vlanid_allow_list.append(vlan_info.C_router_vlan_id) }}
+{{ mrzcpd_vlanid_allow_list.append(vlan_info.I_router_vlan_id) }}
+{% endfor %}
+vlan-id-allow= {{ mrzcpd_vlanid_allow_list | join(",") }},4000,4001
 {% endif %}
 {% endraw %}
 jumbo_frame=1

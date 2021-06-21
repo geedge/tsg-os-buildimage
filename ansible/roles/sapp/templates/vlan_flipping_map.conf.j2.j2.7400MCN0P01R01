@@ -8,8 +8,9 @@
 #C_router_vlan_id  I_router_vlan_id mac_flipping_enable
 {% raw %}
 {% if NPB_device == 'tera' %}
-1301	1302	1
-1201	1202	1
+{% for vlan_info in vlan_flipping %}
+{{ vlan_info.C_router_vlan_id }}	{{ vlan_info.I_router_vlan_id }}	1
+{% endfor %}
 {% endif %}
 {% endraw %}
 4000	4001	0
