@@ -46,8 +46,8 @@ log_fsstat_dst_port=8125
 enable=0
 token_name=ratelimit
 {% raw %}
-redis_server={{ maat_redis_server.address }}
-redis_port={{ maat_redis_server.port }}
+redis_server={{ CM.policy_server.ip }}
+redis_port={{ CM.policy_server.port_range }}
 redis_db_index=6
 {% endraw %}
 

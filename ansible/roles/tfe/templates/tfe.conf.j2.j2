@@ -186,9 +186,9 @@ json_cfg_file=resource/pangu/pangu_http.json
 
 # redis mode conf iterm
 {% raw %}
-maat_redis_server={{ maat_redis_server.address }}
-maat_redis_port_range={{ maat_redis_server.port }}
-maat_redis_db_index={{ maat_redis_server.db }}
+maat_redis_server={{ CM.policy_server.ip }}
+maat_redis_port_range={{ CM.policy_server.port_range }}
+maat_redis_db_index={{ CM.policy_server.db.index_static }}
 {% endraw %}
 
 # iris mode conf iterm

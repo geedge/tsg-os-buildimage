@@ -1,16 +1,14 @@
-version: v1.0.1
+version: 1
 
-maat_redis_server:
-  address: "192.168.100.1"
-  port: 7002
-  port_num: 1
-  db: 0
+CM:
+  policy_server:
+    ip: "127.0.0.1"
+    port_range: 7002
+    port_num: 1
+    db: 
+      index_static: 0
+      index_dynamic: 1
 
-dynamic_maat_redis_server:
-  address: "192.168.100.1"
-  port: 7002
-  port_num: 1
-  db: 1
 
 breakpad_upload_url: http://10.4.63.4:9000/api/2/minidump/?sentry_key=3203b43fd5384a7dbe6a48ecb1f3c595
 data_center: Kyzylorda
