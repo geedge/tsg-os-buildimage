@@ -62,3 +62,5 @@ tsg_diagnose:
   docker_compose_yml:
     virtual_server_nic: eth_dign_s
     virtual_client_nic: eth_dign_c
+
+cm_policy_server_ip: '{% raw %}{{ cm_policy_server_ip }}{% endraw %}'

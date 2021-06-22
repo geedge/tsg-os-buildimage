@@ -68,3 +68,6 @@ inline_device_settings:
 maat_redis_city_server:
   address: "10.4.62.253"
   port: 7002
+
+feature:
+  enable_policy_local_cache: 1

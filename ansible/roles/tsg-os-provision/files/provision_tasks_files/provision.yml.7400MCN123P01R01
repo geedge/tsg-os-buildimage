@@ -20,6 +20,14 @@
         fail_msg: "error:{{ result_exec_obtain_keepalive_subnet.stderr }},stdout:{{ result_exec_obtain_keepalive_subnet.stdout_lines }}"
         success_msg: "Successded: obtain the sn from mxn and write sn into tsg_sn.json"
 
+    - name: "set cm_policy_server_ip var depend on enable_policy_local_cache"
+      set_fact:
+        cm_policy_server_ip: item.cm_policy_server_ip
+      when: feature.enable_policy_local_cache == item.enable_policy_local_cache
+      with_items:
+        - { "enable_policy_local_cache": 1, "NPB_device": tera, "cm_policy_server_ip": 192.168.100.1 }
+        - { "enable_policy_local_cache": 0, "NPB_device": inline_device, "cm_policy_server_ip": CM.policy_server.ip }
+
     - name: "tsg-os-provision: template the tsg_device_tag"
       template:
         src: "../templates/tsg_device_tag.json.j2"

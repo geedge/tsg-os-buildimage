@@ -45,8 +45,8 @@ log_fsstat_dst_port=8125
 #hijack flow control
 enable=0
 token_name=ratelimit
+redis_server={{ cm_policy_server_ip }}
 {% raw %}
-redis_server={{ CM.policy_server.ip }}
 redis_port={{ CM.policy_server.port_range }}
 redis_db_index=6
 {% endraw %}
