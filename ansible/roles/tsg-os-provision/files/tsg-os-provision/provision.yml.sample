@@ -9,7 +9,6 @@ CM:
       index_static: 0
       index_dynamic: 1
 
-
 sentry_url: http://127.0.0.1:9000/api/2/minidump/?sentry_key=3203b43fd5384a7dbe6a48ecb1f3c595
 
 
@@ -36,10 +35,9 @@ cache:
     port: 9090
 
 
-tsg_sn: "CBT2201925000002"
-
 # NPB_device value in [inline_device, tera,direct]
 NPB_device: inline_device
+
 
 vlan_flipping:
   - C_router_vlan_id: 1301

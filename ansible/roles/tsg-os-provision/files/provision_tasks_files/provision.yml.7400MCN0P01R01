@@ -90,7 +90,7 @@
         state: directory
 
     - name: "tsg-os-provision: obtain sn from mxn and write sn to tsg_sn.json"
-      shell: /opt/tsg/tsg-os-provision/tsg7400_obtain_sn_from_mxn.sh
+      shell: /opt/tsg/tsg-os-provision/obtain_sn.sh 192.168.100.5
       register: result_exec_obtain_sn_and_write_sn_in_file
 
     - name: "tsg-os-provision: check result_exec_obtain_sn_and_write_sn_in_file"

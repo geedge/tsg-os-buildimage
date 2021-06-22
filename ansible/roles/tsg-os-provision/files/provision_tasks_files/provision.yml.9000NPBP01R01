@@ -3,6 +3,23 @@
   vars_files:
   - '{{var_files_path}}'
   tasks:
+    - name: "mkdir /opt/tsg/etc/"
+      file:
+        path: /opt/tsg/etc
+        state: directory
+
+    - name: "tsg-os-provision: obtain sn"
+      shell: /opt/tsg/tsg-os-provision/obtain_sn.sh 127.0.0.1
+      register: result_exec_obtain_sn_and_write_sn_in_file
+
+    - name: "tsg-os-provision: check result_exec_obtain_sn_and_write_sn_in_file"
+      assert:
+        that:
+          - result_exec_obtain_keepalive_subnet.rc == 0
+          - result_exec_obtain_keepalive_subnet.failed == False
+        fail_msg: "error:{{ result_exec_obtain_keepalive_subnet.stderr }},stdout:{{ result_exec_obtain_keepalive_subnet.stdout_lines }}"
+        success_msg: "Successded: obtain the sn from mxn and write sn into tsg_sn.json"
+
     - name: "tsg-os-provision: obtain result_exec_obtain_keepalive_subnet"
       shell: ipmitool picmg addrinfo | grep "Hardware Address" | sed 's/^Hardware Address.*0x4\(.*\)/\1/' | awk '{print strtonum("0x"$1)+16'}
       register: result_exec_obtain_keepalive_subnet
