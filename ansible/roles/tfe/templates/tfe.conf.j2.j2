@@ -9,7 +9,7 @@ disable_coredump=0
 enable_breakpad=1
 enable_breakpad_upload=1
 {% raw %}
-breakpad_upload_url={{ breakpad_upload_url }}
+breakpad_upload_url={{ sentry_url }}
 {% endraw %}
 # must be /run/tfe/crashreport，due to tmpfile limit
 breakpad_minidump_dir=/run/tfe/crashreport

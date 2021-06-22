@@ -9,7 +9,7 @@ enable_breakpad=1
 breakpad_minidump_dir=/tmp/certstore/crashreport
 enable_breakpad_upload=1
 {% raw %}
-breakpad_upload_url= {{ breakpad_upload_url }}
+breakpad_upload_url= {{ sentry_url }}
 {% endraw %}
 [CONFIG]
 #Number of running threads
