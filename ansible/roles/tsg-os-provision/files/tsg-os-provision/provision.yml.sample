@@ -38,12 +38,27 @@ cache:
 # NPB_device value in [inline_device, tera,direct]
 NPB_device: inline_device
 
-
-vlan_flipping:
-  - C_router_vlan_id: 1301
-    I_router_vlan_id: 1302
-  - C_router_vlan_id: 1201
-    I_router_vlan_id: 1202
+zone_group_list:
+  - internal:
+      vlan_id: 1301
+      tracking_ip:
+        ipv4: 127.0.0.1
+        ipv6: '\:\:1'
+    external:
+      vlan_id: 1302
+      tracking_ip:
+        ipv4: 127.0.0.1
+        ipv6: '\:\:1'
+  - internal:
+      vlan_id: 1201
+      tracking_ip:
+        ipv4: 127.0.0.1
+        ipv6: '\:\:1'
+    external:
+      vlan_id: 1202
+      tracking_ip:
+        ipv4: 127.0.0.1
+        ipv6: '\:\:1'
 
 keep_alive: 127.0.0.1
 
