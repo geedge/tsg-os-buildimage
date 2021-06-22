@@ -1,3 +1,0 @@
-[Service]
-MemoryLimit=16G
-ExecStartPost=/bin/bash -c "echo 16G > /sys/fs/cgroup/memory/system.slice/certstore.service/memory.memsw.limit_in_bytes"

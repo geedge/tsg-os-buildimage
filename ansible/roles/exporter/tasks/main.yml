@@ -45,6 +45,48 @@
     dest: /usr/lib/systemd/system/exporter-ipmi.service
   tags: template
 
+- name: "Create /usr/lib/systemd/system/exporter-node.service.d directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/exporter-node.service.d
+
+- name: "Create /usr/lib/systemd/system/exporter-systemd.service.d directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/exporter-systemd.service.d
+
+- name: "Create /usr/lib/systemd/system/exporter-ipmi.service.d directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/exporter-ipmi.service.d
+
+- name: "copy slice file to exporter-node.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_override_slice.conf.j2"
+    dest: /usr/lib/systemd/system/exporter-node.service.d/service_override_slice.conf
+    mode: 0644
+
+- name: "copy slice file to exporter-systemd.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_override_slice.conf.j2"
+    dest: /usr/lib/systemd/system/exporter-systemd.service.d/service_override_slice.conf
+    mode: 0644
+
+- name: "copy slice file to exporter-ipmi.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_override_slice.conf.j2"
+    dest: /usr/lib/systemd/system/exporter-ipmi.service.d/service_override_slice.conf
+    mode: 0644
+
 ##################### exporter #####################
 - name: 'exporter-node service start'
   systemd:

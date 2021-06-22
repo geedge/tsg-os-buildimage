@@ -21,6 +21,20 @@
     dest: /usr/lib/systemd/system
     mode: 0644
 
+- name: "Create /usr/lib/systemd/system/telegraf_statistic.service.d/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/telegraf_statistic.service.d
+
+- name: "copy slice file to telegraf_statistic.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_override_slice.conf.j2"
+    dest: /usr/lib/systemd/system/telegraf_statistic.service.d/service_override_slice.conf
+    mode: 0644
+
 ##################### telegraf #####################
 
 - name: "disable telegraf"

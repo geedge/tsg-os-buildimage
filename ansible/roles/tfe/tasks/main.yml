@@ -68,10 +68,10 @@
     src: "{{ role_path }}/templates/require-mrzcpd.conf.j2"
     dest: /usr/lib/systemd/system/tfe.service.d/require-mrzcpd.conf
 
-- name: "copy memory limit file to tfe.service.d"
+- name: "copy slice file to tfe.service.d"
   copy:
-    src: "{{ role_path }}/templates/service_override_memsw_limit.conf.j2"
-    dest: /usr/lib/systemd/system/tfe.service.d/service_override_memsw_limit.conf
+    src: "{{ role_path }}/templates/service_override_slice.conf.j2"
+    dest: /usr/lib/systemd/system/tfe.service.d/service_override_slice.conf
     mode: 0644
 
 ##################### tfe #####################

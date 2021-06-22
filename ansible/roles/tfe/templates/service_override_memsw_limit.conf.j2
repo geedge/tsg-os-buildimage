@@ -1,3 +1,0 @@
-[Service]
-MemoryLimit=100G
-ExecStartPost=/bin/bash -c "echo 100G > /sys/fs/cgroup/memory/system.slice/tfe.service/memory.memsw.limit_in_bytes"

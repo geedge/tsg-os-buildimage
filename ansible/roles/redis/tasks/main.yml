@@ -3,13 +3,26 @@
     src: '{{ role_path }}/files/'
     dest: /tmp/ansible_deploy/
 
-
 - name: "redis rpm install:install redis"
   yum:
     name:
       - "/tmp/ansible_deploy/jemalloc-3.6.0-1.el7.x86_64.rpm"
       - "/tmp/ansible_deploy/redis40u-4.0.14-1.ius.centos7.x86_64.rpm"
     state: present
+
+- name: "Create /usr/lib/systemd/system/redis.service.d directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/redis.service.d
+
+- name: "copy slice file to redis.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_override_slice.conf.j2"
+    dest: /usr/lib/systemd/system/redis.service.d/service_override_slice.conf
+    mode: 0644
 
 - name: "redis exporter"
   copy:

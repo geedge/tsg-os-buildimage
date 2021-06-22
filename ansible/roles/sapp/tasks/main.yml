@@ -137,10 +137,10 @@
     dest: /usr/lib/systemd/system/sapp.service.d/service_override_timeoutsec.conf
     mode: 0644
 
-- name: "copy memory limit file to sapp.service.d"
+- name: "copy slice file to sapp.service.d"
   copy:
-    src: "{{ role_path }}/templates/service_override_memsw_limit.conf.j2"
-    dest: /usr/lib/systemd/system/sapp.service.d/service_override_memsw_limit.conf
+    src: "{{ role_path }}/templates/service_override_slice.conf.j2"
+    dest: /usr/lib/systemd/system/sapp.service.d/service_override_slice.conf
     mode: 0644
 
 - name: "copy env conf to sapp.service.d"

@@ -10,6 +10,20 @@
     src: "{{ role_path }}/templates/mrzcpd.j2"
     dest: /etc/sysconfig/mrzcpd
 
+- name: "Create /usr/lib/systemd/system/mrzcpd.service.d directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/mrzcpd.service.d
+
+- name: "copy slice file to mrzcpd.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_override_slice.conf.j2"
+    dest: /usr/lib/systemd/system/mrzcpd.service.d/service_override_slice.conf
+    mode: 0644
+
 - name: "update mrglobal.conf - TSG9140"
   template:
     src: "{{ role_path }}/templates/mrglobal.conf.j2.j2.9000NPBP01R01"
