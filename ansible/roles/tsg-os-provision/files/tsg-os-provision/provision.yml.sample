@@ -25,11 +25,10 @@ OLAP:
     ip: "127.0.0.1"
     port: 9098
 
-
-firewall:
-  APP_SKETCH_PUBLISH_TOPIC: "APP_SIGNATURE_ID"
-  APP_SKETCH_BROKER_IP: "192.168.40.161"
-  APP_SKETCH_BROKER_PORT: 1883
+APP_SKETCH:
+  broker:
+    ip: "127.0.0.1"
+    port: 1883
 
 
 pangu_pxy:
