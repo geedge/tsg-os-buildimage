@@ -8,9 +8,9 @@ STAT_FILE=capture_packet_maat.status
 EFFECT_INTERVAL_S=1
 REDIS_IP={{ cm_policy_server_ip }}
 {% raw %}
-REDIS_PORT_NUM={{ CM.policy_server.port_num }}
-REDIS_PORT={{ CM.policy_server.port_range }}
-REDIS_INDEX={{ CM.policy_server.db.index_static }}
+REDIS_PORT_NUM={{ cm.policy_server.port_num }}
+REDIS_PORT={{ cm.policy_server.port_range }}
+REDIS_INDEX={{ cm.policy_server.db_static }}
 {% endraw %}
 JSON_CFG_FILE=conf/capture_packet_maat.json
 INC_CFG_DIR=capture_packet_rule/inc/index/
@@ -24,7 +24,7 @@ ACCEPT_TAGS={"tags":[{"tag":"data_center","value":"{{ data_center.name }}"}]}
 [LOG]
 NIC_NAME={{ firewall.capture_packet_plug_conf.LOG.NIC_NAME }}
 {% raw %}
-BROKER_LIST={{ OLAP.kafka_broker.address_list | join(",") }}
+BROKER_LIST={{ olap.kafka_broker.address_list | join(",") }}
 {% endraw %}
 FIELD_FILE=conf/capture_packet_log_field.conf
 

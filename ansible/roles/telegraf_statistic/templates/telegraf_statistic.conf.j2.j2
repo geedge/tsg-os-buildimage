@@ -23,7 +23,7 @@
 
 [[outputs.kafka]]
 {% raw %}
-   brokers = [ "{{ OLAP.kafka_broker.address_list | join("\",\"") }}" ]
+   brokers = [ "{{ olap.kafka_broker.address_list | join("\",\"") }}" ]
 {% endraw %}
    topic = "TRAFFIC-METRICS-LOG"
    data_format = "json"

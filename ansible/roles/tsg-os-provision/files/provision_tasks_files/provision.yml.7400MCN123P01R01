@@ -25,8 +25,8 @@
         cm_policy_server_ip: item.cm_policy_server_ip
       when: feature.enable_policy_local_cache == item.enable_policy_local_cache
       with_items:
-        - { "enable_policy_local_cache": 1, "NPB_device": tera, "cm_policy_server_ip": 192.168.100.1 }
-        - { "enable_policy_local_cache": 0, "NPB_device": inline_device, "cm_policy_server_ip": CM.policy_server.ip }
+        - { "enable_policy_local_cache": 1, "npb_device": tera, "cm_policy_server_ip": 192.168.100.1 }
+        - { "enable_policy_local_cache": 0, "npb_device": inline_device, "cm_policy_server_ip": cm.policy_server.address }
 
     - name: "tsg-os-provision: template the tsg_device_tag"
       template:

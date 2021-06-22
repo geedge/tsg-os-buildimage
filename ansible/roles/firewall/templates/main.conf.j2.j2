@@ -44,7 +44,7 @@ MAX_SERVICE=1
 LOG_LEVEL=30
 LOG_PATH="./tsglog/tsglog"
 {% raw %}
-BROKER_LIST="{{ OLAP.kafka_broker.address_list | join(",") }}"
+BROKER_LIST="{{ olap.kafka_broker.address_list | join(",") }}"
 {% endraw %}
 COMMON_FIELD_FILE="tsgconf/tsg_log_field.conf"
 
@@ -83,7 +83,7 @@ live_intervals_time = 30
 
 [HOS_CONF]
 {% raw %}
-hos_serverip="{{ OLAP.hos_server.ip }}"
+hos_serverip="{{ OLAP.hos_server.address }}"
 hos_serverport={{ OLAP.hos_server.port }}
 {% endraw %}
 hos_accesskeyid="default"
@@ -103,8 +103,8 @@ QOS=1
 PUBLISH_TOPIC="APP_SIGNATURE_ID"
 #CLIENT_ID=
 {% raw %}
-BROKER_IP="{{ APP_SKETCH.broker.ip }}"
-BROKER_PORT="{{ APP_SKETCH.broker.port }}"
+BROKER_IP="{{ app_sketch.broker.address }}"
+BROKER_PORT="{{ app_sketch.broker.port }}"
 {% endraw %}
 
 [APP_PROTO_ENGINE]
