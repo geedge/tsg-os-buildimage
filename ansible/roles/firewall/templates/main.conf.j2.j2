@@ -65,7 +65,7 @@ APP_NAME="tsg_master"
 [SYSTEM]
 NIC_NAME="{{ firewall.main_conf.SYSTEM.NIC_NAME }}"
 {% raw %}
-ENTRANCE_ID={{ tsg_master_entrance_id }}
+ENTRANCE_ID={{ data_center.id }}
 {% endraw %}
 LOG_LEVEL=30
 LOG_PATH="./tsglog/tsg_master"

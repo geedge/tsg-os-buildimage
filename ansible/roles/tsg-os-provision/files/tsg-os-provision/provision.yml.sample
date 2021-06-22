@@ -12,8 +12,10 @@ CM:
 
 sentry_url: http://127.0.0.1:9000/api/2/minidump/?sentry_key=3203b43fd5384a7dbe6a48ecb1f3c595
 
-data_center: Kyzylorda
-tsg_master_entrance_id: 9
+
+data_center:
+  name: City instance
+  id: 1
 
 
 log_kafkabrokers:
