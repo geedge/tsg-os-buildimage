@@ -24,7 +24,7 @@ ACCEPT_TAGS={"tags":[{"tag":"data_center","value":"{{ data_center.name }}"}]}
 [LOG]
 NIC_NAME={{ firewall.capture_packet_plug_conf.LOG.NIC_NAME }}
 {% raw %}
-BROKER_LIST={{ log_kafkabrokers.address | join(",") }}
+BROKER_LIST={{ OLAP.kafka_broker.address_list | join(",") }}
 {% endraw %}
 FIELD_FILE=conf/capture_packet_log_field.conf
 

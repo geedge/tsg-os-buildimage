@@ -44,7 +44,7 @@ MAX_SERVICE=1
 LOG_LEVEL=30
 LOG_PATH="./tsglog/tsglog"
 {% raw %}
-BROKER_LIST="{{ log_kafkabrokers.address | join(",") }}"
+BROKER_LIST="{{ OLAP.kafka_broker.address_list | join(",") }}"
 {% endraw %}
 COMMON_FIELD_FILE="tsgconf/tsg_log_field.conf"
 
@@ -83,8 +83,8 @@ live_intervals_time = 30
 
 [HOS_CONF]
 {% raw %}
-hos_serverip="{{ firewall.hos_serverip }}"
-hos_serverport={{ firewall.hos_serverport }}
+hos_serverip="{{ OLAP.hos_server.ip }}"
+hos_serverport={{ OLAP.hos_server.port }}
 {% endraw %}
 hos_accesskeyid="default"
 hos_secretkey="default"

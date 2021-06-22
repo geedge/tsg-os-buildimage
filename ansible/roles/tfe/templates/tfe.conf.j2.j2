@@ -91,7 +91,7 @@ key_log_file=log/sslkeylog.log
 mc_cache_enable=1
 mc_cache_eth={{ tfe.tfe_conf.ssl.mc_cache_eth }}
 {% raw %}
-mc_cache_broker_list={{ log_kafkabrokers.address | join(",") }}
+mc_cache_broker_list={{ OLAP.kafka_broker.address_list | join(",") }}
 {% endraw %}
 mc_cache_topic=PXY-EXCH-INTERMEDIA-CERT
 
@@ -165,7 +165,7 @@ stat_file=log/traffic_mirror.status
 enable=1
 NIC_NAME={{ tfe.tfe_conf.kafka.NIC_NAME }}
 {% raw %}
-kafka_brokerlist={{ log_kafkabrokers.address | join(",") }}
+kafka_brokerlist={{ OLAP.kafka_broker.address_list | join(",") }}
 {% endraw %}
 kafka_topic=PROXY-EVENT-LOG
 device_id_filepath=/opt/tsg/etc/tsg_sn.json

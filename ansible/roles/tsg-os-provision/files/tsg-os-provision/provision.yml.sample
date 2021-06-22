@@ -18,13 +18,15 @@ data_center:
   id: 1
 
 
-log_kafkabrokers:
-  address: ['1.1.1.1:9092','2.2.2.2:9092']
+OLAP:
+  kafka_broker:
+    address_list: ['1.1.1.1:9092','2.2.2.2:9092']
+  hos_server:
+    ip: "127.0.0.1"
+    port: 9098
 
 
 firewall:
-  hos_serverip: "192.168.40.223"
-  hos_serverport: 9098
   APP_SKETCH_PUBLISH_TOPIC: "APP_SIGNATURE_ID"
   APP_SKETCH_BROKER_IP: "192.168.40.161"
   APP_SKETCH_BROKER_PORT: 1883
