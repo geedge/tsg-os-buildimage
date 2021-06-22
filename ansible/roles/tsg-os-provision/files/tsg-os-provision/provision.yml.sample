@@ -60,12 +60,10 @@ zone_group_list:
         ipv4: 127.0.0.1
         ipv6: '\:\:1'
 
-keep_alive: 127.0.0.1
-
-
-inline_device_config:
-  keepalive_ip: 127.0.0.1
-  eepalive_mask: 255.255.255.0
+inline_device_settings:
+  keepalive:
+    ip: 127.0.0.1
+    mask: 255.255.255.0
 
 maat_redis_city_server:
   address: "10.4.62.253"

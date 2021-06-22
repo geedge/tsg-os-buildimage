@@ -6,11 +6,12 @@
     - name: "set sapp_overlay_mode var depend on NPB device"
       set_fact:
         sapp_overlay_mode: item.sapp_overlay_mode
+        gdev_conf_keep_alive_ip: item.gdev_conf_keep_alive_ip
       when: NPB_device == item.NPB_device
       with_items:
-        - { "sapp_overlay_mode": none, "NPB_device": tera }
-        - { "sapp_overlay_mode": vxlan, "NPB_device": inline_device }
-        - { "sapp_overlay_mode": none, "NPB_device": direct }
+        - { "sapp_overlay_mode": none, "NPB_device": tera, "gdev_conf_keep_alive_ip": 127.0.0.1 }
+        - { "sapp_overlay_mode": vxlan, "NPB_device": inline_device, "gdev_conf_keep_alive_ip": inline_device_settings.keepalive.ip }
+        - { "sapp_overlay_mode": none, "NPB_device": direct, "gdev_conf_keep_alive_ip": 127.0.0.1 }
 
     - name: "tsg-os-provision: Template the asymmetric_presence_layer.conf.j2"
       template:

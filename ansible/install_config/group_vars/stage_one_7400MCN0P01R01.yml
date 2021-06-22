@@ -46,7 +46,7 @@ sapp:
     Module:
       pcapdevice: eth_raw
       sendto_gdev_card: eth_raw
-      sendto_gdev_ip: '{% raw %}{{ keep_alive_ip }}{% endraw %}'
+      sendto_gdev_ip: '{% raw %}{{ gdev_conf_keep_alive_ip }}{% endraw %}'
   sapp_toml:
     CPU:
       worker_threads: 42
