@@ -30,11 +30,11 @@ APP_SKETCH:
     ip: "127.0.0.1"
     port: 1883
 
-
-pangu_pxy:
-  log_cache:
-    address: "10.9.62.253"
+cache:
+  hos:
+    ip: "127.0.0.1"
     port: 9090
+
 
 tsg_sn: "CBT2201925000002"
 

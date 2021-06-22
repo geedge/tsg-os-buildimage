@@ -8,8 +8,8 @@ entrance_id=0
 
 #Addresses of hos, Bucket name in hos. Format is defined by WiredLB.
 {% raw %}
-cache_ip_list = {{ pangu_pxy.log_cache.address }}
-cache_listen_port = {{ pangu_pxy.log_cache.port }}
+cache_ip_list = {{ cache.hos.ip }}
+cache_listen_port = {{ cache.hos.port }}
 {% endraw %}
 cache_bucket_name=hos/proxy_hos_bucket
 cache_token=c21f969b5f03d33d43e04f8f136e7682
