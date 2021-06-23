@@ -4,8 +4,7 @@ sz_tunnel=8192
 sz_buffer=0
 
 [device:{{ mrzcpd.mrglobal_conf.device.nic_raw }}]
-{% raw %}
-{% if npb_device == 'inline_device' %}
+{% raw %}{% if npb_device == 'inline_device' %}
 in_addr={{inline_device_settings.keepalive.ip}}
 in_mask={{inline_device_settings.keepalive.mask}}
 vlan-id-allow=4000,4001
@@ -20,8 +19,7 @@ vlan-id-allow={{ mrzcpd_vlanid_allow_list | join(",") }},4000,4001
 {% endif %}
 {% if npb_device == 'direct' %}
 vlan-id-allow=1000,1001,2000,2001,4000,4001
-{% endif %}
-{% endraw %}
+{% endif %}{% endraw %}
 jumbo_frame=1
 max_rx_pkt_len=15360
 clear_tx_flags=1

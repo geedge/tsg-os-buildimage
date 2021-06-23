@@ -8,9 +8,7 @@ enable_kni_v3=1
 disable_coredump=0
 enable_breakpad=1
 enable_breakpad_upload=1
-{% raw %}
-breakpad_upload_url={{ sentry_url }}
-{% endraw %}
+{% raw %}breakpad_upload_url={{ sentry_url }}{% endraw %}
 # must be /run/tfe/crashreport，due to tmpfile limit
 breakpad_minidump_dir=/run/tfe/crashreport
 
@@ -90,9 +88,7 @@ key_log_file=log/sslkeylog.log
 # mid cert cache
 mc_cache_enable=1
 mc_cache_eth={{ tfe.tfe_conf.ssl.mc_cache_eth }}
-{% raw %}
-mc_cache_broker_list={{ olap.kafka_broker.address_list | join(",") }}
-{% endraw %}
+{% raw %}mc_cache_broker_list={{ olap.kafka_broker.address_list | join(",") }}{% endraw %}
 mc_cache_topic=PXY-EXCH-INTERMEDIA-CERT
 
 ssl_ja3_table=PXY_SSL_FINGERPRINT
@@ -164,9 +160,7 @@ stat_file=log/traffic_mirror.status
 [kafka]
 enable=1
 NIC_NAME={{ tfe.tfe_conf.kafka.NIC_NAME }}
-{% raw %}
-kafka_brokerlist={{ olap.kafka_broker.address_list | join(",") }}
-{% endraw %}
+{% raw %}kafka_brokerlist={{ olap.kafka_broker.address_list | join(",") }}{% endraw %}
 kafka_topic=PROXY-EVENT-LOG
 device_id_filepath=/opt/tsg/etc/tsg_sn.json
 
@@ -186,10 +180,8 @@ json_cfg_file=resource/pangu/pangu_http.json
 
 # redis mode conf iterm
 maat_redis_server={{ cm_policy_server_ip }}
-{% raw %}
-maat_redis_port_range={{ cm.policy_server.port_range }}
-maat_redis_db_index={{ cm.policy_server.db_static }}
-{% endraw %}
+{% raw %}maat_redis_port_range={{ cm.policy_server.port_range }}
+maat_redis_db_index={{ cm.policy_server.db_static }}{% endraw %}
 
 # iris mode conf iterm
 full_cfg_dir=pangu_policy/full/index/
