@@ -3,6 +3,30 @@
   vars_files:
   - '{{var_files_path}}'
   tasks:
+    - name: "template adapt_tera_network_setting.sh when NPB device is tera"
+      template:
+        src: ../templates/adapt_tera_network_setting.sh.j2
+        dest: /opt/tsg/tsg-os-provision/adapt_tera_network_setting.sh
+        mode: 0755
+      when: npb_device == tera
+
+    - name: "execute adapt_tera_network_setting.sh when NPB device is tera"
+      shell: /opt/tsg/tsg-os-provision/adapt_tera_network_setting.sh
+      register: result_exec_adapt_tera_network_setting
+      when: npb_device == tera
+
+    - name: "Output results that executes command that gets the result_exec_adapt_tera_network_setting"
+      debug:
+        msg: "{{ result_exec_adapt_tera_network_setting }}"
+
+    - name: "Verify result_exec_adapt_tera_network_setting"
+      assert:
+        that:
+          - result_exec_adapt_tera_network_setting.rc == 0
+          - result_exec_adapt_tera_network_setting.failed == False
+        fail_msg: "error:{{ result_exec_adapt_tera_network_setting.stderr }},stdout:{{ result_exec_adapt_tera_network_setting }}"
+        success_msg: "{{ result_exec_adapt_tera_network_setting.stdout_lines[0] }}"
+
     - name: "set sapp_overlay_mode var depend on NPB device"
       set_fact:
         sapp_overlay_mode: item.sapp_overlay_mode
