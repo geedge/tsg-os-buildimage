@@ -8,7 +8,7 @@ sz_buffer=0
 {% if npb_device == 'inline_device' %}
 in_addr={{inline_device_settings.keepalive.ip}}
 in_mask={{inline_device_settings.keepalive.mask}}
-vlan-id-allow=1000,1001,4000,4001
+vlan-id-allow=4000,4001
 {% endif %}
 {% if npb_device == 'tera' %}
 {% set mrzcpd_vlanid_allow_list = [] %}
