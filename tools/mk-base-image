@@ -57,6 +57,8 @@ cp -a /dev/urandom $target/dev/
 cp -a /dev/random $target/dev/
 
 # install ONIE helpers
+chmod 0755 $projectdir/rootconf/sysroot-bin/*
+chmod 0755 $projectdir/rootconf/sysroot-lib/*
 cp -rf $projectdir/rootconf/sysroot-bin/* $target/bin/
 cp -rf $projectdir/rootconf/sysroot-lib/* $target/lib/
 
