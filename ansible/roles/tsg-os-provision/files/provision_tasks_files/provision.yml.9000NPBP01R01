@@ -28,7 +28,7 @@
           - result_exec_setup_policy_log_nic_network.rc == 0
           - result_exec_setup_policy_log_nic_network.failed == False
         fail_msg: "error:{{ result_exec_setup_policy_log_nic_network.stderr }},stdout:{{ result_exec_setup_policy_log_nic_network }}"
-        success_msg: "{{ result_exec_setup_policy_log_nic_network.stdout_lines[0] }}"
+        success_msg: "{{ result_exec_setup_policy_log_nic_network.stdout_lines }}"
 
     - name: "tsg-os-provision: obtain sn"
       shell: /opt/tsg/tsg-os-provision/obtain_sn.sh 127.0.0.1

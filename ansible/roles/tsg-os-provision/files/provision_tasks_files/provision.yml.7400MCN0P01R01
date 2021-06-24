@@ -23,7 +23,7 @@
           - result_exec_setup_policy_log_nic_network.rc == 0
           - result_exec_setup_policy_log_nic_network.failed == False
         fail_msg: "error:{{ result_exec_setup_policy_log_nic_network.stderr }},stdout:{{ result_exec_setup_policy_log_nic_network }}"
-        success_msg: "{{ result_exec_setup_policy_log_nic_network.stdout_lines[0] }}"
+        success_msg: "{{ result_exec_setup_policy_log_nic_network.stdout_lines }}"
 
     - name: "template adapt_tera_network_setting.sh when NPB device is tera"
       template:
@@ -48,7 +48,7 @@
           - result_exec_adapt_tera_network_setting.rc == 0
           - result_exec_adapt_tera_network_setting.failed == False
         fail_msg: "error:{{ result_exec_adapt_tera_network_setting.stderr }},stdout:{{ result_exec_adapt_tera_network_setting }}"
-        success_msg: "{{ result_exec_adapt_tera_network_setting.stdout_lines[0] }}"
+        success_msg: "{{ result_exec_adapt_tera_network_setting.stdout_lines }}"
       when: npb_device == 'tera'
 
     - name: "set sapp_overlay_mode var depend on NPB device"

@@ -42,22 +42,22 @@ tera_steering_group:
       vlan_id: 1301
       keepalive:
         ipv4: 127.0.0.1/24
-        ipv6: '\:\:1/64'
+        ipv6: 'fe80\:\:1/64'
     external:
       vlan_id: 1302
       keepalive:
         ipv4: 127.0.0.1/24
-        ipv6: '\:\:1/64'
+        ipv6: 'fe80\:\:2/64'
   - internal:
       vlan_id: 1201
       keepalive:
         ipv4: 127.0.0.1/24
-        ipv6: '\:\:1/64'
+        ipv6: 'fe80\:\:3/64'
     external:
       vlan_id: 1202
       keepalive:
         ipv4: 127.0.0.1/24
-        ipv6: '\:\:1/64'
+        ipv6: 'fe80\:\:4/64'
 
 inline_device_settings:
   keepalive:
@@ -71,4 +71,4 @@ feature:
 network_setting:
   nic_policy_log:
     ipv4: 127.0.0.1/24
-    ipv6: '\:\:1/64'
+    ipv6: 'fe80\:\:5/64'
