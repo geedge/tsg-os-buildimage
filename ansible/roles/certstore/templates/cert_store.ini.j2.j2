@@ -8,7 +8,8 @@ disable_coredump=0
 enable_breakpad=1
 breakpad_minidump_dir=/tmp/certstore/crashreport
 enable_breakpad_upload=1
-{% raw %}breakpad_upload_url= {{ sentry_url }}{% endraw %}
+{% raw %}breakpad_upload_url= {{ sentry_url }}
+{% endraw %}
 [CONFIG]
 #Number of running threads
 thread-nu = 4
@@ -52,7 +53,8 @@ port = 6379
 
 ip = {{ cm_policy_server_ip }}
 {% raw %}port = {{ cm.policy_server.port_range }}
-dbindex =  {{ cm.policy_server.db_static }}{% endraw %}
+dbindex =  {{ cm.policy_server.db_static }}
+{% endraw %}
 [stat]
 statsd_server=127.0.0.1
 statsd_port=8100

@@ -22,7 +22,8 @@
    rotation_max_archives = 5
 
 [[outputs.kafka]]
-{% raw %}   brokers = [ "{{ olap.kafka_broker.address_list | join("\",\"") }}" ]{% endraw %}
+{% raw %}   brokers = [ "{{ olap.kafka_broker.address_list | join("\",\"") }}" ]
+{% endraw %}
    topic = "TRAFFIC-METRICS-LOG"
    data_format = "json"
 [[inputs.tcp_listener]]

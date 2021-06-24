@@ -31,4 +31,5 @@
 ./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
 {% raw %}{% if npb_device == 'tera' %}
 ./plug/business/http_healthcheck/http_healthcheck.inf
-{% endif %}{% endraw %}
+{% endif %}
+{% endraw %}

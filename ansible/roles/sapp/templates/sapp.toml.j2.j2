@@ -196,7 +196,8 @@ dictator_enable=1
     enable_breakpad=1
     breakpad_minidump_dir="/tmp/crashreport"
     enable_breakpad_upload=1
-{% raw %}    breakpad_upload_url="{{ sentry_url }}"{% endraw %}
+{% raw %}    breakpad_upload_url="{{ sentry_url }}"
+{% endraw %}
 
 ### note:
 ### These configurations format is complex and difficult to describe with toml grammar,

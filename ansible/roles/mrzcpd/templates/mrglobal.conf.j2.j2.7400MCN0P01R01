@@ -19,7 +19,8 @@ vlan-id-allow={{ mrzcpd_vlanid_allow_list | join(",") }},4000,4001
 {% endif %}
 {% if npb_device == 'direct' %}
 vlan-id-allow=1000,1001,2000,2001,4000,4001
-{% endif %}{% endraw %}
+{% endif %}
+{% endraw %}
 jumbo_frame=1
 max_rx_pkt_len=15360
 clear_tx_flags=1

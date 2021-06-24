@@ -3,4 +3,5 @@
 {% raw %}{% if npb_device == 'tera' %}
 mpls    ethernet[0]    ipv4[1]
 mpls    ethernet[0]    ipv6[1]
-{% endif %}{% endraw %}
+{% endif %}
+{% endraw %}

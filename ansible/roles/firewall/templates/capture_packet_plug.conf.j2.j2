@@ -9,17 +9,20 @@ EFFECT_INTERVAL_S=1
 REDIS_IP={{ cm_policy_server_ip }}
 {% raw %}REDIS_PORT_NUM={{ cm.policy_server.port_num }}
 REDIS_PORT={{ cm.policy_server.port_range }}
-REDIS_INDEX={{ cm.policy_server.db_static }}{% endraw %}
+REDIS_INDEX={{ cm.policy_server.db_static }}
+{% endraw %}
 JSON_CFG_FILE=conf/capture_packet_maat.json
 INC_CFG_DIR=capture_packet_rule/inc/index/
 FULL_CFG_DIR=capture_packet_rule/full/index/
 EFFECTIVE_RANGE_FILE=/opt/tsg/etc/tsg_device_tag.json
 
-{% raw %}ACCEPT_TAGS={"tags":[{"tag":"data_center","value":"{{ data_center.name }}"}]}{% endraw %}
+{% raw %}ACCEPT_TAGS={"tags":[{"tag":"data_center","value":"{{ data_center.name }}"}]}
+{% endraw %}
 
 [LOG]
 NIC_NAME={{ firewall.capture_packet_plug_conf.LOG.NIC_NAME }}
-{% raw %}BROKER_LIST={{ olap.kafka_broker.address_list | join(",") }}{% endraw %}
+{% raw %}BROKER_LIST={{ olap.kafka_broker.address_list | join(",") }}
+{% endraw %}
 FIELD_FILE=conf/capture_packet_log_field.conf
 
 [SYSTEM]

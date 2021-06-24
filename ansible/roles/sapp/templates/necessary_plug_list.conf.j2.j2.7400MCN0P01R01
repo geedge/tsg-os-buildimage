@@ -31,4 +31,5 @@
 ./plug/platform/app_proto_engine/app_proto_engine.inf
 {% raw %}{% if npb_device == 'tera' %}
 ./plug/business/http_healthcheck/http_healthcheck.inf
-{% endif %}{% endraw %}
+{% endif %}
+{% endraw %}
