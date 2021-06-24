@@ -1,7 +1,6 @@
 [Unit]
 Description=Redis persistent key-value database
-After=network.target tsg-os-provision.service
-Requires=tsg-os-provision.service
+After=network.target
 
 [Service]
 ExecStart=/usr/bin/redis-server /etc/maat-redis.conf --supervised systemd

@@ -179,7 +179,7 @@
       systemd:
         name: "{{ item }}"
         enabled: yes
-        status: started
+        state: started
       when: feature.enable_policy_local_cache == 1
       with_items:
         - maat-redis
