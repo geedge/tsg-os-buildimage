@@ -3,6 +3,28 @@
   vars_files:
   - '{{var_files_path}}'
   tasks:
+    - name: "template setup_policy_log_nic_network.sh"
+      template:
+        src: ../templates/setup_policy_log_nic_network.sh.j2
+        dest: /data/tsg-os-provision/setup_policy_log_nic_network.sh
+        mode: 0755
+
+    - name: "execute setup_policy_log_nic_network.sh"
+      shell: /data/tsg-os-provision/setup_policy_log_nic_network.sh
+      register: result_exec_setup_policy_log_nic_network
+
+    - name: "Output results that executes command that gets the result_exec_setup_policy_log_nic_network"
+      debug:
+        msg: "{{ result_exec_setup_policy_log_nic_network }}"
+
+    - name: "Verify result_exec_setup_policy_log_nic_network"
+      assert:
+        that:
+          - result_exec_setup_policy_log_nic_network.rc == 0
+          - result_exec_setup_policy_log_nic_network.failed == False
+        fail_msg: "error:{{ result_exec_setup_policy_log_nic_network.stderr }},stdout:{{ result_exec_setup_policy_log_nic_network }}"
+        success_msg: "{{ result_exec_setup_policy_log_nic_network.stdout_lines[0] }}"
+
     - name: "template adapt_tera_network_setting.sh when NPB device is tera"
       template:
         src: ../templates/adapt_tera_network_setting.sh.j2
