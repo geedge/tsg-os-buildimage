@@ -1,0 +1,9 @@
+#!/bin/bash -ex
+{% if PROFILE_ID == '7400-MCN0-P01R01' or if PROFILE_ID == '7400-MCN123-P01R01' %}
+ifconfig eth_ctl {{ network_setting.nic_policy_log.ipv4 }}
+ifconfig eth_ctl inet6 add  {{ network_setting.nic_policy_log.ipv6 }}
+{% endif %}
+{% if PROFILE_ID == '9000-NPB-P01R01' %}
+ifconfig enp130s2f3 {{ network_setting.nic_policy_log.ipv4 }}
+ifconfig enp130s2f3 inet6 add  {{ network_setting.nic_policy_log.ipv6 }}
+{% endif %}

@@ -1,4 +1,0 @@
-#!/bin/bash -ex
-
-ifconfig eth_ctl {{ network_setting.nic_policy_log.ipv4 }}
-ifconfig eth_ctl inet6 add  {{ network_setting.nic_policy_log.ipv6 }}
