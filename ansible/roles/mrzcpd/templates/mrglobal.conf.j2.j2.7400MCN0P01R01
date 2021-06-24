@@ -27,24 +27,28 @@ vlan-filter=1
 vlan-pvid=0
 vlan-pvid-mode=2
 promisc=1
+rssmode=0
 
 [device:{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }}]
 jumbo_frame=1
 max_rx_pkt_len=15360
 clear_tx_flags=1
 promisc=1
+rssmode=0
 
 [device:{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }}]
 jumbo_frame=1
 max_rx_pkt_len=15360
 clear_tx_flags=1
 promisc=1
+rssmode=0
 
 [device:{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }}]
 jumbo_frame=1
 max_rx_pkt_len=15360
 clear_tx_flags=1
 promisc=1
+rssmode=0
 
 [service]
 # lcore id for i/o service, use comma to split
