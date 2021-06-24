@@ -41,15 +41,5 @@
 - name: "Template the maat-redis.conf"
   template:
     src: "{{ role_path }}/templates/maat-redis.conf.j2.j2"
-    dest: /opt/tsg/tsg-os-provision/templates/gdev.conf.j2
+    dest: /opt/tsg/tsg-os-provision/templates/maat-redis.conf.j2
   tags: template
-
-- name: "enable maat-redis"
-  systemd:
-    name: maat-redis.service
-    enabled: yes
-
-- name: "enable maat-redis exporter"
-  systemd:
-    name: maat-redis-exporter.service
-    enabled: yes

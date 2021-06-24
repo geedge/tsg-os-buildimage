@@ -166,14 +166,24 @@
 
     - name: "Template the maat-redis.conf"
       template:
-        src: "/opt/tsg/tsg-os-provision/templates/gdev.conf.j2"
+        src: "/opt/tsg/tsg-os-provision/templates/maat-redis.conf.j2"
         dest: /etc/maat-redis.conf
       tags: maat-redis
-
+      when: feature.enable_policy_local_cache == 1
 
     - name: 'tsg-os-provision: execute command - systemctl daemon-reload'
       systemd:
         daemon_reload: yes
+
+    - name: "start maat-redis and maat-redis-exporter"
+      systemd:
+        name: "{{ item }}"
+        enabled: yes
+        status: started
+      when: feature.enable_policy_local_cache == 1
+      with_items:
+        - maat-redis
+        - maat-redis-exporter
 
     - name: "tsg-os-provision: snapshot the stage2 config files"
       copy:
