@@ -33,9 +33,9 @@
 - name: "copy setup script"
   copy:
     src: "{{ role_path }}/files/setup"
-    dest: /opt/tsg/env/
+    dest: "/opt/tsg/env/"
     mode: 0755
-    
+
 - name: "copy tsg-env.service"
   copy:
     src: "{{ role_path }}/files/tsg-env.service"
@@ -46,8 +46,8 @@
   copy:
     src: "{{ role_path }}/files/tsg-env_stop"
     dest: "/opt/tsg/env/"
-    mode: 0755 
-    
+    mode: 0755
+
 - name: "enable tsg-env"
   systemd:
     name: tsg-env
@@ -64,3 +64,70 @@
   systemd:
     name: watchdog
     enabled: no
+
+# systemctl set-property user.slice     CPUShares=1500 MemoryLimit=13G
+# systemctl set-property system.slice   CPUShares=1000 MemoryLimit=13G
+# systemctl set-property workload.slice CPUShares=7500 MemoryLimit=99G
+
+# workload.slice
+- name: "Create /etc/systemd/system/workload.slice.d/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /etc/systemd/system/workload.slice.d/
+
+- name: "copy 50-CPUShares.conf to workload.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_workload_slice_cpu.conf.j2"
+    dest: /etc/systemd/system/workload.slice.d/50-CPUShares.conf
+    mode: 0644
+
+- name: "copy 50-MemoryLimit.conf to workload.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_workload_slice_mem.conf.j2"
+    dest: /etc/systemd/system/workload.slice.d/50-MemoryLimit.conf
+    mode: 0644
+
+# user.slice
+- name: "Create /etc/systemd/system/user.slice.d/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /etc/systemd/system/user.slice.d/
+
+- name: "copy 50-CPUShares.conf to user.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_user_slice_cpu.conf.j2"
+    dest: /etc/systemd/system/user.slice.d/50-CPUShares.conf
+    mode: 0644
+
+- name: "copy 50-MemoryLimit.conf to user.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_user_slice_mem.conf.j2"
+    dest: /etc/systemd/system/user.slice.d/50-MemoryLimit.conf
+    mode: 0644
+
+# system.slice
+- name: "Create /etc/systemd/system/system.slice.d/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /etc/systemd/system/system.slice.d/
+
+- name: "copy 50-CPUShares.conf to system.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_system_slice_cpu.conf.j2"
+    dest: /etc/systemd/system/system.slice.d/50-CPUShares.conf
+    mode: 0644
+
+- name: "copy 50-MemoryLimit.conf to system.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_system_slice_mem.conf.j2"
+    dest: /etc/systemd/system/system.slice.d/50-MemoryLimit.conf
+    mode: 0644
