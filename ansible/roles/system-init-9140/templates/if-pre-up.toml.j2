@@ -6,8 +6,8 @@ if [ "$STA" == "pre-up" ]
 then
   logger "$0 called for interface named $INF with $STA ..."
   case "$INF" in
-          enp131s0f0) logger "Setting $STA $INF ipaddr ..."; /sbin/setup.enp131s0f0.ips $INF $STA;;
-          enp130s2f1) logger "Setting $STA $INF RPS ..."; /sbin/setup.enp130s2f1.ips $INF $STA;;
+          eth_pf_mgmt0) logger "Setting $STA $INF ipaddr ..."; /sbin/setup.eth_pf_mgmt0.ips $INF $STA;;
+          eth_vf_tfe) logger "Setting $STA $INF RPS ..."; /sbin/setup.eth_vf_tfe.ips $INF $STA;;
   esac
 fi
 exit 0

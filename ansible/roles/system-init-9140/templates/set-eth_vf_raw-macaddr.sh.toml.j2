@@ -1,0 +1,9 @@
+#!/bin/sh
+echo --------------------  set eth_vf_raw macaddr  --------------------
+output=$(ipmitool picmg addrinfo)
+echo $output
+substr=${output:21:2}
+echo deviceid:$substr
+macaddr='90:00:00:91:40:'$substr
+echo eth_vf_raw macaddr:$macaddr
+echo $macaddr > /sys/class/net/eth_pf_smbio/device/sriov/0/mac

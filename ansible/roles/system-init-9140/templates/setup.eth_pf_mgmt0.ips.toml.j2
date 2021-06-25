@@ -5,7 +5,7 @@ STA="$2"
 
 logger "$0 called for interface named $INF with $STA ..."
 
-if [ "$INF" == "enp131s0f0" ]
+if [ "$INF" == "eth_pf_mgmt0" ]
 then
   logger "$0: Interface $INF with $STA ,Set $INF ipaddr ..."
   output=$(ipmitool picmg addrinfo)
@@ -14,5 +14,5 @@ then
   echo $substr
   num=$((16#${substr}+16))
   ipaddr='10.254.'$num'.1'
-  ifconfig enp131s0f0 $ipaddr netmask 255.255.0.0
+  ifconfig eth_pf_mgmt0 $ipaddr netmask 255.255.0.0
 fi

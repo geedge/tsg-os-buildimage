@@ -1,28 +1,60 @@
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",ATTR{device/sriov_numvfs}="3"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",ATTR{device/sriov/0/trunk}="add 0,4000,4001"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",RUN+="/usr/bin/set-enp1s2-macaddr.sh"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 1 vlan 4000"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 2 vlan 4001"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 0 trust on"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 1 trust on"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 2 trust on"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 0 spoofchk off"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 0 state enable"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 1 state enable"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:00/0000:00:01.0/0000:01:00.0/net/enp1s0",PROGRAM+="/usr/sbin/ip link set enp1s0 vf 2 state enable"
+# rename enp1s0 to eth_pf_smbio
+# rename enp1s2 to eth_vf_raw
+# rename enp1s2f1 to eth_vf_dign_c
+# rename enp1s2f2 to eth_vf_dign_s
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:00.0", NAME:="eth_pf_smbio"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:00.0",ATTR{device/sriov_numvfs}="3"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.0", NAME:="eth_vf_raw"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.1", NAME:="eth_vf_dign_c"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.2", NAME:="eth_vf_dign_s"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:00.0",ATTR{device/sriov/0/trunk}="add 0,4000,4001"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:00.0",RUN+="/usr/bin/set-eth_vf_raw-macaddr.sh"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.1",PROGRAM+="/usr/sbin/ip link set eth_pf_smbio vf 1 vlan 4000"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.2",PROGRAM+="/usr/sbin/ip link set eth_pf_smbio vf 2 vlan 4001"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.0",PROGRAM+="/usr/sbin/ip link set eth_pf_smbio vf 0 trust on"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.1",PROGRAM+="/usr/sbin/ip link set eth_pf_smbio vf 1 trust on"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.2",PROGRAM+="/usr/sbin/ip link set eth_pf_smbio vf 2 trust on"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.0",PROGRAM+="/usr/sbin/ip link set eth_pf_smbio vf 0 spoofchk off"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.0",PROGRAM+="/usr/sbin/ip link set eth_pf_smbio vf 0 state enable"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.1",PROGRAM+="/usr/sbin/ip link set eth_pf_smbio vf 1 state enable"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.2",PROGRAM+="/usr/sbin/ip link set eth_pf_smbio vf 2 state enable"
 
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",ATTR{device/sriov_numvfs}="4"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 0 vlan 4095"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 1 vlan 4095"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 2 vlan 3816"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 3 vlan 3817"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 0 trust on"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 1 trust on"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 2 trust on"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 3 trust on"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 0 mac 00:0e:c6:d6:72:c1"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 1 mac fe:65:b7:03:50:bd"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 0 state enable"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 1 state enable"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 2 state enable"
-ACTION=="add", SUBSYSTEM=="net",DEVPATH=="/devices/pci0000:80/0000:80:01.0/0000:82:00.0/net/enp130s0",PROGRAM+="/usr/sbin/ip link set enp130s0 vf 3 state enable"
+# rename enp130s0 to eth_pf_smbcx
+# rename enp130s2 to eth_vf_kni
+# rename enp130s2f1 to eth_vf_tfe
+# rename enp130s2f2 to eth_vf_mirr
+# rename enp130s2f3 to eth_vf_ctl
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:00.0", NAME:="eth_pf_smbcx"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:00.0",ATTR{device/sriov_numvfs}="4"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.0", NAME:="eth_vf_kni"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.1", NAME:="eth_vf_tfe"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.2", NAME:="eth_vf_mirr"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.3", NAME:="eth_vf_ctl"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.0",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 0 vlan 4095"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.1",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 1 vlan 4095"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.2",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 2 vlan 3816"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.3",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 3 vlan 3817"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.0",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 0 trust on"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.1",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 1 trust on"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.2",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 2 trust on"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.3",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 3 trust on"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.0",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 0 mac 00:0e:c6:d6:72:c1"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.1",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 1 mac fe:65:b7:03:50:bd"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.0",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 0 state enable"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.1",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 1 state enable"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.2",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 2 state enable"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.3",PROGRAM+="/usr/sbin/ip link set eth_pf_smbcx vf 3 state enable"
+
+# rename enp131s0f0 to eth_pf_mgmt0
+# rename enp131s0f1 to eth_pf_mgmt1
+# rename enp131s0f2 to eth_pf_ge0
+# rename enp131s0f3 to eth_pf_ge1
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:83:00.0", NAME:="eth_pf_mgmt0"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:83:00.1", NAME:="eth_pf_mgmt1"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:83:00.2", NAME:="eth_pf_ge0"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:83:00.3", NAME:="eth_pf_ge1"
+
+# rename enp5s0f0 to eth_pf_xe0
+# rename enp5s0f1 to eth_pf_xe1
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:05:00.0", NAME:="eth_pf_xe0"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:05:00.1", NAME:="eth_pf_xe1"
