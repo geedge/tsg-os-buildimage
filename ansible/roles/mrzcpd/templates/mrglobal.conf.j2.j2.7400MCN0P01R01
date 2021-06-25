@@ -1,5 +1,5 @@
 [device]
-device={{ mrzcpd.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }},vxlan_user,vxlan_fwd
+device={{ mrzcpd.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }}
 sz_tunnel=8192
 sz_buffer=0
 
@@ -21,34 +21,26 @@ vlan-id-allow={{ mrzcpd_vlanid_allow_list | join(",") }},4000,4001
 vlan-id-allow=1000,1001,2000,2001,4000,4001
 {% endif %}
 {% endraw %}
-jumbo_frame=1
-max_rx_pkt_len=15360
-clear_tx_flags=1
 vlan-filter=1
 vlan-pvid=0
 vlan-pvid-mode=2
 promisc=1
+allmulticast=1
 rssmode=0
 
 [device:{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }}]
-jumbo_frame=1
-max_rx_pkt_len=15360
-clear_tx_flags=1
 promisc=1
+allmulticast=1
 rssmode=0
 
 [device:{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }}]
-jumbo_frame=1
-max_rx_pkt_len=15360
-clear_tx_flags=1
 promisc=1
+allmulticast=1
 rssmode=0
 
 [device:{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }}]
-jumbo_frame=1
-max_rx_pkt_len=15360
-clear_tx_flags=1
 promisc=1
+allmulticast=1
 rssmode=0
 
 [service]
@@ -62,7 +54,7 @@ virtaddr=0x7f40c4a00000
 loglevel=7
 
 [keepalive]
-check_spinlock=0
+check_spinlock=1
 
 [ctrlzone]
 ctrlzone0=tunnat,64
@@ -73,17 +65,3 @@ sz_direct_pktmbuf=4194304
 sz_indirect_pktmbuf=8192
 sz_cache=256
 sz_data=4096
-
-[forward]
-nr_forward_rule=10
-forward_rule_0=pv,{{ mrzcpd.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mrglobal_conf.device.nic_raw }}
-forward_rule_1=vp,{{ mrzcpd.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mrglobal_conf.device.nic_raw }}
-forward_rule_2=vv,vxlan_fwd,vxlan_user
-forward_rule_3=vv,vxlan_user,vxlan_fwd
-forward_rule_4=pv,{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }}
-forward_rule_5=vp,{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn1 }}
-forward_rule_6=pv,{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }}
-forward_rule_7=vp,{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn2 }}
-forward_rule_8=pv,{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }}
-forward_rule_9=vp,{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }},{{ mrzcpd.mrglobal_conf.device.nic_mcn3 }}
-

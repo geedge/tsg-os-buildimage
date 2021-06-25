@@ -4,12 +4,8 @@ sz_tunnel=8192
 sz_buffer=0
 
 [device:{{ mrzcpd.mrglobal_conf.device.nic_mirr }}]
-#jumbo_frame=1
-#max_rx_pkt_len=15360
-#clear_tx_flags=1
 promisc=0
 rssmode=0
-mtu=15360
 
 [service]
 iocore={{ mrzcpd.mrglobal_conf.service.iocore }}

@@ -28,6 +28,12 @@
     dest: /home/mesasoft/sapp_run/etc/project_list.conf
   tags: template
 
+- name: Template the send_raw_pkt.conf
+  template:
+    src: "{{ role_path }}/templates/send_raw_pkt.conf.j2"
+    dest: /home/mesasoft/sapp_run/etc/send_raw_pkt.conf
+  tags: template
+
 - name: Template the conflist.inf - tsg_9140
   template:
     src: "{{ role_path }}/templates/conflist.inf.j2.9000NPBP01R01"
