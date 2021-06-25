@@ -2,6 +2,11 @@
 
 ip_of_obtain_sn=$1
 
+if [ $ip_of_obtain_sn == '127.0.0.1' ];then
+    echo "{\"sn\": \"CBT22021250000020625\"}" > /opt/tsg/etc/tsg_sn.json
+    exit 0
+fi
+
 if [ ! -f "/opt/tsg/tsg-os-provision/cmm_api_tst" ];then
     echo "not found cmm_api_tst!"
     exit 1

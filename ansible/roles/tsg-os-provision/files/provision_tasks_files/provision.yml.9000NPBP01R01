@@ -114,12 +114,6 @@
         dest: /opt/tsg/etc/tsg_device_tag.json
       tags: tsg_device_tag
 
-    - name: "tsg-os-provision: template the tsg_sn"
-      template:
-        src: "../templates/tsg_sn.json.j2"
-        dest: /opt/tsg/etc/tsg_sn.json
-      tags: tsg_sn
-
     - name: 'tsg-os-provision: execute command - systemctl daemon-reload'
       systemd:
         daemon_reload: yes
