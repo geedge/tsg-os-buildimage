@@ -52,3 +52,15 @@
   systemd:
     name: tsg-env
     enabled: yes
+
+# 禁用 IPMI
+- name: "disable ipmi"
+  systemd:
+    name: ipmi
+    enabled: no
+
+# 禁用 Watchdog
+- name: "disable watchdog"
+  systemd:
+    name: watchdog
+    enabled: no
