@@ -140,7 +140,12 @@ tcp_ttl_upstream=75
 tcp_ttl_downstream=70
 
 [stat]
+{% if PROFILE_ID == '7400-MCN123-P01R01' %}
+statsd_server=192.168.100.1
+{% endif %}
+{% if PROFILE_ID == '9000-NPB-P01R01' %}
 statsd_server=127.0.0.1
+{% endif %}
 statsd_port=8100
 statsd_cycle=5
 # 1:FS_OUTPUT_STATSD; 2:FS_OUTPUT_INFLUX_LINE
