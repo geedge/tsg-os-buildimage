@@ -13,6 +13,9 @@ mkdir -p /data/overlay/rootfs_etc/work
 mkdir -p /data/overlay/rootfs_var/rw
 mkdir -p /data/overlay/rootfs_var/work
 
+#provision path
+mkdir -p /data/tsg-os-provision
+
 # app_proto_engine's license
 mkdir -p /data/app_proto_engine/license
 
