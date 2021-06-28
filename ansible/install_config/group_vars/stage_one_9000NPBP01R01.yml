@@ -4,21 +4,21 @@
 firewall:
   capture_packet_plug_conf:
     LOG:
-      NIC_NAME: enp130s2f3
+      NIC_NAME: eth_vf_ctl
   main_conf:
     TSG_LOG:
-      NIC_NAME: enp130s2f3
+      NIC_NAME: eth_vf_ctl
     SYSTEM:
-      NIC_NAME: enp130s2f3
+      NIC_NAME: eth_vf_ctl
 
 kni:
   kni_conf:
     global:
       tfe_node_count: 1
-      manage_eth: enp130s2f3
+      manage_eth: eth_vf_ctl
     tfe_node_list:
       - node_id: 0 
-        dev_eth_symbol: enp130s2
+        dev_eth_symbol: eth_vf_kni
         ip_addr: 127.0.0.1
     tfe_cmsg_receiver:
       listen_eth: lo
@@ -28,16 +28,16 @@ kni:
 mrzcpd:
   mrglobal_conf:
     device:
-      nic_raw: enp1s2
-      nic_to_tfe: enp130s2
+      nic_raw: eth_vf_raw
+      nic_to_tfe: eth_vf_kni
     service:
       iocore: 52,53,54,55
 
 sapp:
   gdev_conf:
     Module:
-      pcapdevice: enp1s2
-      sendto_gdev_card: enp1s2
+      pcapdevice: eth_vf_raw
+      sendto_gdev_card: eth_vf_raw
       sendto_gdev_ip: '{% raw %}10.253.{{ keepalive_subnet_ip }}.1{% endraw %}'
   sapp_toml:
     CPU:
@@ -46,13 +46,13 @@ sapp:
       bind_mask: 15,16,17,18,19,20,21,22,23,24,25,26,27,42,43,44,45,46,47,48,49,50,51
     PACKET_IO:
       packet_io_internal_interface:
-        name: enp1s2
+        name: eth_vf_raw
       overlay_tunnel_definition:
         overlay_mode: vxlan
 
 tfe:
   tfe_env_config:
-    TFE_DEVICE_DATA_INCOMING: enp130s2f1
+    TFE_DEVICE_DATA_INCOMING: eth_vf_tfe
     TFE_PEER_MAC_DATA_INCOMING: 00:0e:c6:d6:72:c1
   tfe_conf:
     system:
@@ -61,11 +61,11 @@ tfe:
     kni:
       ip: 127.0.0.1
     ssl:
-      mc_cache_eth: enp130s2f3
+      mc_cache_eth: eth_vf_ctl
     key_keeper:
       cert_store_host: 127.0.0.1
     kafka:
-      NIC_NAME: enp130s2f3
+      NIC_NAME: eth_vf_ctl
     traffic_mirror:
       enable: 0
       device: lo
@@ -73,7 +73,7 @@ tfe:
 
 tsg_diagnose:
   docker_compose_yml:
-    virtual_server_nic: enp1s2f2
-    virtual_client_nic: enp1s2f1
+    virtual_server_nic: eth_vf_dign_s
+    virtual_client_nic: eth_vf_dign_c
 
 cm_policy_server_ip: '{% raw %}{{ cm.policy_server.address }}{% endraw %}'
