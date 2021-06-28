@@ -65,5 +65,6 @@
     - {role: exporter, tags: exporter}
     - {role: docker, tags: docker}
     - {role: tsg-diagnose, tags: tsg-diagnose}
+    - {role: tsg-9140-NPB-rmp, tags: tsg-9140-NPB-rmp}
     - {role: system-init, tags: system-init}
     - {role: system-init-9140, tags: system-init-9140}
