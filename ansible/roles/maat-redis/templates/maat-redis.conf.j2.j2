@@ -278,7 +278,7 @@ dir /var/lib/redis
 #    network partition slaves automatically try to reconnect to masters
 #    and resynchronize with them.
 #
-{% raw %}slaveof {{ cm_policy_server_ip }} {{ cm.policy_server.port_range }}
+{% raw %}slaveof {{ cm.policy_server.address }} {{ cm.policy_server.port_range }}
 {% endraw %}
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
