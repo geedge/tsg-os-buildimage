@@ -1,3 +1,23 @@
-#!/bin/bash -ex
+#!/bin/bash
+status_address_add_ipv4=0
+status_address_add_ipv6=0
+status_route_add_ipv4=0
 ifconfig eth_ctl {{ network_setting.nic_policy_log.ipv4 }}
+status_address_add_ipv4=$?
+if [ $status_address_add_ipv4 -ne 0 ]; then
+  echo "Fail to add ipv4 address to eth_ctl,return code:${status_address_add_ipv4}"
+  exit $status_address_add_ipv4
+fi
+route add default gw {{ network_setting.nic_policy_log.gateway_ipv4 }} dev eth_ctl
+status_route_add_ipv4=$?
+if [ $status_route_add_ipv4 -ne 7 ] && [ $status_route_add_ipv4 -ne 0 ]; then
+  echo "Fail to add ipv4 route to eth_ctl,return code:${status_route_add_ipv4}"
+  exit $status_route_add_ipv4
+fi
+
 ifconfig eth_ctl inet6 add  {{ network_setting.nic_policy_log.ipv6 }}
+status_address_add_ipv6=$?
+if [ $status_address_add_ipv6 -ne 0 ] && [ $status_address_add_ipv6 -ne 1 ]; then
+  echo "Fail to add ipv6 address to eth_ctl,return code:${status_address_add_ipv6}"
+  exit $status_address_add_ipv6
+fi
