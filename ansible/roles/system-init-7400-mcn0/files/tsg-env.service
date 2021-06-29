@@ -2,7 +2,7 @@
 Description=tsg sled-mcn0 env init
 Requires=network.target
 After=network.target
-Before=mrenv.service
+Before=mrenv.service tsg-os-provision-convertor.service
 
 [Service]
 ExecStart=/opt/tsg/env/setup
