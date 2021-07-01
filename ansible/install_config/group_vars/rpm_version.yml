@@ -53,7 +53,7 @@ mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.4.7.cea4bb9
 
 sapp_rpm_version:
-  sapp: sapp-4.2.39.3c2b02b
+  sapp: sapp-4.2.40.33f5b18
   tcpdump_mesa: tcpdump_mesa-1.0.5.793bb53
 
 tfe_rpm_version:
