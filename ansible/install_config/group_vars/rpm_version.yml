@@ -8,19 +8,19 @@ firewall_rpm_version:
   ftp: ftp-1.0.8.13d5fda
   fw_dns_plug: fw_dns_plug-3.0.6.57c2feb
   fw_ftp_plug: fw_ftp_plug-3.0.1.0a78573
-  fw_http_plug: fw_http_plug-3.2.5.30df450
+  fw_http_plug: fw_http_plug-3.2.6.36a8829
   fw_mail_plug: fw_mail_plug-3.1.1.777fa90
   fw_quic_plug: fw_quic_plug-3.0.4.947ef77
   fw_ssl_plug: fw_ssl_plug-3.1.1.d9e9de4
   http: http-2.0.5.c61ad9a
   mail: mail-1.0.11.48abeae
-  quic: quic-1.1.17.8c22b4d
+  quic: quic-1.1.18.13ba53b
   ssl: ssl-2.0.2.1389716
-  tsg_conn_sketch: tsg_conn_sketch-2.1.41.906e62b
+  tsg_conn_sketch: tsg_conn_sketch-3.0.0.1d6df69
   rtp: rtp-1.0.4.91b4ab7
   mesa_sip: mesa_sip-1.1.1.0721ead
   fw_voip_plug: fw_voip_plug-1.0.6.341fe83
-  app_proto_identify: app_proto_identify-2.0.1.dd683eb
+  app_proto_identify: app_proto_identify-2.0.2.55a9520
   app_proto_engine: app_proto_engine-2.0.5.1df79c4 
   gtp: gtp-1.0.4.8804e43
   gtp_signaling_plug: gtp_signaling_plug-1.0.2.2dfced5
@@ -39,12 +39,7 @@ framework_rpm_version:
   libwiredcfg: libwiredcfg-2.0.6.67ae0ab
   libWiredLB: libWiredLB-2.0.5.4629165
   libbreakpad_mini: libbreakpad_mini-1.0.2.a56ef00
-  libaws-c-common: libaws-c-common-1.0.3.fa2adf0
-  libaws-c-event-stream: libaws-c-event-stream-1.0.6.67fd944
-  libaws-checksums: libaws-checksums-1.0.6.8b09ac1
-  libaws-cpp-sdk-core: libaws-cpp-sdk-core-1.0.8.a3fe079
-  libaws-cpp-sdk-s3: libaws-cpp-sdk-s3-2.0.0.f3c33ea
-  libhos-client-cpp: libhos-client-cpp-1.0.26.a8573f5
+  libhos-client-cpp: libhos-client-cpp-2.0.0.696fcec
 
 kni_rpm_version:
   kni: kni-21.05.02.d64fa9a
@@ -63,7 +58,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-3.0.8.ea0c3d7
   
 tsg_master_rpm_version:
-  tsg_master: tsg_master-4.2.8.a35b9e2 
+  tsg_master: tsg_master-4.2.9.198c01a 
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-21.03.01.39beba7
