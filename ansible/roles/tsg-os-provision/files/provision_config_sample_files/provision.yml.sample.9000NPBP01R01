@@ -1,0 +1,40 @@
+version: 1
+
+cm:
+  policy_server:
+    address: "127.0.0.1"
+    port_range: 7002
+    port_num: 1
+    db_static: 0
+    db_dynamic: 1
+
+sentry_url: http://127.0.0.1:9000/api/2/minidump/?sentry_key=3203b43fd5384a7dbe6a48ecb1f3c595
+
+
+data_center:
+  name: City instance
+  id: 1
+
+
+olap:
+  kafka_broker:
+    address_list: ['1.1.1.1:9092','2.2.2.2:9092']
+  hos_server:
+    address: "127.0.0.1"
+    port: 9098
+
+app_sketch:
+  broker:
+    address: "127.0.0.1"
+    port: 1883
+
+cache:
+  hos:
+    address: "127.0.0.1"
+    port: 9090
+
+network_setting:
+  nic_policy_log:
+    ipv4: 127.0.0.1/24
+    ipv6: 'fe80\:\:5/64'
+    gateway_ipv4: 191.168.1.1 
