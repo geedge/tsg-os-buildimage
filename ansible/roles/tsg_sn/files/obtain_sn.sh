@@ -23,7 +23,8 @@ CHIDL=`echo $CHID | awk '{print length($0)}'`
 
 if [ $CHIDL != 20 ];then
     echo "CHID length is not 20!"
-    exit 1
+    echo "{\"sn\": \"CBT00000000000000000\"}" > /opt/tsg/etc/tsg_sn.json
+    exit 0
 fi
 
 echo "{\"sn\": \"$CHID\"}" > /opt/tsg/etc/tsg_sn.json
