@@ -69,12 +69,6 @@
         - { "enable_policy_local_cache": 1, "npb_device": tera, "cm_policy_server_ip": 192.168.100.1 }
         - { "enable_policy_local_cache": 0, "npb_device": inline_device, "cm_policy_server_ip": "{{ cm.policy_server.address }}" }
 
-    - name: "tsg-os-provision: Template the asymmetric_presence_layer.conf.j2"
-      template:
-        src: ../templates/asymmetric_presence_layer.conf.j2
-        dest: /home/mesasoft/sapp_run/etc/asymmetric_presence_layer.conf
-      tags: sapp
-
     - name: "tsg-os-provision: Template the conflist.inf"
       template:
         src: ../templates/conflist.inf.j2
