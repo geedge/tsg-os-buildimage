@@ -8,7 +8,7 @@
 #C_router_vlan_id  I_router_vlan_id mac_flipping_enable
 {% raw %}{% if npb_device == 'tera' %}
 {% for zone_group in tera_steering_group %}
-{{ zone_group.zone_group.internal.vlan_id }}	{{ zone_group.external.vlan_id }}	1
+{{ zone_group.internal.vlan_id }}	{{ zone_group.external.vlan_id }}	1
 {% endfor %}
 {% if npb_device == 'direct' %}
 1000	1001	0
