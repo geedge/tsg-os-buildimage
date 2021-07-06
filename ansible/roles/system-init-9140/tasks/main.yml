@@ -214,3 +214,11 @@
   systemd:
     name: watchdog
     enabled: yes
+
+# 关闭DHCPDISCOVER
+- name: "set 90-9000-dracut.rules"
+  template:
+    src: "{{ role_path }}/templates/90-9000-dracut.rules.j2"
+    dest: /usr/lib/dracut/dracut.conf.d/90-9000-dracut.conf
+    mode: 0644
+  tags: template
