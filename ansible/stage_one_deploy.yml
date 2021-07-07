@@ -24,6 +24,8 @@
     - {role: exporter, tags: exporter}
     - {role: tsg-diagnose, tags: tsg-diagnose}
     - {role: system-init, tags: system-init}
+    - {role: wannat_wangw, tags: wannat_wangw}
+    - {role: wire_graft, tags: wire_graft}
 
 - hosts: 7400-MCN123-P01R01
   remote_user: root

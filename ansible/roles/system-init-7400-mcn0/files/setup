@@ -38,6 +38,7 @@ function vf_setup()
   sleep 5
 
   ifconfig eth_ctl up
+  ifconfig eth_ctl mtu 2000
   ip link set eth_pf vf 2 vlan 200
   ifconfig eth_ctl 192.168.200.1 netmask 255.255.255.0
 

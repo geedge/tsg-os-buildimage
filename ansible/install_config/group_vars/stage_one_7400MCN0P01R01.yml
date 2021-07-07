@@ -64,3 +64,17 @@ tsg_diagnose:
     virtual_client_nic: eth_dign_c
 
 cm_policy_server_ip: '{% raw %}{{ cm_policy_server_ip }}{% endraw %}'
+
+wannat_wangw:
+  wangw_conf:
+    main:
+      NAT_GW_tunnel_recv_port: 3544
+      NAT_GW_tunnel_send_port: 3544
+      NAT_GW_tunnel_device: eth_ctl
+
+wire_graft:
+  wire_graft_conf:
+    main:
+      identification_by_which_device: eth_ctl
+    toroad:
+      sendto_toroad_enable: 1   

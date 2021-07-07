@@ -144,7 +144,19 @@
         src: "../templates/telegraf_statistic.conf.j2"
         dest: /etc/telegraf/telegraf_statistic.conf
       tags: telegraf_statistic
-  
+ 
+    - name: "tsg-os-provision: template wannat wangw.conf file"
+      template:
+        src: "../templates/wangw.conf.j2"
+        dest: /home/mesasoft/sapp_run/etc/wannat/wangw.conf
+      tags: wangw
+
+    - name: "tsg-os-provision: template wire_graft.conf file"
+      template:
+        src: "../templates/wire_graft.conf.j2"
+        dest: /home/mesasoft/sapp_run/etc/wire_graft/wire_graft.conf
+      tags: wire_graft
+	  
     - name: "mkdir /opt/tsg/etc/"
       file:
         path: /opt/tsg/etc
