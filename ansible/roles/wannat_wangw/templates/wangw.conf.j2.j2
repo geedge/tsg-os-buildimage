@@ -1,0 +1,68 @@
+[main]
+#在线模式用vxlan, 测试模式用ethernet, 即标准ethernet/IP协议
+NAT_GW_tunnel_mode=vxlan
+
+#本地监听端口
+NAT_GW_tunnel_recv_port={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_recv_port }}
+
+#DNAT首包发送给NATGW时, 对端的监听端口
+NAT_GW_tunnel_send_port={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_send_port }}
+
+#NAT GW的内部互联网卡名称
+NAT_GW_tunnel_device={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_device }}
+
+#NAT GW的内部互联IP地址, 端口使用vxlan默认值, 要求对方也开放UDP 4789端口
+{% raw %}NAT_GW_tunnel_ip={{ wannat_natgw.natgw_ip }}
+{% endraw %}
+
+#接收来自NAT GW的包, 需要创建sapp的独立发包线程, 目前暂时只支持1个.
+I2E_independent_thread_num=1
+
+#重复流量识别
+duplicate_pkt_prune=1
+
+[pkt_dump]
+command_port=9346
+
+[session]
+#最大并发连接数 
+max_session_num=100000
+
+#连续no_pkt_timeout秒没有数据包, 认为此连接已超时, 可以删除
+no_pkt_timeout=60
+
+
+[runtime_log]
+log_file=./wannat_log/wannat.log
+log_level=30
+
+[field_stat2]
+Fs2_log_local_dir_path=./wannat_log
+Fs2_server_ip=127.0.0.1
+Fs2_server_port=8125
+Fs2_interval=3
+
+[maat]
+table_info=./etc/wannat/tableinfo.conf
+#json, redis, local_file
+#config_src_type=local_file
+config_src_type=redis
+#config_src_type=json
+json_cfg_file=./etc/wannat/gtest.json
+inc_dir=./redis_dump/
+full_dir=./redis_dump/
+
+redis_server_ip={{ cm_policy_server_ip }}
+{% raw %}REDIS_PORT_NUM={{ cm.policy_server.port_num }}
+redis_server_port={{ cm.policy_server.port_range }}
+redis_index={{ cm.policy_server.db_static }}
+{% endraw %}
+
+
+[no_nat_gw_self_test]
+test_eth_mode_nat_type=snat
+test_eth_mode_vlink_id=0
+test_eth_mode_link_dir=E
+test_eth_bpf="port 80"
+test_linkinfo_file=./etc/wannat/self_test.linkinfo
+

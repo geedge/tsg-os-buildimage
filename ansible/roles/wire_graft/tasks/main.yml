@@ -1,0 +1,14 @@
+---
+- name: "install wire_graft plug packages"
+  yum:
+    name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+  with_dict: "{{ wire_graft_rpm_version }}"
+
+- name: "Template the etc/wire_graft/wire_graft.conf"
+  template:
+    src: "{{ role_path }}/templates/wire_graft.conf.j2.j2"
+    dest: /opt/tsg/tsg-os-provision/templates/wire_graft.conf.j2
+  tags: template
+

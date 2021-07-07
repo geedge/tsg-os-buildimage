@@ -1,0 +1,14 @@
+---
+- name: "install wannat wangw plug packages"
+  yum:
+    name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+  with_dict: "{{ wannat_wangw_rpm_version }}"
+
+- name: "Template the etc/wannat/wangw.conf"
+  template:
+    src: "{{ role_path }}/templates/wangw.conf.j2.j2"
+    dest: /opt/tsg/tsg-os-provision/templates/wangw.conf.j2
+  tags: template
+
