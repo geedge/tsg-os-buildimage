@@ -156,7 +156,7 @@
         src: "../templates/wire_graft.conf.j2"
         dest: /home/mesasoft/sapp_run/etc/wire_graft/wire_graft.conf
       tags: wire_graft
-	  
+
     - name: "mkdir /opt/tsg/etc/"
       file:
         path: /opt/tsg/etc
