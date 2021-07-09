@@ -82,7 +82,7 @@ services:
         echo '0      2       *       *       *       /usr/local/bin/python /root/unittest/clear_file_timeout.py' > /etc/crontabs/root
         echo '0      2       *       *       *       /usr/local/bin/python /root/unittest/clear_file_timeout.py -d /root/result_tsg_diagnose/conn_traffic_status' > /etc/crontabs/root
         crond
-        python /root/unittest/tsg_diagnose.py -l -w NEZHA
+        tail -f /dev/null
 
 
 networks: 
