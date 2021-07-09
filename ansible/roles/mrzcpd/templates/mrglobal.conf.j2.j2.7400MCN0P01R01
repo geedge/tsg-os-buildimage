@@ -11,10 +11,7 @@ vlan-id-allow=4000,4001
 {% endif %}
 {% if npb_device == 'tera' %}
 {% set mrzcpd_vlanid_allow_list = [] %}
-{% for zone_group in tera_steering_group %}
-{{ mrzcpd_vlanid_allow_list.append(zone_group.internal.vlan_id) }}
-{{ mrzcpd_vlanid_allow_list.append(zone_group.external.vlan_id) }}
-{% endfor %}
+{% for zone_group in tera_steering_group %}{{ mrzcpd_vlanid_allow_list.append(zone_group.internal.vlan_id) }}{{ mrzcpd_vlanid_allow_list.append(zone_group.external.vlan_id) }}{% endfor %}
 vlan-id-allow={{ mrzcpd_vlanid_allow_list | join(",") }},4000,4001
 {% endif %}
 {% if npb_device == 'direct' %}
