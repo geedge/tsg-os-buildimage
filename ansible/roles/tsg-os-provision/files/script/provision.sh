@@ -13,15 +13,17 @@ execute_provision_action(){
     cp ${version_file_path} ${present_version_file_path} -r   
 }
 
-if [ ! -f "$present_version_file_path" ];then
-    execute_provision_action
-    exit 0
-fi
+#if [ ! -f "$present_version_file_path" ];then
+#    execute_provision_action
+#    exit 0
+#fi
 
-md5_version_file=`md5sum $version_file_path | awk '{print $1}'`
-md5_present_version_file=`md5sum $present_version_file_path | awk '{print $1}'`
+#md5_version_file=`md5sum $version_file_path | awk '{print $1}'`
+#md5_present_version_file=`md5sum $present_version_file_path | awk '{print $1}'`
 
-if [ "$md5_version_file" != "$md5_present_version_file" ];then
-    execute_provision_action
-    exit 0
-fi
+#if [ "$md5_version_file" != "$md5_present_version_file" ];then
+#    execute_provision_action
+#    exit 0
+#fi
+
+execute_provision_action
