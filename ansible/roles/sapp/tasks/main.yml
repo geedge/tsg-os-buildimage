@@ -115,7 +115,7 @@
 - name: Template the well_known_port.conf
   template:
     src: "{{ role_path }}/templates/well_known_port.conf.j2"
-    dest: /opt/tsg/tsg-os-provision/templates/well_known_port.conf
+    dest: /home/mesasoft/sapp_run/etc/well_known_port.conf
   tags: template
 
 
