@@ -29,6 +29,9 @@ ln -sf /boot/grub /boot/grub2
 # treat grub2* as grub*
 ln -sf /usr/bin/grub2-editenv /usr/bin/grub-editenv
 
+rm -rf /data/overlay/rootfs_var/rw/lib/rpm
+rm -rf /data/overlay/rootfs_var/rw/lib/docker
+
 # Setup o/s mount points
 (cat <<EOF2
 tmpfs                   /tmp                    tmpfs   defaults        0 0
