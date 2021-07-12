@@ -58,13 +58,11 @@
     dest: /usr/lib/systemd/system/tsg-os-provision.service
     mode: 0644
 
-- name: "tsg-os-provision: chmod 0755 for provison.sh"
-  file:
-    path: "{{ item }}"
-    mode: '0755'
-  with_items:
-    - /opt/tsg/tsg-os-provision/provision.sh
-
+- name: "tsg-os-provision: copy provision.sh file to dest"
+  copy:
+    src: "{{ role_path }}/files/script/provision.sh"
+    dest: /opt/tsg/tsg-os-provision/provision.sh
+    mode: 0755
 
 - name: "tsg-os-provision: enable tsg-os-provison and tsg-os-provison-convertor"
   systemd:
