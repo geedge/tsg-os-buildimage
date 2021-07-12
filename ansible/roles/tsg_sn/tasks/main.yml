@@ -1,9 +1,17 @@
 ---
-- name: "deploy obtain sn"
+- name: "deploy obtain sn tsg-7400"
   copy:
-    src: "{{ item }}"
-    dest: /opt/tsg/tsg-os-provision/exec/
+    src: "{{ role_path }}/files/{{ item.src }}"
+    dest: "/opt/tsg/tsg-os-provision/exec/{{ item.dest }}"
     mode: 0755
   with_items:
-    - "{{ role_path }}/files/obtain_sn.sh"
-    - "{{ role_path }}/files/cmm_api_tst"
+    - { "src": "obtain_sn.sh.TSG7400", "dest": "obtain_sn.sh" }
+    - { "src": "cmm_api_tst", "dest": "cmm_api_tst" }
+  when: PROFILE_ID == '7400-MCN0-P01R01' or PROFILE_ID == '7400-MCN123-P01R01'
+
+- name: "deploy obtain sn - tsg-9140"
+  copy:
+    src: "{{ role_path }}/files/obtain_sn.sh.TSG9140"
+    dest: /opt/tsg/tsg-os-provision/exec/obtain_sn.sh
+    mode: 0755
+  when: PROFILE_ID == '9000-NPB-P01R01'
