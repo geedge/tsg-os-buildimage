@@ -57,6 +57,8 @@ sapp:
         name: eth_raw
       overlay_tunnel_definition:
         overlay_mode: '{% raw %}{{ sapp_overlay_mode }}{% endraw %}'
+  send_raw_pkt_conf:
+    nic_name: eth_raw
 
 tsg_diagnose:
   docker_compose_yml:

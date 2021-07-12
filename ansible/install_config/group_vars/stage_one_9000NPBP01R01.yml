@@ -49,6 +49,8 @@ sapp:
         name: eth_vf_raw
       overlay_tunnel_definition:
         overlay_mode: vxlan
+  send_raw_pkt_conf:
+    nic_name: eth_vf_raw
 
 tfe:
   tfe_env_config:
