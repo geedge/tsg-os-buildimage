@@ -1,8 +1,0 @@
----
-- hosts: provision
-  vars_files:
-  - '{{var_files_path}}'
-  tasks:
-    - name: "tsg-os-provision: Nothing to do, exit error code"
-      fail:
-        msg: "Error: There are nothing to do,maybe some errors occurred during the os-building..."

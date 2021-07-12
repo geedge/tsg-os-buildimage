@@ -2,7 +2,7 @@
 - name: "deploy obtain sn"
   copy:
     src: "{{ item }}"
-    dest: /opt/tsg/tsg-os-provision/
+    dest: /opt/tsg/tsg-os-provision/exec/
     mode: 0755
   with_items:
     - "{{ role_path }}/files/obtain_sn.sh"

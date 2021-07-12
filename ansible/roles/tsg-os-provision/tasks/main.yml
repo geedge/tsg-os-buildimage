@@ -1,8 +1,27 @@
-- name: "tsg-os-provision: copy tsg-os-provision scripts to dest"
+- name: "tsg-os-provision: build tsg-os-provision directory and sub directory"
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "/opt/tsg/tsg-os-provision/"
+    - "/opt/tsg/tsg-os-provision/files/"
+    - "/opt/tsg/tsg-os-provision/tasks/"
+    - "/opt/tsg/tsg-os-provision/templates/"
+    - "/opt/tsg/tsg-os-provision/exec/"
+
+- name: "tsg-os-provision: copy hosts file dest"
   copy:
-    src: "{{ role_path }}/files/tsg-os-provision"
-    dest: /opt/tsg/
+    src: "{{ role_path }}/files/hosts"
+    dest: /opt/tsg/tsg-os-provision/hosts
     mode: 0644
+
+- name: "tsg-os-provision: template network settings shell"
+  copy:
+    src: "{{ role_path }}/files/network_settings/{{ item }}"
+    dest: "/opt/tsg/tsg-os-provision/templates/"
+  with_items:
+    - adapt_tera_network_setting.sh.j2
+    - setup_policy_log_nic_network.sh.j2
 
 - name: "tsg-os-provision: copy tasks file that excutes provision to dest  - tsg9140"
   copy:

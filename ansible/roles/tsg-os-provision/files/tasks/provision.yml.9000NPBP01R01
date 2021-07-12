@@ -9,7 +9,7 @@
         state: directory
 
     - name: "tsg-os-provision: obtain sn"
-      shell: /opt/tsg/tsg-os-provision/obtain_sn.sh 127.0.0.1
+      shell: /opt/tsg/tsg-os-provision/exec/obtain_sn.sh 127.0.0.1
       register: result_exec_obtain_sn_and_write_sn_in_file
 
     - name: "tsg-os-provision: check result_exec_obtain_sn_and_write_sn_in_file"
