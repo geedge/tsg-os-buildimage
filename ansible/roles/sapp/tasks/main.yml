@@ -151,7 +151,8 @@
     dest: /opt/tsg/tsg-os-provision/files/
     mode: "{{ item.mode }}"
   with_items:
-    - { src: "{{ role_path }}/files/tera_fake_promisc_setup.conf", mode: "0644" }
+    - { src: "{{ role_path }}/files/service_attach_startpre.conf.tera", mode: "0644" }
+    - { src: "{{ role_path }}/files/service_attach_startpre.conf.except_tera", mode: "0644" }
     - { src: "{{ role_path }}/files/tera_fake_promisc_setup.sh", mode: "0755" }
   when:
     - PROFILE_ID == '7400-MCN0-P01R01'
