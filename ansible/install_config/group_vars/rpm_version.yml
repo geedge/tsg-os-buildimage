@@ -8,7 +8,7 @@ firewall_rpm_version:
   ftp: ftp-1.0.8.13d5fda
   fw_dns_plug: fw_dns_plug-3.0.8.06b600e
   fw_ftp_plug: fw_ftp_plug-3.0.1.0a78573
-  fw_http_plug: fw_http_plug-3.2.6.36a8829
+  fw_http_plug: fw_http_plug-3.2.7.ab20b13
   fw_mail_plug: fw_mail_plug-3.1.1.777fa90
   fw_quic_plug: fw_quic_plug-3.0.4.947ef77
   fw_ssl_plug: fw_ssl_plug-3.1.3.6729f7a
