@@ -59,6 +59,7 @@ sapp:
         overlay_mode: '{% raw %}{{ sapp_overlay_mode }}{% endraw %}'
   send_raw_pkt_conf:
     nic_name: eth_raw
+  prefix_path: /opt/tsg/sapp
 
 tsg_diagnose:
   docker_compose_yml:

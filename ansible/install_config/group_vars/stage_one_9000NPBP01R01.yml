@@ -51,6 +51,7 @@ sapp:
         overlay_mode: vxlan
   send_raw_pkt_conf:
     nic_name: eth_vf_raw
+  prefix_path: /opt/tsg/sapp
 
 tfe:
   tfe_env_config:

@@ -46,7 +46,7 @@
     - name: "tsg-os-provision: template gdev.conf file"
       template:
         src: "../templates/gdev.conf.j2"
-        dest: /home/mesasoft/sapp_run/etc/gdev.conf
+        dest: /opt/tsg/sapp/etc/gdev.conf
       tags: sapp
 
     - name: "tsg-os-provision: template mrglobal.conf file"
@@ -64,25 +64,25 @@
     - name: "tsg-os-provision: Template the tsgconf/main.conf"
       template:
         src: "../templates/main.conf.j2"
-        dest: /home/mesasoft/sapp_run/tsgconf/main.conf
+        dest: /opt/tsg/sapp/tsgconf/main.conf
       tags: firewall
   
     - name: "tsg-os-provision: Template the tsgconf/maat.conf"
       template:
         src: "../templates/maat.conf.j2"
-        dest: /home/mesasoft/sapp_run/tsgconf/maat.conf
+        dest: /opt/tsg/sapp/tsgconf/maat.conf
       tags: firewall
   
     - name: "tsg-os-provision: Template the conf/capture_packet_plug.conf"
       template:
         src: "../templates/capture_packet_plug.conf.j2"
-        dest: /home/mesasoft/sapp_run/conf/capture_packet_plug.conf
+        dest: /opt/tsg/sapp/conf/capture_packet_plug.conf
       tags: firewall
   
     - name: "tsg-os-provision: Template the sapp.toml"
       template:
         src: "../templates/sapp.toml.j2"
-        dest: /home/mesasoft/sapp_run/etc/sapp.toml
+        dest: /opt/tsg/sapp/etc/sapp.toml
       tags: sapp
   
     - name: "tsg-os-provision: Templates telegraf.conf"

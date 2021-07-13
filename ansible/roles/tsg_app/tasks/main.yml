@@ -4,3 +4,8 @@
     name: "{{ tsg_app_rpm_version.app_sketch_local }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+- name: "Install app_sketch_local that is sapp plugins"
+  shell: rpm -i /tmp/rpm_download/{{ tsg_app_rpm_version.app_sketch_local }}* --prefix {{ sapp.prefix_path }}

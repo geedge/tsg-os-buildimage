@@ -1,19 +1,41 @@
 ---
-- name: "copy sapp to destination server"
-  copy:
-    src: "{{ role_path }}/files/"
-    dest: /tmp/ansible_deploy/
 
-- name: "install sapp and tcpdump_mesa rpms from localhost"
+- name: "Create directory /opt/tsg/framework and /opt/tsg/sapp if they not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0644'
+  with_items:
+    - /opt/tsg/sapp
+    - /opt/tsg/framework
+
+- name: "download sapp and tcpdump_mesa rpms from localhost"
   yum:
     name: "{{ item.value }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
   with_dict: "{{ sapp_rpm_version }}"
+
+- name: "Install sapp and tcpdump_mesa rpm package"
+  shell: rpm -i /tmp/rpm_download/{{ item.rpm_version }}* --prefix {{ item.prefix_path }}
+  with_items:
+    - {"rpm_version": "{{ sapp_rpm_version.sapp }}", "prefix_path": "{{ sapp.prefix_path }}" }
+    - {"rpm_version": "{{ sapp_rpm_version.tcpdump_mesa }}", "prefix_path": "/opt/tsg/framework" }
+
+- name: replace sapp service
+  replace:
+    path: "{{ item }}"
+    regexp: '/home/mesasoft/sapp_run'
+    replace: '/opt/tsg/sapp'
+  with_items:
+    - /usr/lib/systemd/system/sapp.service
+    - /etc/sysconfig/sapp
 
 - name: "mkdir tsgconf"
   file:
-    path: /home/mesasoft/sapp_run/tsgconf
+    path: /opt/tsg/sapp/tsgconf
     state: directory
 
 - name: Template the sapp.toml
@@ -25,19 +47,19 @@
 - name: Template the project_list.conf
   template:
     src: "{{ role_path }}/templates/project_list.conf.j2"
-    dest: /home/mesasoft/sapp_run/etc/project_list.conf
+    dest: /opt/tsg/sapp/etc/project_list.conf
   tags: template
 
 - name: Template the send_raw_pkt.conf
   template:
     src: "{{ role_path }}/templates/send_raw_pkt.conf.j2"
-    dest: /home/mesasoft/sapp_run/etc/send_raw_pkt.conf
+    dest: /opt/tsg/sapp/etc/send_raw_pkt.conf
   tags: template
 
 - name: Template the conflist.inf - tsg_9140
   template:
     src: "{{ role_path }}/templates/conflist.inf.j2.9000NPBP01R01"
-    dest: /home/mesasoft/sapp_run/plug/conflist.inf
+    dest: /opt/tsg/sapp/plug/conflist.inf
   tags: template
   when:
     - PROFILE_ID == '9000-NPB-P01R01'
@@ -53,19 +75,19 @@
 - name: Template the entrylist.conf.j2
   template:
     src: "{{ role_path }}/templates/entrylist.conf.j2"
-    dest: /home/mesasoft/sapp_run/etc/entrylist.conf
+    dest: /opt/tsg/sapp/etc/entrylist.conf
   tags: template
 
 - name: Template the asymmetric_addr_layer.conf.j2
   template:
     src: "{{ role_path }}/templates/asymmetric_addr_layer.conf.j2"
-    dest: /home/mesasoft/sapp_run/etc/asymmetric_addr_layer.conf
+    dest: /opt/tsg/sapp/etc/asymmetric_addr_layer.conf
   tags: template
 
 - name: Template the necessary_plug_list.conf - tsg_9140
   template:
     src: "{{ role_path }}/templates/necessary_plug_list.conf.j2.9000NPBP01R01"
-    dest: /home/mesasoft/sapp_run/etc/necessary_plug_list.conf
+    dest: /opt/tsg/sapp/etc/necessary_plug_list.conf
   tags: template
   when:
     - PROFILE_ID == '9000-NPB-P01R01'
@@ -81,7 +103,7 @@
 - name: Template the vlan_flipping_map.conf - tsg-9140
   template:
     src: "{{ role_path }}/templates/vlan_flipping_map.conf.j2.9000NPBP01R01"
-    dest: /home/mesasoft/sapp_run/etc/vlan_flipping_map.conf
+    dest: /opt/tsg/sapp/etc/vlan_flipping_map.conf
   tags: template
   when:
     - PROFILE_ID == '9000-NPB-P01R01'
@@ -97,7 +119,7 @@
 - name: Template the sapp_log.conf
   template:
     src: "{{ role_path }}/templates/sapp_log.conf.j2"
-    dest: /home/mesasoft/sapp_run/etc/sapp_log.conf
+    dest: /opt/tsg/sapp/etc/sapp_log.conf
   tags: template
 
 - name: Template the sapp_tmpfile.conf
@@ -115,7 +137,7 @@
 - name: Template the well_known_port.conf
   template:
     src: "{{ role_path }}/templates/well_known_port.conf.j2"
-    dest: /home/mesasoft/sapp_run/etc/well_known_port.conf
+    dest: /opt/tsg/sapp/etc/well_known_port.conf
   tags: template
 
 

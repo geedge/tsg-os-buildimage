@@ -4,3 +4,8 @@
       - "{{ tsg_master_rpm_version.tsg_master }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+- name: "Install tsg_master that is sapp plugins"
+  shell: rpm -i /tmp/rpm_download/{{ tsg_master_rpm_version.tsg_master }}* --prefix {{ sapp.prefix_path }}

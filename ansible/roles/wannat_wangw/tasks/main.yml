@@ -4,6 +4,12 @@
     name: "{{ item.value }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+  with_dict: "{{ wannat_wangw_rpm_version }}"
+
+- name: "Install wangw that is sapp plugins"
+  shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ sapp.prefix_path }}
   with_dict: "{{ wannat_wangw_rpm_version }}"
 
 - name: "Template the etc/wannat/wangw.conf"

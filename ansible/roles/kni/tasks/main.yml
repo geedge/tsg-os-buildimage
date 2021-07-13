@@ -5,11 +5,14 @@
       - "{{ kni_rpm_version.kni }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+- name: "Install kni that is sapp plugin with prefix option"
+  shell: rpm -i /tmp/rpm_download/{{ kni_rpm_version.kni }}* --prefix {{ sapp.prefix_path }}
 
 - name: Template the kni.conf
   template:
     src: "{{ role_path }}/templates/kni.conf.j2"
-    dest: /home/mesasoft/sapp_run/etc/kni/kni.conf
+    dest: /opt/tsg/sapp/etc/kni/kni.conf
   tags: template
-
-

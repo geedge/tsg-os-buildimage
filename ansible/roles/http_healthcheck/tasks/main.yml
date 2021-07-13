@@ -3,3 +3,8 @@
     name: "{{ http_healthcheck_rpm_version.http_healthcheck }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+- name: "Install http_healthcheck that is sapp plugins"
+  shell: rpm -i /tmp/rpm_download/{{ http_healthcheck_rpm_version.http_healthcheck }}* --prefix {{ sapp.prefix_path }}
