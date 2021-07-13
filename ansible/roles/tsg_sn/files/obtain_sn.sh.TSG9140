@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-output=`sshpass -p eb-20170122 ssh root@10.254.17.1 "ipmitool fru | awk 'NR==12'"`
+output=`ipmitool fru -t 130 | awk 'NR==12'`
 if [  -z "$output" ];then
     echo "{\"sn\": \"unknown\"}" > /opt/tsg/etc/tsg_sn.json
     exit 0
