@@ -26,6 +26,10 @@ ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:01:02.2",PROGRAM+="/usr/sbin/ip 
 # rename enp130s2f3 to eth_vf_ctl
 ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:00.0", NAME:="eth_pf_smbcx"
 ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:00.0",ATTR{device/sriov_numvfs}="4"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:00.0",ATTR{/device/sriov/0/max_tx_rate}="10240"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:00.0",ATTR{/device/sriov/1/max_tx_rate}="10240"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:00.0",ATTR{/device/sriov/2/max_tx_rate}="10240"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:00.0",ATTR{/device/sriov/3/max_tx_rate}="10240"
 ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.0", NAME:="eth_vf_kni"
 ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.1", NAME:="eth_vf_tfe"
 ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:82:02.2", NAME:="eth_vf_mirr"
