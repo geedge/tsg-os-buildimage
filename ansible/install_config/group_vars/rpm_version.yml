@@ -6,7 +6,7 @@ firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.2.8d6da43
   dns: dns-2.0.14.6d7e2f8
   ftp: ftp-1.0.8.13d5fda
-  fw_dns_plug: fw_dns_plug-3.0.7.604fd5d
+  fw_dns_plug: fw_dns_plug-3.0.8.06b600e
   fw_ftp_plug: fw_ftp_plug-3.0.1.0a78573
   fw_http_plug: fw_http_plug-3.2.6.36a8829
   fw_mail_plug: fw_mail_plug-3.1.1.777fa90
@@ -16,7 +16,7 @@ firewall_rpm_version:
   mail: mail-1.0.11.48abeae
   quic: quic-1.1.18.13ba53b
   ssl: ssl-2.0.2.1389716
-  tsg_conn_sketch: tsg_conn_sketch-3.0.3.fcdcd10
+  tsg_conn_sketch: tsg_conn_sketch-3.0.6.bbdb730
   rtp: rtp-1.0.4.91b4ab7
   mesa_sip: mesa_sip-1.1.2.b4bc77d
   fw_voip_plug: fw_voip_plug-1.0.6.341fe83
@@ -24,6 +24,7 @@ firewall_rpm_version:
   app_proto_engine: app_proto_engine-2.0.5.1df79c4 
   gtp: gtp-1.0.5.afa055c
   gtp_signaling_plug: gtp_signaling_plug-1.0.2.2dfced5
+  deal_socks: deal_socks-1.0.0.a5848da
 
 framework_rpm_version:
   libcjson: libcjson-1.7.10.ab2896f
@@ -39,7 +40,7 @@ framework_rpm_version:
   libwiredcfg: libwiredcfg-2.0.6.67ae0ab
   libWiredLB: libWiredLB-2.0.5.4629165
   libbreakpad_mini: libbreakpad_mini-1.0.2.a56ef00
-  libhos-client-cpp: libhos-client-cpp-2.0.1.68f7b08
+  libhos-client-cpp: libhos-client-cpp-2.0.2.0c27c77
 
 kni_rpm_version:
   kni: kni-21.05.02.d64fa9a
@@ -58,7 +59,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.0.1.157bff7
   
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.0.2.0320b4b 
+  tsg_master: tsg_master-5.0.3.e9e75ff 
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-21.03.01.39beba7
