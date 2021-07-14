@@ -4,27 +4,27 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: latest
 
-- name: "mkdir /opt/exporter/"
+- name: "mkdir /opt/tsg/exporter/"
   file:
-    path: /opt/exporter/
+    path: /opt/tsg/exporter/
     state: directory
 
 - name: "copy node_exporter"
   copy:
     src: '{{ role_path }}/files/node_exporter'
-    dest: /opt/exporter/node_exporter
+    dest: /opt/tsg/exporter/node_exporter
     mode: 0755
 
 - name: "copy systemd_exporter"
   copy:
     src: '{{ role_path }}/files/systemd_exporter'
-    dest: /opt/exporter/systemd_exporter
+    dest: /opt/tsg/exporter/systemd_exporter
     mode: 0755
 
 - name: "copy ipmi_exporter"
   copy:
     src: '{{ role_path }}/files/ipmi_exporter'
-    dest: /opt/exporter/ipmi_exporter
+    dest: /opt/tsg/exporter/ipmi_exporter
     mode: 0755
   when: PROFILE_ID != '9000-NPB-P01R01'
 
