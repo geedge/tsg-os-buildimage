@@ -12,7 +12,7 @@
   shell: rpm -i /tmp/rpm_download/{{ item.rpm_version }}* --prefix {{ item.prefix }}
   with_items:
     - { "rpm_version": "{{ wire_graft_rpm_version.wire_graft }}", "prefix": "{{ sapp.prefix_path }}" }
-    - { "rpm_version": "{{ wire_graft_rpm_version.libwire_graft }}", "prefix": "/opt/tsg/framework" }
+    - { "rpm_version": "{{ wire_graft_rpm_version.libwire_graft }}", "prefix": "{{ framework.prefix_path }}" }
 
 - name: "Template the etc/wire_graft/wire_graft.conf"
   template:

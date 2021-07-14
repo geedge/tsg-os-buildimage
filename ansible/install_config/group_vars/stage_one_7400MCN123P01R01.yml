@@ -30,3 +30,6 @@ tfe:
       type: 1
 
 cm_policy_server_ip: '{% raw %}{{ cm_policy_server_ip }}{% endraw %}'
+
+framework:
+  prefix_path: /opt/tsg/framework

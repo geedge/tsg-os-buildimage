@@ -7,7 +7,6 @@
   yum:
     name: "{{ packages }}"
     state: present
-    skip_broken: yes
   vars:
     packages:
       - /tmp/ansible_deploy/librdkafka-0.11.4-1.el7.x86_64.rpm
@@ -18,7 +17,20 @@
     name: "{{ item.value }}"
     state: present
     conf_file: "{{ rpm_repo_config_path }}"
+    download_only: yes
+    download_dir: /tmp/rpm_download/
   with_dict: "{{ framework_rpm_version }}"
+
+- name: "Install frameworks except libmaatframe and libcjson"
+  shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ framework.prefix_path }}
+  when: item.key != 'libcjson' and item.key != 'libmaatframe'
+  with_dict: "{{ framework_rpm_version }}"
+
+- name: "Install frameworks only libmaatframe and libcjson"
+  shell: rpm -i /tmp/rpm_download/{{ item }}* --prefix {{ framework.prefix_path }}/lib
+  with_items:
+    - "{{ framework_rpm_version.libcjson }}"
+    - "{{ framework_rpm_version.libmaatframe }}"
 
 - name: "mkdir /etc/ld.so.conf.d/"
   file:

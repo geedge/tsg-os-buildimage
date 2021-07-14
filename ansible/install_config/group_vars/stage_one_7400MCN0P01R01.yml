@@ -80,4 +80,7 @@ wire_graft:
     main:
       identification_by_which_device: eth_ctl
     toroad:
-      sendto_toroad_enable: 1   
+      sendto_toroad_enable: 1
+
+framework:
+  prefix_path: /opt/tsg/framework

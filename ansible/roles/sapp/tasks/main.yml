@@ -22,7 +22,7 @@
   shell: rpm -i /tmp/rpm_download/{{ item.rpm_version }}* --prefix {{ item.prefix_path }}
   with_items:
     - {"rpm_version": "{{ sapp_rpm_version.sapp }}", "prefix_path": "{{ sapp.prefix_path }}" }
-    - {"rpm_version": "{{ sapp_rpm_version.tcpdump_mesa }}", "prefix_path": "/opt/tsg/framework" }
+    - {"rpm_version": "{{ sapp_rpm_version.tcpdump_mesa }}", "prefix_path": "{{ framework.prefix_path }}" }
 
 - name: replace sapp service
   replace:
