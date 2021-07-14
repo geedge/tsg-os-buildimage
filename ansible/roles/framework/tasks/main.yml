@@ -5,12 +5,12 @@
 
 - name: "install framework packages by rpm packages"
   yum:
-    name: "{{ packages }}"
+    name: "{{ item }}"
     state: present
-  vars:
-    packages:
-      - /tmp/ansible_deploy/librdkafka-0.11.4-1.el7.x86_64.rpm
-      - /tmp/ansible_deploy/lz4-1.7.5-3.el7.x86_64.rpm
+    conf_file: "{{ rpm_repo_config_path }}"
+  with_items:
+    - librdkafka
+    - lz4
 
 - name: "install framework packages"
   yum:
