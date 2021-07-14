@@ -6,7 +6,7 @@ firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.2.8d6da43
   dns: dns-2.0.14.6d7e2f8
   ftp: ftp-1.0.8.13d5fda
-  fw_dns_plug: fw_dns_plug-3.0.8.06b600e
+  fw_dns_plug: fw_dns_plug-3.0.9.fdeb3ee
   fw_ftp_plug: fw_ftp_plug-3.0.1.0a78573
   fw_http_plug: fw_http_plug-3.2.7.ab20b13
   fw_mail_plug: fw_mail_plug-3.1.1.777fa90
@@ -24,7 +24,7 @@ firewall_rpm_version:
   app_proto_engine: app_proto_engine-2.0.5.1df79c4 
   gtp: gtp-1.0.5.afa055c
   gtp_signaling_plug: gtp_signaling_plug-1.0.2.2dfced5
-  deal_socks: deal_socks-1.0.0.a5848da
+  deal_socks: deal_socks-1.0.2.379a897
 
 framework_rpm_version:
   libcjson: libcjson-1.7.10.ab2896f
