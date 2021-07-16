@@ -40,7 +40,7 @@ framework_rpm_version:
   libwiredcfg: libwiredcfg-2.0.6.67ae0ab
   libWiredLB: libWiredLB-2.0.5.4629165
   libbreakpad_mini: libbreakpad_mini-1.0.2.a56ef00
-  libhos-client-cpp: libhos-client-cpp-2.0.2.0c27c77
+  libhos-client-cpp: libhos-client-cpp-2.0.3.a3cbaeb
 
 kni_rpm_version:
   kni: kni-21.05.02.d64fa9a
