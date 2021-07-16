@@ -115,7 +115,7 @@
     - name: "tsg-os-provision: template mrglobal.conf file"
       template:
         src: "../templates/mrglobal.conf.j2"
-        dest: /opt/mrzcpd/etc/mrglobal.conf
+        dest: /opt/tsg/mrzcpd/etc/mrglobal.conf
       tags: mrzcpd
 
     - name: "tsg-os-provision: template certstore configure file"

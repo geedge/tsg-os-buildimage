@@ -32,6 +32,7 @@ mrzcpd:
       nic_to_tfe: eth_vf_kni
     service:
       iocore: 52,53,54,55
+  prefix_path: /opt/tsg/mrzcpd
 
 sapp:
   gdev_conf:

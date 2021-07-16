@@ -40,6 +40,7 @@ mrzcpd:
       nic_mcn3: eth_mcn3
     service:
       iocore: 52,53,54,55
+  prefix_path: /opt/tsg/mrzcpd
 
 sapp:
   gdev_conf:

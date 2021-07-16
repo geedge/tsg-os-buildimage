@@ -1,14 +1,38 @@
 ---
-- name: "install mrzcpd"
+- name: "download mrzcpd rpm into local /tmp/rpm_download"
   yum:
     name: "{{ mrzcpd_rpm_version.mrzcpd }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+- name: "Install mrzcpd rpm package"
+  shell: rpm -i /tmp/rpm_download/{{ mrzcpd_rpm_version.mrzcpd }}* --prefix {{ mrzcpd.prefix_path }}
+
+- name: "update /etc/ld.so.conf.d/mrzcpd.conf"
+  template:
+    src: "{{ role_path }}/templates/mrzcpd.conf.j2"
+    dest: /etc/ld.so.conf.d/mrzcpd.conf
 
 - name: "update sysconfig/mrzcpd"
   template:
     src: "{{ role_path }}/templates/mrzcpd.j2"
     dest: /etc/sysconfig/mrzcpd
+
+- name: "replace action: replace /opt/mrzcpd to /opt/tsg/mrzcpd"
+  replace:
+    path: "{{ item }}"
+    regexp: '/opt/mrzcpd'
+    replace: '{{ mrzcpd.prefix_path }}'
+  with_items:
+    - /etc/profile.d/mrzcpd.sh
+    - /opt/tsg/mrzcpd/lib/pkgconfig/mrzcpd.pc
+    - /usr/lib/systemd/system/mrapm_device.service
+    - /usr/lib/systemd/system/mrapm_stream.service
+    - /usr/lib/systemd/system/mrenv.service
+    - /usr/lib/systemd/system/mrtunnat.service
+    - /usr/lib/systemd/system/mrzcpd.service
 
 - name: "Create /usr/lib/systemd/system/mrzcpd.service.d directory if it does not exist"
   file:
@@ -41,7 +65,7 @@
 - name: "update mrglobal.conf - TSG7400 - mcn1 mcn2 mcn3"
   template:
     src: "{{ role_path }}/templates/mrglobal.conf.j2.7400MCN123P01R01"
-    dest: /opt/mrzcpd/etc/mrglobal.conf
+    dest: /opt/tsg/mrzcpd/etc/mrglobal.conf
   when:
     - PROFILE_ID == '7400-MCN123-P01R01'
 

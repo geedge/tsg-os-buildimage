@@ -6,7 +6,8 @@ mrzcpd:
     device:
       nic_mirr: eth_mirr_d
     service:
-      iocore: 53,54 
+      iocore: 53,54
+  prefix_path: /opt/tsg/mrzcpd
 
 tfe:
   tfe_env_config:
