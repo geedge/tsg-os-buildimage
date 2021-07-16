@@ -21,6 +21,8 @@ locak_package_to_install="$projectdir/package/kernel-lt-$kernel_version.rpm
                           $projectdir/package/kernel-lt-devel-$kernel_version.rpm"
 
 setopt="group_package_types=mandatory,default,optional"
+
+yum -c "$yum_config" --installroot="$target" -y makecache
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt localinstall $locak_package_to_install
 
