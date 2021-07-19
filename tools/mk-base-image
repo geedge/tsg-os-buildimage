@@ -15,7 +15,7 @@ set -ex
 
 package_to_install="@base @core @debugging @directory-client @guest-agents
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management
-                    grub2 epel-release efibootmgr ansible yum-utils ipmitool docker-ce docker-ce-cli containerd.io lrzsz python3 vconfig watchdog pcm"
+                    grub2 epel-release efibootmgr ansible yum-utils ipmitool docker-ce docker-ce-cli containerd.io lrzsz python3 vconfig watchdog pcm git"
 
 locak_package_to_install="$projectdir/package/kernel-lt-$kernel_version.rpm
                           $projectdir/package/kernel-lt-devel-$kernel_version.rpm"
@@ -25,6 +25,12 @@ setopt="group_package_types=mandatory,default,optional"
 yum -c "$yum_config" --installroot="$target" -y makecache
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt localinstall $locak_package_to_install
+
+#git clone --depth 1 https://github.com/brendangregg/FlameGraph.git /opt/tools/FlameGraph/
+#git clone --depth 1 https://github.com/brendangregg/perf-tools.git /opt/tools/perf-tools/
+test -d "$target"/opt/tools/ || mkdir -p "$target"/opt/tools/
+tar -zxf $projectdir/tools/FlameGraph.tar.gz -C "$target"/opt/tools/
+tar -zxf $projectdir/tools/perf-tools.tar.gz -C "$target"/opt/tools/
 
 cat > "$target"/etc/sysconfig/network <<EOF
 NETWORKING=yes
