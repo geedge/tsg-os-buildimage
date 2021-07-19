@@ -1,0 +1,28 @@
+---
+# 安装 tsg 9140 exporter proxy
+- name: "mkdir /opt/tsg/exporter"
+  file:
+    path: /opt/tsg/exporter
+    state: directory
+
+- name: "unarchive exporter-proxy(NGINX)"
+  unarchive:
+    src: "{{role_path}}/files/exporter-proxy.tar.gz"
+    dest: /opt/tsg/exporter
+
+- name: "templates exporter-proxy.service"
+  template:
+    src: "{{role_path}}/templates/exporter-proxy.service.j2"
+    dest: /usr/lib/systemd/system/exporter-proxy.service
+  tags: template
+
+- name: "template nginx.conf"
+  template:
+    src: "{{role_path}}/templates/nginx.conf.j2"
+    dest: /opt/tsg/exporter/exporter-proxy/conf/nginx.conf
+  tags: template
+
+- name: 'exporter-proxy service start'
+  systemd:
+    name: exporter-proxy
+    enabled: yes
