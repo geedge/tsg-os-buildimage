@@ -31,6 +31,7 @@ ln -sf /usr/bin/grub2-editenv /usr/bin/grub-editenv
 
 rm -rf /data/overlay/rootfs_var/rw/lib/rpm
 rm -rf /data/overlay/rootfs_var/rw/lib/docker
+rm -rf /data/overlay/rootfs_etc/rw/ld.so.conf.d
 
 # Setup o/s mount points
 (cat <<EOF2

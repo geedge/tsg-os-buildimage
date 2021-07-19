@@ -65,11 +65,14 @@ cp -a /dev/zero $target/dev/
 cp -a /dev/urandom $target/dev/
 cp -a /dev/random $target/dev/
 
+
 # install ONIE helpers
 chmod 0755 $projectdir/rootconf/sysroot-bin/*
 chmod 0755 $projectdir/rootconf/sysroot-lib/*
 cp -rf $projectdir/rootconf/sysroot-bin/* $target/bin/
 cp -rf $projectdir/rootconf/sysroot-lib/* $target/lib/
+cp -rf $projectdir/rootconf/sysroot-usr/service/* $target/usr/lib/systemd/system
+ln -vfs --relative  $target/usr/lib/systemd/system/ldconfig.service $target/usr/lib/systemd/system/sysinit.target.wants/ldconfig.service
 
 # ansible-playbook -i tsg-9140-scripts/install_config/tsg_9140_host tsg-9140-scripts/tsg_9140_deploy.yml
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
