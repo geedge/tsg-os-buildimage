@@ -47,3 +47,9 @@
     src: "{{ role_path }}/files/maat_redis_tool"
     dest: /opt/MESA/bin/
     mode: 0755
+
+- name: "copy framework.sh to destination for execute files of framework"
+  copy:
+    src: "{{ role_path }}/files/framework.sh"
+    dest: /etc/profile.d/
+    mode: 0755
