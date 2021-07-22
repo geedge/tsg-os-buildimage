@@ -106,4 +106,7 @@ BROKER_PORT="{{ app_sketch.broker.port }}"
 {% endraw %}
 
 [APP_PROTO_ENGINE]
+nb_workers=60000
+classification_cache_enable=2
+basic_dpi_enable=1
 license_path=/data/app_proto_engine/license
