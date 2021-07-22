@@ -11,7 +11,7 @@ vlan-strip=1
 {% raw %}in_addr=10.253.{{ keepalive_subnet_ip }}.1
 {% endraw %}
 in_mask=255.255.0.0
-rssmode=0
+rssmode=2
 
 [device:{{ mrzcpd.mrglobal_conf.device.nic_to_tfe }}]
 mtu=4096
@@ -24,7 +24,7 @@ vlan-pvid-mode=2
 hw_strip_crc=1
 sz_tunnel=8192
 sz_buffer=0
-rssmode=0
+rssmode=2
 
 [service]
 # lcore id for i/o service, use comma to split
