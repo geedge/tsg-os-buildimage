@@ -215,6 +215,11 @@
     name: watchdog
     enabled: yes
 
+- name: "enable irqbalance"
+  systemd:
+    name: irqbalance
+    enabled: yes
+
 # 关闭DHCPDISCOVER
 - name: "set 90-9000-dracut.rules"
   template:
