@@ -1,1 +1,5 @@
-d /var/log/sapp         	    0755 - -   2d -
+#Type Path        Mode User Group Age Argument
+d /var/log/sapp/                0755 - -   2d -
+d /run/sapp/alerts_files/       0755 - -   2d -
+L /opt/tsg/sapp/log             - - - -   /var/log/sapp
+L /opt/tsg/sapp/alerts_files  	- - - -   /run/sapp/alerts_files

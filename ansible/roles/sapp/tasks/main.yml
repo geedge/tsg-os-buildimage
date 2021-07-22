@@ -125,7 +125,7 @@
 - name: Template the sapp_tmpfile.conf
   template:
     src: "{{ role_path }}/templates/sapp_tmpfile.conf.j2"
-    dest: /etc/tmpfiles.d/sapp_tmpfile.conf
+    dest: /usr/lib/tmpfiles.d/sapp_tmpfile.conf
   tags: template
 
 - name: Template the gdev.conf
