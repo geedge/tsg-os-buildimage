@@ -12,6 +12,8 @@ mkdir -p /data/overlay/rootfs_etc/rw
 mkdir -p /data/overlay/rootfs_etc/work
 mkdir -p /data/overlay/rootfs_var/rw
 mkdir -p /data/overlay/rootfs_var/work
+mkdir -p /data/overlay/rootfs_home/rw
+mkdir -p /data/overlay/rootfs_home/work
 
 #provision path
 mkdir -p /data/tsg-os-provision
@@ -46,6 +48,7 @@ ${1}               	    /                       ext4    defaults        1 1
 /dev/sda5               /data                   ext4    defaults        1 1
 overlay                 /etc                    overlay x-systemd.requires=/,x-systemd.requires=/data,lowerdir=/etc,upperdir=/data/overlay/rootfs_etc/rw,workdir=/data/overlay/rootfs_etc/work 0 0
 overlay                 /var                    overlay x-systemd.requires=/,x-systemd.requires=/data,lowerdir=/var,upperdir=/data/overlay/rootfs_var/rw,workdir=/data/overlay/rootfs_var/work 0 0
+overlay                 /home                   overlay x-systemd.requires=/,x-systemd.requires=/data,lowerdir=/home,upperdir=/data/overlay/rootfs_home/rw,workdir=/data/overlay/rootfs_home/work 0 0
 EOF2
 ) > /etc/fstab
 
