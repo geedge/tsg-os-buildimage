@@ -40,8 +40,9 @@ devpts                  /dev/pts                devpts  gid=5,mode=620  0 0
 sysfs                   /sys                    sysfs   defaults        0 0
 proc                    /proc                   proc    defaults        0 0
 ${1}               	    /                       ext4    defaults        1 1
-/dev/sda4               /data                   ext4    defaults        1 1
 /dev/sda2               /mnt/onie-boot/         ext4    defaults        1 1
+/dev/sda3               /update                 ext4    defaults        1 1
+/dev/sda5               /data                   ext4    defaults        1 1
 overlay                 /etc                    overlay x-systemd.requires=/,x-systemd.requires=/data,lowerdir=/etc,upperdir=/data/overlay/rootfs_etc/rw,workdir=/data/overlay/rootfs_etc/work 0 0
 overlay                 /var                    overlay x-systemd.requires=/,x-systemd.requires=/data,lowerdir=/var,upperdir=/data/overlay/rootfs_var/rw,workdir=/data/overlay/rootfs_var/work 0 0
 EOF2

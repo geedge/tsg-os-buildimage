@@ -3,7 +3,7 @@
 blk_dev=/dev/sda
 random_dev=/dev/urandom
 root_disk=hd0
-distro_part=3
+distro_part=4
 distro_dev="${blk_dev}${distro_part}"
 distro_mnt=/mnt/distro
 onie_root_dir=/mnt/onie-boot/onie
@@ -13,15 +13,23 @@ grub_serial_command="%%GRUB_SERIAL_COMMAND%%"
 DISTR0_VER="%%DISTR0_VER%%"
 MACHINE_ID="%%MACHINE_ID%%"
 CHROOT_PKG="%%CHROOT_PKG%%"
+
+size_part_tsg_os_update="%%SIZE_PART_UPDATE%%"
 size_part_tsg_os_sysroot="%%SIZE_PART_SYSROOT%%"
 size_part_tsg_os_data="%%SIZE_PART_DATA%%"
 
+vol_label_tsg_os_update="TSG-OS-UPDATE"
 vol_label_tsg_os_sysroot="TSG-OS-SYSROOT"
 vol_label_tsg_os_data="TSG-OS-DATA"
-exp_part_tsg_os_sysroot=3
-exp_part_tsg_os_data=4
+
+exp_part_tsg_os_update=3
+exp_part_tsg_os_sysroot=4
+exp_part_tsg_os_data=5
+
+dev_part_tsg_os_update="/dev/sda${exp_part_tsg_os_update}"
 dev_part_tsg_os_sysroot="/dev/sda${exp_part_tsg_os_sysroot}"
 dev_part_tsg_os_data="/dev/sda${exp_part_tsg_os_data}"
+
 tsg_os_efi_prefix="TSG-OS"
 tsg_os_efi_label="TSG-OS: v${DISTR0_VER} (${MACHINE_ID})"
 
@@ -34,17 +42,26 @@ fi
 
 check_is_upgrade()
 {
+  part_tsg_os_update=$(sgdisk -p $blk_dev | grep -e "$vol_label_tsg_os_update" | awk '{print $1}')
   part_tsg_os_sysroot=$(sgdisk -p $blk_dev | grep -e "$vol_label_tsg_os_sysroot" | awk '{print $1}')
   part_tsg_os_data=$(sgdisk -p $blk_dev | grep -e "$vol_label_tsg_os_data" | awk '{print $1}')
 
-  if [ "$part_tsg_os_sysroot" != "$exp_part_tsg_os_sysroot" ]; then return 1
+  if [ "$part_tsg_os_update"  != "$exp_part_tsg_os_update" ]; then return 1
+  elif [ "$part_tsg_os_sysroot" != "$exp_part_tsg_os_sysroot" ]; then return 1
   elif [ "$part_tsg_os_data" != "$exp_part_tsg_os_data" ]; then return 1
   fi
   return 0
 }
 
+format_update_partitions() {
+  mkfs.ext4 -L "TGS-OS-UPDATE" $dev_part_tsg_os_update || {
+    echo "ERROR: Unable to create file system on \$dev_part_tsg_os_update"
+    exit 1
+  }
+}
+
 format_sysroot_partitions() {
-  mkfs.ext4 -L "TGS-OS-SYSROOT-1" $dev_part_tsg_os_sysroot || {
+  mkfs.ext4 -L "TGS-OS-SYSROOT" $dev_part_tsg_os_sysroot || {
     echo "ERROR: Unable to create file system on \$dev_part_tsg_os_sysroot"
     exit 1
   }
@@ -66,6 +83,14 @@ create_gpt_partitions() {
 
   partprobe ${blk_dev}
 
+  echo "Create partition TSG-OS-UPDATE."
+  begin=$(sgdisk -F $blk_dev)
+  sgdisk --new=${exp_part_tsg_os_update}:${begin}:+${size_part_tsg_os_update} \
+         --change-name=${exp_part_tsg_os_update}:"TSG-OS-UPDATE" ${blk_dev} || {
+        echo "ERROR: Unable to create partition TSG-OS-UPDATE on $blk_dev"
+        exit 1
+  }
+
   echo "Create partition TSG-OS-SYSROOT."
   begin=$(sgdisk -F $blk_dev)
   sgdisk --new=${exp_part_tsg_os_sysroot}:${begin}:+${size_part_tsg_os_sysroot} \
@@ -76,7 +101,9 @@ create_gpt_partitions() {
 
   echo "Create partition TSG-OS-DATA."
   begin=$(sgdisk -F $blk_dev)
-  sgdisk --new=${exp_part_tsg_os_data}:${begin}:+${size_part_tsg_os_data} \
+  end=$(sgdisk -E $blk_dev)
+
+  sgdisk --new=${exp_part_tsg_os_data}:${begin}:${end} \
          --change-name=${exp_part_tsg_os_data}:"TSG-OS-DATA" ${blk_dev} || {
         echo "ERROR: Unable to create partition TSG-OS-DATA on $blk_dev"
         exit 1
@@ -191,6 +218,11 @@ else
 
    format_presistent_partitions || {
        echo "ERROR: Unable to format presistent partitions on $blk_dev, TSG-OS install failed."
+       exit 1
+   }
+
+    format_update_partitions || {
+       echo "ERROR: Unable to format update partitions on $blk_dev, TSG-OS install failed."
        exit 1
    }
 fi
