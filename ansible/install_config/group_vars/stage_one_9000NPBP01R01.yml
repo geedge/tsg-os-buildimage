@@ -42,8 +42,8 @@ sapp:
   sapp_toml:
     CPU:
       worker_threads: 24
-      send_only_threads_max: 1
-      bind_mask: 14,15,16,17,18,19,20,21,22,23,24,25,26,27,42,43,44,45,46,47,48,49,50,51,0
+      send_only_threads_max: 0
+      bind_mask: 14,15,16,17,18,19,20,21,22,23,24,25,26,27,42,43,44,45,46,47,48,49,50,51
     PACKET_IO:
       packet_io_internal_interface:
         name: eth_vf_raw
