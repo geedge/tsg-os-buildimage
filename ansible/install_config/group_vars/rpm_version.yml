@@ -20,7 +20,7 @@ firewall_rpm_version:
   rtp: rtp-1.0.4.91b4ab7
   mesa_sip: mesa_sip-1.1.2.b4bc77d
   fw_voip_plug: fw_voip_plug-1.0.6.341fe83
-  app_proto_identify: app_proto_identify-2.0.2.55a9520
+  app_proto_identify: app_proto_identify-2.0.3.24b4595
   app_proto_engine: app_proto_engine-2.0.5.1df79c4 
   gtp: gtp-1.0.5.afa055c
   gtp_signaling_plug: gtp_signaling_plug-1.0.2.2dfced5
@@ -28,7 +28,7 @@ firewall_rpm_version:
 
 framework_rpm_version:
   libcjson: libcjson-1.7.10.ab2896f
-  libdocumentanalyze: libdocumentanalyze-2.0.6.2d1abe0
+  libdocumentanalyze: libdocumentanalyze-2.0.7.eb1f13b
   libmaatframe: libmaatframe-3.4.2.479eb77
   libMESA_field_stat: libMESA_field_stat-1.0.2.6d45eed
   libMESA_field_stat2: libMESA_field_stat2-2.9.10.72ac4f1
