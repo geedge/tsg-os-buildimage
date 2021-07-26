@@ -43,7 +43,7 @@ framework_rpm_version:
   libhos-client-cpp: libhos-client-cpp-2.0.4.d775b9d
 
 kni_rpm_version:
-  kni: kni-21.07.02.8cff5b2
+  kni: kni-21.07.03.7431a68
 
 mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.4.8.566081c
