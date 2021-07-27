@@ -74,6 +74,14 @@ cp -rf $projectdir/rootconf/sysroot-lib/* $target/lib/
 cp -rf $projectdir/rootconf/sysroot-usr/service/* $target/usr/lib/systemd/system
 ln -vfs --relative  $target/usr/lib/systemd/system/ldconfig.service $target/usr/lib/systemd/system/sysinit.target.wants/ldconfig.service
 
+#tty audit using pam
+mv $target/etc/pam.d/system-auth $target/etc/pam.d/system-auth-local
+mv $target/etc/pam.d/password-auth $target/etc/pam.d/password-auth-local
+echo "session     required      pam_tty_audit.so  enable=*" >> $target/etc/pam.d/system-auth-local
+echo "session     required      pam_tty_audit.so  enable=*" >> $target/etc/pam.d/password-auth-local
+ln -vfs --relative $target/etc/pam.d/system-auth-local $target/etc/pam.d/system-auth
+ln -vfs --relative $target/etc/pam.d/password-auth-local $target/etc/pam.d/password-auth
+
 # ansible-playbook -i tsg-9140-scripts/install_config/tsg_9140_host tsg-9140-scripts/tsg_9140_deploy.yml
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
 

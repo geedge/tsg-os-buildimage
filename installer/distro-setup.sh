@@ -2,19 +2,19 @@
 
 # Create default user: user,admin,support
 echo "Setting user user password as user"
-useradd -s /bin/bash -m -k /dev/null user
+useradd -s /bin/bash -m user
 echo user | passwd user --stdin
 #echo "user    ALL=(ALL)       ALL" >> /etc/sudoers
 echo user | passwd --stdin
 
 echo "Setting user admin password as admin"
-useradd -s /bin/bash -m -k /dev/null admin
+useradd -s /bin/bash -m admin
 echo admin | passwd admin --stdin
 echo "admin    ALL=(ALL)       ALL" >> /etc/sudoers
 echo admin | passwd --stdin
 
 echo "Setting user support password as support"
-useradd -s /bin/bash -m -k /dev/null support
+useradd -s /bin/bash -m support
 echo support | passwd support --stdin
 echo "support    ALL=(ALL)       ALL" >> /etc/sudoers
 echo support | passwd --stdin
@@ -49,11 +49,6 @@ rm -rf /data/overlay/rootfs_etc/rw/ld.so.conf.d
 
 # Setup o/s mount points
 (cat <<EOF2
-tmpfs                   /tmp                    tmpfs   defaults        0 0
-tmpfs                   /dev/shm                tmpfs   defaults        0 0
-devpts                  /dev/pts                devpts  gid=5,mode=620  0 0
-sysfs                   /sys                    sysfs   defaults        0 0
-proc                    /proc                   proc    defaults        0 0
 ${1}               	    /                       ext4    defaults        1 1
 /dev/sda2               /mnt/onie-boot/         ext4    defaults        1 1
 /dev/sda3               /update                 ext4    defaults        1 1
