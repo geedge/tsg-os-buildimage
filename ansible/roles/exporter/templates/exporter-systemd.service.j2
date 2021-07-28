@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/opt/exporter/systemd_exporter --web.disable-exporter-metrics
+ExecStart=/opt/exporter/systemd_exporter --web.disable-exporter-metrics --collector.unit-blacklist=.*\.socket|systemd-fsck@.*\.service|-\.slice
 Restart=always
 
 [Install]
