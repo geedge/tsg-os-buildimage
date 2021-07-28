@@ -5,10 +5,28 @@ enable_kni_v2=0
 enable_kni_v3=1
 
 # Only when (disable_coredump == 1 || (enable_breakpad == 1 && enable_breakpad_upload == 1)) is satisfied, the core will not be generated locally
+
+{% raw %}{% if coredump.format == 'none' %}
+disable_coredump=1
+enable_breakpad=0
+enable_breakpad_upload=0
+{% endif %}
+{% if coredump.format == 'core' %}
 disable_coredump=0
+enable_breakpad=0
+enable_breakpad_upload=0
+{% endif %}
+{% if coredump.format == 'minidump' %}
+disable_coredump=1
 enable_breakpad=1
+{% if coredump.collect == 'sentry' %}
 enable_breakpad_upload=1
-{% raw %}breakpad_upload_url={{ sentry_url }}
+breakpad_upload_url={{ coredump.sentry_url }}
+{% endif %}
+{% if coredump.collect == 'local' %}
+enable_breakpad_upload=0
+{% endif %}
+{% endif %}
 {% endraw %}
 # must be /run/tfe/crashreport，due to tmpfile limit
 breakpad_minidump_dir=/run/tfe/crashreport
