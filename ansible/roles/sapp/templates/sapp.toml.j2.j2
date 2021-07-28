@@ -207,14 +207,14 @@ dictator_enable=1
     enable_breakpad=1
 {% if coredump.collect == 'sentry' %}
     enable_breakpad_upload=1
-    breakpad_upload_url={{ coredump.sentry_url }}
+    breakpad_upload_url="{{ coredump.sentry_url }}"
 {% endif %}
 {% if coredump.collect == 'local' %}
     enable_breakpad_upload=0
 {% endif %}
 {% endif %}
 {% endraw %}
-    breakpad_minidump_dir="/tmp/crashreport"
+    breakpad_minidump_dir="/run/sapp/crashreport"
 
 ### note:
 ### These configurations format is complex and difficult to describe with toml grammar,
