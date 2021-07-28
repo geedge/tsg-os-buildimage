@@ -7,12 +7,24 @@ stream_project_tag_enable=1
 at_least_total_num=2
 at_least_total_byte=10
 
+#是否将link_info存入streaminfo,供其他插件读取
+stream_project_tag_enable=1
+
 #用于标识本机ip使用哪块网卡,可能是管理口,可能是其他业务口
 identification_by_which_device={{ wire_graft.wire_graft_conf.main.identification_by_which_device}}
 
 #mirror镜像模式下, 从MAC地址获取链路信息
-mirror_mode_enable=0
+### note, for example, dst mac is 01:12:34:56:78:90, src src is 02:AA:BB:CC:DD:EE:FF, 
+### ether[0] is 0x01, dst mac first octet, ether[1] is 0x12, dst mac second octet,
+### ether[6] is 0x02, src mac first octet, ether[11] is 0xFF, src mac sixth octet.
+### the bit field is from 0 to 7, the 0 is least significant bit, the 7 is most significant bit.
+mirror_get_linkinfo_enable=0
 mirror_linkinfo_project_name=mirror_linkinfo_from_mac
+
+mirror_linkinfo_device_syntax="mac[11]:0-7"
+mirror_linkinfo_slot_syntax="mac[9]:0-7"
+mirror_linkinfo_port_syntax="mac[10]:0-7"
+mirror_linkinfo_dir_syntax="mac[4]:7-7"
 
 [toroad]
 sendto_toroad_enable={{ wire_graft.wire_graft_conf.toroad.sendto_toroad_enable }}

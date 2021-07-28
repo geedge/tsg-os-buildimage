@@ -2,14 +2,14 @@
 #在线模式用vxlan, 测试模式用ethernet, 即标准ethernet/IP协议
 NAT_GW_tunnel_mode=vxlan
 
-#本地监听端口
-NAT_GW_tunnel_recv_port={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_recv_port }}
-
-#DNAT首包发送给NATGW时, 对端的监听端口
-NAT_GW_tunnel_send_port={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_send_port }}
+#从起始位置开始, 本地监听sapp->threa_cound个端口, 支持多线程NIO无锁模式
+recvfrom_NATGW_bind_first_port={{ wannat_wangw.wangw_conf.main.recvfrom_NATGW_bind_first_port }}
 
 #NAT GW的内部互联网卡名称
 NAT_GW_tunnel_device={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_device }}
+
+#DNAT首包发送给NATGW时, 对端的监听端口
+NAT_GW_tunnel_port={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_send_port }}
 
 #NAT GW的内部互联IP地址, 端口使用vxlan默认值, 要求对方也开放UDP 4789端口
 {% raw %}NAT_GW_tunnel_ip={{ wannat_natgw.natgw_ip }}
