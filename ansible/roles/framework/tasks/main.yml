@@ -45,7 +45,7 @@
 - name: "copy maat_redis_tool to destination"
   copy:
     src: "{{ role_path }}/files/maat_redis_tool"
-    dest: /opt/MESA/bin/
+    dest: /opt/tsg/framework/bin/
     mode: 0755
 
 - name: "copy framework.sh to destination for execute files of framework"
