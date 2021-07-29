@@ -29,6 +29,7 @@ tfe:
       enable: 1
       device: eth_mirr_d
       type: 1
+      default_vlan_id_for_mac: 0
 
 cm_policy_server_ip: '{% raw %}{{ cm_policy_server_ip }}{% endraw %}'
 

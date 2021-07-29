@@ -175,10 +175,10 @@ statsd_set_prometheus_url_path=/metrics
 [traffic_mirror]
 enable={{ tfe.tfe_conf.traffic_mirror.enable }}
 device={{ tfe.tfe_conf.traffic_mirror.device }}
-type={{ tfe.tfe_conf.traffic_mirror.type }}
-
 # 0:TRAFFIC_MIRROR_ETHDEV_AF_PACKET; 1:TRAFFIC_MIRROR_ETHDEV_MARSIO
-type=0
+type={{ tfe.tfe_conf.traffic_mirror.type }}
+default_vlan_id_for_mac={{ tfe.tfe_conf.traffic_mirror.default_vlan_id_for_mac }}
+
 table_info=resource/pangu/table_info_traffic_mirror.conf
 stat_file=log/traffic_mirror.status
 

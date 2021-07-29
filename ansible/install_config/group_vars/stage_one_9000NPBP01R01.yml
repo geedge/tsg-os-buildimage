@@ -54,6 +54,7 @@ sapp:
     nic_name: eth_vf_raw
   prefix_path: /opt/tsg/sapp
 
+# “default_vlan_id_for_mac” needs to be modified according to the vlan plan of the device 
 tfe:
   tfe_env_config:
     TFE_DEVICE_DATA_INCOMING: eth_vf_tfe
@@ -71,9 +72,10 @@ tfe:
     kafka:
       NIC_NAME: eth_vf_ctl
     traffic_mirror:
-      enable: 0
-      device: lo
-      type: 0
+      enable: 1
+      device: eth_vf_mirr
+      type: 1
+      default_vlan_id_for_mac: 300
 
 tsg_diagnose:
   docker_compose_yml:
