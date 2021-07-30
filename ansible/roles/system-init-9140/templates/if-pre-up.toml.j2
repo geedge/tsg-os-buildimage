@@ -7,6 +7,7 @@ then
   logger "$0 called for interface named $INF with $STA ..."
   case "$INF" in
           eth_pf_mgmt0) logger "Setting $STA $INF ipaddr ..."; /sbin/setup.eth_pf_mgmt0.ips $INF $STA;;
+          eth_pf_mgmt1) logger "Setting $STA $INF ipaddr ..."; /sbin/setup.eth_pf_mgmt1.ips $INF $STA;;
           eth_vf_tfe) logger "Setting $STA $INF RPS ..."; /sbin/setup.eth_vf_tfe.ips $INF $STA;;
   esac
 fi

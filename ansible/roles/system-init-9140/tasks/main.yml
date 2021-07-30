@@ -81,6 +81,13 @@
     mode: 0777
   tags: template
 
+- name: "copy eth_pf_mgmt1.ips cfg"
+  template:
+    src: "{{ role_path }}/templates/setup.eth_pf_mgmt1.ips.toml.j2"
+    dest: /sbin/setup.eth_pf_mgmt1.ips
+    mode: 0777
+  tags: template
+
 - name: "copy setup.eth_vf_tfe.ips"
   template:
     src: "{{ role_path }}/templates/setup.eth_vf_tfe.ips.toml.j2"
