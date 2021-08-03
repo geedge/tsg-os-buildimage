@@ -8,7 +8,7 @@ mtu=4096
 clear_tx_flags=1
 hw_strip_crc=1
 vlan-strip=1
-{% raw %}in_addr=10.253.{{ keepalive_subnet_ip }}.1
+{% raw %}in_addr=10.252.{{ keepalive_subnet_ip }}.1
 {% endraw %}
 in_mask=255.255.0.0
 rssmode=2
