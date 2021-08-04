@@ -20,7 +20,7 @@ firewall_rpm_version:
   rtp: rtp-1.0.4.91b4ab7
   mesa_sip: mesa_sip-1.1.2.b4bc77d
   fw_voip_plug: fw_voip_plug-1.0.6.341fe83
-  app_proto_identify: app_proto_identify-2.0.3.24b4595
+  app_proto_identify: app_proto_identify-2.0.4.8251758
   app_proto_engine: app_proto_engine-2.0.7.1945009  
   gtp: gtp-1.0.5.afa055c
   gtp_signaling_plug: gtp_signaling_plug-1.0.2.2dfced5
@@ -39,7 +39,7 @@ framework_rpm_version:
   libtsglua: libtsglua-1.0.8.0dbf2e6
   libwiredcfg: libwiredcfg-2.0.6.67ae0ab
   libWiredLB: libWiredLB-2.0.5.4629165
-  libbreakpad_mini: libbreakpad_mini-1.0.3.ac8e1ae
+  libbreakpad_mini: libbreakpad_mini-1.0.4.12fee8c
   libhos-client-cpp: libhos-client-cpp-2.0.4.d775b9d
 
 kni_rpm_version:

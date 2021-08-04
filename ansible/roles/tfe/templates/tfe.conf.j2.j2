@@ -30,6 +30,7 @@ enable_breakpad_upload=0
 {% endraw %}
 # must be /run/tfe/crashreport，due to tmpfile limit
 breakpad_minidump_dir=/run/tfe/crashreport
+breakpad_upload_tools=/opt/tsg/framework/bin/minidump_upload
 
 # ask for at least (1 + nr_worker_threads) masks
 # the first  mask for acceptor thread

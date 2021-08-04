@@ -26,7 +26,8 @@ RUN_LOG_PATH = "conf/zlog.conf"
 {% endif %}
 {% endif %}
 {% endraw %}
-    breakpad_minidump_dir="/run/certstore/crashreport "
+    breakpad_minidump_dir="/run/certstore/crashreport"
+    breakpad_upload_tools="/opt/tsg/framework/bin/minidump_upload"
 [CONFIG]
 #Number of running threads
 thread-nu = 4
