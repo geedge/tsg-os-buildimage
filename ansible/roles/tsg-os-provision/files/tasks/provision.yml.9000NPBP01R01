@@ -43,6 +43,12 @@
       set_fact:
         keepalive_subnet_ip: "{{ result_exec_obtain_keepalive_subnet.stdout_lines[0] }}"
 
+    - name: "tsg-os-provision: Template the conflist.inf"
+      template:
+        src: ../templates/conflist.inf.j2
+        dest: /opt/tsg/sapp/plug/conflist.inf
+      tags: sapp
+
     - name: "tsg-os-provision: template gdev.conf file"
       template:
         src: "../templates/gdev.conf.j2"

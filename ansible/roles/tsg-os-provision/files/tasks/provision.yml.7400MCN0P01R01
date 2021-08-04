@@ -94,12 +94,6 @@
         dest: /opt/tsg/sapp/plug/conflist.inf
       tags: sapp
 
-    - name: "tsg-os-provision: necessary_plug_list.conf"
-      template:
-        src: ../templates/necessary_plug_list.conf.j2
-        dest: /opt/tsg/sapp/etc/necessary_plug_list.conf
-      tags: sapp
-
     - name: "tsg-os-provision: vlan_flipping_map.conf"
       template:
         src: ../templates/vlan_flipping_map.conf.j2

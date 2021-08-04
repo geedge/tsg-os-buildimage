@@ -34,3 +34,20 @@ cache:
   hos:
     address: "127.0.0.1"
     port: 9090
+
+firewall:
+  enable: 0/1
+
+proxy:
+  enable: 0/1
+
+connsketch:
+  enable: 0/1
+
+capturepacket:
+  enable: 0/1
+
+app:
+  identify_by:
+    user_defined_signature: 0/1
+    builtin_app_engine: 0/1
