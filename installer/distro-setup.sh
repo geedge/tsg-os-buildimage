@@ -2,21 +2,21 @@
 
 # Create default user: user,admin,support
 echo "Setting user user password as user"
-useradd -s /bin/bash -m user
+useradd -G systemd-journal -s /bin/bash -m user
 echo user | passwd user --stdin
 #echo "user    ALL=(ALL)       ALL" >> /etc/sudoers
 echo user | passwd --stdin
 
 echo "Setting user admin password as admin"
-useradd -s /bin/bash -m admin
+useradd -G systemd-journal -s /bin/bash -m admin
 echo admin | passwd admin --stdin
-echo "admin    ALL=(ALL)       ALL" >> /etc/sudoers
+echo "%admin    ALL=(ALL)       ALL" >> /etc/sudoers
 echo admin | passwd --stdin
 
 echo "Setting user support password as support"
-useradd -s /bin/bash -m support
+useradd -G systemd-journal -s /bin/bash -m support
 echo support | passwd support --stdin
-echo "support    ALL=(ALL)       ALL" >> /etc/sudoers
+echo "%support    ALL=(ALL)       ALL" >> /etc/sudoers
 echo support | passwd --stdin
 
 # prepare overlayfs
