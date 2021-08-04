@@ -98,7 +98,7 @@ LOG_PATH="./tsglog/app_sketch_local/app_sketch_local"
 SENDBACK_SWITCH=0
 
 [APP_SKETCH_FEEDBACK]
-QOS=1
+QOS=0
 PUBLISH_TOPIC="APP_SIGNATURE_ID"
 #CLIENT_ID=
 {% raw %}BROKER_IP="{{ app_sketch.broker.address }}"
@@ -110,3 +110,8 @@ nb_workers=60000
 classification_cache_enable=2
 basic_dpi_enable=1
 license_path=/data/app_proto_engine/license
+
+[TRAFFIC_MIRROR]
+TRAFFIC_MIRROR_ENABLE=1
+NIC_NAME=eth_vf_mirr
+DEFAULT_VLAN_ID=2

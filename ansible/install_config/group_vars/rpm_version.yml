@@ -2,20 +2,20 @@ certstore_rpm_version:
   certstore: certstore-2.1.8.20210604.8077136
 
 firewall_rpm_version:
-  capture_packet_plug: capture_packet_plug-3.0.6.a2db4a4
+  capture_packet_plug: capture_packet_plug-3.1.1.6f324e7
   conn_telemetry: conn_telemetry-1.0.2.8d6da43
   dns: dns-2.0.14.6d7e2f8
   ftp: ftp-1.0.8.13d5fda
   fw_dns_plug: fw_dns_plug-3.0.9.fdeb3ee
-  fw_ftp_plug: fw_ftp_plug-3.0.1.0a78573
-  fw_http_plug: fw_http_plug-3.2.8.41427e3
-  fw_mail_plug: fw_mail_plug-3.1.1.777fa90
+  fw_ftp_plug: fw_ftp_plug-3.1.0.6d367b3
+  fw_http_plug: fw_http_plug-4.0.0.a78765f
+  fw_mail_plug: fw_mail_plug-4.0.0.38c39d7
   fw_quic_plug: fw_quic_plug-3.0.4.947ef77
-  fw_ssl_plug: fw_ssl_plug-3.1.4.98b76c9
+  fw_ssl_plug: fw_ssl_plug-3.2.0.ec688a9
   http: http-2.0.5.c61ad9a
   mail: mail-1.0.11.48abeae
   quic: quic-1.1.18.13ba53b
-  ssl: ssl-2.0.2.1389716
+  ssl: ssl-2.0.3.44bcfa8
   tsg_conn_sketch: tsg_conn_sketch-3.0.15.710e7e7
   rtp: rtp-1.0.4.91b4ab7
   mesa_sip: mesa_sip-1.1.2.b4bc77d
@@ -49,17 +49,17 @@ mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.4.8.566081c
 
 sapp_rpm_version:
-  sapp: sapp-4.2.43.3177ff9
+  sapp: sapp-4.2.44.ce0dfaf
   tcpdump_mesa: tcpdump_mesa-1.0.6.faa4eba
 
 tfe_rpm_version:
   tfe: tfe-4.5.8.be8de2e
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-4.0.2.d0ba885
+  app_sketch_local: app_sketch_local-4.1.0.5c5b968
   
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.0.4.95b0519 
+  tsg_master: tsg_master-5.1.5.36397f5 
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-21.03.01.39beba7
