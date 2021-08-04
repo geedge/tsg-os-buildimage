@@ -21,6 +21,13 @@
     dest: /opt/tsg/exporter/systemd_exporter
     mode: 0755
 
+- name: "copy redis_exporter"
+  copy:
+    src: '{{ role_path }}/files/redis_exporter'
+    dest: /opt/tsg/exporter/redis_exporter
+    mode: 0755
+  when: PROFILE_ID == '7400-MCN0-P01R01'
+
 - name: "copy ipmi_exporter"
   copy:
     src: '{{ role_path }}/files/ipmi_exporter'
