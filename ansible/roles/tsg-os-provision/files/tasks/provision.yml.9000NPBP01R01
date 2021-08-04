@@ -73,12 +73,6 @@
         dest: /opt/tsg/sapp/tsgconf/maat.conf
       tags: firewall
   
-    - name: "tsg-os-provision: Template the conf/capture_packet_plug.conf"
-      template:
-        src: "../templates/capture_packet_plug.conf.j2"
-        dest: /opt/tsg/sapp/conf/capture_packet_plug.conf
-      tags: firewall
-  
     - name: "tsg-os-provision: Template the sapp.toml"
       template:
         src: "../templates/sapp.toml.j2"
