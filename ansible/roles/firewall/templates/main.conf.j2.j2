@@ -111,7 +111,9 @@ classification_cache_enable=2
 basic_dpi_enable=1
 license_path=/data/app_proto_engine/license
 
+{% if PROFILE_ID == '9000-NPB-P01R01' %}
 [TRAFFIC_MIRROR]
 TRAFFIC_MIRROR_ENABLE=1
 NIC_NAME=eth_vf_mirr
 DEFAULT_VLAN_ID=2
+{% endif %}
