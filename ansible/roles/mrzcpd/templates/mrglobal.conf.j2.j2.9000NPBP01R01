@@ -30,6 +30,7 @@ rssmode=2
 mtu=2048
 hw_strip_crc=1
 rssmode=2
+vlan-strip=1
 
 [service]
 # lcore id for i/o service, use comma to split
