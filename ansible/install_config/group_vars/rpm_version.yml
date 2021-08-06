@@ -42,7 +42,7 @@ framework_rpm_version:
   libWiredLB: libWiredLB-2.0.5.4629165
   libbreakpad_mini: libbreakpad_mini-1.0.4.12fee8c
   libhos-client-cpp: libhos-client-cpp-2.0.4.d775b9d
-  libMV_Sketch: libMV_Sketch-1.0.4.20210806.ca0cfa0
+  libMV_Sketch: libMV_Sketch-1.0.5.20210806.187f45c
 
 kni_rpm_version:
   kni: kni-21.07.03.7431a68
