@@ -1,0 +1,12 @@
+[Coredump]
+{% if coredump.format == 'core' %}
+Storage=external
+{% else %}
+Storage=none
+{% endif %}
+Compress=no
+ProcessSizeMax=128G
+ExternalSizeMax=128G
+JournalSizeMax=128G
+MaxUse=50
+KeepFree=50

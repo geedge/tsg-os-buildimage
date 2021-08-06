@@ -72,6 +72,8 @@ chmod 0755 $projectdir/rootconf/sysroot-lib/*
 cp -rf $projectdir/rootconf/sysroot-bin/* $target/bin/
 cp -rf $projectdir/rootconf/sysroot-lib/* $target/lib/
 cp -rf $projectdir/rootconf/sysroot-usr/service/* $target/usr/lib/systemd/system
+cp -rf $projectdir/rootconf/sysroot-usr/sysctl/* $target/usr/lib/sysctl.d/
+
 ln -vfs --relative  $target/usr/lib/systemd/system/ldconfig.service $target/usr/lib/systemd/system/sysinit.target.wants/ldconfig.service
 
 #tty audit using pam

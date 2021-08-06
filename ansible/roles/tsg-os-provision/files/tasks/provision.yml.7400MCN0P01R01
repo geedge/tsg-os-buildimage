@@ -198,6 +198,16 @@
         - maat-redis
         - maat-redis-exporter
 
+    - name: "tsg-os-provision: coredump setup override - mkdir"
+      file:
+        path: /usr/lib/systemd/coredump.conf.d/
+        state: directory
+
+    - name: "tsg-os-provision: coredump setup override - override"
+      template:
+        src: "../templates/coredump_setup_override.conf.j2"
+        dest: /usr/lib/systemd/coredump.conf.d/coredump_setup_override.conf
+
     - name: "tsg-os-provision: snapshot the stage2 config files"
       copy:
         src: /data/tsg-os-provision/provision.yml
