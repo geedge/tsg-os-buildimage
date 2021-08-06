@@ -106,10 +106,10 @@ BROKER_PORT="{{ app_sketch.broker.port }}"
 {% endraw %}
 
 [APP_PROTO_ENGINE]
+debug_swtich=30
 nb_workers=60000
 classification_cache_enable=2
 basic_dpi_enable=1
-license_path=/data/app_proto_engine/license
 
 {% if PROFILE_ID == '9000-NPB-P01R01' %}
 [TRAFFIC_MIRROR]

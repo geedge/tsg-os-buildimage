@@ -30,9 +30,6 @@ mkdir -p /data/overlay/rootfs_home/work
 #provision path
 mkdir -p /data/tsg-os-provision
 
-# app_proto_engine's license
-mkdir -p /data/app_proto_engine/license
-
 # presistent journald
 mkdir -p /var/log/journal
 
