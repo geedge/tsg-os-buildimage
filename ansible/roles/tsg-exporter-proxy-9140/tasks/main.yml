@@ -22,6 +22,20 @@
     dest: /opt/tsg/exporter/exporter-proxy/conf/nginx.conf
   tags: template
 
+- name: "Create /usr/lib/systemd/system/exporter-proxy.service.d/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/exporter-proxy.service.d
+
+- name: "copy slice file to exporter-proxy.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_override_slice.conf.j2"
+    dest: /usr/lib/systemd/system/exporter-proxy.service.d/service_override_slice.conf
+    mode: 0644
+
 - name: 'exporter-proxy service start'
   systemd:
     name: exporter-proxy
