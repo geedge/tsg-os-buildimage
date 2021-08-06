@@ -6,6 +6,9 @@
 {% if app.identify_by.builtin_app_engine == 1 %}
 ./plug/platform/app_proto_engine/app_proto_engine.inf
 {% endif %}
+{% if ddossketch.enable == 1 %}
+./plug/platform/tsg_flow_record/tsg_flow_record.inf
+{% endif %}
 {% endraw %}
 
 [protocol]

@@ -47,6 +47,9 @@ connsketch:
 capturepacket:
   enable: 0/1
 
+ddossketch:
+  enable: 0/1
+
 app:
   identify_by:
     user_defined_signature: 0/1
