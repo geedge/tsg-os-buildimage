@@ -46,6 +46,9 @@ connsketch:
 
 capturepacket:
   enable: 0/1
+  
+wannat:
+  enable: 0/1  
 
 ddossketch:
   enable: 0/1

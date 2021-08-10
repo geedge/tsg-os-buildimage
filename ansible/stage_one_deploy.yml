@@ -70,3 +70,5 @@
     - {role: tsg-exporter-proxy-9140, tags: tsg-exporter-proxy-9140}
     - {role: system-init-9140, tags: system-init-9140}
     - {role: system-init, tags: system-init}
+    - {role: wannat_wangw, tags: wannat_wangw}
+    - {role: wire_graft, tags: wire_graft}    
