@@ -90,12 +90,12 @@ wannat_wangw:
     main:
       recvfrom_NATGW_bind_first_port: 3545
       NAT_GW_tunnel_send_port: 3544
-      NAT_GW_tunnel_device: eth_ctl
+      NAT_GW_tunnel_device: eth_vf_ctl
 
 wire_graft:
   wire_graft_conf:
     main:
-      identification_by_which_device: eth_ctl
+      identification_by_which_device: eth_vf_ctl
     toroad:
       sendto_toroad_enable: 1
 
