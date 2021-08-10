@@ -114,6 +114,18 @@
         dest: /opt/tsg/etc/tsg_device_tag.json
       tags: tsg_device_tag
 
+    - name: "tsg-os-provision: template wannat wangw.conf file"
+      template:
+        src: "../templates/wangw.conf.j2"
+        dest: /opt/tsg/sapp/etc/wannat/wangw.conf
+      tags: wangw
+
+    - name: "tsg-os-provision: template wire_graft.conf file"
+      template:
+        src: "../templates/wire_graft.conf.j2"
+        dest: /opt/tsg/sapp/etc/wire_graft/wire_graft.conf
+      tags: wire_graft
+
     - name: "tsg-os-provision: coredump setup override - mkdir"
       file:
         path: /usr/lib/systemd/coredump.conf.d/

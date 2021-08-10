@@ -85,5 +85,19 @@ tsg_diagnose:
 
 cm_policy_server_ip: '{% raw %}{{ cm.policy_server.address }}{% endraw %}'
 
+wannat_wangw:
+  wangw_conf:
+    main:
+      recvfrom_NATGW_bind_first_port: 3545
+      NAT_GW_tunnel_send_port: 3544
+      NAT_GW_tunnel_device: eth_ctl
+
+wire_graft:
+  wire_graft_conf:
+    main:
+      identification_by_which_device: eth_ctl
+    toroad:
+      sendto_toroad_enable: 1
+
 framework:
   prefix_path: /opt/tsg/framework
