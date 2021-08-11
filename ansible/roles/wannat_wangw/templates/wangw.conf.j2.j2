@@ -1,4 +1,6 @@
 [main]
+#接收来自natgw的数据包模式: udp_socket, udp_multi_thread, marsio
+NAT_GW_io_mode=udp_multi_thread
 #在线模式用vxlan, 测试模式用ethernet, 即标准ethernet/IP协议
 NAT_GW_tunnel_mode=vxlan
 
@@ -15,14 +17,11 @@ NAT_GW_tunnel_port={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_send_port }}
 {% raw %}NAT_GW_tunnel_ip={{ wannat_natgw.natgw_ip }}
 {% endraw %}
 
-#接收来自NAT GW的包, 需要创建sapp的独立发包线程, 目前暂时只支持1个.
-I2E_independent_thread_num=1
 
-#重复流量识别
-duplicate_pkt_prune=1
 
-[pkt_dump]
-command_port=9346
+
+
+
 
 [session]
 #最大并发连接数 
