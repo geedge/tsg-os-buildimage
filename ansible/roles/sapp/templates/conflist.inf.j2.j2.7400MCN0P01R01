@@ -3,7 +3,7 @@
 ./plug/platform/wire_graft/wire_graft.inf
 ./plug/platform/app_proto_identify/app_proto_identify.inf
 ./plug/platform/tsg_master/tsg_master.inf
-./plug/platform/app_proto_engine/app_proto_engine.inf
+#./plug/platform/app_proto_engine/app_proto_engine.inf
 
 [protocol]
 ./plug/protocol/mesa_sip/mesa_sip.inf
