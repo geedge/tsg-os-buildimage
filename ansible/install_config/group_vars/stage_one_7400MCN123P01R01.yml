@@ -6,7 +6,7 @@ mrzcpd:
     device:
       nic_mirr: eth_mirr_d
     service:
-      iocore: 53,54 
+      iocore: 46,47 
 
 tfe:
   tfe_env_config:
