@@ -16,6 +16,7 @@ coredump:
 data_center:
   name: City instance
   id: 1
+  device_seq: 1
 
 
 olap:
