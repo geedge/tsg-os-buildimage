@@ -23,14 +23,7 @@
 
 - name: "Install frameworks except libmaatframe and libcjson"
   shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ framework.prefix_path }}
-  when: item.key != 'libcjson' and item.key != 'libmaatframe'
   with_dict: "{{ framework_rpm_version }}"
-
-- name: "Install frameworks only libmaatframe and libcjson"
-  shell: rpm -i /tmp/rpm_download/{{ item }}* --prefix {{ framework.prefix_path }}/lib
-  with_items:
-    - "{{ framework_rpm_version.libcjson }}"
-    - "{{ framework_rpm_version.libmaatframe }}"
 
 - name: "mkdir /etc/ld.so.conf.d/"
   file:
