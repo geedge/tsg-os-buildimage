@@ -97,15 +97,14 @@ hos_request_num=1000
 [APP_SKETCH_LOCAL]
 LOG_LEVEL=30
 LOG_PATH="./tsglog/app_sketch_local/app_sketch_local"
-SENDBACK_SWITCH=1
+SENDBACK_SWITCH=0
 
 [APP_SKETCH_FEEDBACK]
 QOS=0
 PUBLISH_TOPIC="APP_SIGNATURE_ID"
 #CLIENT_ID=
-{% raw %}BROKER_IP="{{ app_sketch.broker.address }}"
-BROKER_PORT="{{ app_sketch.broker.port }}"
-{% endraw %}
+#BROKER_IP=
+#BROKER_PORT=
 
 [APP_PROTO_ENGINE]
 debug_swtich=30

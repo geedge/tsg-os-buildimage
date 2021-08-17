@@ -43,11 +43,6 @@ olap:
     address: "127.0.0.1"
     port: 9098
 
-app_sketch:
-  broker:
-    address: "127.0.0.1"
-    port: 1883
-
 app:
   identify_by:
     user_defined_signature: 0/1
