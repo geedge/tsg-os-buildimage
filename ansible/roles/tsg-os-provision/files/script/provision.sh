@@ -6,6 +6,11 @@ hosts_path=/opt/tsg/tsg-os-provision/hosts
 provision_path=/opt/tsg/tsg-os-provision/tasks/provision.yml
 version_file_path=/usr/lib/os-release
 present_version_file_path=/data/tsg-os-provision/.os-release.present
+convertor_script_path=/opt/tsg/tsg-os-provision/convertor.sh
+
+execute_provision_convert_action(){
+    /opt/tsg/tsg-os-provision/convertor.sh    
+}
 
 execute_provision_action(){
     ansible-playbook -i ${hosts_path} ${provision_path} -e "var_files_path=${config_path}"
@@ -25,5 +30,5 @@ execute_provision_action(){
 #    execute_provision_action
 #    exit 0
 #fi
-
+execute_provision_convert_action
 execute_provision_action

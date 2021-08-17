@@ -72,11 +72,6 @@
     mode: 0644
   when: PROFILE_ID == '7400-MCN123-P01R01'
 
-- name: "tsg-os-provision: copy tsg-os-provision-convertor.service file to dest"
-  copy:
-    src: "{{ role_path }}/files/service/tsg-os-provision-convertor.service"
-    dest: /usr/lib/systemd/system/tsg-os-provision-convertor.service
-    mode: 0644
 
 - name: "tsg-os-provision: copy tsg-os-provision.service file to dest"
   copy:
@@ -86,17 +81,19 @@
 
 - name: "tsg-os-provision: copy provision.sh file to dest"
   copy:
-    src: "{{ role_path }}/files/script/provision.sh"
-    dest: /opt/tsg/tsg-os-provision/provision.sh
+    src: "{{ role_path }}/files/script/{{ item }}"
+    dest: /opt/tsg/tsg-os-provision/
     mode: 0755
+  with_items:
+    - provision.sh
+    - convertor.sh
 
-- name: "tsg-os-provision: enable tsg-os-provison and tsg-os-provison-convertor"
+- name: "tsg-os-provision: enable tsg-os-provison"
   systemd:
     name: "{{ item }}"
     enabled: yes
   with_items:
     - tsg-os-provision
-    - tsg-os-provision-convertor
 
 - name: "tsg-os-provision: install yaml module using pip3"
   pip:
