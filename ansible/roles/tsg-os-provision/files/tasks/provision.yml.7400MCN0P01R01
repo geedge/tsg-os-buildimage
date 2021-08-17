@@ -6,11 +6,11 @@
     - name: "template setup_policy_log_nic_network.sh"
       template:
         src: ../templates/setup_policy_log_nic_network.sh.j2
-        dest: /data/tsg-os-provision/setup_policy_log_nic_network.sh
+        dest: /opt/tsg/tsg-os-provision/exec/setup_policy_log_nic_network.sh
         mode: 0755
 
     - name: "execute setup_policy_log_nic_network.sh"
-      shell: /data/tsg-os-provision/setup_policy_log_nic_network.sh
+      shell: /opt/tsg/tsg-os-provision/exec/setup_policy_log_nic_network.sh
       register: result_exec_setup_policy_log_nic_network
 
     - name: "Output results that executes command that gets the result_exec_setup_policy_log_nic_network"
