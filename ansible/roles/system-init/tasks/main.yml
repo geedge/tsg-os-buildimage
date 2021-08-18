@@ -4,11 +4,6 @@
     name: sshd
     enabled: yes
 
-- name: "enable ntpd"
-  systemd:
-    name: ntpd
-    enabled: yes
-
 - name: "set sshd UseDns no"
   shell: sed -i 's/#UseDNS yes/UseDNS no/g' /etc/ssh/sshd_config
 
