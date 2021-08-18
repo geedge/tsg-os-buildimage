@@ -36,8 +36,8 @@
 
 - name: Template the conflist.inf - tsg_9140
   template:
-    src: "{{ role_path }}/templates/conflist.inf.j2.9000NPBP01R01"
-    dest: /home/mesasoft/sapp_run/plug/conflist.inf
+    src: "{{ role_path }}/templates/conflist.inf.j2.j2.9000NPBP01R01"
+    dest: /opt/tsg/tsg-os-provision/templates/conflist.inf.j2
   tags: template
   when:
     - PROFILE_ID == '9000-NPB-P01R01'

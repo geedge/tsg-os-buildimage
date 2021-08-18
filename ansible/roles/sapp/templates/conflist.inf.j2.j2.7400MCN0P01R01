@@ -1,9 +1,16 @@
 [platform]
+{% raw %}{% if wannat.enable == 1 %}
 ./plug/platform/wannat/wangw.inf
 ./plug/platform/wire_graft/wire_graft.inf
+{% endif %}
+{% if connsketch.enable == 1 %}
 ./plug/platform/app_proto_identify/app_proto_identify.inf
+{% endif %}
 ./plug/platform/tsg_master/tsg_master.inf
-#./plug/platform/app_proto_engine/app_proto_engine.inf
+{% if app.identify_by.builtin_app_engine == 1 %}
+./plug/platform/app_proto_engine/app_proto_engine.inf
+{% endif %}
+{% endraw %}
 
 [protocol]
 ./plug/protocol/mesa_sip/mesa_sip.inf
@@ -18,9 +25,16 @@
 ./plug/protocol/gtp/gtp.inf
 
 [business]
+{% raw %}{% if connsketch.enable == 1 %}
 ./plug/business/tsg_conn_sketch/tsg_conn_sketch.inf
+{% endif %}
+{% if capturepacket.enable == 1 %}
 ./plug/business/capture_packet_plug/capture_packet_plug.inf
+{% endif %}
+{% if proxy.enable == 1 %}
 ./plug/business/kni/kni.inf
+{% endif %}
+{% if firewall.enable == 1 %}
 ./plug/business/fw_ssl_plug/fw_ssl_plug.inf
 ./plug/business/fw_http_plug/fw_http_plug.inf
 ./plug/business/fw_dns_plug/fw_dns_plug.inf
@@ -28,11 +42,14 @@
 ./plug/business/fw_ftp_plug/fw_ftp_plug.inf
 ./plug/business/fw_quic_plug/fw_quic_plug.inf
 ./plug/business/fw_voip_plug/fw_voip_plug.inf
-./plug/business/conn_telemetry/conn_telemetry.inf
-./plug/business/app_sketch_local/app_sketch_local.inf
 ./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
-./plug/business/deal_socks/deal_socks.inf
-{% raw %}{% if npb_device == 'tera' %}
+./plug/business/deal_socks/deal_socks.inf 
+{% endif %}
+./plug/business/conn_telemetry/conn_telemetry.inf
+{% if app.identify_by.user_defined_signature == 1 %}
+./plug/business/app_sketch_local/app_sketch_local.inf
+{% endif %}
+{% if npb_device == 'tera' %}
 ./plug/business/http_healthcheck/http_healthcheck.inf
 {% endif %}
 {% endraw %}

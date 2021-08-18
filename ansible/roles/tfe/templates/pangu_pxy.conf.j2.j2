@@ -7,8 +7,8 @@ en_sendlog=1
 entrance_id=0
 
 #Addresses of hos, Bucket name in hos. Format is defined by WiredLB.
-{% raw %}cache_ip_list = {{ cache.hos.address }}
-cache_listen_port = {{ cache.hos.port }}
+{% raw %}cache_ip_list = {{ olap.hos_server.address }}
+cache_listen_port = {{ olap.hos_server.port }}
 {% endraw %}
 cache_bucket_name=hos/proxy_hos_bucket
 cache_token=c21f969b5f03d33d43e04f8f136e7682

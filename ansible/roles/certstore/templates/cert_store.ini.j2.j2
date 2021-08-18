@@ -4,12 +4,29 @@ DEBUG_SWITCH = 1
 RUN_LOG_PATH = "conf/zlog.conf"
 
 [breakpad]
-disable_coredump=0
-enable_breakpad=1
-breakpad_minidump_dir=/tmp/certstore/crashreport
-enable_breakpad_upload=1
-{% raw %}breakpad_upload_url= {{ sentry_url }}
+{% raw %}{% if coredump.format == 'none' %}
+    disable_coredump=1
+    enable_breakpad=0
+    enable_breakpad_upload=0
+{% endif %}
+{% if coredump.format == 'core' %}
+    disable_coredump=0
+    enable_breakpad=0
+    enable_breakpad_upload=0
+{% endif %}
+{% if coredump.format == 'minidump' %}
+    disable_coredump=1
+    enable_breakpad=1
+{% if coredump.collect == 'sentry' %}
+    enable_breakpad_upload=1
+    breakpad_upload_url={{ coredump.sentry_url }}
+{% endif %}
+{% if coredump.collect == 'local' %}
+    enable_breakpad_upload=0
+{% endif %}
+{% endif %}
 {% endraw %}
+    breakpad_minidump_dir="/run/certstore/crashreport"
 [CONFIG]
 #Number of running threads
 thread-nu = 4
