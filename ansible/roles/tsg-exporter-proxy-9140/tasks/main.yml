@@ -36,6 +36,15 @@
     dest: /usr/lib/systemd/system/exporter-proxy.service.d/service_override_slice.conf
     mode: 0644
 
+- name: "replace action: replace service WantedBy from multi-user.target to workload.target"
+  replace:
+    path: "{{ item }}"
+    regexp: 'WantedBy=multi-user.target'
+    replace: 'WantedBy=workload.target'
+  with_items:
+    - /usr/lib/systemd/system/exporter-proxy.service
+  when: PROFILE_ID == '9000-NPB-P01R01'
+
 - name: 'exporter-proxy service start'
   systemd:
     name: exporter-proxy

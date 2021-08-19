@@ -52,3 +52,11 @@
     src: "{{ role_path }}/files/service_override_prestart.conf"
     dest: /usr/lib/systemd/system/tsg-diagnose.service.d/
     mode: 0644
+
+- name: "replace action: replace service WantedBy from multi-user.target to workload.target"
+  replace:
+    path: "{{ item }}"
+    regexp: 'WantedBy=multi-user.target'
+    replace: 'WantedBy=workload.target'
+  with_items:
+    - /usr/lib/systemd/system/tsg-diagnose.service

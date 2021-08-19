@@ -74,6 +74,15 @@
     dest: /usr/lib/systemd/system/tfe.service.d/service_override_slice.conf
     mode: 0644
 
+- name: "replace action: replace service WantedBy from multi-user.target to workload.target"
+  replace:
+    path: "{{ item }}"
+    regexp: 'WantedBy=multi-user.target'
+    replace: 'WantedBy=workload.target'
+  with_items:
+    - /usr/lib/systemd/system/tfe-env.service
+    - /usr/lib/systemd/system/tfe.service
+
 ##################### tfe #####################
 - name: "enable tfe-env"
   systemd:

@@ -1,0 +1,6 @@
+[Unit]
+Description=TSG workload
+Requires=basic.target multi-user.target
+Conflicts=rescue.service rescue.target
+After=basic.target rescue.service rescue.target multi-user.target
+AllowIsolate=yes

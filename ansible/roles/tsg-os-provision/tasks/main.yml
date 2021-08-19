@@ -1,3 +1,6 @@
+- name: "set system default.target"
+  shell: ln -vfs /usr/lib/systemd/system/workload.target /etc/systemd/system/default.target
+
 - name: "tsg-os-provision: build tsg-os-provision directory and sub directory"
   file:
     path: "{{ item }}"
@@ -73,12 +76,6 @@
   when: PROFILE_ID == '7400-MCN123-P01R01'
 
 
-- name: "tsg-os-provision: copy tsg-os-provision.service file to dest"
-  copy:
-    src: "{{ role_path }}/files/service/tsg-os-provision.service"
-    dest: /usr/lib/systemd/system/tsg-os-provision.service
-    mode: 0644
-
 - name: "tsg-os-provision: copy provision.sh file to dest"
   copy:
     src: "{{ role_path }}/files/script/{{ item }}"
@@ -88,12 +85,70 @@
     - provision.sh
     - convertor.sh
 
-- name: "tsg-os-provision: enable tsg-os-provison"
+- name: "install tsg-os-provision.service -- TSG7400"
+  copy:
+    src: "{{ role_path }}/files/service/{{ item.src }}"
+    dest: /usr/lib/systemd/system/{{ item.dest }}
+    mode: 0644
+  with_items:
+    - { "src": tsg-os-provision.service.TSG7400, "dest": tsg-os-provision.service }
+  when: PROFILE_ID == '7400-MCN0-P01R01' or PROFILE_ID == '7400-MCN123-P01R01'
+
+- name: "replace action: replace service WantedBy from multi-user.target to workload-pre.target --TSG7400"
+  replace:
+    path: "{{ item }}"
+    regexp: 'WantedBy=multi-user.target'
+    replace: 'RequiredBy=workload-pre.target'
+  with_items:
+    - /usr/lib/systemd/system/tsg-os-provision.service
+  when: PROFILE_ID == '7400-MCN0-P01R01' or PROFILE_ID == '7400-MCN123-P01R01'
+
+- name: "tsg-os-provision: enable tsg-os-provison -- TSG7400"
   systemd:
     name: "{{ item }}"
     enabled: yes
   with_items:
     - tsg-os-provision
+  when: PROFILE_ID == '7400-MCN0-P01R01' or PROFILE_ID == '7400-MCN123-P01R01'
+
+- name: "install tsg-os-provision.service -- TSG9140"
+  copy:
+    src: "{{ role_path }}/files/service/{{ item.src }}"
+    dest: /usr/lib/systemd/system/{{ item.dest }}
+    mode: 0644
+  with_items:
+    - { "src": tsg-os-provision.service.TSG9140, "dest": tsg-os-provision.service }
+  when: PROFILE_ID == '9000-NPB-P01R01'
+
+- name: "replace action: add service into sysinit.target --TSG9140"
+  shell: ln -vfs --relative /usr/lib/systemd/system/{{item}} /usr/lib/systemd/system/sysinit.target.wants/{{item}}
+  with_items:
+    - tsg-os-provision.service
+  when: PROFILE_ID == '9000-NPB-P01R01'
+
+##### tsg-os-provison-guard.service enable start###################
+- name: "tsg-os-provision: tsg-os-provision-guard.service to dest"
+  copy:
+    src: "{{ role_path }}/files/service/tsg-os-provision-guard.service.TSG9140"
+    dest: /usr/lib/systemd/system/tsg-os-provision-guard.service
+    mode: 0644
+  when: PROFILE_ID == '9000-NPB-P01R01'
+
+- name: "tsg-os-provision: tsg-os-provision-guard.sh to dest"
+  copy:
+    src: "{{ role_path }}/files/script/guard.sh"
+    dest: /opt/tsg/tsg-os-provision/exec/
+    mode: 0755
+  when: PROFILE_ID == '9000-NPB-P01R01'
+
+- name: "tsg-os-provision: enable tsg-os-provision-guard.service"
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+  with_items:
+    - tsg-os-provision-guard.service
+  when: PROFILE_ID == '9000-NPB-P01R01'
+##### tsg-os-provison-guard.service enable end###################
 
 - name: "tsg-os-provision: install yaml module using pip3"
   pip:

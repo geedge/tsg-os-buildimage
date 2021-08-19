@@ -35,6 +35,14 @@
     dest: /usr/lib/systemd/system/telegraf_statistic.service.d/service_override_slice.conf
     mode: 0644
 
+- name: "replace action: replace service WantedBy from multi-user.target to workload.target"
+  replace:
+    path: "{{ item }}"
+    regexp: 'WantedBy=multi-user.target'
+    replace: 'WantedBy=workload.target'
+  with_items:
+    - /usr/lib/systemd/system/telegraf_statistic.service
+
 ##################### telegraf #####################
 
 - name: "disable telegraf"

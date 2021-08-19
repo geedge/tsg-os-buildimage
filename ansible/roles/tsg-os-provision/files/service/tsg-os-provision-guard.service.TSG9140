@@ -1,0 +1,10 @@
+[Unit]
+Description=Tsg os provision guard
+
+[Service]
+ExecStart=/bin/sh -c "/opt/tsg/tsg-os-provision/exec/guard.sh"
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+RequiredBy=workload-pre.target

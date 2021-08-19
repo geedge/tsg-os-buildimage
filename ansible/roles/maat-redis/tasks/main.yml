@@ -43,3 +43,12 @@
     src: "{{ role_path }}/templates/maat-redis.conf.j2.j2"
     dest: /opt/tsg/tsg-os-provision/templates/maat-redis.conf.j2
   tags: template
+
+- name: "replace action: replace service WantedBy from multi-user.target to workload.target"
+  replace:
+    path: "{{ item }}"
+    regexp: 'WantedBy=multi-user.target'
+    replace: 'WantedBy=workload.target'
+  with_items:
+    - /usr/lib/systemd/system/maat-redis.service
+    - /usr/lib/systemd/system/maat-redis-exporter.service

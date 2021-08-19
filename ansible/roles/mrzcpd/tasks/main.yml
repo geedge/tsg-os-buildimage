@@ -69,6 +69,18 @@
   when:
     - PROFILE_ID == '7400-MCN123-P01R01'
 
+- name: "replace action: replace service WantedBy from multi-user.target to workload.target"
+  replace:
+    path: "{{ item }}"
+    regexp: 'WantedBy=multi-user.target'
+    replace: 'WantedBy=workload.target'
+  with_items:
+    - /usr/lib/systemd/system/mrapm_device.service
+    - /usr/lib/systemd/system/mrapm_stream.service
+    - /usr/lib/systemd/system/mrenv.service
+    - /usr/lib/systemd/system/mrtunnat.service
+    - /usr/lib/systemd/system/mrzcpd.service
+
 ##################### mrzcpd #####################
 - name: "enable mrenv"
   systemd:

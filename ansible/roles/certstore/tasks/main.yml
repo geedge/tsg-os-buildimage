@@ -56,6 +56,15 @@
     - { src: "cert-redis.conf" , dest: "/etc" , mode: "0644" }
     - { src: "cert-redis.service" , dest: "/usr/lib/systemd/system" , mode: "0644" }
 
+- name: "replace action: replace service WantedBy from multi-user.target to workload.target"
+  replace:
+    path: "{{ item }}"
+    regexp: 'WantedBy=multi-user.target'
+    replace: 'WantedBy=workload.target'
+  with_items:
+    - /usr/lib/systemd/system/cert-redis.service
+    - /usr/lib/systemd/system/certstore.service
+
 ##################### certstore #####################
 - name: "start certstore"
   systemd:
