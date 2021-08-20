@@ -150,6 +150,13 @@
   when: PROFILE_ID == '9000-NPB-P01R01'
 ##### tsg-os-provison-guard.service enable end###################
 
+- name: "tsg-os-provision: copy tsg-start.sh to dest - tsg9140"
+  copy:
+    src: "{{ role_path }}/files/script/tsg-start.sh"
+    dest: /opt/tsg/tsg-os-provision/exec/
+    mode: 0755
+  when: PROFILE_ID == '9000-NPB-P01R01'
+
 - name: "tsg-os-provision: install yaml module using pip3"
   pip:
     name: PyYAML
