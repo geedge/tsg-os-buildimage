@@ -2,7 +2,7 @@ certstore_rpm_version:
   certstore: certstore-2.1.8.20210604.8077136
 
 firewall_rpm_version:
-  capture_packet_plug: capture_packet_plug-3.1.1.6f324e7
+  capture_packet_plug: capture_packet_plug-3.1.2.001f9c6
   conn_telemetry: conn_telemetry-1.0.2.8d6da43
   dns: dns-2.0.14.6d7e2f8
   ftp: ftp-1.0.8.13d5fda
@@ -30,7 +30,7 @@ firewall_rpm_version:
 framework_rpm_version:
   libcjson: libcjson-1.7.11.93ffba0
   libdocumentanalyze: libdocumentanalyze-2.0.7.eb1f13b
-  libmaatframe: libmaatframe-3.4.7.03d351f
+  libmaatframe: libmaatframe-3.4.8.c84fb97
   libMESA_field_stat: libMESA_field_stat-1.0.2.6d45eed
   libMESA_field_stat2: libMESA_field_stat2-2.9.11.0bb06b4
   libMESA_handle_logger: libMESA_handle_logger-2.0.8.f76af2f
@@ -58,10 +58,10 @@ tfe_rpm_version:
   tfe: tfe-4.5.12.f764a4b
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-4.1.2.d1660e6
+  app_sketch_local: app_sketch_local-4.1.3.bffa759
   
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.2.3.145786c 
+  tsg_master: tsg_master-5.2.4.ea1875f
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-21.03.01.39beba7
