@@ -63,8 +63,18 @@ cmsg_port=2475
 watchdog_switch=1
 watchdog_port=2476
 
+[watchdog_tfe]
+# The worker thread updates the timestamp every two seconds
+# The watchdog thread checks the timestamp every second
+enable=1
+timeout_seconds=5
+statistics_window=20
+timeout_cnt_as_fail=3
+timeout_debug=0
+
 [ssl]
 ssl_ja3_debug=0
+ssl_ja3_table=PXY_SSL_FINGERPRINT
 # ssl version Not available, configured via TSG website
 # ssl_max_version=tls13
 # ssl_min_version=ssl3
@@ -111,8 +121,8 @@ mc_cache_eth={{ tfe.tfe_conf.ssl.mc_cache_eth }}
 {% raw %}mc_cache_broker_list={{ olap.kafka_broker.address_list | join(",") }}
 {% endraw %}
 mc_cache_topic=PXY-EXCH-INTERMEDIA-CERT
-
-ssl_ja3_table=PXY_SSL_FINGERPRINT
+sasl_username=admin
+sasl_passwd=galaxy2019
 
 [key_keeper]
 #Mode: debug - generate cert with ca_path, normal - generate cert with cert store
@@ -189,6 +199,8 @@ NIC_NAME={{ tfe.tfe_conf.kafka.NIC_NAME }}
 {% raw %}kafka_brokerlist={{ olap.kafka_broker.address_list | join(",") }}
 {% endraw %}
 kafka_topic=PROXY-EVENT-LOG
+sasl_username=admin
+sasl_passwd=galaxy2019
 device_id_filepath=/opt/tsg/etc/tsg_sn.json
 
 [maat]
