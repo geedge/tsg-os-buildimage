@@ -4,6 +4,11 @@
     name: sshd
     enabled: yes
 
+- name: "disable chronyd"
+  systemd:
+    name: chronyd
+    enabled: no
+
 - name: "enable ntpd"
   systemd:
     name: ntpd
