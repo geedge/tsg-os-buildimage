@@ -1,5 +1,6 @@
 #!/bin/bash -ex
 
+enable_config_apply=$1
 config_path=/data/tsg-os-provision/provision.yml
 snapshot_config_path=/data/tsg-os-provision/provision.yml.snapshot
 hosts_path=/opt/tsg/tsg-os-provision/hosts
@@ -13,7 +14,7 @@ execute_provision_convert_action(){
 }
 
 execute_provision_action(){
-    ansible-playbook -i ${hosts_path} ${provision_path} -e "var_files_path=${config_path}"
+    ansible-playbook -i ${hosts_path} ${provision_path} -e "var_files_path=${config_path} enable_config_apply=${enable_config_apply}"
     cp ${config_path} ${snapshot_config_path} -r
     cp ${version_file_path} ${present_version_file_path} -r   
 }
