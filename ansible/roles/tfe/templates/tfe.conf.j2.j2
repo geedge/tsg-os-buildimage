@@ -121,8 +121,8 @@ mc_cache_eth={{ tfe.tfe_conf.ssl.mc_cache_eth }}
 {% raw %}mc_cache_broker_list={{ olap.kafka_broker.address_list | join(",") }}
 {% endraw %}
 mc_cache_topic=PXY-EXCH-INTERMEDIA-CERT
-sasl_username=admin
-sasl_passwd=galaxy2019
+#sasl_username=admin
+#sasl_passwd=galaxy2019
 
 [key_keeper]
 #Mode: debug - generate cert with ca_path, normal - generate cert with cert store
@@ -199,8 +199,8 @@ NIC_NAME={{ tfe.tfe_conf.kafka.NIC_NAME }}
 {% raw %}kafka_brokerlist={{ olap.kafka_broker.address_list | join(",") }}
 {% endraw %}
 kafka_topic=PROXY-EVENT-LOG
-sasl_username=admin
-sasl_passwd=galaxy2019
+#sasl_username=admin
+#sasl_passwd=galaxy2019
 device_id_filepath=/opt/tsg/etc/tsg_sn.json
 
 [maat]

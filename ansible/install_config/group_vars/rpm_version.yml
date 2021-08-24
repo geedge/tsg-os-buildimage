@@ -14,7 +14,7 @@ firewall_rpm_version:
   fw_ssl_plug: fw_ssl_plug-3.2.1.8e0550d
   http: http-2.0.5.c61ad9a
   mail: mail-1.0.11.48abeae
-  quic: quic-1.1.18.13ba53b
+  quic: quic-1.2.1.3412ad1
   ssl: ssl-2.0.4.99e3b10
   tsg_conn_sketch: tsg_conn_sketch-3.0.20.07a0a93
   rtp: rtp-1.0.4.91b4ab7
@@ -58,10 +58,10 @@ tfe_rpm_version:
   tfe: tfe-4.5.12.f764a4b
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-4.1.3.bffa759
+  app_sketch_local: app_sketch_local-4.1.4.99af904
   
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.2.4.ea1875f
+  tsg_master: tsg_master-5.3.0.21ada9c
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-21.03.01.39beba7
