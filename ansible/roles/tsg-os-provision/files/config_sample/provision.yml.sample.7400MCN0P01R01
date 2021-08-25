@@ -21,7 +21,7 @@ wannat:
 ddossketch:
   enable: 0/1
 
-sapp_stream_bypass_under_ddos
+sapp_stream_bypass_under_ddos:
   enable: 0/1  
 
 app:

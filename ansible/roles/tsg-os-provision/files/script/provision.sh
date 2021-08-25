@@ -14,7 +14,7 @@ execute_provision_convert_action(){
 }
 
 execute_provision_action(){
-    ansible-playbook -i ${hosts_path} ${provision_path} -e "var_files_path=${config_path} enable_config_apply=${enable_config_apply}"
+    ansible-playbook -i ${hosts_path} ${provision_path} -e "enable_config_apply=${enable_config_apply}"
     cp ${config_path} ${snapshot_config_path} -r
     cp ${version_file_path} ${present_version_file_path} -r   
 }

@@ -1,8 +1,21 @@
 ---
 - hosts: provision
-  vars_files:
-  - '{{var_files_path}}'
   tasks:
+    - name: Load default config file variable
+      include_vars:
+        file: /opt/tsg/tsg-os-provision/provision.default.yml
+
+    - name: Load general config file variable 
+      include_vars:
+        file: /data/tsg-os-provision/provision.yml
+
+    - name: Load provision.yml.d config file variable
+      include_vars:
+        dir: /data/tsg-os-provision/provision.yml.d/
+        extensions:
+          - 'yml'
+          - 'yaml'
+
     - name: "mkdir /opt/tsg/etc/"
       file:
         path: /opt/tsg/etc

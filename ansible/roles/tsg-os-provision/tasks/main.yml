@@ -61,6 +61,27 @@
     mode: 0644
   when: PROFILE_ID == '9000-NPB-P01R01'
 
+- name: "tsg-os-provision: copy provision.default.yml - tsg7400 mcn0"
+  copy:
+    src: "{{ role_path }}/files/config_sample/provision.default.yml.7400MCN0P01R01"
+    dest: /opt/tsg/tsg-os-provision/provision.default.yml
+    mode: 0644
+  when: PROFILE_ID == '7400-MCN0-P01R01'
+
+- name: "tsg-os-provision: copy provision.default.yml - tsg7400 mcn123"
+  copy:
+    src: "{{ role_path }}/files/config_sample/provision.default.yml.7400MCN123P01R01"
+    dest: /opt/tsg/tsg-os-provision/provision.default.yml
+    mode: 0644
+  when: PROFILE_ID == '7400-MCN123-P01R01'
+
+- name: "tsg-os-provision: copy provision.default.yml - tsg9140"
+  copy:
+    src: "{{ role_path }}/files/config_sample/provision.default.yml.9000NPBP01R01"
+    dest: /opt/tsg/tsg-os-provision/provision.default.yml
+    mode: 0644
+  when: PROFILE_ID == '9000-NPB-P01R01'
+
 - name: "tsg-os-provision: copy provision.yml.sample to dest - tsg7400 mcn0"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.yml.sample.7400MCN0P01R01"

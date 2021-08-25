@@ -1,0 +1,33 @@
+feature:
+  enable_policy_local_cache: 1
+
+firewall:
+  enable: 1
+
+proxy:
+  enable: 1
+
+connsketch:
+  enable: 1
+
+capturepacket:
+  enable: 1
+  
+wannat:
+  enable: 1  
+
+ddossketch:
+  enable: 1
+
+sapp_stream_bypass_under_ddos:
+  enable: 1 
+
+app:
+  identify_by:
+    user_defined_signature: 1
+    builtin_app_engine: 1
+
+coredump:
+  format: minidump
+  collect: sentry
+  sentry_url: http://127.0.0.1:9000/api/2/minidump/?sentry_key=3203b43fd5384a7dbe6a48ecb1f3c595

@@ -29,6 +29,7 @@ mkdir -p /data/overlay/rootfs_home/work
 
 #provision path
 mkdir -p /data/tsg-os-provision
+mkdir -p /data/tsg-os-provision/provision.yml.d
 
 # presistent journald
 mkdir -p /var/log/journal
