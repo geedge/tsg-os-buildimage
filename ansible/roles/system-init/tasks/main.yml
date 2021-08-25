@@ -14,6 +14,42 @@
     name: ntpd
     enabled: yes
 
+#Service Optimization
+- name: "enable snmpd"
+  systemd:
+    name: snmpd
+    enabled: yes
+
+- name: "enable snmptrapd"
+  systemd:
+    name: snmptrapd
+    enabled: yes
+
+- name: "disenable abrt-ccpp"
+  systemd:
+    name: abrt-ccpp
+    enabled: no
+
+- name: "disenable abrt-oops"
+  systemd:
+    name: abrt-oops
+    enabled: no
+
+- name: "disenable abrtd"
+  systemd:
+    name: abrtd
+    enabled: no
+
+- name: "disenable dmraid-activation"
+  systemd:
+    name: dmraid-activation
+    enabled: no
+
+- name: "disenable postfix"
+  systemd:
+    name: postfix
+    enabled: no
+
 - name: "set sshd UseDns no"
   shell: sed -i 's/#UseDNS yes/UseDNS no/g' /etc/ssh/sshd_config
 
