@@ -13,8 +13,8 @@ firewall_rpm_version:
   fw_quic_plug: fw_quic_plug-3.0.4.947ef77
   fw_ssl_plug: fw_ssl_plug-3.1.3.6729f7a
   http: http-2.0.5.c61ad9a
-  mail: mail-1.0.11.48abeae
-  quic: quic-1.1.18.13ba53b
+  mail: mail-1.0.12.28f3d17
+  quic: quic-1.2.3.e33f9b4
   ssl: ssl-2.0.2.1389716
   tsg_conn_sketch: tsg_conn_sketch-3.0.14.90eaa62
   rtp: rtp-1.0.4.91b4ab7
