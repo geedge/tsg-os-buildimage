@@ -43,7 +43,7 @@ sysroot-base: builddir
 sysroot-verfile: sysroot-base
 	sed -i -e "s/^NAME=.*/NAME=\"TSG-OS\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
 	sed -i -e "s/^VERSION=.*/VERSION=\"$(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
-	sed -i -e "s/^PRETTY_NAME=.*/PRETTY_NAME=\"TSG-OS v$(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
+	sed -i -e "s/^PRETTY_NAME=.*/PRETTY_NAME=\"TSG-OS $(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
 
 sysroot-ansible: sysroot-verfile sysroot-base
 	cp $(CONFDIR)/yum.conf $(TARGET_SYSROOT_DIR)/tmp/ -r

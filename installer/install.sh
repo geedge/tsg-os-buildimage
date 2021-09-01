@@ -31,7 +31,7 @@ dev_part_tsg_os_sysroot="/dev/sda${exp_part_tsg_os_sysroot}"
 dev_part_tsg_os_data="/dev/sda${exp_part_tsg_os_data}"
 
 tsg_os_efi_prefix="TSG-OS"
-tsg_os_efi_label="TSG-OS: v${DISTR0_VER} (${MACHINE_ID})"
+tsg_os_efi_label="TSG-OS: ${DISTR0_VER} (${MACHINE_ID})"
 
 # auto-detect whether BIOS or UEFI
 if [ -d "/sys/firmware/efi/efivars" ] ; then
@@ -310,11 +310,11 @@ EOF2
 
 # Add a menu entry for o/s distro
 (cat <<EOF3
-menuentry 'TSG-OS v${DISTR0_VER} (${MACHINE_ID})' {
+menuentry 'TSG-OS ${DISTR0_VER} (${MACHINE_ID})' {
   set root='(${root_disk},gpt${distro_part})'
-  echo    'Loading TSG-OS v${DISTR0_VER} (${MACHINE_ID}) ...'
+  echo    'Loading TSG-OS ${DISTR0_VER} (${MACHINE_ID}) ...'
   linux   /boot/vmlinuz ${kernel_args} root=${blk_dev}${distro_part}
-  echo    'Loading TSG-OS v${DISTR0_VER} (${MACHINE_ID}) initial ramdisk ...'
+  echo    'Loading TSG-OS ${DISTR0_VER} (${MACHINE_ID}) initial ramdisk ...'
   initrd  /boot/initrd.img
  }
 EOF3
