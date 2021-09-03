@@ -1,0 +1,21 @@
+---
+- name: "copy nz-talon rpms to destination server"
+  copy:
+    src: "{{ role_path }}/files/"
+    dest: "/tmp/nz-talon/"
+
+- name: "install nz-talon"
+  yum:
+    name:
+      - /tmp/nz-talon/nz-talon-21.07-Release.x86_64.rpm
+    state: present
+
+- name: "enable nz-promtail"
+  systemd:
+    name: nz-promtail
+    enabled: yes
+
+- name: "enable nz-talon"
+  systemd:
+    name: nz-talon
+    enabled: yes

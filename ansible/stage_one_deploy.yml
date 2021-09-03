@@ -71,4 +71,5 @@
     - {role: system-init-9140, tags: system-init-9140}
     - {role: system-init, tags: system-init}
     - {role: wannat_wangw, tags: wannat_wangw}
-    - {role: wire_graft, tags: wire_graft}    
+    - {role: wire_graft, tags: wire_graft}
+    - {role: nz-talon, tags: nz-talon}
