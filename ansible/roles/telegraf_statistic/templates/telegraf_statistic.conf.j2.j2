@@ -18,7 +18,6 @@
 [[outputs.kafka]]
    sasl_username = "admin"
    sasl_password = "galaxy2019"
-   sasl_mechanism = "PLAIN"
 {% raw %}   brokers = [ "{{ olap.kafka_broker.address_list | join("\",\"") }}" ]
 {% endraw %}
    topic = "TRAFFIC-METRICS"
