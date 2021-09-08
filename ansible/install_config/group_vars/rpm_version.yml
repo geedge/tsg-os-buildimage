@@ -25,7 +25,7 @@ firewall_rpm_version:
   gtp: gtp-1.0.5.afa055c
   gtp_signaling_plug: gtp_signaling_plug-1.0.2.2dfced5
   deal_socks: deal_socks-1.0.2.379a897
-  tsg_ddos_sketch: tsg_ddos_sketch-1.0.4.6e05cbc
+  tsg_ddos_sketch: tsg_ddos_sketch-1.0.9.b297d74
 
 framework_rpm_version:
   libcjson: libcjson-1.7.11.93ffba0
@@ -42,7 +42,7 @@ framework_rpm_version:
   libWiredLB: libWiredLB-2.0.5.4629165
   libbreakpad_mini: libbreakpad_mini-1.0.5.b0f8073
   libhos-client-cpp: libhos-client-cpp-2.0.4.d775b9d
-  libMV_Sketch: libMV_Sketch-1.0.7.20210810.76bce29
+  libMV_Sketch: libMV_Sketch-1.0.9.20210906.8a1cb3c
 
 kni_rpm_version:
   kni: kni-21.08.01.534a9de
