@@ -7,10 +7,10 @@ hosts_path=/opt/tsg/tsg-os-provision/hosts
 provision_path=/opt/tsg/tsg-os-provision/tasks/provision.yml
 version_file_path=/usr/lib/os-release
 present_version_file_path=/data/tsg-os-provision/.os-release.present
-convertor_script_path=/opt/tsg/tsg-os-provision/convertor.sh
+convertor_script_path=/opt/tsg/tsg-os-provision/scripts/convertor.sh
 
 execute_provision_convert_action(){
-    /opt/tsg/tsg-os-provision/convertor.sh    
+    /opt/tsg/tsg-os-provision/scripts/convertor.sh    
 }
 
 execute_provision_action(){

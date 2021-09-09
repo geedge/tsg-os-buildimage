@@ -1,0 +1,3 @@
+#!/bin/bash -xe
+
+/opt/tsg/tsg-os-provision/scripts/provision.sh 1

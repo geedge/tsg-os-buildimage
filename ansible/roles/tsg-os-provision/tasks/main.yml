@@ -10,7 +10,7 @@
     - "/opt/tsg/tsg-os-provision/files/"
     - "/opt/tsg/tsg-os-provision/tasks/"
     - "/opt/tsg/tsg-os-provision/templates/"
-    - "/opt/tsg/tsg-os-provision/exec/"
+    - "/opt/tsg/tsg-os-provision/scripts/"
 
 - name: "tsg-os-provision: copy hosts file dest"
   copy:
@@ -100,7 +100,7 @@
 - name: "tsg-os-provision: copy provision.sh file to dest"
   copy:
     src: "{{ role_path }}/files/script/{{ item }}"
-    dest: /opt/tsg/tsg-os-provision/
+    dest: /opt/tsg/tsg-os-provision/scripts
     mode: 0755
   with_items:
     - provision.sh
@@ -158,7 +158,7 @@
 - name: "tsg-os-provision: tsg-os-provision-guard.sh to dest"
   copy:
     src: "{{ role_path }}/files/script/guard.sh"
-    dest: /opt/tsg/tsg-os-provision/exec/
+    dest: /opt/tsg/tsg-os-provision/scripts/
     mode: 0755
   when: PROFILE_ID == '9000-NPB-P01R01'
 
@@ -173,8 +173,8 @@
 
 - name: "tsg-os-provision: copy tsg-start.sh to dest - tsg9140"
   copy:
-    src: "{{ role_path }}/files/script/tsg-os-provision-config-apply.sh"
-    dest: /opt/tsg/tsg-os-provision/exec/
+    src: "{{ role_path }}/files/script/provision-config-apply"
+    dest: /opt/tsg/tsg-os-provision/
     mode: 0755
   when: PROFILE_ID == '9000-NPB-P01R01'
 
@@ -182,3 +182,9 @@
   pip:
     name: PyYAML
     executable: pip3
+
+- name: "copy tsg-os-provision.sh to destination"
+  copy:
+    src: "{{ role_path }}/files/script/tsg-os-provision.sh"
+    dest: /etc/profile.d/
+    mode: 0755

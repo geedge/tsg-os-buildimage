@@ -2,7 +2,7 @@
 - name: "deploy obtain sn tsg-7400"
   copy:
     src: "{{ role_path }}/files/{{ item.src }}"
-    dest: "/opt/tsg/tsg-os-provision/exec/{{ item.dest }}"
+    dest: "/opt/tsg/tsg-os-provision/scripts/{{ item.dest }}"
     mode: 0755
   with_items:
     - { "src": "obtain_sn.sh.TSG7400", "dest": "obtain_sn.sh" }
@@ -12,6 +12,6 @@
 - name: "deploy obtain sn - tsg-9140"
   copy:
     src: "{{ role_path }}/files/obtain_sn.sh.TSG9140"
-    dest: /opt/tsg/tsg-os-provision/exec/obtain_sn.sh
+    dest: /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
     mode: 0755
   when: PROFILE_ID == '9000-NPB-P01R01'

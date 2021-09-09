@@ -19,11 +19,11 @@
     - name: "template setup_policy_log_nic_network.sh"
       template:
         src: ../templates/setup_policy_log_nic_network.sh.j2
-        dest: /opt/tsg/tsg-os-provision/exec/setup_policy_log_nic_network.sh
+        dest: /opt/tsg/tsg-os-provision/scripts/setup_policy_log_nic_network.sh
         mode: 0755
 
     - name: "execute setup_policy_log_nic_network.sh"
-      shell: /opt/tsg/tsg-os-provision/exec/setup_policy_log_nic_network.sh
+      shell: /opt/tsg/tsg-os-provision/scripts/setup_policy_log_nic_network.sh
       register: result_exec_setup_policy_log_nic_network
 
     - name: "Output results that executes command that gets the result_exec_setup_policy_log_nic_network"
@@ -41,12 +41,12 @@
     - name: "template adapt_tera_network_setting.sh when NPB device is tera"
       template:
         src: ../templates/adapt_tera_network_setting.sh.j2
-        dest: /opt/tsg/tsg-os-provision/exec/adapt_tera_network_setting.sh
+        dest: /opt/tsg/tsg-os-provision/scripts/adapt_tera_network_setting.sh
         mode: 0755
       when: npb_device == 'tera'
 
     - name: "execute adapt_tera_network_setting.sh when NPB device is tera"
-      shell: /opt/tsg/tsg-os-provision/exec/adapt_tera_network_setting.sh
+      shell: /opt/tsg/tsg-os-provision/scripts/adapt_tera_network_setting.sh
       register: result_exec_adapt_tera_network_setting
       when: npb_device == 'tera'
 
@@ -173,7 +173,7 @@
         state: directory
 
     - name: "tsg-os-provision: obtain sn from mxn and write sn to tsg_sn.json"
-      shell: /opt/tsg/tsg-os-provision/exec/obtain_sn.sh 192.168.100.5
+      shell: /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh 192.168.100.5
       register: result_exec_obtain_sn_and_write_sn_in_file
 
     - name: "tsg-os-provision: check result_exec_obtain_sn_and_write_sn_in_file"
