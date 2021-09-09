@@ -51,8 +51,8 @@ mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.4.8.566081c
 
 sapp_rpm_version:
-  sapp: sapp-4.2.49.1c4b0a6
-  tcpdump_mesa: tcpdump_mesa-1.0.6.faa4eba
+  sapp: sapp-4.2.50.dbc910b
+  tcpdump_mesa: tcpdump_mesa-1.0.8.da3eeea
 
 tfe_rpm_version:
   tfe: tfe-4.5.13.acc67e3
@@ -70,8 +70,8 @@ http_healthcheck_rpm_version:
   http_healthcheck: http_healthcheck-21.06.01.d0685bb
 
 wannat_wangw_rpm_version:
-  libwangw: libwangw-1.3.4.893165a
+  libwangw: libwangw-1.3.5.5e6c78d
 
 wire_graft_rpm_version:  
-  wire_graft: wire_graft_plug-1.3.5.9de921b
-  libwire_graft: libwire_graft-1.3.5.9de921b
+  wire_graft: wire_graft_plug-1.3.6.2832a3c
+  libwire_graft: libwire_graft-1.3.6.2832a3c
