@@ -158,6 +158,12 @@
         src: /data/tsg-os-provision/provision.yml
         dest: /data/tsg-os-provision/provision.yml.snapshot
 
+    - name: "tsg-os-provision: restart tsg-os-provision-guard"
+      systemd:
+        name: tsg-os-provision-guard
+        state: restarted
+      when: enable_config_apply == '1'
+
     - name: "tsg-os-provision: restart mrzcpd"
       systemd:
         name: mrzcpd
