@@ -115,11 +115,11 @@
     - { "src": tsg-os-provision.service.TSG7400, "dest": tsg-os-provision.service }
   when: PROFILE_ID == '7400-MCN0-P01R01' or PROFILE_ID == '7400-MCN123-P01R01'
 
-- name: "replace action: replace service WantedBy from multi-user.target to workload-pre.target --TSG7400"
+- name: "replace action: replace service WantedBy from multi-user.target to workload.target --TSG7400"
   replace:
     path: "{{ item }}"
     regexp: 'WantedBy=multi-user.target'
-    replace: 'RequiredBy=workload-pre.target'
+    replace: 'RequiredBy=workload.target'
   with_items:
     - /usr/lib/systemd/system/tsg-os-provision.service
   when: PROFILE_ID == '7400-MCN0-P01R01' or PROFILE_ID == '7400-MCN123-P01R01'
@@ -147,29 +147,6 @@
     - tsg-os-provision.service
   when: PROFILE_ID == '9000-NPB-P01R01'
 
-##### tsg-os-provison-guard.service enable start###################
-- name: "tsg-os-provision: tsg-os-provision-guard.service to dest"
-  copy:
-    src: "{{ role_path }}/files/service/tsg-os-provision-guard.service.TSG9140"
-    dest: /usr/lib/systemd/system/tsg-os-provision-guard.service
-    mode: 0644
-  when: PROFILE_ID == '9000-NPB-P01R01'
-
-- name: "tsg-os-provision: tsg-os-provision-guard.sh to dest"
-  copy:
-    src: "{{ role_path }}/files/script/guard.sh"
-    dest: /opt/tsg/tsg-os-provision/scripts/
-    mode: 0755
-  when: PROFILE_ID == '9000-NPB-P01R01'
-
-- name: "tsg-os-provision: enable tsg-os-provision-guard.service"
-  systemd:
-    name: "{{ item }}"
-    enabled: yes
-  with_items:
-    - tsg-os-provision-guard.service
-  when: PROFILE_ID == '9000-NPB-P01R01'
-##### tsg-os-provison-guard.service enable end###################
 
 - name: "tsg-os-provision: copy tsg-start.sh to dest - tsg9140"
   copy:

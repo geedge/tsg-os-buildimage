@@ -86,7 +86,6 @@ ln -vfs --relative $target/etc/pam.d/password-auth-local $target/etc/pam.d/passw
 
 cp -rf $projectdir/rootconf/sysroot-usr/target/* $target/usr/lib/systemd/system
 mkdir -p $target/usr/lib/systemd/system/workload.target.wants
-mkdir -p $target/usr/lib/systemd/system/workload-pre.target.wants
 
 # ansible-playbook -i tsg-9140-scripts/install_config/tsg_9140_host tsg-9140-scripts/tsg_9140_deploy.yml
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
