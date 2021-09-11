@@ -3,15 +3,6 @@
     src: "{{ role_path }}/files/"
     dest: "/tmp/ansible_deploy/"
 
-- name: "install framework packages by rpm packages"
-  yum:
-    name: "{{ item }}"
-    state: present
-    conf_file: "{{ rpm_repo_config_path }}"
-  with_items:
-    - librdkafka
-    - lz4
-
 - name: "install framework packages"
   yum:
     name: "{{ item.value }}"
@@ -21,7 +12,7 @@
     download_dir: /tmp/rpm_download/
   with_dict: "{{ framework_rpm_version }}"
 
-- name: "Install frameworks except libmaatframe and libcjson"
+- name: "Install frameworks"
   shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ framework.prefix_path }}
   with_dict: "{{ framework_rpm_version }}"
 
