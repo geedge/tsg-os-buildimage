@@ -99,3 +99,33 @@
       copy:
         src: /data/tsg-os-provision/provision.yml
         dest: /data/tsg-os-provision/provision.yml.snapshot
+
+    - name: "tsg-os-provision: restart mrenv"
+      systemd:
+        name: mrenv
+        state: restarted
+      when: enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart mrzcpd"
+      systemd:
+        name: mrzcpd
+        state: restarted
+      when: enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart mrapm_device"
+      systemd:
+        name: mrapm_device
+        state: restarted
+      when: enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart mrapm_stream"
+      systemd:
+        name: mrapm_stream
+        state: restarted
+      when: enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart tfe"
+      systemd:
+        name: tfe
+        state: restarted
+      when: enable_config_apply == '1'
