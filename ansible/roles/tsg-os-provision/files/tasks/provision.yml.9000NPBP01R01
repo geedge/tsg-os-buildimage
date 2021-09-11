@@ -1,6 +1,11 @@
 ---
 - hosts: provision
   tasks:
+    - name: Delete porvision successed sign
+      file:
+        path: /data/tsg-os-provision/.provision_succeeded
+        state: absent
+
     - name: Load default config file variable
       include_vars:
         file: /opt/tsg/tsg-os-provision/provision.default.yml
@@ -158,9 +163,32 @@
         src: /data/tsg-os-provision/provision.yml
         dest: /data/tsg-os-provision/provision.yml.snapshot
 
+    - name: add porvision successed sign
+      file:
+        path: /data/tsg-os-provision/.provision_succeeded
+        state: touch
+
+    - name: "tsg-os-provision: restart mrenv"
+      systemd:
+        name: mrenv
+        state: restarted
+      when: enable_config_apply == '1'
+
     - name: "tsg-os-provision: restart mrzcpd"
       systemd:
         name: mrzcpd
+        state: restarted
+      when: enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart mrapm_device"
+      systemd:
+        name: mrapm_device
+        state: restarted
+      when: enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart mrapm_stream"
+      systemd:
+        name: mrapm_stream
         state: restarted
       when: enable_config_apply == '1'
 
@@ -173,6 +201,12 @@
     - name: "tsg-os-provision: restart certstore"
       systemd:
         name: certstore
+        state: restarted
+      when: enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart cert-redis"
+      systemd:
+        name: cert-redis
         state: restarted
       when: enable_config_apply == '1'
 

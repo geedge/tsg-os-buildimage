@@ -9,9 +9,9 @@ convertor_script_path=/opt/tsg/tsg-os-provision/scripts/convertor.sh
 
 succ_sign_file=/data/tsg-os-provision/.provision_succeeded
 
-execute_provision_del_succ_sign(){
-    rm -rf ${succ_sign_file}
-}
+#execute_provision_del_succ_sign(){
+#    rm -rf ${succ_sign_file}
+#}
 
 execute_provision_convert_action(){
     /opt/tsg/tsg-os-provision/scripts/convertor.sh    
@@ -22,11 +22,11 @@ execute_provision_action(){
     cp ${config_path} ${snapshot_config_path} -r 
 }
 
-execute_provision_add_succ_sign(){
-    touch ${succ_sign_file}
-}
+#execute_provision_add_succ_sign(){
+#    touch ${succ_sign_file}
+#}
 
-execute_provision_del_succ_sign
+#execute_provision_del_succ_sign
 execute_provision_convert_action
 execute_provision_action
-execute_provision_add_succ_sign
+#execute_provision_add_succ_sign
