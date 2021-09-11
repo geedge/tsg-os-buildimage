@@ -2,21 +2,21 @@ certstore_rpm_version:
   certstore: certstore-2.1.8.20210604.8077136
 
 firewall_rpm_version:
-  capture_packet_plug: capture_packet_plug-3.1.3.ee500bd
+  capture_packet_plug: capture_packet_plug-3.1.5.135006c
   conn_telemetry: conn_telemetry-1.0.2.8d6da43
   dns: dns-2.0.14.6d7e2f8
   ftp: ftp-1.0.8.13d5fda
   fw_dns_plug: fw_dns_plug-4.0.0.e92fd7c
   fw_ftp_plug: fw_ftp_plug-3.1.0.6d367b3
   fw_http_plug: fw_http_plug-4.0.1.297b1ba
-  fw_mail_plug: fw_mail_plug-4.0.0.38c39d7
+  fw_mail_plug: fw_mail_plug-4.0.1.facab68
   fw_quic_plug: fw_quic_plug-4.0.0.afaea75
   fw_ssl_plug: fw_ssl_plug-3.2.2.58bac95
   http: http-2.0.5.c61ad9a
   mail: mail-1.0.12.28f3d17
   quic: quic-1.2.7.c67f819
   ssl: ssl-2.0.4.99e3b10
-  tsg_conn_sketch: tsg_conn_sketch-3.0.22.4c02e27
+  tsg_conn_sketch: tsg_conn_sketch-3.0.23.2a82212
   rtp: rtp-1.0.5.93e978a
   mesa_sip: mesa_sip-1.1.2.b4bc77d
   fw_voip_plug: fw_voip_plug-1.0.7.0521f2f
@@ -43,6 +43,7 @@ framework_rpm_version:
   libbreakpad_mini: libbreakpad_mini-1.0.5.b0f8073
   libhos-client-cpp: libhos-client-cpp-2.0.4.d775b9d
   libMV_Sketch: libMV_Sketch-1.0.9.20210906.8a1cb3c
+  librdkfka: librdkafka-1.2.0.4b8dd6d
 
 kni_rpm_version:
   kni: kni-21.08.02.5718d87
@@ -58,10 +59,10 @@ tfe_rpm_version:
   tfe: tfe-4.5.13.acc67e3
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-4.1.5.d3963ed
+  app_sketch_local: app_sketch_local-4.1.7.26acff4
   
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.3.3.3e911b2
+  tsg_master: tsg_master-5.3.5.4578ad3
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-21.03.01.39beba7
