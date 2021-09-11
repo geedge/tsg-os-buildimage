@@ -26,7 +26,6 @@
     - {role: system-init, tags: system-init}
     - {role: wannat_wangw, tags: wannat_wangw}
     - {role: wire_graft, tags: wire_graft}
-    - {role: tsg-os-provision-condition, tags: tsg-os-provision-condition}
 
 - hosts: 7400-MCN123-P01R01
   remote_user: root
@@ -43,7 +42,6 @@
     - {role: tsg_sn, tags: tsg_sn}
     - {role: tfe, tags: tfe}
     - {role: system-init, tags: system-init}
-    - {role: tsg-os-provision-condition, tags: tsg-os-provision-condition}
 
 - hosts: 9000-NPB-P01R01
   remote_user: root
