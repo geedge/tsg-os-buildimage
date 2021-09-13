@@ -38,3 +38,10 @@
     replace: 'WantedBy=workload.target'
   with_items:
     - /usr/lib/systemd/system/tsg-diagnose.service
+
+- name: "add sudo secure_path"
+  lineinfile:
+    path: /etc/sudoers
+    backrefs: yes
+    regexp: "^(.*Defaults    secure_path =.*)$"
+    line: '\1:/opt/tsg/tsg-diagnose/scripts'
