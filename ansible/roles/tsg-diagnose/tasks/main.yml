@@ -1,8 +1,3 @@
-- name: "Tsg-diagnose:copy file to device"
-  copy:
-    src: '{{ role_path }}/files/'
-    dest: /tmp/ansible_deploy/
-
 - name: "Install tsg-diagnose rpm package"
   yum:
     name:
@@ -10,28 +5,11 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 
-- name: "Templates tsg-diagnose.config"
-  template:
-    src: "{{role_path}}/templates/tsg-diagnose.config.j2"
-    dest: /opt/tsg/tsg-diagnose/etc/tsg-diagnose.config
-  tags: template
-
 - name: "Templates docker-compose.yml"
   template:
     src: "{{role_path}}/templates/docker-compose.yml.j2"
     dest: /opt/tsg/tsg-diagnose/compose/docker-compose.yml
   tags: template
-
-- name: "tsg-diagnose:mkdir -p .badssl_cert_dict"
-  file:
-    path: /opt/tsg/tsg-diagnose/.badssl_cert_dict
-    state: directory
-
-- name: "tsg-diagnose: unarchive certs"
-  unarchive:
-    src: /tmp/ansible_deploy/tsg-diagnose-certs.tgz
-    dest: /opt/tsg/tsg-diagnose/.badssl_cert_dict
-    remote_src: yes
 
 - name: "copy tsg-diagnose.service file to dest"
   copy:
