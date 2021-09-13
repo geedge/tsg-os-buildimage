@@ -77,7 +77,7 @@ dictator_enable=1
 
     [packet_io.under_ddos]
 ### note, to reduce impact of ddos attack,set some stream bypass, all plugins will not process these streams   
-{% raw %}stream_bypass_enabled={{ sapp_stream_bypass_under_ddos.enable }}
+{% raw %}stream_bypass_enabled={{ feature.enable_stream_bypass_under_ddos }}
 {% endraw %}
 	
 ### note, cpu usage value is percent, for example, config value is 85, means 85%, valid range: [1,100]    

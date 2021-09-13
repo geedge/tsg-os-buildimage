@@ -1,5 +1,13 @@
 version: 1
 
+data_center:
+  name: City instance
+  id: 1
+  device_seq: 1
+
+feature:
+  enable_stream_bypass_under_ddos: 0
+
 firewall:
   enable: 0/1
 
@@ -17,14 +25,6 @@ wannat:
 
 ddossketch:
   enable: 0/1
- 
-sapp_stream_bypass_under_ddos:
-  enable: 0/1   
-
-data_center:
-  name: City instance
-  id: 1
-  device_seq: 1
 
 app:
   identify_by:

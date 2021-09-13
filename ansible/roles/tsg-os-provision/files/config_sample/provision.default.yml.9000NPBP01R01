@@ -1,3 +1,6 @@
+feature:
+  enable_stream_bypass_under_ddos: 0
+
 firewall:
   enable: 1
 
@@ -15,9 +18,6 @@ wannat:
 
 ddossketch:
   enable: 1
-
-sapp_stream_bypass_under_ddos:
-  enable: 1 
 
 app:
   identify_by:
