@@ -3,6 +3,14 @@
     src: "{{ role_path }}/files/"
     dest: "/tmp/ansible_deploy/"
 
+- name: "uninstall rsyslog-kafka and librdkafka"
+  yum:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - rsyslog-kafka
+    - librdkafka
+
 - name: "install framework packages"
   yum:
     name: "{{ item.value }}"
