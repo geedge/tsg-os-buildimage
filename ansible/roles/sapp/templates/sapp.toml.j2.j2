@@ -120,8 +120,9 @@ dictator_enable=1
 ### note, stream_id_base_time format is "%Y-%m-%d %H:%M:%S" 
     stream_id_base_time="2021-01-01 00:00:00"
     [stream.tcp]
-    max=100000
-    timeout=30
+    {% raw %}max={{ advanced_settings.stream_tcp_max }}
+    timeout={{ advanced_settings.stream_tcp_timeout }}
+    {% endraw %}
     syn_mandatory=1
     reorder_pkt_max=128
     analyse_option_enabled=1
@@ -142,8 +143,9 @@ dictator_enable=1
         remedy_kill_tcp_by_inline_device=0
 	
     [stream.udp]
-    max=100000
-    timeout=60
+    {% raw %}max={{ advanced_settings.stream_udp_max }}
+    timeout={{ advanced_settings.stream_udp_timeout }}
+    {% endraw %}
     meaningful_statistics_minimum_pkt=3
     meaningful_statistics_minimum_byte=5
     
