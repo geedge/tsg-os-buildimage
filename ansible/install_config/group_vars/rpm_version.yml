@@ -8,13 +8,13 @@ firewall_rpm_version:
   ftp: ftp-1.0.8.13d5fda
   fw_dns_plug: fw_dns_plug-4.0.0.e92fd7c
   fw_ftp_plug: fw_ftp_plug-3.1.0.6d367b3
-  fw_http_plug: fw_http_plug-4.0.1.297b1ba
+  fw_http_plug: fw_http_plug-4.0.2.1f4b42a
   fw_mail_plug: fw_mail_plug-4.0.1.facab68
-  fw_quic_plug: fw_quic_plug-4.0.0.afaea75
+  fw_quic_plug: fw_quic_plug-4.0.1.1979d53
   fw_ssl_plug: fw_ssl_plug-3.2.2.58bac95
-  http: http-2.0.5.c61ad9a
+  http: http-2.0.6.d5488fc
   mail: mail-1.0.12.28f3d17
-  quic: quic-1.2.7.c67f819
+  quic: quic-1.3.1.3aa13f9
   ssl: ssl-2.0.4.99e3b10
   tsg_conn_sketch: tsg_conn_sketch-3.0.23.2a82212
   rtp: rtp-1.0.5.93e978a
@@ -62,7 +62,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.1.7.26acff4
   
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.3.5.4578ad3
+  tsg_master: tsg_master-5.3.6.427a0d7
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-21.09.2.516ff30
