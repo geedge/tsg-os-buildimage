@@ -23,6 +23,9 @@ capturepacket:
 
 wannat:
   enable: 0/1
+  natgw_address: "127.0.0.1"
+  toroad_address: "127.0.0.1"
+  toroad_port: 8888
 
 ddossketch:
   enable: 0/1
@@ -83,13 +86,6 @@ network_setting:
     ipv4: 127.0.0.1/24
     ipv6: 'fe80\:\:5/64'
     gateway_ipv4: 192.168.1.1 
-
-wannat_natgw:
-  natgw_ip: "127.0.0.1"
-
-wannat_toroad:
-  server_ip: "127.0.0.1"
-  server_port: 8888
 
 coredump:
   format: minidump/core/none

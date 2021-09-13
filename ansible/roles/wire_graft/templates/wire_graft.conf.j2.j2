@@ -28,8 +28,8 @@ mirror_linkinfo_dir_syntax="mac[4]:7-7"
 
 [toroad]
 sendto_toroad_enable={{ wire_graft.wire_graft_conf.toroad.sendto_toroad_enable }}
-{% raw %}toroad_ip={{ wannat_toroad.server_ip }}
-toroad_port={{ wannat_toroad.server_port }}
+{% raw %}toroad_ip={{ wannat.toroad_address }}
+toroad_port={{ wannat.toroad_port }}
 {% endraw %}
 
 [log]

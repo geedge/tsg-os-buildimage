@@ -21,7 +21,10 @@ capturepacket:
   enable: 0/1
   
 wannat:
-  enable: 0/1  
+  enable: 0/1
+  natgw_address: "127.0.0.1"
+  toroad_address: "127.0.0.1"
+  toroad_port: 8888
 
 ddossketch:
   enable: 0/1
@@ -45,13 +48,6 @@ olap:
   hos_server:
     address: "127.0.0.1"
     port: 9098
-
-wannat_natgw:
-  natgw_ip: "127.0.0.1"
-
-wannat_toroad:
-  server_ip: "127.0.0.1"
-  server_port: 8888
 
 coredump:
   format: minidump/core/none

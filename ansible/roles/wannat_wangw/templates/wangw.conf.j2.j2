@@ -14,7 +14,7 @@ NAT_GW_tunnel_device={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_device }}
 NAT_GW_tunnel_port={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_send_port }}
 
 #NAT GW的内部互联IP地址, 端口使用vxlan默认值, 要求对方也开放UDP 4789端口
-{% raw %}NAT_GW_tunnel_ip={{ wannat_natgw.natgw_ip }}
+{% raw %}NAT_GW_tunnel_ip={{ wannat.natgw_address }}
 {% endraw %}
 
 

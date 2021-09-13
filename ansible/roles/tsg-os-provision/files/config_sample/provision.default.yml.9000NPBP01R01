@@ -14,7 +14,10 @@ capturepacket:
   enable: 1
   
 wannat:
-  enable: 1  
+  enable: 1
+  natgw_address: "127.0.0.1"
+  toroad_address: "127.0.0.1"
+  toroad_port: 8888  
 
 ddossketch:
   enable: 1
