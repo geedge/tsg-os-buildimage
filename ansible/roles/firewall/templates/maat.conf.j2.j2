@@ -8,7 +8,7 @@ STAT_FILE=tsg_static_maat.status
 EFFECT_INTERVAL_S=1
 REDIS_IP={{ cm_policy_server_ip }}
 {% raw %}REDIS_PORT_NUM={{ cm.policy_server.port_num }}
-REDIS_PORT={{ cm.policy_server.port_range }}
+REDIS_PORT={{ cm.policy_server.port }}
 REDIS_INDEX={{ cm.policy_server.db_static }}
 {% endraw %}
 JSON_CFG_FILE=tsgconf/tsg_maat.json
@@ -26,7 +26,7 @@ STAT_FILE=tsg_dynamic_maat.status
 EFFECT_INTERVAL_S=1
 REDIS_IP={{ cm_policy_server_ip }}
 {% raw %}REDIS_PORT_NUM={{ cm.policy_server.port_num }}
-REDIS_PORT={{ cm.policy_server.port_range }}
+REDIS_PORT={{ cm.policy_server.port }}
 REDIS_INDEX={{ cm.policy_server.db_dynamic }}
 {% endraw %}
 JSON_CFG_FILE=tsgconf/tsg_maat.json
@@ -43,7 +43,7 @@ STAT_FILE=app_sketch_maat.status
 EFFECT_INTERVAL_S=1
 REDIS_IP={{ cm_policy_server_ip }}
 {% raw %}REDIS_PORT_NUM={{ cm.policy_server.port_num }}
-REDIS_PORT={{ cm.policy_server.port_range }}
+REDIS_PORT={{ cm.policy_server.port }}
 REDIS_INDEX={{ cm.policy_server.db_static }}
 {% endraw %}
 JSON_CFG_FILE=tsgconf/app_sketch_maat.json
@@ -60,7 +60,7 @@ STAT_FILE=capture_packet.status
 EFFECT_INTERVAL_S=1
 REDIS_IP={{ cm_policy_server_ip }}
 {% raw %}REDIS_PORT_NUM={{ cm.policy_server.port_num }}
-REDIS_PORT={{ cm.policy_server.port_range }}
+REDIS_PORT={{ cm.policy_server.port }}
 REDIS_INDEX={{ cm.policy_server.db_static }}
 {% endraw %}
 JSON_CFG_FILE=tsgconf/capture_packet_maat.json

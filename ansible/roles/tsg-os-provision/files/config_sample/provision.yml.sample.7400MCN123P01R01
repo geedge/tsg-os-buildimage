@@ -10,10 +10,7 @@ feature:
 cm:
   policy_server:
     address: "127.0.0.1"
-    port_range: 7002
-    port_num: 1
-    db_static: 0
-    db_dynamic: 1
+    port: 7002
 
 olap:
   kafka_broker:

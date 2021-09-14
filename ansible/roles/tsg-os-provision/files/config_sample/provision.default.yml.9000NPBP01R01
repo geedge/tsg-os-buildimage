@@ -38,3 +38,9 @@ advanced_settings:
   stream_udp_max: 100000
   stream_udp_timeout: 60
   stream_bypass_trigger_cpu_usage: 85
+
+cm:
+  policy_server:
+    port_num: 1
+    db_static: 0
+    db_dynamic: 1

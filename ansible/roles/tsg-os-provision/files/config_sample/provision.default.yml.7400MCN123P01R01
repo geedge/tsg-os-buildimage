@@ -5,3 +5,9 @@ coredump:
   format: minidump
   collect: sentry
   sentry_url: http://127.0.0.1:9000/api/2/minidump/?sentry_key=3203b43fd5384a7dbe6a48ecb1f3c595
+
+cm:
+  policy_server:
+    port_num: 1
+    db_static: 0
+    db_dynamic: 1
