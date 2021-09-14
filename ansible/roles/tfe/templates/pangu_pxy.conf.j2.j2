@@ -45,9 +45,8 @@ log_fsstat_dst_port=8125
 enable=0
 token_name=ratelimit
 redis_server={{ cm_policy_server_ip }}
-{% raw %}redis_port={{ cm.policy_server.port }}
+redis_port={{ cm_policy_server_port }}
 redis_db_index=6
-{% endraw %}
 
 [tango_cache]
 enable_cache=0

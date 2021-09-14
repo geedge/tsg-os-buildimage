@@ -70,8 +70,8 @@ port = 6379
 #Maat monitors the Redsi server IP address and port number
 
 ip = {{ cm_policy_server_ip }}
-{% raw %}port = {{ cm.policy_server.port }}
-dbindex =  {{ cm.policy_server.db_static }}
+port = {{ cm_policy_server_port }}
+{% raw %}dbindex =  {{ cm.policy_server.db_static }}
 {% endraw %}
 [stat]
 statsd_server=127.0.0.1

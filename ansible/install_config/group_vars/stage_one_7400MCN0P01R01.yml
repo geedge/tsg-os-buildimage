@@ -68,6 +68,7 @@ tsg_diagnose:
     virtual_client_nic: eth_dign_c
 
 cm_policy_server_ip: '{% raw %}{{ cm_policy_server_ip }}{% endraw %}'
+cm_policy_server_port: '{% raw %}{{ cm_policy_server_port }}{% endraw %}'
 
 wannat_wangw:
   wangw_conf:

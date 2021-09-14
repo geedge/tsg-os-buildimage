@@ -47,8 +47,8 @@ inc_dir=./redis_dump/
 full_dir=./redis_dump/
 
 redis_server_ip={{ cm_policy_server_ip }}
+redis_server_port={{ cm_policy_server_port }}
 {% raw %}REDIS_PORT_NUM={{ cm.policy_server.port_num }}
-redis_server_port={{ cm.policy_server.port }}
 redis_index={{ cm.policy_server.db_static }}
 {% endraw %}
 

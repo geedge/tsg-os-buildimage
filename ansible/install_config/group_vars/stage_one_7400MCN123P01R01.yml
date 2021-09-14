@@ -32,6 +32,7 @@ tfe:
       default_vlan_id_for_mac: 0
 
 cm_policy_server_ip: '{% raw %}{{ cm_policy_server_ip }}{% endraw %}'
+cm_policy_server_port: '{% raw %}{{ cm_policy_server_port }}{% endraw %}'
 
 framework:
   prefix_path: /opt/tsg/framework

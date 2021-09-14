@@ -77,10 +77,11 @@
     - name: "set cm_policy_server_ip var depend on enable_policy_local_cache"
       set_fact:
         cm_policy_server_ip: "{{ item.cm_policy_server_ip }}"
+        cm_policy_server_port: "{{ item.cm_policy_server_port }}"
       when: feature.enable_policy_local_cache == item.enable_policy_local_cache
       with_items:
-        - { "enable_policy_local_cache": 1, "npb_device": tera, "cm_policy_server_ip": 192.168.100.1 }
-        - { "enable_policy_local_cache": 0, "npb_device": inline_device, "cm_policy_server_ip": "{{ cm.policy_server.address }}" }
+        - { "enable_policy_local_cache": 1, "npb_device": tera, "cm_policy_server_ip": 192.168.100.1, "cm_policy_server_port": 7002 }
+        - { "enable_policy_local_cache": 0, "npb_device": inline_device, "cm_policy_server_ip": "{{ cm.policy_server.address }}", "cm_policy_server_port": "{{ cm.policy_server.port }}"}
 
     - name: "Add sapp service service_attach_startpre.conf.tera when NPB_device type is tera"
       copy:
