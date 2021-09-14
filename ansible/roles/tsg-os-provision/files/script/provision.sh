@@ -22,7 +22,7 @@ execute_provision_convert_action(){
 execute_provision_action(){
     ansible-playbook -i ${hosts_path} ${provision_path} -e "enable_config_apply=${enable_config_apply}"
     cp ${config_path} ${snapshot_config_path} -r 
-    rm ${snapshot_config_d_path}
+    rm ${snapshot_config_d_path} -rf
     cp -r ${config_d_path} ${snapshot_config_d_path}
 }
 
