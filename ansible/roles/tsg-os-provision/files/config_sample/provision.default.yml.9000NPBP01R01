@@ -33,9 +33,9 @@ coredump:
   sentry_url: http://127.0.0.1:9000/api/2/minidump/?sentry_key=3203b43fd5384a7dbe6a48ecb1f3c595
 
 advanced_settings:
-  stream_tcp_max: 100000
+  stream_tcp_max: 50000
   stream_tcp_timeout: 30
-  stream_udp_max: 100000
+  stream_udp_max: 50000
   stream_udp_timeout: 60
   stream_bypass_trigger_cpu_usage: 85
 
