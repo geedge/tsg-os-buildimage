@@ -165,3 +165,10 @@
     src: "{{ role_path }}/files/script/tsg-os-provision.sh"
     dest: /etc/profile.d/
     mode: 0755
+
+- name: "add sudo secure_path"
+  lineinfile:
+    path: /etc/sudoers
+    backrefs: yes
+    regexp: "^(.*Defaults    secure_path =.*)$"
+    line: '\1:/opt/tsg/tsg-os-provision'
