@@ -7,6 +7,7 @@ data_center:
 
 feature:
   enable_stream_bypass_under_ddos: 0
+  stream_bypass_trigger_cpu_usage: 85
 
 firewall:
   enable: 0/1

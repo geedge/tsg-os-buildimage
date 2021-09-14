@@ -1,6 +1,7 @@
 feature:
   enable_policy_local_cache: 1
   enable_stream_bypass_under_ddos: 0
+  stream_bypass_trigger_cpu_usage: 85
 
 firewall:
   enable: 1

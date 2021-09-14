@@ -81,8 +81,10 @@ dictator_enable=1
 {% endraw %}
 	
 ### note, cpu usage value is percent, for example, config value is 85, means 85%, valid range: [1,100]    
-### sapp change to bypass state immediately when realtime cpu usage > bypass_trigger_cpu_usage
-    bypass_trigger_cpu_usage=90    
+### sapp change to bypass state immediately when realtime cpu usage > bypass_trigger_cpu_usage 
+{% raw %}bypass_trigger_cpu_usage={{ feature.stream_bypass_trigger_cpu_usage }}
+{% endraw %}	
+
 ### note, unit of get_cpu_usage_interval is milliseconds(ms)     
     get_cpu_usage_interval=500
 ### note, use the average of the last $smooth_avg_window times as current realtime value 
