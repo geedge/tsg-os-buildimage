@@ -172,3 +172,10 @@
     backrefs: yes
     regexp: "^(.*Defaults    secure_path =.*)$"
     line: '\1:/opt/tsg/tsg-os-provision'
+
+- name: 'change ansible hash_behaviour value replace to merge'
+  lineinfile:
+    path: /etc/ansible/ansible.cfg
+    backrefs: yes
+    regexp: "^(.*#hash_behaviour = replace.*)$"
+    line: '\1\nhash_behaviour = merge'
