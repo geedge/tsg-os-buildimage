@@ -1,3 +1,7 @@
 #!/bin/bash -xe
 
+if [ "$(id -u)" != 0 ]; then
+    echo "No root privilege to execute, Please checkout the privilege"
+    exit 1
+fi
 /opt/tsg/tsg-os-provision/scripts/provision.sh 1
