@@ -168,16 +168,16 @@
         path: /data/tsg-os-provision/.provision_succeeded
         state: touch
 
-    - name: "tsg-os-provision: restart mrenv"
+    - name: "tsg-os-provision: start mrenv"
       systemd:
         name: mrenv
-        state: restarted
+        state: started
       when: enable_config_apply == '1'
 
-    - name: "tsg-os-provision: restart mrzcpd"
+    - name: "tsg-os-provision: start mrzcpd"
       systemd:
         name: mrzcpd
-        state: restarted
+        state: started
       when: enable_config_apply == '1'
 
     - name: "tsg-os-provision: restart mrapm_device"
