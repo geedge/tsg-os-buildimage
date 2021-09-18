@@ -122,10 +122,11 @@ mv_depth=4
 mv_width=13660
 timestemp=5
 min_report_threshold=150
-tcp_flood_thresh="{{ ddossketch.tcp_flood_report_thresh }}"
+{% raw %}tcp_flood_thresh="{{ ddossketch.tcp_flood_report_thresh }}"
 udp_flood_thresh="{{ ddossketch.udp_flood_report_thresh }}"
 icmp_flood_thresh="{{ ddossketch.icmp_flood_report_thresh }}"
 dns_flood_thresh="{{ ddossketch.dns_flood_report_thresh }}"
+{% endraw %}
 
 {% if PROFILE_ID == '9000-NPB-P01R01' %}
 [TRAFFIC_MIRROR]
