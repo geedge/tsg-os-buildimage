@@ -21,6 +21,10 @@ wannat:
 
 ddossketch:
   enable: 1
+  tcp_flood_report_thresh: 0.0008
+  udp_flood_report_thresh: 0.0008
+  icmp_flood_report_thresh: 0.0008
+  dns_flood_report_thresh: 0.0008
 
 app:
   identify_by:
