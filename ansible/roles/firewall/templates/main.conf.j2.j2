@@ -121,9 +121,11 @@ throughput=1
 mv_depth=4
 mv_width=13660
 timestemp=5
-min_report_threshold=20
-#tcp_flood, udp_flood, icmp_flood, dns_flood
-report_thresh="["0.008", "0.008", "0.008", "0.008"]"
+min_report_threshold=150
+tcp_flood_thresh="0.0008"
+udp_flood_thresh="0.0008"
+icmp_flood_thresh="0.0008"
+dns_flood_thresh="0.0008"
 
 {% if PROFILE_ID == '9000-NPB-P01R01' %}
 [TRAFFIC_MIRROR]
