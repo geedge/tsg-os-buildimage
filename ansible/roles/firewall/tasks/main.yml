@@ -36,3 +36,8 @@
     dest:  /opt/tsg/sapp/conf/http/http.conf
   tags: template
 
+- name: "Template the conf/quic/main.conf"
+  template:
+    src: "{{ role_path }}/templates/quic/main.conf.j2"
+    dest:  /opt/tsg/sapp/conf/quic/main.conf
+  tags: template
