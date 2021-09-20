@@ -2,6 +2,10 @@
 status_address_add_ipv4=0
 status_address_add_ipv6=0
 status_route_add_ipv4=0
+
+static_hostname=$(hostnamectl status --static)
+hostnamectl set-hostname $static_hostname --transient --pretty
+
 ifconfig eth_ctl {{ network_setting.nic_policy_log.ipv4 }}
 status_address_add_ipv4=$?
 if [ $status_address_add_ipv4 -ne 0 ]; then
