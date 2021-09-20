@@ -64,15 +64,23 @@
         success_msg: "{{ result_exec_adapt_tera_network_setting.stdout_lines }}"
       when: npb_device == 'tera'
 
-    - name: "set sapp_overlay_mode var depend on NPB device"
+    - name: "set sapp_overlay_mode var when NPB device is tera"
       set_fact:
-        sapp_overlay_mode: "{{ item.sapp_overlay_mode }}"
-        gdev_conf_keep_alive_ip: "{{ item.gdev_conf_keep_alive_ip }}"
-      when: npb_device == item.npb_device
-      with_items:
-        - { "sapp_overlay_mode": none, "npb_device": tera, "gdev_conf_keep_alive_ip": 127.0.0.1 }
-        - { "sapp_overlay_mode": vxlan, "npb_device": inline_device, "gdev_conf_keep_alive_ip": "{{ inline_device_settings.keepalive.ip }}" }
-        - { "sapp_overlay_mode": none, "npb_device": direct, "gdev_conf_keep_alive_ip": 127.0.0.1 }
+        sapp_overlay_mode: "none"
+        gdev_conf_keep_alive_ip: "127.0.0.1"
+      when: npb_device == 'tera'
+
+    - name: "set sapp_overlay_mode var when NPB device is inline_device"
+      set_fact:
+        sapp_overlay_mode: "vxlan"
+        gdev_conf_keep_alive_ip: "{{ inline_device_settings.keepalive.ip }}"
+      when: npb_device == 'inline_device'
+
+    - name: "set sapp_overlay_mode var when NPB device is direct"
+      set_fact:
+        sapp_overlay_mode: "none"
+        gdev_conf_keep_alive_ip: "127.0.0.1"
+      when: npb_device == 'direct'
 
     - name: "set cm_policy_server_ip var depend on enable_policy_local_cache"
       set_fact:
