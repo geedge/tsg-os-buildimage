@@ -17,6 +17,7 @@
     - name: Load provision.yml.d config file variable
       include_vars:
         dir: /data/tsg-os-provision/provision.yml.d/
+        ignore_unknown_extensions: yes
         extensions:
           - 'yml'
           - 'yaml'
