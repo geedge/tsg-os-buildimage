@@ -6,6 +6,7 @@ file perms = 644
 DEBUG=10
 INFO=20
 FATAL=30
+STOP=40
 [formats]
 other = "%d(%c), %V, %F, %U, %m%n"
 plugin = "%d(%c), %m%n"
@@ -13,4 +14,5 @@ plugin = "%d(%c), %m%n"
 __log_runtimelog.fatal    "./log/runtimelog.%d(%F)"
 __log_runtimelog_plugin.fatal    >stdout; plugin
 __log_runtimelog_plugin.info    "./log/plugin.log.%d(%F)"; plugin
+__tsglog_app_sketch_local_app_sketch_local.stop "./log/%c.%d(%F)"; other
 !.fatal    "./log/%c.%d(%F)"; other
