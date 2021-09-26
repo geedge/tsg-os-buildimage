@@ -10,7 +10,7 @@ FATAL=30
 other = "%d(%c), %V, %F, %U, %m%n"
 plugin = "%d(%c), %m%n"
 [rules]
-__log_runtimelog.info    "./log/runtimelog.%d(%F)"
+__log_runtimelog.fatal    "./log/runtimelog.%d(%F)"
 __log_runtimelog_plugin.fatal    >stdout; plugin
 __log_runtimelog_plugin.info    "./log/plugin.log.%d(%F)"; plugin
 !.fatal    "./log/%c.%d(%F)"; other
