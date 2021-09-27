@@ -179,6 +179,15 @@
   with_items:
     - /usr/lib/systemd/system/sapp.service   
 
+- name: 'delete r2,r3'
+  file:
+    path: "/opt/tsg/sapp/{{ item }}"
+    state: absent
+  with_items:
+    - r2
+    - r3
+
+
 ##################### sapp #####################
 - name: "enable sapp"
   systemd:
