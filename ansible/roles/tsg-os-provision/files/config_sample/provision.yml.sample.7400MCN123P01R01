@@ -1,8 +1,9 @@
 version: 1
 
-data_center:
-  name: City instance
-  id: 1
+device:
+  tags:
+    - key1: value1
+    - key2: value2
 
 feature:
   enable_policy_local_cache: 1
