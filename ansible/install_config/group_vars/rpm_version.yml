@@ -40,7 +40,7 @@ framework_rpm_version:
   libtsglua: libtsglua-1.0.8.0dbf2e6
   libwiredcfg: libwiredcfg-2.0.6.67ae0ab
   libWiredLB: libWiredLB-2.0.5.4629165
-  libbreakpad_mini: libbreakpad_mini-1.0.5.b0f8073
+  libbreakpad_mini: libbreakpad_mini-1.0.7.c421107
   libhos-client-cpp: libhos-client-cpp-2.0.6.7b6a128
   libMV_Sketch: libMV_Sketch-1.0.12.20210922.b53318f
   librdkfka: librdkafka-1.2.0.4b8dd6d
