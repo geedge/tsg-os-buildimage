@@ -3,8 +3,14 @@
 ./plug/platform/wannat/wangw.inf
 ./plug/platform/wire_graft/wire_graft.inf
 {% endif %}
+{% if connsketch.enable is defined %}
 {% if connsketch.enable == 1 %}
 ./plug/platform/app_proto_identify/app_proto_identify.inf
+{% endif %}
+{% else %}
+{% if sessionrecord.enable == 1 %}
+./plug/platform/app_proto_identify/app_proto_identify.inf
+{% endif %}
 {% endif %}
 ./plug/platform/tsg_master/tsg_master.inf
 {% if app.identify_by.builtin_app_engine == 1 %}
@@ -28,8 +34,14 @@
 ./plug/protocol/gtp/gtp.inf
 
 [business]
-{% raw %}{% if connsketch.enable == 1 %}
+{% raw %}{% if connsketch.enable is defined %}
+{% if connsketch.enable == 1 %}
 ./plug/business/tsg_conn_sketch/tsg_conn_sketch.inf
+{% endif %}
+{% else %}
+{% if sessionrecord.enable == 1 %}
+./plug/business/tsg_conn_sketch/tsg_conn_sketch.inf
+{% endif %}
 {% endif %}
 {% if capturepacket.enable == 1 %}
 ./plug/business/capture_packet_plug/capture_packet_plug.inf

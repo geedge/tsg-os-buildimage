@@ -8,7 +8,7 @@ firewall:
 proxy:
   enable: 1
 
-connsketch:
+sessionrecord:
   enable: 1
 
 capturepacket:
