@@ -5,7 +5,7 @@ device:
     - key1: value1
     - key2: value2
 
-session_record_id_generator:
+session_id_generator:
   snowflake_worker_id_base: 1
   snowflake_worker_id_offset: 1
 

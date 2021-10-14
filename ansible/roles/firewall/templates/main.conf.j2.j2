@@ -65,12 +65,12 @@ APP_NAME="tsg_master"
 
 [SYSTEM]
 NIC_NAME="{{ firewall.main_conf.SYSTEM.NIC_NAME }}"
-{% raw %}{% if session_record_id_generator.snowflake_worker_id_base is defined %}
-DATACENTER_ID={{ session_record_id_generator.snowflake_worker_id_base }}
+{% raw %}{% if session_id_generator.snowflake_worker_id_base is defined %}
+DATACENTER_ID={{ session_id_generator.snowflake_worker_id_base }}
 {% elif data_center.id is defined %}
 DATACENTER_ID={{ data_center.id }}
 {% else %}
-DATACENTER_ID={{ session_record_id_generator.snowflake_worker_id_base }}
+DATACENTER_ID={{ session_id_generator.snowflake_worker_id_base }}
 {% endif %}
 {% endraw %}
 LOG_LEVEL=30
@@ -78,12 +78,12 @@ LOG_PATH="./tsglog/tsg_master"
 POLICY_PRIORITY_LABEL="POLICY_PRIORITY"
 L7_PROTOCOL_FILE="./tsgconf/tsg_l7_protocol.conf"
 DEVICE_ID_COMMAND="hostname | awk -F'-' '{print $3}'| awk -F'adc' '{print $2}'"
-{% raw %}{% if session_record_id_generator.snowflake_worker_id_offset is defined %}
-DEVICE_SEQ_IN_DATA_CENTER={{ session_record_id_generator.snowflake_worker_id_offset }}
+{% raw %}{% if session_id_generator.snowflake_worker_id_offset is defined %}
+DEVICE_SEQ_IN_DATA_CENTER={{ session_id_generator.snowflake_worker_id_offset }}
 {% elif device.sequence_in_data_center is defined %}
 DEVICE_SEQ_IN_DATA_CENTER={{ device.sequence_in_data_center }}
 {% else %}
-DEVICE_SEQ_IN_DATA_CENTER={{ session_record_id_generator.snowflake_worker_id_offset }}
+DEVICE_SEQ_IN_DATA_CENTER={{ session_id_generator.snowflake_worker_id_offset }}
 {% endif %}
 {% endraw %}
 
