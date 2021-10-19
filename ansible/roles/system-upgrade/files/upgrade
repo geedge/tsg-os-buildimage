@@ -1,0 +1,82 @@
+#!/bin/bash
+#Scripts are used to automatically upgrade the system
+repo_path='/update/repo/user/'
+
+if [ `whoami` = "root" ];then
+    echo "Root user"
+else
+    echo "non-root user"
+    exit 1
+fi
+
+function help()
+{
+    cat <<- EOF
+    Usage:    upgrade   [OPTION]... [FILE]...     or   upgrade   [OPTION]...[OPTION]...[FILE]...    File should be full path 
+    
+    -h --help       Print program help and exit
+    
+    -p --path       The path where the bin file needs to be executed
+
+    -f --force      Ignore warning , never prompt 
+EOF
+    exit 0
+}
+
+
+function warning(){
+    read -r -p "Next, the upgrade will be carried out. Please be careful. Enter y to continue and N to stop. [Y/n] " input
+
+    case $input in
+    [yY][eE][sS]|[yY])
+               mainpart
+               ;;
+    [nN][oO]|[nN])
+               echo "No"
+               exit 1
+               ;;
+    *)
+               echo "Invalid input..."
+               exit 1
+               ;;
+    esac
+}
+
+function mainpart(){
+    if [ -h '/data/onie-installer-x86_64.bin' ];then
+        rm -rf  /data/onie-installer-x86_64.bin
+        (source ./depository  -a  $path)    
+    else
+        (source ./depository  -a  $path)    
+    fi
+    bin_name=`echo ${path##*/}`
+    echo  $bin_name
+    ln -s  $repo_path$bin_name   /data/onie-installer-x86_64.bin 
+    echo "After 10 seconds, the operating system will be reinstalled. If you need to stop, press Ctrl + C"
+    sleep 10s
+    rm -rf $path
+    onie-reboot-install
+}
+
+main(){
+    if [ "$force" ==  "-force" -o  "$force" == "-f" ];then
+        mainpart           
+    else
+        warning 
+    fi
+}
+
+while [ -n "$1" ];do 
+    case $1 in
+    -p|--path)  path=$2 
+    shift 2;; 
+    -f|--force) force=$1
+    shift 1;;
+    -h|--help) help;; 
+    --) shift;break;; 
+    -*) echo "error: no such option $1."; exit 1;;
+    *) break;;
+    esac
+done
+
+main

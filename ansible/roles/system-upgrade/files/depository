@@ -1,0 +1,81 @@
+#!/usr/bin/env sh
+repo_path='/update/repo/user'
+bin_num=6
+
+function help(){
+    cat <<- EOF
+    Usage: repo  [OPTION]... FILE...   The file parameter can be null. The specific usage is as follows. File should be full path.        
+   
+    -h --help      
+    
+    -a --add         repo  -a   file     Add a new bin file to the warehouse and delete one. Keep the number of warehouse files to 5 
+                         
+    -d --delete      repo  -d   file     Delete the specified bin file
+
+    -q --query       repo  -q            Query all bin files in the warehouse
+
+    -e --eliminate   repo  -e            Eliminate file,keep the last 5 bin files in the warehouse
+  
+EOF
+    exit 0
+}
+
+function query(){
+content=`ls -thl  $repo_path/|awk '{print $6,$7,$8,$5,$9}'`
+printf "\e[40;94m %s\n\e[0m" "   date""              size""                name"
+IFS=$'\n'
+for line in  $content;
+do
+  IFS=$IFS
+  arr=($line)
+  date=`echo $arr|cut -d ' ' -f1,2,3`
+  size=`echo $arr|cut -d ' ' -f4`
+  name=`echo $arr|cut -d ' ' -f5`
+  echo $date "         $size" "        $name"
+done;
+IFS=$IFS
+exit 0
+}
+
+function delete(){
+if [ ! $del_path ]; then
+  echo "This parameter cannot be empty"
+  exit 1
+else
+  rm -rf $del_path
+  exit 0
+fi
+}
+
+function eliminate(){
+ls -tQ $repo_path/*.bin| tail -n+$bin_num | xargs rm -f
+exit 0
+}
+
+function add(){
+if [ ! $bin_path ]; then
+  echo "This parameter cannot be empty"
+  exit 1
+else
+  cp -ar $bin_path  $repo_path
+  eliminate
+  exit 0
+fi
+}
+
+
+while [ -n "$1" ];do 
+    case $1 in
+    -a|--add) bin_path=$2 add 
+    shift 2;; 
+    -d|--delete) del_path=$2 delete
+    shift 2;;
+    -e|--eliminate) eliminate;;
+    -q|--query) query;;
+    -h|--help) help;; 
+    --) shift;break;; 
+    -*) echo "error: no such option $1."; exit 1;;
+    *) break;;
+    esac
+done
+

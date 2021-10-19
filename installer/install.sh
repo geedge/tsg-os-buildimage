@@ -254,6 +254,11 @@ mount -t sysfs sys ${distro_mnt}/sys
 cp -a ${blk_dev} ${distro_mnt}/${blk_dev}
 cp -a ${random_dev} ${distro_mnt}/${random_dev}
 
+mkdir -p ${distro_mnt}/update
+mount -t ext4 /dev/sda${exp_part_tsg_os_update} ${distro_mnt}/update
+mkdir -p ${distro_mnt}/update/repo/user
+mkdir -p ${distro_mnt}/update/repo/factory
+
 mkdir -p ${distro_mnt}/data
 mount -t ext4 /dev/sda${exp_part_tsg_os_data} ${distro_mnt}/data
 
@@ -267,7 +272,7 @@ chroot ${distro_mnt} /distro-setup.sh ${distro_dev}
 umount ${distro_mnt}/proc
 umount ${distro_mnt}/sys
 umount ${distro_mnt}/data
-
+umount ${distro_mnt}/update
 # Install boot loader
 echo "Install GRUB2 bootloader .."
 

@@ -1,0 +1,15 @@
+- name: "upgrade Script copy"
+  copy:
+    src: '{{ role_path }}/files/upgrade'
+    dest: /opt/system-upgrade/
+    mode: '0755'
+- name: "depository Script copy"
+  copy:
+    src: '{{ role_path }}/files/depository'
+    dest: /opt/system-upgrade/
+    mode: '0755'
+- name: "upgradepath Script copy"
+  copy:
+    src: '{{ role_path }}/files/upgradepath.sh'
+    dest: /etc/profile.d/
+    mode: '0755'
