@@ -76,7 +76,7 @@ tfe:
       enable: 1
       device: eth_vf_mirr
       type: 1
-      default_vlan_id_for_mac: 300
+      default_vlan_id_for_mac: 1025
 
 tsg_diagnose:
   docker_compose_yml:
