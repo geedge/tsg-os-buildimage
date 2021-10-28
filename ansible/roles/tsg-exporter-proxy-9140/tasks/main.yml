@@ -43,7 +43,7 @@
     replace: 'WantedBy=workload.target'
   with_items:
     - /usr/lib/systemd/system/exporter-proxy.service
-  when: PROFILE_ID == '9000-NPB-P01R01'
+  when: runtime_env == '9140'
 
 - name: 'exporter-proxy service start'
   systemd:

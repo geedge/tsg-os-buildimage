@@ -38,63 +38,63 @@
     src: "{{ role_path }}/files/tasks/provision.yml.9000NPBP01R01"
     dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
     mode: 0644
-  when: PROFILE_ID == '9000-NPB-P01R01'
+  when: runtime_env == '9140'
 
 - name: "tsg-os-provision: copy tasks file that excutes provision to dest - tsg7400 mcn0"
   copy:
     src: "{{ role_path }}/files/tasks/provision.yml.7400MCN0P01R01"
     dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
     mode: 0644
-  when: PROFILE_ID == '7400-MCN0-P01R01'
+  when: runtime_env == '7400mcn0'
 
 - name: "tsg-os-provision: copy tasks file that excutes provision to dest - tsg7400 mcn1 mcn2 mcn3"
   copy:
     src: "{{ role_path }}/files/tasks/provision.yml.7400MCN123P01R01"
     dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
     mode: 0644
-  when: PROFILE_ID == '7400-MCN123-P01R01'
+  when: runtime_env == '7400mcn123'
 
 - name: "tsg-os-provision: copy provision.yml.sample file to dest - tsg9140"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.yml.sample.9000NPBP01R01"
     dest: /opt/tsg/tsg-os-provision/provision.yml.sample
     mode: 0644
-  when: PROFILE_ID == '9000-NPB-P01R01'
+  when: runtime_env == '9140'
 
 - name: "tsg-os-provision: copy provision.default.yml - tsg7400 mcn0"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.default.yml.7400MCN0P01R01"
     dest: /opt/tsg/tsg-os-provision/provision.default.yml
     mode: 0644
-  when: PROFILE_ID == '7400-MCN0-P01R01'
+  when: runtime_env == '7400mcn0'
 
 - name: "tsg-os-provision: copy provision.default.yml - tsg7400 mcn123"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.default.yml.7400MCN123P01R01"
     dest: /opt/tsg/tsg-os-provision/provision.default.yml
     mode: 0644
-  when: PROFILE_ID == '7400-MCN123-P01R01'
+  when: runtime_env == '7400mcn123'
 
 - name: "tsg-os-provision: copy provision.default.yml - tsg9140"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.default.yml.9000NPBP01R01"
     dest: /opt/tsg/tsg-os-provision/provision.default.yml
     mode: 0644
-  when: PROFILE_ID == '9000-NPB-P01R01'
+  when: runtime_env == '9140'
 
 - name: "tsg-os-provision: copy provision.yml.sample to dest - tsg7400 mcn0"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.yml.sample.7400MCN0P01R01"
     dest: /opt/tsg/tsg-os-provision/provision.yml.sample
     mode: 0644
-  when: PROFILE_ID == '7400-MCN0-P01R01'
+  when: runtime_env == '7400mcn0'
 
 - name: "tsg-os-provision: copy provision.yml.sample to dest - tsg7400 mcn1 mcn2 mcn3"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.yml.sample.7400MCN123P01R01"
     dest: /opt/tsg/tsg-os-provision/provision.yml.sample
     mode: 0644
-  when: PROFILE_ID == '7400-MCN123-P01R01'
+  when: runtime_env == '7400mcn123'
 
 
 - name: "tsg-os-provision: copy provision.sh file to dest"
@@ -113,7 +113,7 @@
     mode: 0644
   with_items:
     - { "src": tsg-os-provision.service.TSG7400, "dest": tsg-os-provision.service }
-  when: PROFILE_ID == '7400-MCN0-P01R01' or PROFILE_ID == '7400-MCN123-P01R01'
+  when: runtime_env == '7400mcn0' or runtime_env == '7400mcn123'
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target --TSG7400"
   replace:
@@ -122,7 +122,7 @@
     replace: 'RequiredBy=workload.target'
   with_items:
     - /usr/lib/systemd/system/tsg-os-provision.service
-  when: PROFILE_ID == '7400-MCN0-P01R01' or PROFILE_ID == '7400-MCN123-P01R01'
+  when: runtime_env == '7400mcn0' or runtime_env == '7400mcn123'
 
 - name: "tsg-os-provision: enable tsg-os-provison -- TSG7400"
   systemd:
@@ -130,7 +130,7 @@
     enabled: yes
   with_items:
     - tsg-os-provision
-  when: PROFILE_ID == '7400-MCN0-P01R01' or PROFILE_ID == '7400-MCN123-P01R01'
+  when: runtime_env == '7400mcn0' or runtime_env == '7400mcn123'
 
 - name: "install tsg-os-provision.service -- TSG9140"
   copy:
@@ -139,13 +139,13 @@
     mode: 0644
   with_items:
     - { "src": tsg-os-provision.service.TSG9140, "dest": tsg-os-provision.service }
-  when: PROFILE_ID == '9000-NPB-P01R01'
+  when: runtime_env == '9140'
 
 - name: "replace action: add service into sysinit.target --TSG9140"
   shell: ln -vfs --relative /usr/lib/systemd/system/{{item}} /usr/lib/systemd/system/sysinit.target.wants/{{item}}
   with_items:
     - tsg-os-provision.service
-  when: PROFILE_ID == '9000-NPB-P01R01'
+  when: runtime_env == '9140'
 
 
 - name: "tsg-os-provision: copy tsg-start.sh to dest - tsg9140"
@@ -153,7 +153,7 @@
     src: "{{ role_path }}/files/script/provision-config-apply"
     dest: /opt/tsg/tsg-os-provision/
     mode: 0755
-  when: PROFILE_ID == '9000-NPB-P01R01'
+  when: runtime_env == '9140'
 
 #- name: "tsg-os-provision: install yaml module using pip3"
 #  pip:

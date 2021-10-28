@@ -99,7 +99,7 @@ networks:
     driver: macvlan
     enable_ipv6: true
     driver_opts: 
-      parent: {{ tsg_diagnose.docker_compose_yml.virtual_server_nic }}
+      parent: {{ diagnose.virtual_server_nic }}
     ipam: 
       config: 
         - subnet: 192.0.2.0/24
@@ -114,7 +114,7 @@ networks:
     driver: macvlan
     enable_ipv6: true
     driver_opts:
-      parent: {{ tsg_diagnose.docker_compose_yml.virtual_client_nic }}
+      parent: {{ diagnose.virtual_client_nic }}
     ipam:
       config:
         - subnet: 192.0.2.0/24

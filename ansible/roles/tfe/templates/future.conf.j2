@@ -1,9 +1,9 @@
 [STAT]
 no_stats=0
-{% if PROFILE_ID == '7400-MCN123-P01R01' %}
+{% if dp_steering_proxy.location == 'foreign' %}
 statsd_server=192.168.100.1
 {% endif %}
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
+{% if dp_steering_proxy.location == 'local' %}
 statsd_server=127.0.0.1
 {% endif %}
 statsd_port=8100

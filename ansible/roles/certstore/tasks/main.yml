@@ -2,12 +2,8 @@
   file: path=/opt/tsg state=directory
   tags: mkdir
 
-- name: install certstore
-  yum:
-    name:
-      - "{{ certstore_rpm_version.certstore }}"
-    conf_file: "{{ rpm_repo_config_path }}"
-    state: present
+- name: "Install certstore"
+  shell: rpm -i /tmp/rpm_download/{{ certstore_rpm_version.certstore }}*
 
 - name: template certstore configure file
   template:

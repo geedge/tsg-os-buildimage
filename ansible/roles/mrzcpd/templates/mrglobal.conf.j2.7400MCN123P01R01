@@ -1,14 +1,14 @@
 [device]
-device={{ mrzcpd.mrglobal_conf.device.nic_mirr }}
+device={{ dp_traffic_mirror.nic_name }}
 sz_tunnel=8192
 sz_buffer=0
 
-[device:{{ mrzcpd.mrglobal_conf.device.nic_mirr }}]
+[device:{{ dp_traffic_mirror.nic_name }}]
 promisc=0
 rssmode=0
 
 [service]
-iocore={{ mrzcpd.mrglobal_conf.service.iocore }}
+iocore={{ workload_zcpd.cpu_affinity }}
 
 [eal]
 virtaddr=0x7d0000000000

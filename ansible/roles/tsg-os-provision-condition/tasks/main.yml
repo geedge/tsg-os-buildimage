@@ -14,7 +14,7 @@
     - telegraf_statistic
     - tfe-env
     - tfe
-  when: PROFILE_ID == '9000-NPB-P01R01'
+  when: runtime_env == '9140'
 
 - name: "add condition into service depend provision result TSG7400 MCN0"
   copy:
@@ -30,7 +30,7 @@
     - mrzcpd
     - sapp
     - telegraf_statistic
-  when: PROFILE_ID == '7400-MCN0-P01R01'
+  when: runtime_env == '7400mcn0'
 
 - name: "add condition into service depend provision result TSG7400 MCN0"
   copy:
@@ -44,4 +44,4 @@
     - mrzcpd
     - tfe-env
     - tfe
-  when: PROFILE_ID == '7400-MCN123-P01R01'
+  when: runtime_env == '7400mcn123'

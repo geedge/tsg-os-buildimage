@@ -1,9 +1,5 @@
-- name: "Install tsg-diagnose rpm package"
-  yum:
-    name:
-      - "{{ tsg_diagnose_rpm_version.tsg_diagnose }}"
-    conf_file: "{{ rpm_repo_config_path }}"
-    state: present
+- name: "Install  tsg-diagnose"
+  shell: rpm -i /tmp/rpm_download/{{ tsg_diagnose_rpm_version.tsg_diagnose }}*
 
 - name: "Templates docker-compose.yml"
   template:

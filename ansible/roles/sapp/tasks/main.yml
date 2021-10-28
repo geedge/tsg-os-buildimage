@@ -9,20 +9,11 @@
     - /opt/tsg/sapp
     - /opt/tsg/framework
 
-- name: "download sapp and tcpdump_mesa rpms from localhost"
-  yum:
-    name: "{{ item.value }}"
-    conf_file: "{{ rpm_repo_config_path }}"
-    state: present
-    download_only: yes
-    download_dir: /tmp/rpm_download/
-  with_dict: "{{ sapp_rpm_version }}"
-
 - name: "Install sapp and tcpdump_mesa rpm package"
   shell: rpm -i /tmp/rpm_download/{{ item.rpm_version }}* --prefix {{ item.prefix_path }}
   with_items:
-    - {"rpm_version": "{{ sapp_rpm_version.sapp }}", "prefix_path": "{{ sapp.prefix_path }}" }
-    - {"rpm_version": "{{ sapp_rpm_version.tcpdump_mesa }}", "prefix_path": "{{ framework.prefix_path }}" }
+    - {"rpm_version": "{{ sapp_rpm_version.sapp }}", "prefix_path": "{{ prefix_path.sapp }}" }
+    - {"rpm_version": "{{ sapp_rpm_version.tcpdump_mesa }}", "prefix_path": "{{ prefix_path.framework }}" }
 
 - name: replace sapp service
   replace:
@@ -70,7 +61,7 @@
     dest: /opt/tsg/tsg-os-provision/templates/conflist.inf.j2
   tags: template
   when:
-    - PROFILE_ID == '9000-NPB-P01R01'
+    - runtime_env == '9140'
 
 - name: Template the conflist.inf - tsg_7400
   template:
@@ -78,7 +69,7 @@
     dest: /opt/tsg/tsg-os-provision/templates/conflist.inf.j2
   tags: template
   when:
-    - PROFILE_ID == '7400-MCN0-P01R01'
+    - runtime_env == '7400mcn0'
 
 - name: Template the entrylist.conf.j2
   template:
@@ -97,8 +88,6 @@
     src: "{{ role_path }}/templates/necessary_plug_list.conf.j2"
     dest: /opt/tsg/sapp/etc/necessary_plug_list.conf
   tags: template
-  when:
-    - PROFILE_ID == '7400-MCN0-P01R01' or PROFILE_ID == '9000-NPB-P01R01'
 
 - name: Template the vlan_flipping_map.conf - tsg-9140
   template:
@@ -106,7 +95,7 @@
     dest: /opt/tsg/sapp/etc/vlan_flipping_map.conf
   tags: template
   when:
-    - PROFILE_ID == '9000-NPB-P01R01'
+    - runtime_env == '9140'
 
 - name: Template the vlan_flipping_map.conf - tsg-7400
   template:
@@ -114,7 +103,7 @@
     dest: /opt/tsg/tsg-os-provision/templates/vlan_flipping_map.conf.j2
   tags: template
   when:
-    - PROFILE_ID == '7400-MCN0-P01R01'
+    - runtime_env == '7400mcn0'
 
 - name: Template the sapp_log.conf
   template:
@@ -177,7 +166,7 @@
     - { src: "{{ role_path }}/files/service_attach_startpre.conf.except_tera", mode: "0644" }
     - { src: "{{ role_path }}/files/tera_fake_promisc_setup.sh", mode: "0755" }
   when:
-    - PROFILE_ID == '7400-MCN0-P01R01'
+    - runtime_env == '7400mcn0'
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:

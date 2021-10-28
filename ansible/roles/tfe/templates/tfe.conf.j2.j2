@@ -1,5 +1,5 @@
 [system]
-nr_worker_threads={{ tfe.tfe_conf.system.nr_worker_threads }}
+nr_worker_threads={{ dp_proxy.worker_thread }}
 enable_kni_v1=0
 enable_kni_v2=0
 enable_kni_v3=1
@@ -35,8 +35,8 @@ breakpad_upload_tools=/opt/tsg/framework/bin/minidump_upload
 # ask for at least (1 + nr_worker_threads) masks
 # the first  mask for acceptor thread
 # the others mask for worker   thread
-enable_cpu_affinity={{ tfe.tfe_conf.system.enable_cpu_affinity }}
-cpu_affinity_mask=48-55
+enable_cpu_affinity={{ dp_proxy.enable_cpu_affinity }}
+cpu_affinity_mask={{ dp_proxy.cpu_affinity }}
 
 # LEAST_CONN = 0; ROUND_ROBIN = 1
 load_balance=1
@@ -56,7 +56,12 @@ queue_no_enobufs=1
 
 # send cmsg
 send_switch=1
-ip={{ tfe.tfe_conf.kni.ip }}
+{% if dp_steering_proxy.location == 'local' %}
+ip=127.0.0.1
+{% endif %}
+{% if dp_steering_proxy.location == 'foreign'%}
+ip=192.168.100.1
+{% endif %}
 cmsg_port=2475
 
 # watch dog
@@ -117,7 +122,7 @@ key_log_file=log/sslkeylog.log
 
 # mid cert cache
 mc_cache_enable=1
-mc_cache_eth={{ tfe.tfe_conf.ssl.mc_cache_eth }}
+mc_cache_eth={{ control_and_policy.nic_name }}
 {% raw %}mc_cache_broker_list={{ olap.kafka_broker.address_list | join(",") }}
 {% endraw %}
 mc_cache_topic=PXY-EXCH-INTERMEDIA-CERT
@@ -129,7 +134,12 @@ sasl_passwd=galaxy2019
 #0 on cache 1 off cache
 no_cache=0
 mode=normal
-cert_store_host={{ tfe.tfe_conf.key_keeper.cert_store_host }}
+{% if dp_certstore == 'local' %}
+cert_store_host=127.0.0.1
+{% endif %}
+{% if dp_certstore == 'foreign'%}
+cert_store_host=
+{% endif %}
 cert_store_port=9991
 ca_path=resource/tfe/tango-ca-v3-trust-ca.pem
 untrusted_ca_path=resource/tfe/tango-ca-v3-untrust-ca.pem
@@ -169,10 +179,10 @@ tcp_ttl_upstream=75
 tcp_ttl_downstream=70
 
 [stat]
-{% if PROFILE_ID == '7400-MCN123-P01R01' %}
+{% if dp_steering_proxy.location == 'foreign' %}
 statsd_server=192.168.100.1
 {% endif %}
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
+{% if dp_steering_proxy.location == 'local' %}
 statsd_server=127.0.0.1
 {% endif %}
 statsd_port=8100
@@ -184,18 +194,18 @@ statsd_set_prometheus_port=9001
 statsd_set_prometheus_url_path=/metrics
 
 [traffic_mirror]
-enable={{ tfe.tfe_conf.traffic_mirror.enable }}
-device={{ tfe.tfe_conf.traffic_mirror.device }}
+enable={{ dp_proxy.enable_traffic_mirror }}
+device={{ dp_traffic_mirror.nic_name }}
 # 0:TRAFFIC_MIRROR_ETHDEV_AF_PACKET; 1:TRAFFIC_MIRROR_ETHDEV_MARSIO
-type={{ tfe.tfe_conf.traffic_mirror.type }}
-default_vlan_id_for_mac={{ tfe.tfe_conf.traffic_mirror.default_vlan_id_for_mac }}
+type={{ dp_proxy.traffic_mirror_type }}
+default_vlan_id_for_mac={{ dp_proxy.traffic_mirror_vlan_id }}
 
 table_info=resource/pangu/table_info_traffic_mirror.conf
 stat_file=log/traffic_mirror.status
 
 [kafka]
 enable=1
-NIC_NAME={{ tfe.tfe_conf.kafka.NIC_NAME }}
+NIC_NAME={{ control_and_policy.nic_name }}
 {% raw %}kafka_brokerlist={{ olap.kafka_broker.address_list | join(",") }}
 {% endraw %}
 kafka_topic=PROXY-EVENT
@@ -218,8 +228,8 @@ deferred_load_on=0
 json_cfg_file=resource/pangu/pangu_http.json
 
 # redis mode conf iterm
-maat_redis_server={{ cm_policy_server_ip }}
-maat_redis_port_range={{ cm_policy_server_port }}
+maat_redis_server={% raw %}{{ cm_policy_server_ip }}{% endraw %}
+maat_redis_port_range={% raw %}{{ cm_policy_server_port }}{% endraw %}
 {% raw %}maat_redis_db_index={{ cm.policy_server.db_static }}
 {% endraw %}
 

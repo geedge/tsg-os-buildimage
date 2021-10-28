@@ -1,5 +1,5 @@
 [Module]
-pcapdevice={{ sapp.gdev_conf.Module.pcapdevice }}
-sendto_gdev_card={{ sapp.gdev_conf.Module.sendto_gdev_card }}
-sendto_gdev_ip={{ sapp.gdev_conf.Module.sendto_gdev_ip }}
+pcapdevice={{ dp_steering_firewall.nic_internal }}
+sendto_gdev_card={{ dp_steering_firewall.nic_internal }}
+sendto_gdev_ip={% raw %}{{ gdev_conf_keep_alive_ip }}{% endraw %}
 gdev_status_switch=1

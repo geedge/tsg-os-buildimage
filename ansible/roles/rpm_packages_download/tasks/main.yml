@@ -1,0 +1,123 @@
+---
+- name: "download rpm packages: certstore"
+  yum:
+    name:
+      - "{{ certstore_rpm_version.certstore }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+- name: "download rpm packages: firewall"
+  yum:
+    name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+  with_dict: "{{ firewall_rpm_version }}"
+
+- name: "uninstall rsyslog-kafka and librdkafka"
+  yum:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - rsyslog-kafka
+    - librdkafka
+
+- name: "download rpm packages: framework"
+  yum:
+    name: "{{ item.value }}"
+    state: present
+    conf_file: "{{ rpm_repo_config_path }}"
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+  with_dict: "{{ framework_rpm_version }}"
+
+- name: "download rpm packages: kni"
+  yum:
+    name:
+      - "{{ kni_rpm_version.kni }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+- name: "download rpm packages: mrzcpd"
+  yum:
+    name: "{{ mrzcpd_rpm_version.mrzcpd }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+- name: "download rpm packages: sapp and tcpdump_mesa"
+  yum:
+    name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+  with_dict: "{{ sapp_rpm_version }}"
+
+- name: "download rpm packages: tfe"
+  yum:
+    name:
+      - "{{ tfe_rpm_version.tfe }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+- name: "download rpm packages: app_skecth_local"
+  yum:
+    name: "{{ tsg_app_rpm_version.app_sketch_local }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+  
+- name: "install tsg_master from localhost"
+  yum:
+    name:
+      - "{{ tsg_master_rpm_version.tsg_master }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+- name: "Install tsg-diagnose rpm package"
+  yum:
+    name:
+      - "{{ tsg_diagnose_rpm_version.tsg_diagnose }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+- name: "install http_healthcheck from localhost"
+  yum:
+    name: "{{ http_healthcheck_rpm_version.http_healthcheck }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+
+- name: "install wannat wangw plug packages"
+  yum:
+    name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+  with_dict: "{{ wannat_wangw_rpm_version }}"
+
+- name: "install wire_graft plug packages"
+  yum:
+    name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: /tmp/rpm_download/
+  with_dict: "{{ wire_graft_rpm_version }}"

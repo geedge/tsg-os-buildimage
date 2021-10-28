@@ -1,15 +1,6 @@
 ---
-- name: "install firewall packages"
-  yum:
-    name: "{{ item.value }}"
-    conf_file: "{{ rpm_repo_config_path }}"
-    state: present
-    download_only: yes
-    download_dir: /tmp/rpm_download/
-  with_dict: "{{ firewall_rpm_version }}"
-
 - name: "Install firwall that are sapp plugins"
-  shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ sapp.prefix_path }}
+  shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ prefix_path.sapp }}
   with_dict: "{{ firewall_rpm_version }}"
 
 - name: "Template the tsgconf/main.conf"

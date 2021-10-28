@@ -26,14 +26,14 @@
     src: '{{ role_path }}/files/redis_exporter'
     dest: /opt/tsg/exporter/redis_exporter
     mode: 0755
-  when: PROFILE_ID == '7400-MCN0-P01R01'
+  when: monitor.enable_redis_exporter == 1
 
 - name: "copy ipmi_exporter"
   copy:
     src: '{{ role_path }}/files/ipmi_exporter'
     dest: /opt/tsg/exporter/ipmi_exporter
     mode: 0755
-  when: PROFILE_ID != '9000-NPB-P01R01'
+  when: monitor.enable_ipmi_exporter == 1
 
 - name: "templates atca-exporter-node.service"
   template:
@@ -52,7 +52,7 @@
     src: "{{role_path}}/templates/exporter-ipmi.service.j2"
     dest: /usr/lib/systemd/system/exporter-ipmi.service
   tags: template
-  when: PROFILE_ID != '9000-NPB-P01R01'
+  when: monitor.enable_ipmi_exporter == 1
 
 - name: "Create /usr/lib/systemd/system/exporter-node.service.d directory if it does not exist"
   file:
@@ -77,7 +77,7 @@
     mode: '0755'
   with_items:
     - /usr/lib/systemd/system/exporter-ipmi.service.d
-  when: PROFILE_ID != '9000-NPB-P01R01'
+  when: monitor.enable_ipmi_exporter == 1
 
 - name: "copy slice file to exporter-node.service.d"
   copy:
@@ -96,7 +96,7 @@
     src: "{{ role_path }}/templates/service_override_slice.conf.j2"
     dest: /usr/lib/systemd/system/exporter-ipmi.service.d/service_override_slice.conf
     mode: 0644
-  when: PROFILE_ID != '9000-NPB-P01R01'
+  when: monitor.enable_ipmi_exporter == 1
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:
@@ -114,7 +114,7 @@
     replace: 'WantedBy=workload.target'
   with_items:
     - /usr/lib/systemd/system/exporter-ipmi.service
-  when: PROFILE_ID == '7400-MCN0-P01R01' or PROFILE_ID == '7400-MCN123-P01R01'
+  when: monitor.enable_ipmi_exporter == 1
 
 ##################### exporter #####################
 - name: 'exporter-node service start'
@@ -131,4 +131,4 @@
   systemd:
     name: exporter-ipmi
     enabled: yes
-  when: PROFILE_ID != '9000-NPB-P01R01'
+  when: monitor.enable_ipmi_exporter == 1

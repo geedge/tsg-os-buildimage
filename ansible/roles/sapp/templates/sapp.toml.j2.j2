@@ -10,9 +10,9 @@ instance_name = "sapp4"
 
 [CPU]
 ### note, bind_mask, if you do not want to bind thread to special CPU core, keep it empty as []
-worker_threads={{ sapp.sapp_toml.CPU.worker_threads }}
-send_only_threads_max={{ sapp.sapp_toml.CPU.send_only_threads_max }}
-bind_mask=[{{ sapp.sapp_toml.CPU.bind_mask }}]
+worker_threads={{ workload_firewall.worker_threads }}
+send_only_threads_max={{ workload_firewall.send_only_threads_max }}
+bind_mask=[{{ workload_firewall.cpu_affinity }}]
 
 [MEM]
 dictator_enable=1
@@ -25,8 +25,15 @@ dictator_enable=1
     l2_l3_tunnel_support=1
 
 ### note, optional value is [none, vxlan]
-        overlay_mode={{ sapp.sapp_toml.PACKET_IO.overlay_tunnel_definition.overlay_mode }}
-
+{% if dp_steering_firewall.encapsulation == 'vlan' or dp_steering_firewall.encapsulation == 'raw' %}
+        overlay_mode=none
+{% endif %}
+{% if dp_steering_firewall.encapsulation == 'vxlan' %}
+        overlay_mode=vxlan
+{% endif %}
+{% if dp_steering_firewall.encapsulation == 'provision' %}
+        overlay_mode={% raw %}{{ sapp_overlay_mode }}{% endraw %}
+{% endif %}
     [packet_io.feature]
 	
 	### note, used to represent inbound or outbound direction value,
@@ -61,12 +68,25 @@ dictator_enable=1
    
 ### note, depolyment.mode options: [mirror, inline, transparent]
     [packet_io.depolyment]
+{% if dp_steering_firewall.deployment == 'inline' %}
     mode=inline
+{% endif %}
+{% if dp_steering_firewall.deployment == 'mirror' %}
+    mode=mirror
+{% endif %}
+{% if dp_steering_firewall.deployment == 'transparent' %}
+    mode=transparent
+{% endif %}
 
 ### note, interface.type options: [pag,pcap,marsio]
     [packet_io.internal.interface]
+{% if dp_steering_firewall.deployment == 'driver' %}
         type=marsio
-        name={{ sapp.sapp_toml.PACKET_IO.packet_io_internal_interface.name }}
+{% endif %}
+{% if dp_steering_firewall.deployment == 'pcap' %}
+        type=pcap
+{% endif %}
+        name={{ dp_steering_firewall.nic_internal }}
     [packet_io.external.interface]
         type=pcap
     name=lo
@@ -264,5 +284,5 @@ dictator_enable=1
     data_file_inline_keepalive_log="gdev_keeplive_status.log"
 
 [LIBRARY_LINK]	 
-    marsio_library_path="{{ mrzcpd.prefix_path }}/lib/libmarsio.so"	
+    marsio_library_path="{{ prefix_path.mrzcpd }}/lib/libmarsio.so"	
 	

@@ -39,7 +39,7 @@ IP_ADDR_TABLE="TSG_SECURITY_ADDR"
 
 [TSG_LOG]
 MODE=1
-NIC_NAME="{{ firewall.main_conf.TSG_LOG.NIC_NAME }}"
+NIC_NAME="{{ control_and_policy.nic_name }}"
 MAX_SERVICE=1
 LOG_LEVEL=30
 LOG_PATH="./tsglog/tsglog"
@@ -64,7 +64,7 @@ OUTPUT_PATH="./tsg_stat.log"
 APP_NAME="tsg_master"
 
 [SYSTEM]
-NIC_NAME="{{ firewall.main_conf.SYSTEM.NIC_NAME }}"
+NIC_NAME="{{ control_and_policy.nic_name }}"
 {% raw %}{% if data_center.id is defined %}
 DATACENTER_ID={{ data_center.id }}
 {% elif session_id_generator.snowflake_worker_id_base is defined %}
@@ -144,13 +144,12 @@ icmp_flood_thresh="{{ ddossketch.icmp_flood_report_thresh }}"
 dns_flood_thresh="{{ ddossketch.dns_flood_report_thresh }}"
 {% endraw %}
 
-{% if PROFILE_ID == '9000-NPB-P01R01' %}
+{% if dp_steering_firewall.enable_mirror == 1 %}
 [TRAFFIC_MIRROR]
 TRAFFIC_MIRROR_ENABLE=1
-NIC_NAME=eth_vf_mirr
+NIC_NAME={{ dp_traffic_mirror.nic_name }}
 DEFAULT_VLAN_ID=2
 {% endif %}
-
 [RADIUS_PLUG]
 {% raw %}{% set tags_list = [] %}
 {% if data_center.name is defined %}

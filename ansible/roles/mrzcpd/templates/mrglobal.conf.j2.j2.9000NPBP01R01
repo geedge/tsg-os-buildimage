@@ -1,9 +1,11 @@
 [device]
-device={{ mrzcpd.mrglobal_conf.device.nic_raw }},{{ mrzcpd.mrglobal_conf.device.nic_to_tfe }},{{ mrzcpd.mrglobal_conf.device.nic_mirr }}
+{% set steeering_to_proxy_nic_list = [] %}
+{% for node_info in dp_steering_proxy.node_list %}{{ steeering_to_proxy_nic_list.append(node_info.nic_name) }}{% endfor %}
+device={{ dp_steering_firewall.nic_internal }},{{ steeering_to_proxy_nic_list | join(",") }}
 sz_tunnel=8192
 sz_buffer=0
 
-[device:{{ mrzcpd.mrglobal_conf.device.nic_raw }}]
+[device:{{ dp_steering_firewall.nic_internal }}]
 mtu=4096
 clear_tx_flags=1
 hw_strip_crc=1
@@ -13,7 +15,8 @@ vlan-strip=1
 in_mask=255.255.0.0
 rssmode=2
 
-[device:{{ mrzcpd.mrglobal_conf.device.nic_to_tfe }}]
+{% for node_info in dp_steering_proxy.node_list %}
+[device:{{ node_info.nic_name }}]
 mtu=4096
 clear_tx_flags=1
 vlan-filter=1
@@ -26,7 +29,9 @@ sz_tunnel=8192
 sz_buffer=0
 rssmode=2
 
-[device:{{ mrzcpd.mrglobal_conf.device.nic_mirr }}]
+{% endfor %}
+
+[device:{{ dp_traffic_mirror.nic_name }}]
 mtu=2048
 hw_strip_crc=1
 rssmode=2
@@ -34,7 +39,7 @@ vlan-strip=1
 
 [service]
 # lcore id for i/o service, use comma to split
-iocore={{ mrzcpd.mrglobal_conf.service.iocore }}
+iocore={{ workload_zcpd.cpu_affinity }}
 {% raw %}{% if session_distribution_policy.hash_key == 'outer-most-sip-dip' %}
 distmode=0
 {% endif %}

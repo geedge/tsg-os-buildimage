@@ -11,17 +11,8 @@
     - rsyslog-kafka
     - librdkafka
 
-- name: "install framework packages"
-  yum:
-    name: "{{ item.value }}"
-    state: present
-    conf_file: "{{ rpm_repo_config_path }}"
-    download_only: yes
-    download_dir: /tmp/rpm_download/
-  with_dict: "{{ framework_rpm_version }}"
-
 - name: "Install frameworks"
-  shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ framework.prefix_path }}
+  shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ prefix_path.framework }}
   with_dict: "{{ framework_rpm_version }}"
 
 - name: "mkdir /etc/ld.so.conf.d/"

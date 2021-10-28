@@ -7,11 +7,11 @@
   with_items:
     - { "src": "obtain_sn.sh.TSG7400", "dest": "obtain_sn.sh" }
     - { "src": "cmm_api_tst", "dest": "cmm_api_tst" }
-  when: PROFILE_ID == '7400-MCN0-P01R01' or PROFILE_ID == '7400-MCN123-P01R01'
+  when: runtime_env == '7400mcn0' or runtime_env == '7400mcn123'
 
 - name: "deploy obtain sn - tsg-9140"
   copy:
     src: "{{ role_path }}/files/obtain_sn.sh.TSG9140"
     dest: /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
     mode: 0755
-  when: PROFILE_ID == '9000-NPB-P01R01'
+  when: runtime_env == '9140'

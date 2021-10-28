@@ -51,8 +51,8 @@ log_fsstat_dst_port=8125
 #hijack flow control
 enable=0
 token_name=ratelimit
-redis_server={{ cm_policy_server_ip }}
-redis_port={{ cm_policy_server_port }}
+redis_server={% raw %}{{ cm_policy_server_ip }}{% endraw %}
+redis_port={% raw %}{{ cm_policy_server_port }}{% endraw %}
 redis_db_index=6
 
 [tango_cache]

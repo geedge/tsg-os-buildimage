@@ -8,7 +8,7 @@ NAT_GW_tunnel_mode=vxlan
 {% raw %}recvfrom_NATGW_bind_first_port={{ wannat.wan_gateway_listen_port_range_left_edge }}
 {% endraw %}
 #NAT GW的内部互联网卡名称
-NAT_GW_tunnel_device={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_device }}
+NAT_GW_tunnel_device={{ control_and_policy.nic_name }}
 
 #DNAT首包发送给NATGW时, 对端的监听端口
 {% raw %}NAT_GW_tunnel_port={{ wannat.nat_gateway_listen_port }}
@@ -69,8 +69,8 @@ json_cfg_file=./etc/wannat/gtest.json
 inc_dir=./redis_dump/
 full_dir=./redis_dump/
 
-redis_server_ip={{ cm_policy_server_ip }}
-redis_server_port={{ cm_policy_server_port }}
+redis_server_ip={% raw %}{{ cm_policy_server_ip }}{% endraw %}
+redis_server_port={% raw %}{{ cm_policy_server_port }}{% endraw %}
 {% raw %}REDIS_PORT_NUM={{ cm.policy_server.port_num }}
 redis_index={{ cm.policy_server.db_static }}
 {% endraw %}

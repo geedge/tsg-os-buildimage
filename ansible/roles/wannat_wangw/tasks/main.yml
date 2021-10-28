@@ -1,17 +1,8 @@
 ---
-- name: "install wannat wangw plug packages"
-  yum:
-    name: "{{ item.value }}"
-    conf_file: "{{ rpm_repo_config_path }}"
-    state: present
-    download_only: yes
-    download_dir: /tmp/rpm_download/
-  with_dict: "{{ wannat_wangw_rpm_version }}"
-
 - name: "Install wangw plugins"
   shell: rpm -i /tmp/rpm_download/{{ item.rpm_version }}* --prefix {{ item.prefix }}
   with_items:
-    - { "rpm_version": "{{ wannat_wangw_rpm_version.libwangw }}", "prefix": "{{ sapp.prefix_path }}" }
+    - { "rpm_version": "{{ wannat_wangw_rpm_version.libwangw }}", "prefix": "{{ prefix_path.sapp }}" }
 
 - name: "Template the etc/wannat/wangw.conf"
   template:

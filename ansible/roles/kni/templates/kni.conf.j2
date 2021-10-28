@@ -1,27 +1,52 @@
 [global]
 log_path = ./log/kni/kni.log
 log_level = 30
-tfe_node_count = {{ kni.kni_conf.global.tfe_node_count }}
-manage_eth = {{ kni.kni_conf.global.manage_eth }}
+{% if dp_steering_proxy.location == 'local' %}
+tfe_node_count = 1
+{% endif %}
+{% if dp_steering_proxy.location == 'foreign' %}
+tfe_node_count = {{ dp_steering_proxy.node_count }}
+{% endif %}
+manage_eth = {{ control_and_policy.nic_name }}
 deploy_mode = normal
 tun_name = tun_kni
 src_mac_addr = 00:0e:c6:d6:72:c1
 dst_mac_addr = fe:65:b7:03:50:bd
 
-{% for tfe_node_info in kni.kni_conf.tfe_node_list %}
-[tfe{{ tfe_node_info.node_id }}]
+{% for tfe_node_info in dp_steering_proxy.node_list %}
+{% if dp_steering_proxy.location == 'local' %}
+[tfe0]
+{% endif %}
+{% if dp_steering_proxy.location == 'foreign' %}
+[tfe{{ tfe_node_info.id }}]
+{% endif %}
 enabled = 1
-dev_eth_symbol = {{ tfe_node_info.dev_eth_symbol }}
-ip_addr = {{ tfe_node_info.ip_addr }}
+dev_eth_symbol = {{ tfe_node_info.nic_name }}
+{% if dp_steering_proxy.location == 'local' %}
+ip_addr = 127.0.0.1
+{% endif %}
+{% if dp_steering_proxy.location == 'foreign' %}
+ip_addr = {{ tfe_node_info.addr }}
+{% endif %}
 {% endfor %}
 
 [tfe_cmsg_receiver]
-listen_eth = {{ kni.kni_conf.tfe_cmsg_receiver.listen_eth }}
+{% if dp_steering_proxy.location == 'local' %}
+listen_eth = lo
+{% endif %}
+{% if dp_steering_proxy.location == 'foreign' %}
+listen_eth = {{ dp_steering_proxy.nic_cmsg_and_watchdog }}
+{% endif %}
 listen_port = 2475
 
 [watch_dog]
 switch = 1
-listen_eth = {{ kni.kni_conf.watch_dog.listen_eth }}
+{% if dp_steering_proxy.location == 'local' %}
+listen_eth = lo
+{% endif %}
+{% if dp_steering_proxy.location == 'foreign' %}
+listen_eth = {{ dp_steering_proxy.nic_cmsg_and_watchdog }}
+{% endif %}
 listen_port = 2476
 keepalive_idle = 2
 keepalive_intvl = 1

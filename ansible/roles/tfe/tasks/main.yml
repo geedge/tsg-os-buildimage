@@ -10,12 +10,8 @@
     dest: /usr/lib/systemd/system/
     mode: 0644
 
-- name: "install tfe rpms from localhost"
-  yum:
-    name:
-      - "{{ tfe_rpm_version.tfe }}"
-    conf_file: "{{ rpm_repo_config_path }}"
-    state: present
+- name: "Install  tfe"
+  shell: rpm -i /tmp/rpm_download/{{ tfe_rpm_version.tfe }}*
 
 - name: "tfe:copy cert file to device"
   copy:

@@ -58,9 +58,14 @@
         fail_msg: "error:{{ result_exec_obtain_keepalive_subnet.stderr }},stdout:{{ result_exec_obtain_keepalive_subnet.stdout_lines }}"
         success_msg: "{{ result_exec_obtain_keepalive_subnet.stdout_lines[0] }}"
 
-    - name: "tsg-os-provision: Set fact for field keepalive_subnet_ip"
+    - name: "set cm_policy_server_ip  and cm_policy_server_port"
       set_fact:
-        keepalive_subnet_ip: "{{ result_exec_obtain_keepalive_subnet.stdout_lines[0] }}"
+        cm_policy_server_ip: "{{cm.policy_server.address}}"
+        cm_policy_server_port: "{{ cm.policy_server.port }}"
+
+    - name: "tsg-os-provision: Set fact for field gdev_conf_keep_alive_ip"
+      set_fact:
+        gdev_conf_keep_alive_ip: "10.252.{{ result_exec_obtain_keepalive_subnet.stdout_lines[0] }}.1"
 
     - name: "tsg-os-provision: Template the conflist.inf"
       template:
