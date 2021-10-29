@@ -10,9 +10,9 @@
       - /tmp/nz-talon/nz-talon-21.10.2-Release.x86_64.rpm
     state: present
 
-- name: "enable nz-promtail"
+- name: "enable promtail"
   systemd:
-    name: nz-promtail
+    name: promtail
     enabled: yes
 
 - name: "enable nz-talon"
