@@ -7,7 +7,7 @@
 - name: "install nz-talon"
   yum:
     name:
-      - /tmp/nz-talon/nz-talon-21.07-Release.x86_64.rpm
+      - /tmp/nz-talon/nz-talon-21.10.2-Release.x86_64.rpm
     state: present
 
 - name: "enable nz-promtail"
