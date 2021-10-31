@@ -1,0 +1,35 @@
+- name: "aksusbd rpm install: copy file to device"
+  copy:
+    src: '{{ role_path }}/files/aksusbd-8.23-1.x86_64.rpm'
+    dest: /tmp/ansible_deploy/
+
+- name: "aksusbd rpm install: install aksusbd"
+  yum:
+    name:
+      - "/tmp/ansible_deploy/aksusbd-8.23-1.x86_64.rpm"
+    state: present
+
+- name: "hasp_update rpm install: copy file to device"
+  copy:
+    src: '{{ role_path }}/files/hasp_update-1.0.0.fab0aed-1.el7.x86_64.rpm'
+    dest: /tmp/ansible_deploy/
+  
+- name: "hasp_update rpm install: install hasp_update"
+  yum:
+    name:
+      - "/tmp/ansible_deploy/hasp_update-1.0.0.fab0aed-1.el7.x86_64.rpm"
+    state: present
+
+- name: "Create /etc/tsg/licence/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /etc/tsg/licence/
+
+- name: "copy hasp.sh to /etc/profile.d/"
+  copy:
+    src: "{{ role_path }}/files/hasp.sh"
+    dest: /etc/profile.d/
+    mode: 0755

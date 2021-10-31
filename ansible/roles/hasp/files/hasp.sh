@@ -1,0 +1,1 @@
+export HASPUSER_PREFIX=/etc/tsg/licence/
