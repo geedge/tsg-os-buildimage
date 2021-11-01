@@ -4,7 +4,7 @@ certstore_rpm_version:
 firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-3.1.5.135006c
   conn_telemetry: conn_telemetry-1.0.2.8d6da43
-  dns: dns-2.0.18.1294d53
+  dns: dns-2.0.19.246616f
   ftp: ftp-1.0.10.cc283fd
   fw_dns_plug: fw_dns_plug-4.0.0.e92fd7c
   fw_ftp_plug: fw_ftp_plug-3.1.0.6d367b3
