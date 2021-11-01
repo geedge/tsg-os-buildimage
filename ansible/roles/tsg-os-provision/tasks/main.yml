@@ -155,10 +155,10 @@
     mode: 0755
   when: PROFILE_ID == '9000-NPB-P01R01'
 
-- name: "tsg-os-provision: install yaml module using pip3"
-  pip:
-    name: PyYAML
-    executable: pip3
+#- name: "tsg-os-provision: install yaml module using pip3"
+#  pip:
+#    name: PyYAML
+#    executable: pip3
 
 - name: "copy tsg-os-provision.sh to destination"
   copy:
