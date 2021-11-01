@@ -32,6 +32,7 @@
 ./plug/protocol/quic/quic.inf
 ./plug/protocol/l2tp_protocol_plug/l2tp_protocol_plug.inf
 ./plug/protocol/gtp/gtp.inf
+./plug/protocol/ssh/ssh.inf
 
 [business]
 {% raw %}{% if connsketch.enable is defined %}
