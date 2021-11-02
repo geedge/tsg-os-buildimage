@@ -74,6 +74,12 @@
     dest: /usr/lib/systemd/system/tfe.service.d/service_override_slice.conf
     mode: 0644
 
+- name: "copy env file to tfe.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_override_env.conf.j2"
+    dest: /usr/lib/systemd/system/tfe.service.d/service_override_env.conf
+    mode: 0644
+
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:
     path: "{{ item }}"

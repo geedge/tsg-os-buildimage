@@ -33,6 +33,12 @@
     dest: /usr/lib/systemd/system/certstore.service.d/service_override_slice.conf
     mode: 0644
 
+- name: "copy env file to certstore.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_override_env.conf.j2"
+    dest: /usr/lib/systemd/system/certstore.service.d/service_override_env.conf
+    mode: 0644
+
 - name: "Create /usr/lib/systemd/system/cert-redis.service.d directory if it does not exist"
   file:
     path: "{{ item }}"
