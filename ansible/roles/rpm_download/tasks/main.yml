@@ -6,7 +6,7 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
 
 - name: "download rpm packages: firewall"
   yum:
@@ -14,7 +14,7 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
   with_dict: "{{ firewall_rpm_version }}"
 
 - name: "uninstall rsyslog-kafka and librdkafka"
@@ -31,7 +31,7 @@
     state: present
     conf_file: "{{ rpm_repo_config_path }}"
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
   with_dict: "{{ framework_rpm_version }}"
 
 - name: "download rpm packages: kni"
@@ -41,7 +41,7 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
 
 - name: "download rpm packages: mrzcpd"
   yum:
@@ -49,7 +49,7 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
 
 - name: "download rpm packages: sapp and tcpdump_mesa"
   yum:
@@ -57,17 +57,17 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
   with_dict: "{{ sapp_rpm_version }}"
 
 - name: "download rpm packages: tfe"
   yum:
-    name:
-      - "{{ tfe_rpm_version.tfe }}"
+    name: "{{ item.value }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
+  with_dict: "{{ tfe_rpm_version }}"
 
 - name: "download rpm packages: app_skecth_local"
   yum:
@@ -75,49 +75,68 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
 
   
-- name: "install tsg_master from localhost"
+- name: "download rpm packages: tsg_master"
   yum:
     name:
       - "{{ tsg_master_rpm_version.tsg_master }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
 
-- name: "Install tsg-diagnose rpm package"
+- name: "download rpm packages: tsg-diagnose"
   yum:
     name:
       - "{{ tsg_diagnose_rpm_version.tsg_diagnose }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
 
-- name: "install http_healthcheck from localhost"
+- name: "download rpm packages: http_healthcheck"
   yum:
     name: "{{ http_healthcheck_rpm_version.http_healthcheck }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
 
-- name: "install wannat wangw plug packages"
+- name: "download rpm packages: wannat wangw"
   yum:
     name: "{{ item.value }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
   with_dict: "{{ wannat_wangw_rpm_version }}"
 
-- name: "install wire_graft plug packages"
+- name: "download rpm packages: wire_graft"
   yum:
     name: "{{ item.value }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
-    download_dir: /tmp/rpm_download/
+    download_dir: "{{ path_download }}"
   with_dict: "{{ wire_graft_rpm_version }}"
+
+- name: "download rpm packages: freeipmi"
+  yum:
+    name: "{{ item }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: latest
+    download_only: yes
+    download_dir: "{{ path_download }}"
+  with_items:
+    - freeipmi
+    - systemd-sysv
+
+- name: "download rpm packages: watchdog"
+  yum:
+    name: "watchdog"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: latest
+    download_only: yes
+    download_dir: "{{ path_download }}"

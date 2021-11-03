@@ -1,0 +1,78 @@
+---
+#- name: "uninstall certstore"
+#  yum:
+#    name: "{{ item.value }}"
+#    state: absent
+#  with_dict: "{{ certstore_rpm_version }}"
+
+- name: "uninstall firewall"
+  yum:
+    name: "{{ item.key }}"
+    state: absent
+  with_dict: "{{ firewall_rpm_version }}"
+
+- name: "uninstall framework"
+  yum:
+    name: "{{ item.key }}"
+    state: absent
+  with_dict: "{{ framework_rpm_version }}"
+
+- name: "uninstall kni"
+  yum:
+    name: "{{ item.key }}"
+    state: absent
+  with_dict: "{{ kni_rpm_version }}"
+
+- name: "uninstall mrzcpd"
+  yum:
+    name: "{{ item.key }}"
+    state: absent
+  with_dict: "{{ mrzcpd_rpm_version }}"
+
+- name: "uninstall sapp and tcpdump_mesa"
+  yum:
+    name: "{{ item.key }}"
+    state: absent
+  with_dict: "{{ sapp_rpm_version }}"
+
+#- name: "uninstall tfe"
+#  yum:
+#    name: "{{ item.value }}"
+#    state: absent
+#  with_dict: "{{ tfe_rpm_version }}"
+
+- name: "uninstall app_skecth_local"
+  yum:
+    name: "{{ item.key }}"
+    state: absent
+  with_dict: "{{ tsg_app_rpm_version }}"
+
+- name: "uninstall tsg_master"
+  yum:
+    name: "{{ item.key }}"
+    state: absent
+  with_dict: "{{ tsg_master_rpm_version }}"
+
+#- name: "uninstall tsg-diagnose"
+#  yum:
+#    name: "{{ item.value }}"
+#    state: absent
+#  with_dict: "{{ tsg_diagnose_rpm_version }}"
+
+- name: "uninstall http_healthcheck"
+  yum:
+    name: "{{ item.key }}"
+    state: absent
+  with_dict: "{{ http_healthcheck_rpm_version }}"
+
+- name: "uninstall wannat wangw"
+  yum:
+    name: "{{ item.key }}"
+    state: absent
+  with_dict: "{{ wannat_wangw_rpm_version }}"
+
+- name: "uninstall wire_graft"
+  yum:
+    name: "{{ item.key }}"
+    state: absent
+  with_dict: "{{ wire_graft_rpm_version }}"

@@ -3,12 +3,12 @@
   vars_files:
     - install_config/group_vars/rpm_version.yml
   roles:
-    - {role: rpm_packages_download, tags: rpm_packages_download}
+    - {role: rpm_download, tags: rpm_download}
 
 - hosts: 7400-MCN0-P01R01
   remote_user: root
   vars_files:
-    - install_config/group_vars/stage_one_7400MCN0P01R01.yml
+    - install_config/group_vars/HAL_7400MCN0P01R01.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}
@@ -39,7 +39,7 @@
 - hosts: 7400-MCN123-P01R01
   remote_user: root
   vars_files:
-    - install_config/group_vars/stage_one_7400MCN123P01R01.yml
+    - install_config/group_vars/HAL_7400MCN123P01R01.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}
@@ -56,7 +56,7 @@
 - hosts: 9000-NPB-P01R01
   remote_user: root
   vars_files:
-    - install_config/group_vars/stage_one_9000NPBP01R01.yml
+    - install_config/group_vars/HAL_9000NPBP01R01.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}

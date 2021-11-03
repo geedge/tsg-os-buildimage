@@ -1,0 +1,5 @@
+---
+- name: "copy rpm to target_device"
+  copy:
+    src: "{{ role_path }}/files/"
+    dest: /tmp/rpm_download/

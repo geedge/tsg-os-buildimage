@@ -1,5 +1,16 @@
-- name: "Install  tsg-diagnose"
-  shell: rpm -i /tmp/rpm_download/{{ tsg_diagnose_rpm_version.tsg_diagnose }}*
+#- name: "Install  tsg-diagnose"
+#  shell: rpm -i /tmp/rpm_download/{{ tsg_diagnose_rpm_version.tsg_diagnose }}*
+#
+- name: "Get tsg_diagnose rpm path"
+  find:
+    path: /tmp/rpm_download/
+    pattern: "{{ tsg_diagnose_rpm_version.tsg_diagnose }}*"
+  register: tsg_diagnose_rpm_fullname
+
+- name: "Install tsg_diagnose from local path" 
+  yum: 
+    name: "{{ tsg_diagnose_rpm_fullname.files[0].path }}" 
+    state: present 
 
 - name: "Templates docker-compose.yml"
   template:

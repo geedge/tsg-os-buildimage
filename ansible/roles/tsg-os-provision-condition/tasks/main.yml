@@ -14,7 +14,7 @@
     - telegraf_statistic
     - tfe-env
     - tfe
-  when: runtime_env == '9140'
+  when: runtime_env == 'TSG-9140' or 'TSG-server'
 
 - name: "add condition into service depend provision result TSG7400 MCN0"
   copy:
@@ -30,7 +30,7 @@
     - mrzcpd
     - sapp
     - telegraf_statistic
-  when: runtime_env == '7400mcn0'
+  when: runtime_env == 'TSG-7400-mcn0'
 
 - name: "add condition into service depend provision result TSG7400 MCN0"
   copy:
@@ -44,4 +44,4 @@
     - mrzcpd
     - tfe-env
     - tfe
-  when: runtime_env == '7400mcn123'
+  when: runtime_env == 'TSG-7400-mcn123'

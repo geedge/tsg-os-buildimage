@@ -1,8 +1,13 @@
-- name: "Install freeipmi rpm package"
-  yum:
-    name: freeipmi
-    conf_file: "{{ rpm_repo_config_path }}"
-    state: latest
+- name: "Get freeipmi rpm path"
+  find:
+    path: /tmp/rpm_download/
+    pattern: "freeipmi-*"
+  register: freeipmi_rpm_fullname
+
+- name: "Install freeipmi from local path" 
+  yum: 
+    name: "{{ freeipmi_rpm_fullname.files[0].path }}" 
+    state: present 
 
 - name: "mkdir /opt/tsg/exporter/"
   file:

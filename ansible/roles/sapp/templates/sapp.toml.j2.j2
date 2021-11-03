@@ -32,7 +32,8 @@ dictator_enable=1
         overlay_mode=vxlan
 {% endif %}
 {% if dp_steering_firewall.encapsulation == 'provision' %}
-        overlay_mode={% raw %}{{ sapp_overlay_mode }}{% endraw %}
+        overlay_mode={% raw %}{{ sapp_overlay_mode }}
+        {% endraw %}
 {% endif %}
     [packet_io.feature]
 	
@@ -80,10 +81,10 @@ dictator_enable=1
 
 ### note, interface.type options: [pag,pcap,marsio]
     [packet_io.internal.interface]
-{% if dp_steering_firewall.deployment == 'driver' %}
+{% if dp_steering_firewall.capture_packet == 'driver' %}
         type=marsio
 {% endif %}
-{% if dp_steering_firewall.deployment == 'pcap' %}
+{% if dp_steering_firewall.capture_packet == 'pcap' %}
         type=pcap
 {% endif %}
         name={{ dp_steering_firewall.nic_internal }}

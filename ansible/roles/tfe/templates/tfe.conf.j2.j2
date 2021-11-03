@@ -1,5 +1,5 @@
 [system]
-nr_worker_threads={{ dp_proxy.worker_thread }}
+nr_worker_threads={{ workload_proxy.worker_thread }}
 enable_kni_v1=0
 enable_kni_v2=0
 enable_kni_v3=1
@@ -35,8 +35,8 @@ breakpad_upload_tools=/opt/tsg/framework/bin/minidump_upload
 # ask for at least (1 + nr_worker_threads) masks
 # the first  mask for acceptor thread
 # the others mask for worker   thread
-enable_cpu_affinity={{ dp_proxy.enable_cpu_affinity }}
-cpu_affinity_mask={{ dp_proxy.cpu_affinity }}
+enable_cpu_affinity={{ workload_proxy.enable_cpu_affinity }}
+cpu_affinity_mask={{ workload_proxy.cpu_affinity }}
 
 # LEAST_CONN = 0; ROUND_ROBIN = 1
 load_balance=1
@@ -134,11 +134,11 @@ sasl_passwd=galaxy2019
 #0 on cache 1 off cache
 no_cache=0
 mode=normal
-{% if dp_certstore == 'local' %}
+{% if dp_certstore.location == 'local' %}
 cert_store_host=127.0.0.1
 {% endif %}
-{% if dp_certstore == 'foreign'%}
-cert_store_host=
+{% if dp_certstore.location == 'foreign'%}
+cert_store_host=192.168.100.1
 {% endif %}
 cert_store_port=9991
 ca_path=resource/tfe/tango-ca-v3-trust-ca.pem
@@ -228,8 +228,10 @@ deferred_load_on=0
 json_cfg_file=resource/pangu/pangu_http.json
 
 # redis mode conf iterm
-maat_redis_server={% raw %}{{ cm_policy_server_ip }}{% endraw %}
-maat_redis_port_range={% raw %}{{ cm_policy_server_port }}{% endraw %}
+maat_redis_server={% raw %}{{ cm_policy_server_ip }}
+{% endraw %}
+maat_redis_port_range={% raw %}{{ cm_policy_server_port }}
+{% endraw %}
 {% raw %}maat_redis_db_index={{ cm.policy_server.db_static }}
 {% endraw %}
 

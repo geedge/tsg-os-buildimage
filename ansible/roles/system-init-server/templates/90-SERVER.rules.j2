@@ -1,0 +1,47 @@
+# rename p4p1 to eth_pf_40G_0
+# rename p4p1_0 to eth_vf_raw
+# rename p4p1_1 to eth_vf_dign_c
+# rename p4p1_2 to eth_vf_dign_s
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:00.0", NAME:="eth_pf_40G_0"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:00.0",ATTR{device/sriov_numvfs}="3"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:02.0", NAME:="eth_vf_raw"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:02.1", NAME:="eth_vf_dign_c"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:02.2", NAME:="eth_vf_dign_s"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:00.0",ATTR{device/sriov/0/trunk}="add 0,4000,4001"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:00.0",RUN+="/usr/bin/set-eth_vf_raw-macaddr.sh"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:02.1",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_0 vf 1 vlan 4000"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:02.2",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_0 vf 2 vlan 4001"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:02.0",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_0 vf 0 trust on"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:02.1",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_0 vf 1 trust on"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:02.2",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_0 vf 2 trust on"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:02.0",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_0 vf 0 spoofchk off"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:02.0",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_0 vf 0 state enable"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:02.1",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_0 vf 1 state enable"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:02.2",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_0 vf 2 state enable"
+
+
+#rename p4p2 to eth_pf_40G_1
+#rename p4p2_0 to eth_vf_kni
+#rename p4p2_1 to eth_vf_tfe
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:00.1", NAME:="eth_pf_40G_1"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:00.1",ATTR{device/sriov_numvfs}="2"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:00.1",ATTR{/device/sriov/0/max_tx_rate}="10240"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:00.1",ATTR{/device/sriov/1/max_tx_rate}="10240"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:0a.0", NAME:="eth_vf_kni"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:0a.1", NAME:="eth_vf_tfe"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:0a.0",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_1 vf 0 vlan 4095"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:0a.1",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_1 vf 1 vlan 4095"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:0a.0",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_1 vf 0 trust on"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:0a.1",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_1 vf 1 trust on"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:0a.0",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_1 vf 0 mac 00:0e:c6:d6:72:c1"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:0a.1",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_1 vf 1 mac fe:65:b7:03:50:bd"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:0a.0",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_1 vf 0 state enable"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:98:0a.1",PROGRAM+="/usr/sbin/ip link set eth_pf_40G_1 vf 1 state enable"
+
+#rename p5p1 to eth_pf_ctl
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:b1:00.0", NAME:="eth_pf_ctl"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:b1:00.0",PROGRAM+="/usr/sbin/ip link set eth_pf_ctl state enable"
+
+#rename p5p2 to eth_pf_mirr
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:b1:00.1", NAME:="eth_pf_mirr"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:b1:00.1",PROGRAM+="/usr/sbin/ip link set eth_pf_mirr state enable"

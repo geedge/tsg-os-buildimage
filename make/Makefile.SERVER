@@ -1,0 +1,55 @@
+PROFILE_ID 				:= server
+SUPPORTED_MACHINE_ID 	:= server
+KERNEL_ARGS 			:= console=ttyS0,115200n8 crashkernel=512M default_hugepagesz=1G hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt mitigations=off pci=realloc,assign-busses psi=1 isolcpus=1,9-55
+GRUB_SERIAL_COMMAND 	:=
+SIZE_PART_SYSROOT		:= 16384M
+SIZE_PART_UPDATE			:= 16384M
+
+PROFILE_ID_IN_SHORT		:= $(subst -,$e,$(PROFILE_ID))
+INSTALL_PKG_UNLOCKED 	:= tsg-installer-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}.tar
+INSTALL_PKG_LOCKED		:= tsg-installer-pr-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}.tar
+
+TARGET_BUILD_DIR 		:= $(BUILDDIR_BASE)/$(PROFILE_ID)
+TARGET_INSTALLER_DIR 	:= $(TARGET_BUILD_DIR)/installer
+TARGET_COMPRESS_DIR		:= $(TARGET_BUILD_DIR)/compress
+
+.PHONY: all packages_compress packages_download builddir packages_directory_assemble
+
+all: packages_compress
+
+builddir:
+	mkdir -p $(TARGET_BUILD_DIR)
+	mkdir -p $(TARGET_COMPRESS_DIR)
+	mkdir -p $(TARGET_COMPRESS_DIR)/rpm_download
+
+packages_compress: packages_download packages_directory_assemble
+ifeq ($(LOCK_STATE),UNLOCKED)
+	tar -zcvf $(IMAGEDIR_BASE)/$(INSTALL_PKG_UNLOCKED) -C $(TARGET_COMPRESS_DIR) .
+	sha256sum $(IMAGEDIR_BASE)/$(INSTALL_PKG_UNLOCKED) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(INSTALL_PKG_UNLOCKED).sha256sum.txt
+endif
+ifeq ($(LOCK_STATE),LOCKED)
+	tar -zcvf $(IMAGEDIR_BASE)/$(INSTALL_PKG_LOCKED) -C $(TARGET_COMPRESS_DIR) .
+	sha256sum $(IMAGEDIR_BASE)/$(INSTALL_PKG_LOCKED) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(INSTALL_PKG_LOCKED).sha256sum.txt
+endif
+
+packages_download: builddir
+ifeq ($(LOCK_STATE),UNLOCKED)
+	sed -i '/sapp-pr:/d;/tfe-pr:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
+	sed -i '/role: hasp/d' $(PROJECTDIR)/ansible/HAL_server_deploy.yml
+endif
+ifeq ($(LOCK_STATE),LOCKED)
+	sed -i '/sapp:/d;/tfe:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
+endif
+	$(TOOLSDIR)/ansible-HAL-server $(PROFILE_ID) $(PROJECTDIR) $(TARGET_COMPRESS_DIR)/rpm_download $(PROJECTDIR)/conf/yum.conf
+
+packages_directory_assemble:
+	mkdir -p $(TARGET_COMPRESS_DIR)
+	mkdir -p $(TARGET_COMPRESS_DIR)/group_vars
+	cp -r $(PROJECTDIR)/ansible/roles $(TARGET_COMPRESS_DIR)
+	cp -r $(PROJECTDIR)/ansible/install_config/group_vars/HAL_SERVER.yml $(TARGET_COMPRESS_DIR)/group_vars
+	cp -r $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml $(TARGET_COMPRESS_DIR)/group_vars
+	cp -r $(PROJECTDIR)/ansible/HAL_server_deploy.yml  $(TARGET_COMPRESS_DIR)
+	echo "[server]" > $(TARGET_COMPRESS_DIR)/hosts
+	echo "###target device address###" >> $(TARGET_COMPRESS_DIR)/hosts
+	rm -rf $(TARGET_COMPRESS_DIR)/roles/rpm_to_dest/files
+	mv $(TARGET_COMPRESS_DIR)/rpm_download $(TARGET_COMPRESS_DIR)/roles/rpm_to_dest/files

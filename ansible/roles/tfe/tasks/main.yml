@@ -10,8 +10,22 @@
     dest: /usr/lib/systemd/system/
     mode: 0644
 
-- name: "Install  tfe"
-  shell: rpm -i /tmp/rpm_download/{{ tfe_rpm_version.tfe }}*
+- name: "Get tfe rpm final version"
+  set_fact: 
+    tfe_rpm_final_version: "{{ item.value }}"
+  when: item.key is search("tfe")
+  with_dict: "{{ tfe_rpm_version }}"
+
+- name: "Get tfe rpm path"
+  find:
+    path: /tmp/rpm_download/
+    pattern: "{{ tfe_rpm_final_version }}*"
+  register: tfe_rpm_fullname
+
+- name: "Install tfe from local path" 
+  yum: 
+    name: "{{ tfe_rpm_fullname.files[0].path }}" 
+    state: present 
 
 - name: "tfe:copy cert file to device"
   copy:
@@ -86,6 +100,11 @@
     - /usr/lib/systemd/system/tfe.service
 
 ##################### tfe #####################
+- name: "systemctl daemon-reload"
+  systemd:
+    daemon_reload: yes
+  when: runtime_env == 'TSG-server'
+
 - name: "enable tfe-env"
   systemd:
     name: tfe-env

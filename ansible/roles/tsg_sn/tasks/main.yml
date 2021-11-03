@@ -7,11 +7,18 @@
   with_items:
     - { "src": "obtain_sn.sh.TSG7400", "dest": "obtain_sn.sh" }
     - { "src": "cmm_api_tst", "dest": "cmm_api_tst" }
-  when: runtime_env == '7400mcn0' or runtime_env == '7400mcn123'
+  when: runtime_env == 'TSG-7400-mcn0' or runtime_env == 'TSG-7400-mcn123'
 
 - name: "deploy obtain sn - tsg-9140"
   copy:
     src: "{{ role_path }}/files/obtain_sn.sh.TSG9140"
     dest: /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
     mode: 0755
-  when: runtime_env == '9140'
+  when: runtime_env == 'TSG-9140'
+
+- name: "deploy obtain sn - tsg-server"
+  copy:
+    src: "{{ role_path }}/files/obtain_sn.sh.TSGSERVER"
+    dest: /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
+    mode: 0755
+  when: runtime_env == 'TSG-server'

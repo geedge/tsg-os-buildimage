@@ -1,0 +1,74 @@
+# TOD: TSG-6386 调整 TSG-OS 中的脚本， 适配 TSG-9140 硬件平台
+# variable format {role_name}.{configname}.{section}.{var}  configname 用 "_" 替代 "."
+
+control_and_policy:
+  nic_name: eth_pf_ctl
+
+workload_zcpd:
+  cpu_affinity: 100,101,102,103
+  hugepage_num_1G: 16
+
+dp_traffic_mirror:
+  nic_name: eth_pf_mirr
+
+workload_firewall:
+  cpu_affinity: 17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99
+  worker_threads: 19
+  send_only_threads_max: 0
+
+dp_steering_firewall:
+  deployment: inline
+  encapsulation: vxlan 
+  capture_packet: driver
+  nic_internal: eth_vf_raw
+  nic_internal_mac: 90:00:00:91:40:01
+  enable_mirror: 1
+
+diagnose:
+  virtual_server_nic: eth_vf_dign_s
+  virtual_client_nic: eth_vf_dign_c
+
+prefix_path:
+  mrzcpd: /opt/tsg/mrzcpd
+  framework: /opt/tsg/framework
+  sapp: /opt/tsg/sapp
+
+dp_steering_proxy:
+  ###### location: value {local, foreign}
+  location: local
+  node_list:
+    - nic_name: eth_vf_kni
+
+workload_proxy:
+  enable_cpu_affinity: 1
+  cpu_affinity: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
+  worker_thread: 15
+
+dp_proxy:
+  nic_name_data_incoming: eth_vf_tfe
+  mac_addr_data_incoming: 00:0e:c6:d6:72:c1
+  enable_traffic_mirror: 1
+  traffic_mirror_type: 1
+  traffic_mirror_vlan_id: 1025
+
+dp_certstore:
+  location: local
+# “default_vlan_id_for_mac” needs to be modified according to the vlan plan of the device
+
+
+wannat_wangw:
+  wangw_conf:
+    main:
+      recvfrom_NATGW_bind_first_port: 3545
+      NAT_GW_tunnel_send_port: 3544
+
+wire_graft:
+  wire_graft_conf:
+    toroad:
+      sendto_toroad_enable: 1
+
+monitor:
+  enable_redis_exporter: 0
+  enable_ipmi_exporter: 0
+
+runtime_env: TSG-server

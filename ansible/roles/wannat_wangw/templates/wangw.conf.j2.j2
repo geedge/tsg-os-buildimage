@@ -69,8 +69,10 @@ json_cfg_file=./etc/wannat/gtest.json
 inc_dir=./redis_dump/
 full_dir=./redis_dump/
 
-redis_server_ip={% raw %}{{ cm_policy_server_ip }}{% endraw %}
-redis_server_port={% raw %}{{ cm_policy_server_port }}{% endraw %}
+redis_server_ip={% raw %}{{ cm_policy_server_ip }}
+{% endraw %}
+redis_server_port={% raw %}{{ cm_policy_server_port }}
+{% endraw %}
 {% raw %}REDIS_PORT_NUM={{ cm.policy_server.port_num }}
 redis_index={{ cm.policy_server.db_static }}
 {% endraw %}

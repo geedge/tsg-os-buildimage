@@ -2,8 +2,19 @@
   file: path=/opt/tsg state=directory
   tags: mkdir
 
-- name: "Install certstore"
-  shell: rpm -i /tmp/rpm_download/{{ certstore_rpm_version.certstore }}*
+#- name: "Install certstore"
+#  shell: rpm -i /tmp/rpm_download/{{ certstore_rpm_version.certstore }}*
+
+- name: "Get certstore rpm path"
+  find:
+    path: /tmp/rpm_download/
+    pattern: "{{ certstore_rpm_version.certstore }}*"
+  register: certstore_rpm_fullname
+
+- name: "Install certstore from local path" 
+  yum:
+    name: "{{ certstore_rpm_fullname.files[0].path }}" 
+    state: present
 
 - name: template certstore configure file
   template:
@@ -68,6 +79,11 @@
     - /usr/lib/systemd/system/certstore.service
 
 ##################### certstore #####################
+- name: "systemctl daemon-reload"
+  systemd:
+    daemon_reload: yes
+  when: runtime_env == 'TSG-server'
+
 - name: "start certstore"
   systemd:
     name: certstore.service

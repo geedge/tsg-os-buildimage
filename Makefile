@@ -69,6 +69,10 @@ ifndef PROFILE_LIST
 PROFILE_LIST := 7400MCN0P01R01
 endif
 
+ifndef LOCK_STATE
+LOCK_STATE := UNLOCKED
+endif
+
 export TOOLSDIR
 export CONFDIR
 export INSTALLERDIR
@@ -76,6 +80,7 @@ export PROJECTDIR
 export BUILDDIR_BASE
 export IMAGEDIR_BASE
 export OS_RELEASE_VER
+export LOCK_STATE
 
 .PHONY: all clean $(PROFILE_LIST)
 

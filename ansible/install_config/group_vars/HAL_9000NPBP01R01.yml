@@ -38,12 +38,14 @@ dp_steering_proxy:
   node_list:
     - nic_name: eth_vf_kni
 
-dp_proxy:
-  nic_name_data_incoming: eth_vf_tfe
-  mac_addr_data_incoming: 00:0e:c6:d6:72:c1
+workload_proxy:
   enable_cpu_affinity: 1
   cpu_affinity: 48-55
   worker_thread: 7
+
+dp_proxy:
+  nic_name_data_incoming: eth_vf_tfe
+  mac_addr_data_incoming: 00:0e:c6:d6:72:c1
   enable_traffic_mirror: 1
   traffic_mirror_type: 1
   traffic_mirror_vlan_id: 1025
@@ -56,4 +58,4 @@ monitor:
   enable_redis_exporter: 0
   enable_ipmi_exporter: 0
 
-runtime_env: 9140
+runtime_env: TSG-9140

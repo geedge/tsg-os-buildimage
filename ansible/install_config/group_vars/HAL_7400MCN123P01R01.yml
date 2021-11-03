@@ -21,12 +21,14 @@ dp_steering_proxy:
   node_list:
     - nic_name: eth_vf_kni
 
-dp_proxy:
-  nic_name_data_incoming: eth_pxy
-  mac_addr_data_incoming: aa:bb:cc:dd:ee:ff
+workload_proxy:
   enable_cpu_affinity: 0
   cpu_affinity: 1-8
   worker_thread: 32
+
+dp_proxy:
+  nic_name_data_incoming: eth_pxy
+  mac_addr_data_incoming: aa:bb:cc:dd:ee:ff
   enable_traffic_mirror: 1
   traffic_mirror_type: 1
   traffic_mirror_vlan_id: 0
@@ -38,4 +40,4 @@ monitor:
   enable_redis_exporter: 0
   enable_ipmi_exporter: 1
 
-runtime_env: 7400mcn123
+runtime_env: TSG-7400-mcn123

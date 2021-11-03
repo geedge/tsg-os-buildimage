@@ -9,11 +9,13 @@
     - /opt/tsg/sapp
     - /opt/tsg/framework
 
-- name: "Install sapp and tcpdump_mesa rpm package"
-  shell: rpm -i /tmp/rpm_download/{{ item.rpm_version }}* --prefix {{ item.prefix_path }}
-  with_items:
-    - {"rpm_version": "{{ sapp_rpm_version.sapp }}", "prefix_path": "{{ prefix_path.sapp }}" }
-    - {"rpm_version": "{{ sapp_rpm_version.tcpdump_mesa }}", "prefix_path": "{{ prefix_path.framework }}" }
+- name: "Install sapp rpm package"
+  shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ prefix_path.sapp }}
+  when: item.key is search("sapp")
+  with_dict: "{{ sapp_rpm_version }}"
+
+- name: "Install tcpdump_mesa rpm package"
+  shell: rpm -i /tmp/rpm_download/{{ sapp_rpm_version.tcpdump_mesa }}* --prefix {{ prefix_path.framework }}
 
 - name: replace sapp service
   replace:
@@ -61,7 +63,7 @@
     dest: /opt/tsg/tsg-os-provision/templates/conflist.inf.j2
   tags: template
   when:
-    - runtime_env == '9140'
+    - runtime_env == 'TSG-9140'
 
 - name: Template the conflist.inf - tsg_7400
   template:
@@ -69,7 +71,15 @@
     dest: /opt/tsg/tsg-os-provision/templates/conflist.inf.j2
   tags: template
   when:
-    - runtime_env == '7400mcn0'
+    - runtime_env == 'TSG-7400-mcn0'
+
+- name: Template the conflist.inf - tsg_server
+  template:
+    src: "{{ role_path }}/templates/conflist.inf.j2.j2.SERVER"
+    dest: /opt/tsg/tsg-os-provision/templates/conflist.inf.j2
+  tags: template
+  when:
+    - runtime_env == 'TSG-server'
 
 - name: Template the entrylist.conf.j2
   template:
@@ -95,7 +105,7 @@
     dest: /opt/tsg/sapp/etc/vlan_flipping_map.conf
   tags: template
   when:
-    - runtime_env == '9140'
+    - runtime_env == 'TSG-9140' or runtime_env == 'TSG-server'
 
 - name: Template the vlan_flipping_map.conf - tsg-7400
   template:
@@ -103,7 +113,7 @@
     dest: /opt/tsg/tsg-os-provision/templates/vlan_flipping_map.conf.j2
   tags: template
   when:
-    - runtime_env == '7400mcn0'
+    - runtime_env == 'TSG-7400-mcn0'
 
 - name: Template the sapp_log.conf
   template:
@@ -166,7 +176,7 @@
     - { src: "{{ role_path }}/files/service_attach_startpre.conf.except_tera", mode: "0644" }
     - { src: "{{ role_path }}/files/tera_fake_promisc_setup.sh", mode: "0755" }
   when:
-    - runtime_env == '7400mcn0'
+    - runtime_env == 'TSG-7400-mcn0'
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:
@@ -186,6 +196,12 @@
 
 
 ##################### sapp #####################
+- name: "systemctl daemon-reload"
+  systemd:
+    daemon_reload: yes
+  when: runtime_env == 'TSG-server'
+
+
 - name: "enable sapp"
   systemd:
     name: sapp

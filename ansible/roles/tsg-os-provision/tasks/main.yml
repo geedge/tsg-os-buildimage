@@ -12,6 +12,15 @@
     - "/opt/tsg/tsg-os-provision/templates/"
     - "/opt/tsg/tsg-os-provision/scripts/"
 
+- name: "tsg-os-provision: build data dicretory"
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "/data/tsg-os-provision/provision.yml.d/"
+    - "/data/tsg-os-provision/"
+  when: runtime_env == 'TSG-server'
+
 - name: "tsg-os-provision: copy hosts file dest"
   copy:
     src: "{{ role_path }}/files/hosts"
@@ -38,64 +47,84 @@
     src: "{{ role_path }}/files/tasks/provision.yml.9000NPBP01R01"
     dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
     mode: 0644
-  when: runtime_env == '9140'
+  when: runtime_env == 'TSG-9140'
+
+- name: "tsg-os-provision: copy tasks file that excutes provision to dest  - tsg-server"
+  copy:
+    src: "{{ role_path }}/files/tasks/provision.yml.SERVER"
+    dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
+    mode: 0644
+  when: runtime_env == 'TSG-server'
 
 - name: "tsg-os-provision: copy tasks file that excutes provision to dest - tsg7400 mcn0"
   copy:
     src: "{{ role_path }}/files/tasks/provision.yml.7400MCN0P01R01"
     dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
     mode: 0644
-  when: runtime_env == '7400mcn0'
+  when: runtime_env == 'TSG-7400-mcn0'
 
 - name: "tsg-os-provision: copy tasks file that excutes provision to dest - tsg7400 mcn1 mcn2 mcn3"
   copy:
     src: "{{ role_path }}/files/tasks/provision.yml.7400MCN123P01R01"
     dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
     mode: 0644
-  when: runtime_env == '7400mcn123'
+  when: runtime_env == 'TSG-7400-mcn123'
 
 - name: "tsg-os-provision: copy provision.yml.sample file to dest - tsg9140"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.yml.sample.9000NPBP01R01"
     dest: /opt/tsg/tsg-os-provision/provision.yml.sample
     mode: 0644
-  when: runtime_env == '9140'
+  when: runtime_env == 'TSG-9140'
 
 - name: "tsg-os-provision: copy provision.default.yml - tsg7400 mcn0"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.default.yml.7400MCN0P01R01"
     dest: /opt/tsg/tsg-os-provision/provision.default.yml
     mode: 0644
-  when: runtime_env == '7400mcn0'
+  when: runtime_env == 'TSG-7400-mcn0'
 
 - name: "tsg-os-provision: copy provision.default.yml - tsg7400 mcn123"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.default.yml.7400MCN123P01R01"
     dest: /opt/tsg/tsg-os-provision/provision.default.yml
     mode: 0644
-  when: runtime_env == '7400mcn123'
+  when: runtime_env == 'TSG-7400-mcn123'
 
 - name: "tsg-os-provision: copy provision.default.yml - tsg9140"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.default.yml.9000NPBP01R01"
     dest: /opt/tsg/tsg-os-provision/provision.default.yml
     mode: 0644
-  when: runtime_env == '9140'
+  when: runtime_env == 'TSG-9140'
+
+- name: "tsg-os-provision: copy provision.default.yml - tsg server"
+  copy:
+    src: "{{ role_path }}/files/config_sample/provision.default.yml.SERVER"
+    dest: /opt/tsg/tsg-os-provision/provision.default.yml
+    mode: 0644
+  when: runtime_env == 'TSG-server'
 
 - name: "tsg-os-provision: copy provision.yml.sample to dest - tsg7400 mcn0"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.yml.sample.7400MCN0P01R01"
     dest: /opt/tsg/tsg-os-provision/provision.yml.sample
     mode: 0644
-  when: runtime_env == '7400mcn0'
+  when: runtime_env == 'TSG-7400-mcn0'
 
 - name: "tsg-os-provision: copy provision.yml.sample to dest - tsg7400 mcn1 mcn2 mcn3"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.yml.sample.7400MCN123P01R01"
     dest: /opt/tsg/tsg-os-provision/provision.yml.sample
     mode: 0644
-  when: runtime_env == '7400mcn123'
+  when: runtime_env == 'TSG-7400-mcn123'
 
+- name: "tsg-os-provision: copy provision.yml.sample to dest - tsg server"
+  copy:
+    src: "{{ role_path }}/files/config_sample/provision.yml.sample.SERVER"
+    dest: /opt/tsg/tsg-os-provision/provision.yml.sample
+    mode: 0644
+  when: runtime_env == 'TSG-server'
 
 - name: "tsg-os-provision: copy provision.sh file to dest"
   copy:
@@ -113,7 +142,7 @@
     mode: 0644
   with_items:
     - { "src": tsg-os-provision.service.TSG7400, "dest": tsg-os-provision.service }
-  when: runtime_env == '7400mcn0' or runtime_env == '7400mcn123'
+  when: runtime_env == 'TSG-7400-mcn0' or runtime_env == 'TSG-7400-mcn123'
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target --TSG7400"
   replace:
@@ -122,7 +151,7 @@
     replace: 'RequiredBy=workload.target'
   with_items:
     - /usr/lib/systemd/system/tsg-os-provision.service
-  when: runtime_env == '7400mcn0' or runtime_env == '7400mcn123'
+  when: runtime_env == 'TSG-7400-mcn0' or runtime_env == 'TSG-7400-mcn123'
 
 - name: "tsg-os-provision: enable tsg-os-provison -- TSG7400"
   systemd:
@@ -130,7 +159,7 @@
     enabled: yes
   with_items:
     - tsg-os-provision
-  when: runtime_env == '7400mcn0' or runtime_env == '7400mcn123'
+  when: runtime_env == 'TSG-7400-mcn0' or runtime_env == 'TSG-7400-mcn123'
 
 - name: "install tsg-os-provision.service -- TSG9140"
   copy:
@@ -139,13 +168,13 @@
     mode: 0644
   with_items:
     - { "src": tsg-os-provision.service.TSG9140, "dest": tsg-os-provision.service }
-  when: runtime_env == '9140'
+  when: runtime_env == 'TSG-9140' or runtime_env == 'TSG-server'
 
 - name: "replace action: add service into sysinit.target --TSG9140"
   shell: ln -vfs --relative /usr/lib/systemd/system/{{item}} /usr/lib/systemd/system/sysinit.target.wants/{{item}}
   with_items:
     - tsg-os-provision.service
-  when: runtime_env == '9140'
+  when: runtime_env == 'TSG-9140' or runtime_env == 'TSG-server'
 
 
 - name: "tsg-os-provision: copy tsg-start.sh to dest - tsg9140"
@@ -153,7 +182,7 @@
     src: "{{ role_path }}/files/script/provision-config-apply"
     dest: /opt/tsg/tsg-os-provision/
     mode: 0755
-  when: runtime_env == '9140'
+  when: runtime_env == 'TSG-9140' or runtime_env == 'TSG-server'
 
 #- name: "tsg-os-provision: install yaml module using pip3"
 #  pip:

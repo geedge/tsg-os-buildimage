@@ -1,0 +1,202 @@
+---
+- name: "Get watchdog rpm path"
+  find:
+    path: /tmp/rpm_download/
+    pattern: "watchdog-*"
+  register: watchdog_rpm_fullname
+
+- name: "Install watchdog from local path" 
+  yum: 
+    name: "{{ watchdog_rpm_fullname.files[0].path }}" 
+    state: present 
+
+- name: "set 90-SERVER.rules"
+  template:
+    src: "{{ role_path }}/templates/90-SERVER.rules.j2"
+    dest: /usr/lib/udev/rules.d/90-SERVER.rules
+    mode: 0644
+  tags: template
+
+- name: "set eth_pf_40G_0 cfg"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-eth_pf_40G_0.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth_pf_40G_0
+  tags: template
+
+- name: "set eth_vf_raw cfg"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-eth_vf_raw.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth_vf_raw
+  tags: template
+
+- name: "set eth_vf_dign_c cfg"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-eth_vf_dign_c.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth_vf_dign_c
+  tags: template
+
+- name: "set eth_vf_dign_s cfg"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-eth_vf_dign_s.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth_vf_dign_s
+  tags: template
+
+- name: "set eth_pf_40G_1 cfg"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-eth_pf_40G_1.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth_pf_40G_1
+  tags: template
+
+- name: "set eth_vf_kni cfg"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-eth_vf_kni.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth_vf_kni
+  tags: template
+
+- name: "set eth_vf_tfe cfg"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-eth_vf_tfe.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth_vf_tfe
+  tags: template
+
+- name: "set eth_pf_mirr cfg"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-eth_pf_mirr.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth_pf_mirr
+  tags: template
+
+- name: "set eth_pf_ctl cfg"
+  template:
+    src: "{{ role_path }}/templates/ifcfg-eth_pf_ctl.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth_pf_ctl
+  tags: template
+
+- name: "set set-eth_vf_raw-macaddr.sh"
+  template:
+    src: "{{ role_path }}/templates/set-eth_vf_raw-macaddr.sh.j2"
+    dest: /usr/bin/set-eth_vf_raw-macaddr.sh
+    mode: 0777
+  tags: template
+
+- name: "copy setup.eth_vf_tfe.ips"
+  template:
+    src: "{{ role_path }}/templates/setup.eth_vf_tfe.ips.j2"
+    dest: /sbin/setup.eth_vf_tfe.ips
+    mode: 0777
+  tags: template
+
+- name: "set if-pre-up "
+  template:
+    src: "{{ role_path }}/templates/if-pre-up.j2"
+    dest: /etc/NetworkManager/dispatcher.d/pre-up.d/if-pre-up
+    mode: 0755
+  tags: template
+
+# systemctl set-property user.slice     CPUShares=1500 MemoryLimit=13G
+## systemctl set-property system.slice   CPUShares=1000 MemoryLimit=13G
+## systemctl set-property workload.slice CPUShares=7500 MemoryLimit=100G
+#
+# workload.slice
+- name: "Create /usr/lib/systemd/system/workload.slice.d/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/workload.slice.d/
+
+- name: "copy 50-CPUShares.conf to workload.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_workload_slice_cpu.conf.j2"
+    dest: /usr/lib/systemd/system/workload.slice.d/50-CPUShares.conf
+    mode: 0644
+
+- name: "copy 50-MemoryLimit.conf to workload.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_workload_slice_mem.conf.j2"
+    dest: /usr/lib/systemd/system/workload.slice.d/50-MemoryLimit.conf
+    mode: 0644
+
+# user.slice
+- name: "Create /usr/lib/systemd/system/user.slice.d/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/user.slice.d/
+
+- name: "copy 50-CPUShares.conf to user.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_user_slice_cpu.conf.j2"
+    dest: /usr/lib/systemd/system/user.slice.d/50-CPUShares.conf
+    mode: 0644
+
+- name: "copy 50-MemoryLimit.conf to user.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_user_slice_mem.conf.j2"
+    dest: /usr/lib/systemd/system/user.slice.d/50-MemoryLimit.conf
+    mode: 0644
+
+# system.slice
+- name: "Create /usr/lib/systemd/system/system.slice.d/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/system.slice.d/
+
+- name: "copy 50-CPUShares.conf to system.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_system_slice_cpu.conf.j2"
+    dest: /usr/lib/systemd/system/system.slice.d/50-CPUShares.conf
+    mode: 0644
+
+- name: "copy 50-MemoryLimit.conf to system.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_system_slice_mem.conf.j2"
+    dest: /usr/lib/systemd/system/system.slice.d/50-MemoryLimit.conf
+    mode: 0644
+
+## 启用 IPMI
+- name: "copy ipmi.conf to /etc/sysconfig/ipmi"
+  copy:
+    src: "{{ role_path }}/templates/ipmi.conf.j2"
+    dest: /etc/sysconfig/ipmi
+    mode: 0644
+
+- name: "enable ipmi"
+  systemd:
+    name: ipmi
+    enabled: yes
+
+## 启用 Watchdog
+- name: "copy watchdog.conf to /etc/watchdog.conf"
+  copy:
+    src: "{{ role_path }}/templates/watchdog.conf.j2"
+    dest: /etc/watchdog.conf
+    mode: 0644
+
+- name: "enable watchdog"
+  systemd:
+    name: watchdog
+    enabled: yes
+
+- name: "enable irqbalance"
+  systemd:
+    name: irqbalance
+    enabled: yes
+
+# 关闭DHCPDISCOVER
+- name: "set 90-SERVER-dracut.rules"
+  template:
+    src: "{{ role_path }}/templates/90-SERVER-dracut.rules.j2"
+    dest: /usr/lib/dracut/dracut.conf.d/90-SERVER-dracut.conf
+    mode: 0644
+  tags: template
+
+- name: "enable firewalld"
+  systemd:
+    name: firewalld
+    enabled: no

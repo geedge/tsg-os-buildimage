@@ -11,4 +11,4 @@ echo "$PROFILE_ID"
 echo "[$PROFILE_ID]" > $PROJECTDIR/ansible/install_config/hosts
 echo "$TARGET_SYSROOT_DIR  ansible_connection=chroot" >> $PROJECTDIR/ansible/install_config/hosts
 
-ansible-playbook -i $PROJECTDIR/ansible/install_config/hosts $PROJECTDIR/ansible/stage_one_deploy.yml -e "rpm_repo_config_path=$YUM_CONF_PATH PROFILE_ID=$PROFILE_ID"
+ansible-playbook -i $PROJECTDIR/ansible/install_config/hosts $PROJECTDIR/ansible/HAL_deploy.yml -e "rpm_repo_config_path=$YUM_CONF_PATH PROFILE_ID=$PROFILE_ID path_download=/tmp/rpm_download"
