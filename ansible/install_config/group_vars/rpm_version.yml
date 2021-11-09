@@ -26,7 +26,7 @@ firewall_rpm_version:
   gtp_signaling_plug: gtp_signaling_plug-1.0.2.2dfced5
   deal_socks: deal_socks-1.0.2.379a897
   tsg_ddos_sketch: tsg_ddos_sketch-1.2.1.b6e91bb
-  ssh: ssh-2.0.7.a402e7a
+  ssh: ssh-2.0.8.7d7cfa8
 
 framework_rpm_version:
   libcjson: libcjson-1.7.11.93ffba0
