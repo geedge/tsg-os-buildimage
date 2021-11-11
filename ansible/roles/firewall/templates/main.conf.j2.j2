@@ -97,9 +97,10 @@ live_intervals_time = 120
 sendlog_in_tcp_close=1
 
 [HOS_CONF]
-{% raw %}hos_serverip="{{ olap.hos_server.address }}"
+{% raw %}
+{% if firewall.enable_hos == 1 %}
+hos_serverip="{{ olap.hos_server.address }}"
 hos_serverport={{ olap.hos_server.port }}
-{% endraw %}
 hos_accesskeyid="default"
 hos_secretkey="default"
 hos_poolsize=100
@@ -108,6 +109,8 @@ hos_cache_size=102400
 hos_fs2_serverip="127.0.0.1"
 hos_fs2_serverport=10086
 hos_request_num=1000
+{% endif %}
+{% endraw %}
 
 [APP_SKETCH_LOCAL]
 LOG_LEVEL=30

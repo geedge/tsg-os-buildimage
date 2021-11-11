@@ -11,3 +11,6 @@ cm:
     port_num: 1
     db_static: 0
     db_dynamic: 1
+
+proxy:
+  enable_hos: 1

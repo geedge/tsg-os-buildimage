@@ -4,9 +4,11 @@ feature:
 
 firewall:
   enable: 1
+  enable_hos: 1
 
 proxy:
   enable: 1
+  enable_hos: 1
 
 sessionrecord:
   enable: 1
