@@ -11,10 +11,15 @@ proxy:
 
 sessionrecord:
   enable: 1
+  enable_dns_record: 1
+  enable_rtp_record: 1
 
 capturepacket:
   enable: 1
-  
+
+radius:
+  enable: 1
+
 wannat:
   enable: 0
   natgw_address: "127.0.0.1"

@@ -69,5 +69,7 @@
 {% if npb_device == 'tera' %}
 ./plug/business/http_healthcheck/http_healthcheck.inf
 {% endif %}
-{% endraw %}
+{% if radius.enable == 1 %}
 ./plug/business/radius_collect_plug/radius_collect_plug.inf
+{% endif %}
+{% endraw %}

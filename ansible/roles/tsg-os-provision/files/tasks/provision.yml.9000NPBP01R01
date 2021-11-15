@@ -97,7 +97,13 @@
         src: "../templates/maat.conf.j2"
         dest: /opt/tsg/sapp/tsgconf/maat.conf
       tags: firewall
-  
+
+    - name: "tsg-os-provision: Template the tsg_conn_sketch.inf"
+      template:
+        src: "../templates/tsg_conn_sketch.inf.j2"
+        dest: /opt/tsg/sapp/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf
+      tags: firewall
+
     - name: "tsg-os-provision: Template the sapp.toml"
       template:
         src: "../templates/sapp.toml.j2"

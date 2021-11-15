@@ -25,17 +25,23 @@ FUNC_NAME=tsg_record_http_entry
 FUNC_FLAG=SSL_CLIENT_HELLO,SSL_SERVER_HELLO,SSL_APPLICATION_DATA,SSL_CERTIFICATE_DETAIL
 FUNC_NAME=tsg_record_ssl_entry
 
+{% raw %}{% if sessionrecord.enable_dns_record == 1 %}
 [DNS]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_dns_entry
+{% endif %}
+{% endraw %}
 
 [MAIL]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_mail_entry
 
+{% raw %}{% if sessionrecord.enable_rtp_record == 1 %}
 [RTP]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_rtp_entry
+{% endif %}
+{% endraw %}
 
 [SIP]
 FUNC_FLAG=ALL

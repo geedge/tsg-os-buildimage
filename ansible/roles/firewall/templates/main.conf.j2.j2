@@ -152,7 +152,22 @@ DEFAULT_VLAN_ID=2
 {% endif %}
 
 [RADIUS_PLUG]
-DEVICE_TAGS={"tags":[{"tag":"device_group","value":"BeiJing-XXG"}]}
+{% raw %}{% set tags_list = [] %}
+{% if data_center.name is defined %}
+{% set tag_json = "{\"tag\":\"" ~ "data_center" ~ "\",\"value\":\"" ~ data_center.name ~ "\"}" %}
+{{tags_list.append(tag_json)}}{% endif %}
+{% if device.tags is defined %}
+{% for device_tag in device.tags %}
+{% for key,value in device_tag.items() %}
+{% set tag_json = "{\"tag\":\"" ~ key ~ "\",\"value\":\"" ~ value ~ "\"}" %}
+{{tags_list.append(tag_json)}}{% endfor %}
+{% endfor %}
+{% endif %}
+{% if data_center.name is not defined and device.tags is not defined %}
+{{ device.tags }}
+{% endif %}
+DEVICE_TAGS={"tags":[{{ tags_list | join(",") }}]}
+{% endraw %}
 PACKET_TYPE_FLAG=16
 COLLECT_TOPIC=RADIUS-RECORD
 SERVICE_ID=162

@@ -66,5 +66,7 @@
 {% if app.identify_by.user_defined_signature == 1 %}
 ./plug/business/app_sketch_local/app_sketch_local.inf
 {% endif %}
-{% endraw %}
+{% if radius.enable == 1 %}
 ./plug/business/radius_collect_plug/radius_collect_plug.inf
+{% endif %}
+{% endraw %}
