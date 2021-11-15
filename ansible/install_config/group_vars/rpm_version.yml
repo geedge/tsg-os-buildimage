@@ -16,7 +16,7 @@ firewall_rpm_version:
   mail: mail-1.0.12.28f3d17
   quic: quic-2.0.2.d76065f
   ssl: ssl-2.0.6.27f6517
-  tsg_conn_sketch: tsg_conn_sketch-3.1.3.e3db703
+  tsg_conn_sketch:  tsg_conn_sketch-3.1.4.c3eed1d
   rtp: rtp-1.0.5.93e978a
   mesa_sip: mesa_sip-1.1.2.b4bc77d
   fw_voip_plug: fw_voip_plug-1.0.7.0521f2f
@@ -26,7 +26,7 @@ firewall_rpm_version:
   gtp_signaling_plug: gtp_signaling_plug-1.0.2.2dfced5
   deal_socks: deal_socks-1.0.2.379a897
   tsg_ddos_sketch: tsg_ddos_sketch-1.2.1.b6e91bb
-  ssh: ssh-2.0.11.1498782
+  ssh: ssh-2.0.12.f3d82f6
   radius: radius-1.0.5.b330829
   radius_collect_plug: radius_collect_plug-2.0.3.7d8818f
 
