@@ -60,7 +60,7 @@ sapp_rpm_version:
   tcpdump_mesa: tcpdump_mesa-1.0.9.ca549c5
 
 tfe_rpm_version:
-  tfe: tfe-4.5.24.e4ed3b0
+  tfe: tfe-4.5.25.16b4a62
 
 tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.2.0.9529fcf
