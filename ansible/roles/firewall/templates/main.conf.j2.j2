@@ -150,3 +150,11 @@ TRAFFIC_MIRROR_ENABLE=1
 NIC_NAME=eth_vf_mirr
 DEFAULT_VLAN_ID=2
 {% endif %}
+
+[RADIUS_PLUG]
+DEVICE_TAGS={"tags":[{"tag":"device_group","value":"BeiJing-XXG"}]}
+PACKET_TYPE_FLAG=16
+COLLECT_TOPIC=RADIUS-RECORD
+SERVICE_ID=162
+LOG_PATH=./log/radius_collect_plug/radius_collect_plug
+LOG_LEVEL=30

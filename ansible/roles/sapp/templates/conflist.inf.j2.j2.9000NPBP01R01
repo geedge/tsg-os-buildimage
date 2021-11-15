@@ -33,6 +33,7 @@
 ./plug/protocol/l2tp_protocol_plug/l2tp_protocol_plug.inf
 ./plug/protocol/gtp/gtp.inf
 ./plug/protocol/ssh/ssh.inf
+./plug/protocol/radius/radius.inf
 
 [business]
 {% raw %}{% if connsketch.enable is defined %}
@@ -66,3 +67,4 @@
 ./plug/business/app_sketch_local/app_sketch_local.inf
 {% endif %}
 {% endraw %}
+./plug/business/radius_collect_plug/radius_collect_plug.inf

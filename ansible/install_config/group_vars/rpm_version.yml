@@ -14,19 +14,21 @@ firewall_rpm_version:
   fw_ssl_plug: fw_ssl_plug-3.2.2.58bac95
   http: http-2.0.8.1acf1e8
   mail: mail-1.0.12.28f3d17
-  quic: quic-2.0.1.6e38309
+  quic: quic-2.0.2.d76065f
   ssl: ssl-2.0.6.27f6517
-  tsg_conn_sketch: tsg_conn_sketch-3.1.1.528e93c
+  tsg_conn_sketch: tsg_conn_sketch-3.1.3.e3db703
   rtp: rtp-1.0.5.93e978a
   mesa_sip: mesa_sip-1.1.2.b4bc77d
   fw_voip_plug: fw_voip_plug-1.0.7.0521f2f
-  app_proto_identify: app_proto_identify-2.0.8.e5686dc
+  app_proto_identify: app_proto_identify-2.0.11.73ec128
   app_proto_engine: app_proto_engine-2.1.1.500010c
   gtp: gtp-1.0.5.afa055c
   gtp_signaling_plug: gtp_signaling_plug-1.0.2.2dfced5
   deal_socks: deal_socks-1.0.2.379a897
   tsg_ddos_sketch: tsg_ddos_sketch-1.2.1.b6e91bb
   ssh: ssh-2.0.11.1498782
+  radius: radius-1.0.5.b330829
+  radius_collect_plug: radius_collect_plug-2.0.3.7d8818f
 
 framework_rpm_version:
   libcjson: libcjson-1.7.11.93ffba0
@@ -64,7 +66,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.2.0.9529fcf
   
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.4.15.8602011
+  tsg_master: tsg_master-5.4.16.36c3610
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-21.10.2.c848872
