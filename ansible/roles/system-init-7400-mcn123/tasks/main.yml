@@ -19,7 +19,7 @@
   tags: template
 
 - name: "update depmod"
-  shell: depmod -v 5.4.113-1.el7.elrepo.x86_64
+  shell: depmod -v 5.4.159-1.el7.elrepo.x86_64
 
 - name: "set eth_pf"
   template:

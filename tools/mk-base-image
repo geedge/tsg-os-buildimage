@@ -9,7 +9,7 @@
 yum_config=$1
 target=$2
 projectdir=$3
-kernel_version="5.4.113-1.el7.elrepo.x86_64"
+kernel_version="5.4.159-1.el7.elrepo.x86_64"
 
 set -ex
 
