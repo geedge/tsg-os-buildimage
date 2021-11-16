@@ -43,7 +43,22 @@ rssmode=0
 [service]
 # lcore id for i/o service, use comma to split
 iocore={{ mrzcpd.mrglobal_conf.service.iocore }}
+{% raw %}{% if load_balancing_distribution.mode == 'outer_tuple2' %}
+distmode=0
+{% endif %}
+{% if load_balancing_distribution.mode == 'outer_tuple4' %}
+distmode=1
+{% endif %}
+{% if load_balancing_distribution.mode == 'inner_tuple2' %}
 distmode=2
+{% endif %}
+{% if load_balancing_distribution.mode == 'inner_tuple4' %}
+distmode=3
+{% endif %}
+{% if load_balancing_distribution.mode == 'hardware' %}
+distmode=4
+{% endif %}
+{% endraw %}
 hashmode=0
 
 [eal]
