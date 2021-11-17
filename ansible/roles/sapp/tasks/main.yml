@@ -33,6 +33,14 @@
     - /usr/lib/systemd/system/sapp.service
     - /etc/sysconfig/sapp
 
+- name: replace Requires to Wants in sapp service file
+  replace:
+    path: "{{ item }}"
+    regexp: 'Requires'
+    replace: 'Wants'
+  with_items:
+    - /usr/lib/systemd/system/sapp.service
+
 - name: "mkdir tsgconf"
   file:
     path: /opt/tsg/sapp/tsgconf
