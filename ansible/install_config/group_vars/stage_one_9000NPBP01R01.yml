@@ -32,7 +32,7 @@ mrzcpd:
       nic_to_tfe: eth_vf_kni
       nic_mirr: eth_vf_mirr
     service:
-      iocore: 52,53,54,55
+      iocore: 1,2,3,4
   prefix_path: /opt/tsg/mrzcpd
 
 sapp:
@@ -45,7 +45,7 @@ sapp:
     CPU:
       worker_threads: 43
       send_only_threads_max: 0
-      bind_mask: 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51
+      bind_mask: 5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47
     PACKET_IO:
       packet_io_internal_interface:
         name: eth_vf_raw

@@ -6,8 +6,8 @@ STA="$2"
 if [ "$INF" == "eth_vf_tfe" ]
 then
   logger "$0: Interface $INF with $STA ,Set $INF RPS ..."
-  echo 000000,000001fe > /sys/class/net/eth_vf_tfe/queues/rx-0/rps_cpus
-  echo 000000,000001fe > /sys/class/net/eth_vf_tfe/queues/rx-1/rps_cpus
-  echo 000000,000001fe > /sys/class/net/eth_vf_tfe/queues/rx-2/rps_cpus
-  echo 000000,000001fe > /sys/class/net/eth_vf_tfe/queues/rx-3/rps_cpus
+  echo ff0000,00000000 > /sys/class/net/eth_vf_tfe/queues/rx-0/rps_cpus
+  echo ff0000,00000000 > /sys/class/net/eth_vf_tfe/queues/rx-1/rps_cpus
+  echo ff0000,00000000 > /sys/class/net/eth_vf_tfe/queues/rx-2/rps_cpus
+  echo ff0000,00000000 > /sys/class/net/eth_vf_tfe/queues/rx-3/rps_cpus
 fi
