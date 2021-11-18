@@ -43,19 +43,19 @@ rssmode=0
 [service]
 # lcore id for i/o service, use comma to split
 iocore={{ mrzcpd.mrglobal_conf.service.iocore }}
-{% raw %}{% if load_balancing_distribution.mode == 'outer_tuple2' %}
+{% raw %}{% if session_distribution_policy.hash_key == 'outer-most-sip-dip' %}
 distmode=0
 {% endif %}
-{% if load_balancing_distribution.mode == 'outer_tuple4' %}
+{% if session_distribution_policy.hash_key == 'outer-most-sip-dip-sport-dport' %}
 distmode=1
 {% endif %}
-{% if load_balancing_distribution.mode == 'inner_tuple2' %}
+{% if session_distribution_policy.hash_key == 'inner-most-sip-dip' %}
 distmode=2
 {% endif %}
-{% if load_balancing_distribution.mode == 'inner_tuple4' %}
+{% if session_distribution_policy.hash_key == 'inner-most-sip-dip-sport-dport' %}
 distmode=3
 {% endif %}
-{% if load_balancing_distribution.mode == 'hardware' %}
+{% if session_distribution_policy.hash_key == 'hardware' %}
 distmode=4
 {% endif %}
 {% endraw %}

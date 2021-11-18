@@ -56,6 +56,7 @@ cm:
     db_static: 0
     db_dynamic: 1
 
-#####load_balancing_distribution.mode in [outer_tuple2,outer_tuple4,inner_tuple2,inner_tuple4,hardware]
-load_balancing_distribution:
-  mode: inner_tuple2
+#####session_distribution_policy.hash_key in [outer-most-sip-dip,outer-most-sip-dip-sport-dport,inner-most-sip-dip,inner-most-sip-dip-sport-dport]
+session_distribution_policy:
+  mode: sym-hash
+  hash_key: inner-most-sip-dip
