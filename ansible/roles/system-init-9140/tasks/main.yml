@@ -257,3 +257,14 @@
   systemd:
     name: start-poweroff-guard
     enabled: yes
+#Set CPU frequency scaling
+- name: "copy cpupower.j2 to /etc/sysconfig/cpupower"
+  copy:
+    src: "{{ role_path }}/templates/cpupower.j2"
+    dest: /etc/sysconfig/cpupower
+    mode: 0644
+
+- name: "enable cpupower"
+  systemd:
+    name: cpupower
+    enabled: yes
