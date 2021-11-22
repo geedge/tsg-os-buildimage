@@ -21,6 +21,9 @@ capturepacket:
 radius:
   enable: 1
 
+gtp:
+  enable_gtp_c_record: 1
+
 wannat:
   enable: 0
   natgw_address: "127.0.0.1"
