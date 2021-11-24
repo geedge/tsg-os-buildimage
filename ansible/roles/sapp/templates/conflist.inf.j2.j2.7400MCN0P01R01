@@ -3,7 +3,6 @@
 ./plug/platform/wannat/wangw.inf
 ./plug/platform/wire_graft/wire_graft.inf
 {% endif %}
-./plug/platform/tsg_master/tsg_master.inf
 {% if connsketch.enable is defined %}
 {% if connsketch.enable == 1 %}
 ./plug/platform/app_proto_identify/app_proto_identify.inf
@@ -13,6 +12,7 @@
 ./plug/platform/app_proto_identify/app_proto_identify.inf
 {% endif %}
 {% endif %}
+./plug/platform/tsg_master/tsg_master.inf
 {% if app.identify_by.builtin_app_engine == 1 %}
 ./plug/platform/app_proto_engine/app_proto_engine.inf
 {% endif %}
