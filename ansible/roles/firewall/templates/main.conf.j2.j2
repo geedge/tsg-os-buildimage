@@ -89,11 +89,11 @@ DEVICE_SEQ_IN_DATA_CENTER={{ session_id_generator.snowflake_worker_id_offset }}
 
 [TSG_CONN_SKETCH]
 log_service=2
-live_service=6
+interim_service=6
 transaction_service=7
-live_service_switch=1
+interim_service_switch=1
 transaction_service_switch=1
-live_intervals_time = 120
+interim_intervals_time = 120
 sendlog_in_tcp_close=1
 
 [HOS_CONF]
