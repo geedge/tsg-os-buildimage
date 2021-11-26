@@ -174,8 +174,10 @@ SERVICE_ID=162
 LOG_PATH=./log/radius_collect_plug/radius_collect_plug
 LOG_LEVEL=30
 
-{% raw %}{% if gtp.enable_gtp_c_record == 1 %}
 [GTP_SIGNALING]
+{% raw %}{% if gtp.enable_gtp_c_record == 1 %}
 SENDLOG_SWITCH=1
+{% else %}
+SENDLOG_SWITCH=0
 {% endif %}
 {% endraw %}
