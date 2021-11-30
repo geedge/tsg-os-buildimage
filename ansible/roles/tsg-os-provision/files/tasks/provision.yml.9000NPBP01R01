@@ -170,6 +170,48 @@
         src: /data/tsg-os-provision/provision.yml
         dest: /data/tsg-os-provision/provision.yml.snapshot
 
+    - name: "tsg-os-provision: rewrite sapp.toml bind_mask"
+      lineinfile:
+        path: "/opt/tsg/sapp/etc/sapp.toml"
+        regexp: '^(.*)bind_mask=(.*)$'
+        line: 'bind_mask="5-55"'
+        backrefs: yes
+      when: proxy.enable == 0
+
+    - name: "tsg-os-provision: rewrite sapp.toml worker_threads"
+      lineinfile:
+        path: "/opt/tsg/sapp/etc/sapp.toml"
+        regexp: '^(.*)worker_threads=(.*)$'
+        line: 'worker_threads=51'
+        backrefs: yes
+      when: proxy.enable == 0
+
+    - name: "tsg-os-provision: disable enable service step 1:mount partition to mnt_tmp"
+      mount:
+        path: /tmp/mnt_tmp
+        src: /dev/sda4
+        fstype: ext4
+        state: mounted
+
+    - name: "tsg-os-provision: disable service step 2:disable tfe service"
+      shell: systemctl --root=/tmp/mnt_tmp disable tfe.service
+      when: proxy.enable == 0
+
+    - name: "tsg-os-provision: enable service step 2:enable tfe service"
+      shell: systemctl --root=/tmp/mnt_tmp enable tfe.service
+      when: proxy.enable == 1
+
+    - name: "tsg-os-provision: disable enable service step 3:umount mnt_tmp"
+      mount:
+        path: /tmp/mnt_tmp
+        state: absent
+
+    - name: "tsg-os-provision: stop tfe"
+      systemd:
+        name: tfe
+        state: stopped
+      when: proxy.enable == 0
+
     - name: add porvision successed sign
       file:
         path: /data/tsg-os-provision/.provision_succeeded
@@ -227,4 +269,6 @@
       systemd:
         name: tfe
         state: restarted
-      when: enable_config_apply == '1'
+      when: 
+        - enable_config_apply == '1'
+        - proxy.enable == 1
