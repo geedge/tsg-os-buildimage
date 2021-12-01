@@ -22,6 +22,7 @@
 {% endraw %}
 
 [protocol]
+./plug/protocol/deal_socks/deal_socks.inf 
 ./plug/protocol/mesa_sip/mesa_sip.inf
 ./plug/protocol/rtp/rtp.inf
 ./plug/protocol/ssl/ssl.inf
@@ -60,7 +61,6 @@
 ./plug/business/fw_quic_plug/fw_quic_plug.inf
 ./plug/business/fw_voip_plug/fw_voip_plug.inf
 ./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
-./plug/business/deal_socks/deal_socks.inf 
 {% endif %}
 ./plug/business/conn_telemetry/conn_telemetry.inf
 {% if app.identify_by.user_defined_signature == 1 %}
