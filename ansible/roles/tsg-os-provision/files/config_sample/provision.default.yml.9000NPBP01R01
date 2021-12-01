@@ -28,7 +28,11 @@ wannat:
   natgw_address: "127.0.0.1"
   toroad_address: "127.0.0.1"
   toroad_port: 8888  
-
+  feedback_linkinfo_interval: 30
+  NAT_GW_broadcast_session_port: 5671
+  toroad_broadcast_session_port: 5672
+  toroad_tunnel_port: 3542
+  
 ddossketch:
   enable: 1
   tcp_flood_report_thresh: 0.0008

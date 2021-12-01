@@ -25,6 +25,7 @@
     - {role: tsg-diagnose, tags: tsg-diagnose}
     - {role: system-init, tags: system-init}
     - {role: wannat_wangw, tags: wannat_wangw}
+    - {role: wannat_common, tags: wannat_common}
     - {role: wire_graft, tags: wire_graft}
     - {role: hasp, tags: hasp}
 
@@ -73,6 +74,7 @@
     - {role: system-init-9140, tags: system-init-9140}
     - {role: system-init, tags: system-init}
     - {role: wannat_wangw, tags: wannat_wangw}
+    - {role: wannat_common, tags: wannat_common}
     - {role: wire_graft, tags: wire_graft}
     - {role: nz-talon, tags: nz-talon}
     - {role: tsg-os-provision-condition, tags: tsg-os-provision-condition}

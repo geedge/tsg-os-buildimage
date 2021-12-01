@@ -17,6 +17,19 @@ NAT_GW_tunnel_port={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_send_port }}
 {% raw %}NAT_GW_tunnel_ip={{ wannat.natgw_address }}
 {% endraw %}
 
+#连接NATGW, 订阅四元组广播消息端口
+{% raw %}NAT_GW_broadcast_session_port={{ wannat.NAT_GW_broadcast_session_port }}
+{% endraw %}
+
+{% raw %}toroad_tunnel_ip={{ wannat.toroad_address }}
+{% endraw %}
+#连接toroad, 订阅四元组广播消息端口
+{% raw %}toroad_broadcast_session_port={{ wannat.toroad_broadcast_session_port }}
+{% endraw %}
+
+#SNAT的应答首包发送给toroad时, 对端的监听端口
+{% raw %}toroad_tunnel_port={{ wannat.toroad_tunnel_port }}
+{% endraw %}
 
 [session]
 #最大并发连接数 
