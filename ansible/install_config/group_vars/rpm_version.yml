@@ -4,7 +4,7 @@ certstore_rpm_version:
 firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-3.1.5.135006c
   conn_telemetry: conn_telemetry-1.0.2.8d6da43
-  dns: dns-2.1.1.78a8b13
+  dns: dns-2.1.2.20270fa
   ftp: ftp-1.0.10.cc283fd
   fw_dns_plug: fw_dns_plug-4.0.0.e92fd7c
   fw_ftp_plug: fw_ftp_plug-3.1.0.6d367b3
@@ -15,7 +15,7 @@ firewall_rpm_version:
   http: http-2.0.8.1acf1e8
   mail: mail-1.0.15.b23de6c
   quic: quic-2.0.2.d76065f
-  ssl: ssl-2.0.6.27f6517
+  ssl: ssl-2.0.7.ed9c9c3
   tsg_conn_sketch:  tsg_conn_sketch-3.1.15.2af358b
   rtp: rtp-1.0.5.93e978a
   mesa_sip: mesa_sip-1.1.2.b4bc77d
@@ -63,10 +63,10 @@ tfe_rpm_version:
   tfe: tfe-4.5.26.000ab9f
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-4.2.0.9529fcf
+  app_sketch_local: app_sketch_local-4.3.0.8883971
   
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.4.20.f98acd8
+  tsg_master: tsg_master-5.4.21.f2ebecc
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-21.10.2.c848872
