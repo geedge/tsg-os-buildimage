@@ -63,6 +63,7 @@ sysroot-archive: installer sysroot-ansible sysroot-cleanup
 sysroot-binary: sysroot-archive
 	mkdir -p $(TARGET_BUILD_DIR)/cook-bits
 	$(TOOLSDIR)/cook-bits $(TARGET_BUILD_DIR) $(TARGET_BUILD_DIR)/cook-bits $(IMAGEDIR_BASE)/$(CHROOT_BIN)
+	sha256sum $(IMAGEDIR_BASE)/$(CHROOT_BIN) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(CHROOT_BIN).sha256sum.txt
 
 clean:
 	rm -rf $(TARGET_BUILD_DIR)
