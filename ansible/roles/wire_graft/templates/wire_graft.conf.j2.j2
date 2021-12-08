@@ -32,10 +32,19 @@ mirror_linkinfo_port_syntax="mac[10]:0-7"
 mirror_linkinfo_dir_syntax="mac[4]:7-7"
 
 [toroad]
-sendto_toroad_enable={{ wire_graft.wire_graft_conf.toroad.sendto_toroad_enable }}
+{% raw %}sendto_toroad_enable={{ wannat.enable_link_info_recording }}
+{% endraw %}
 
-{% raw %}toroad_ip={{ wannat.toroad_address }}
+{% raw %}{% if wannat.toroad_address is defined %}
+toroad_ip={{ wannat.toroad_address }}
+{% else %}
+toroad_ip={{ wannat.reachability_test_server_address }}
+{% endif %}
+{% if wannat.toroad_port is defined %}
 toroad_port={{ wannat.toroad_port }}
+{% else %}
+toroad_port={{ wannat.reachability_test_server_port }}
+{% endif %}
 sendto_toroad_interval= {{ wannat.feedback_linkinfo_interval }}
 {% endraw %}
 

@@ -26,13 +26,16 @@ gtp:
 
 wannat:
   enable: 0
-  natgw_address: "127.0.0.1"
-  toroad_address: "127.0.0.1"
-  toroad_port: 8888
+  nat_gateway_address: "127.0.0.1"
+  reachability_test_server_address: "127.0.0.1"
+  reachability_test_server_port: 8888
   feedback_linkinfo_interval: 30
-  NAT_GW_broadcast_session_port: 5671
-  toroad_broadcast_session_port: 5672
-  toroad_tunnel_port: 3542
+  nat_gateway_broadcast_session_port: 5671
+  reachability_test_server_broadcast_session_port: 5672
+  reachability_test_server_tunnel_port: 3542
+  wan_gateway_listen_port_range_left_edge: 3545
+  nat_gateway_listen_port: 3544
+  enable_link_info_recording: 1
 
 ddossketch:
   enable: 1

@@ -35,9 +35,8 @@ gtp:
 
 wannat:
   enable: 0/1
-  natgw_address: "127.0.0.1"
-  toroad_address: "127.0.0.1"
-  toroad_port: 8888
+  nat_gateway_address: "127.0.0.1"
+  reachability_test_server_address: "127.0.0.1"
 
 ddossketch:
   enable: 0/1

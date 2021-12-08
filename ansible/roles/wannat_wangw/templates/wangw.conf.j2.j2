@@ -5,30 +5,39 @@ NAT_GW_io_mode=udp_multi_thread
 NAT_GW_tunnel_mode=vxlan
 
 #从起始位置开始, 本地监听sapp->threa_cound个端口, 支持多线程NIO无锁模式
-recvfrom_NATGW_bind_first_port={{ wannat_wangw.wangw_conf.main.recvfrom_NATGW_bind_first_port }}
-
+{% raw %}recvfrom_NATGW_bind_first_port={{ wannat.wan_gateway_listen_port_range_left_edge }}
+{% endraw %}
 #NAT GW的内部互联网卡名称
 NAT_GW_tunnel_device={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_device }}
 
 #DNAT首包发送给NATGW时, 对端的监听端口
-NAT_GW_tunnel_port={{ wannat_wangw.wangw_conf.main.NAT_GW_tunnel_send_port }}
+{% raw %}NAT_GW_tunnel_port={{ wannat.nat_gateway_listen_port }}
+{% endraw %}
 
 #NAT GW的内部互联IP地址, 端口使用vxlan默认值, 要求对方也开放UDP 4789端口
-{% raw %}NAT_GW_tunnel_ip={{ wannat.natgw_address }}
+{% raw %}{% if wannat.natgw_address is defined %}
+NAT_GW_tunnel_ip={{ wannat.natgw_address }}
+{% else %}
+NAT_GW_tunnel_ip={{ wannat.nat_gateway_address }}
+{% endif %}
 {% endraw %}
 
 #连接NATGW, 订阅四元组广播消息端口
-{% raw %}NAT_GW_broadcast_session_port={{ wannat.NAT_GW_broadcast_session_port }}
+{% raw %}NAT_GW_broadcast_session_port={{ wannat.nat_gateway_broadcast_session_port }}
 {% endraw %}
 
-{% raw %}toroad_tunnel_ip={{ wannat.toroad_address }}
+{% raw %}{% if wannat.toroad_address is defined %}
+toroad_tunnel_ip={{ wannat.toroad_address }}
+{% else %}
+toroad_tunnel_ip={{ wannat.reachability_test_server_address }}
+{% endif %}
 {% endraw %}
 #连接toroad, 订阅四元组广播消息端口
-{% raw %}toroad_broadcast_session_port={{ wannat.toroad_broadcast_session_port }}
+{% raw %}toroad_broadcast_session_port={{ wannat.reachability_test_server_broadcast_session_port }}
 {% endraw %}
 
 #SNAT的应答首包发送给toroad时, 对端的监听端口
-{% raw %}toroad_tunnel_port={{ wannat.toroad_tunnel_port }}
+{% raw %}toroad_tunnel_port={{ wannat.reachability_test_server_tunnel_port }}
 {% endraw %}
 
 [session]
