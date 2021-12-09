@@ -4,15 +4,21 @@
     name: sshd
     enabled: yes
 
-- name: "disable chronyd"
+- name: "enable chronyd"
   systemd:
     name: chronyd
-    enabled: no
+    enabled: yes
 
-- name: "enable ntpd"
+- name: "set chrony.conf"
+  template:
+    src: "{{ role_path }}/templates/chrony.conf.j2"
+    dest: /usr/lib/tmpfiles.d/chrony.conf
+  tags: template
+
+- name: "disable ntpd"
   systemd:
     name: ntpd
-    enabled: yes
+    enabled: no
 
 #Service Optimization
 - name: "enable snmpd"
