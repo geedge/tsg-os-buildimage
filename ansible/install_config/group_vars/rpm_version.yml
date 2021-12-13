@@ -75,7 +75,7 @@ http_healthcheck_rpm_version:
   http_healthcheck: http_healthcheck-21.06.01.d0685bb
 
 wannat_wangw_rpm_version:
-  libwangw: libwangw-1.5.0.f362c8a
+  libwangw: libwangw-1.5.1.7e0480f
   libwannat_common: libwannat_common-1.0.1.8cc3bda
 
 wire_graft_rpm_version:  
