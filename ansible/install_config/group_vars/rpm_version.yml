@@ -18,7 +18,7 @@ firewall_rpm_version:
   ssl: ssl-2.0.7.ed9c9c3
   tsg_conn_sketch:  tsg_conn_sketch-3.2.3.068ac35
   rtp: rtp-1.0.5.93e978a
-  mesa_sip: mesa_sip-1.1.2.b4bc77d
+  mesa_sip: mesa_sip-1.2.0.287cadc
   fw_voip_plug: fw_voip_plug-1.0.7.0521f2f
   app_proto_identify: app_proto_identify-2.0.16.85f5d7c
   app_proto_engine: app_proto_engine-2.1.5.9a87f07
