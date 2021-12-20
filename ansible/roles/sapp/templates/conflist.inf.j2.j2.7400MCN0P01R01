@@ -23,7 +23,7 @@
 
 [protocol]
 ./plug/protocol/deal_socks/deal_socks.inf 
-./plug/protocol/mesa_sip/mesa_sip.inf
+./plug/protocol/sip/sip.inf
 ./plug/protocol/rtp/rtp.inf
 ./plug/protocol/ssl/ssl.inf
 ./plug/protocol/http/http.inf
