@@ -198,7 +198,6 @@ enable={{ dp_proxy.enable_traffic_mirror }}
 device={{ dp_traffic_mirror.nic_name }}
 # 0:TRAFFIC_MIRROR_ETHDEV_AF_PACKET; 1:TRAFFIC_MIRROR_ETHDEV_MARSIO
 type={{ dp_proxy.traffic_mirror_type }}
-default_vlan_id_for_mac={{ dp_proxy.traffic_mirror_vlan_id }}
 
 table_info=resource/pangu/table_info_traffic_mirror.conf
 stat_file=log/traffic_mirror.status

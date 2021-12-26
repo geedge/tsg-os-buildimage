@@ -31,7 +31,6 @@ dp_proxy:
   mac_addr_data_incoming: aa:bb:cc:dd:ee:ff
   enable_traffic_mirror: 1
   traffic_mirror_type: 1
-  traffic_mirror_vlan_id: 0
 
 dp_certstore:
   location: local
