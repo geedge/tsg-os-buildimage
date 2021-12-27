@@ -63,7 +63,7 @@ tfe_rpm_version:
   tfe: tfe-4.5.30.d201968
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-4.3.0.8883971
+  app_sketch_local: app_sketch_local-4.3.1.6038e0a
   
 tsg_master_rpm_version:
   tsg_master: tsg_master-5.4.22.115d519
