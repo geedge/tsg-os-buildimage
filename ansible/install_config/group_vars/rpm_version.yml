@@ -28,7 +28,7 @@ firewall_rpm_version:
   tsg_ddos_sketch: tsg_ddos_sketch-1.2.2.6ed20a6
   radius: radius-1.0.5.b330829
   radius_collect_plug: radius_collect_plug-2.0.4.7057cc5
-  ssh: ssh-2.1.5.ef9588a
+  ssh: ssh-2.1.6.76bc2d1
 
 framework_rpm_version:
   libcjson: libcjson-1.7.11.93ffba0
