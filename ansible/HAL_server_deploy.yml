@@ -31,6 +31,7 @@
     - {role: system-init-server, tags: system-init-server}
     - {role: system-init, tags: system-init}
     - {role: wannat_wangw, tags: wannat_wangw}
+    - {role: wannat_common, tags: wannat_common}
     - {role: wire_graft, tags: wire_graft}
     - {role: nz-talon, tags: nz-talon}
     - {role: tsg-os-provision-condition, tags: tsg-os-provision-condition}
