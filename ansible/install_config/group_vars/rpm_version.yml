@@ -20,7 +20,7 @@ firewall_rpm_version:
   rtp: rtp-1.0.5.93e978a
   mesa_sip: mesa_sip-1.2.0.287cadc
   fw_voip_plug: fw_voip_plug-1.0.7.0521f2f
-  app_proto_identify: app_proto_identify-2.0.16.85f5d7c
+  app_proto_identify: app_proto_identify-2.0.18.2d00546
   app_proto_engine: app_proto_engine-2.1.6.e324726
   gtp: gtp-1.0.5.afa055c
   gtp_signaling_plug: gtp_signaling_plug-1.0.3.c3d2c93
@@ -68,7 +68,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.3.1.6038e0a
   
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.4.22.115d519
+  tsg_master: tsg_master-5.4.25.0b79495
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-21.12.1.21357e0
