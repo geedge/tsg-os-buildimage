@@ -17,7 +17,7 @@ prefix_path:
 
 dp_steering_proxy:
   ###### location: value {local, foreign}
-  location: local
+  location: foreign
   node_list:
     - nic_name: eth_vf_kni
 
@@ -33,7 +33,7 @@ dp_proxy:
   traffic_mirror_type: 1
 
 dp_certstore:
-  location: local
+  location: foreign
 
 monitor:
   enable_redis_exporter: 0
