@@ -40,7 +40,6 @@ dp_steering_firewall:
   # capture_packet value: pcap, driver
   capture_packet: driver
   nic_internal: eth_raw
-  enable_mirror: 1
 
 diagnose:
   virtual_server_nic: eth_dign_s
