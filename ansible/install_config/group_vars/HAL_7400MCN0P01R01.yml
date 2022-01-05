@@ -43,8 +43,8 @@ dp_steering_firewall:
   enable_mirror: 1
 
 diagnose:
-  virtual_server_nic: eth_vf_dign_s
-  virtual_client_nic: eth_vf_dign_c
+  virtual_server_nic: eth_dign_s
+  virtual_client_nic: eth_dign_c
 
 prefix_path:
   mrzcpd: /opt/tsg/mrzcpd
