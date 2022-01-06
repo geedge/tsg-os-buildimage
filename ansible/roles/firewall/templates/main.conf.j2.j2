@@ -180,3 +180,9 @@ SENDLOG_SWITCH=1
 SENDLOG_SWITCH=0
 {% endif %}
 {% endraw %}
+
+[CAPTURE]
+{% raw %}
+HOS_IP="{{ olap.hos_server.address }}"
+HOS_PORT={{ olap.hos_server.port }}
+{% endraw %}
