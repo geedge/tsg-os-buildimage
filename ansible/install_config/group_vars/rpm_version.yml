@@ -29,7 +29,8 @@ firewall_rpm_version:
   radius: radius-1.0.5.b330829
   radius_collect_plug: radius_collect_plug-2.0.4.7057cc5
   ssh: ssh-2.1.6.76bc2d1
-
+  tsg_vulpes: tsg_vulpes-1.0.5.13c0f59
+  
 framework_rpm_version:
   libcjson: libcjson-1.7.11.93ffba0
   libdocumentanalyze: libdocumentanalyze-2.0.7.eb1f13b

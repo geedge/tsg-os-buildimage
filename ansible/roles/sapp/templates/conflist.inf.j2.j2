@@ -37,7 +37,8 @@
 ./plug/protocol/ssh/ssh.inf
 
 [business]
-{% raw %}{% if connsketch.enable is defined %}
+{% raw %}./plug/business/tsg_vulpes/tsg_vulpes.inf
+{% if connsketch.enable is defined %}
 {% if connsketch.enable == 1 %}
 ./plug/business/tsg_conn_sketch/tsg_conn_sketch.inf
 {% endif %}
