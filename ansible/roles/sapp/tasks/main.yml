@@ -57,29 +57,11 @@
     dest: /opt/tsg/sapp/etc/send_raw_pkt.conf
   tags: template
 
-- name: Template the conflist.inf - tsg_9140
-  template:
-    src: "{{ role_path }}/templates/conflist.inf.j2.j2.9000NPBP01R01"
-    dest: /opt/tsg/tsg-os-provision/templates/conflist.inf.j2
-  tags: template
-  when:
-    - runtime_env == 'TSG-9140'
-
-- name: Template the conflist.inf - tsg_7400
-  template:
-    src: "{{ role_path }}/templates/conflist.inf.j2.j2.7400MCN0P01R01"
-    dest: /opt/tsg/tsg-os-provision/templates/conflist.inf.j2
-  tags: template
-  when:
-    - runtime_env == 'TSG-7400-mcn0'
-
 - name: Template the conflist.inf - tsg_server
   template:
-    src: "{{ role_path }}/templates/conflist.inf.j2.j2.SERVER"
+    src: "{{ role_path }}/templates/conflist.inf.j2.j2"
     dest: /opt/tsg/tsg-os-provision/templates/conflist.inf.j2
   tags: template
-  when:
-    - runtime_env == 'TSG-server'
 
 - name: Template the entrylist.conf.j2
   template:

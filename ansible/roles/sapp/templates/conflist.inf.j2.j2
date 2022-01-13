@@ -66,10 +66,13 @@
 {% if app.identify_by.user_defined_signature == 1 %}
 ./plug/business/app_sketch_local/app_sketch_local.inf
 {% endif %}
-{% if npb_device == 'tera' %}
-./plug/business/http_healthcheck/http_healthcheck.inf
-{% endif %}
 {% if radius.enable == 1 %}
 ./plug/business/radius_collect_plug/radius_collect_plug.inf
 {% endif %}
 {% endraw %}
+{% if runtime_env == 'TSG-7400-mcn0' %}
+{% raw %}{% if npb_device == 'tera' %}
+./plug/business/http_healthcheck/http_healthcheck.inf
+{% endif %}
+{% endraw %}
+{% endif %}
