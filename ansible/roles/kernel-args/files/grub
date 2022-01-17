@@ -3,6 +3,6 @@ GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
 GRUB_DEFAULT=saved
 GRUB_DISABLE_SUBMENU=true
 GRUB_TERMINAL_OUTPUT="console"
-GRUB_CMDLINE_LINUX="rhgb quiet iommu=pt intel_iommu=on crashkernel=512M default_hugepagesz=1G hugepagesz=1G hugepages=16 isolcpus=1-103 psi=1 mitigations=off"
+GRUB_CMDLINE_LINUX="rhgb quiet iommu=pt intel_iommu=on crashkernel=512M default_hugepagesz=1G hugepagesz=1G hugepages=16 isolcpus=17-103 psi=1 mitigations=off"
 GRUB_DISABLE_RECOVERY="true"
 
