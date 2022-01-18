@@ -148,7 +148,7 @@ dns_flood_thresh="{{ ddossketch.dns_flood_report_thresh }}"
 [TRAFFIC_MIRROR]
 TRAFFIC_MIRROR_ENABLE=1
 NIC_NAME={{ dp_traffic_mirror.nic_name }}
-DEFAULT_VLAN_ID=2
+DEFAULT_VLAN_ID={{ dp_traffic_mirror.traffic_mirror_vlan_id }}
 {% endif %}
 [RADIUS_PLUG]
 {% raw %}{% set tags_list = [] %}

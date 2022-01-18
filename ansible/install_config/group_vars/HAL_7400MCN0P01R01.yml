@@ -31,6 +31,7 @@ dp_steering_proxy:
 
 dp_traffic_mirror:
   nic_name: eth_mirr_d 
+  traffic_mirror_vlan_id: 0
 
 dp_steering_firewall:
   #deloyment value: mirror,inline, transparent. mirror = one arm + mirror, inline = one arm + series, transparent = two arm + series 

@@ -10,6 +10,7 @@ workload_zcpd:
 
 dp_traffic_mirror:
   nic_name: eth_mirr_d 
+  traffic_mirror_vlan_id: 0
 
 prefix_path:
   mrzcpd: /opt/tsg/mrzcpd
