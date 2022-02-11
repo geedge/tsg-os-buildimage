@@ -52,7 +52,7 @@ framework_rpm_version:
   libMESA_jump_layer: libMESA_jump_layer-1.0.9.1b30b6d
 
 kni_rpm_version:
-  kni: kni-22.02.01.cc234d4
+  kni: kni-22.02.02.d1df1bd
 
 mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.4.11.ad801d9
