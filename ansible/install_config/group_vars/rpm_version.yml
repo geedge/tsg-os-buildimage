@@ -5,7 +5,7 @@ firewall_rpm_version:
   capture_packet_plug:  capture_packet_plug-4.0.7.f30ff40
   conn_telemetry: conn_telemetry-1.0.2.8d6da43
   dns: dns-2.1.2.20270fa
-  ftp: ftp-1.0.10.cc283fd
+  ftp: ftp-1.0.12.1f3255d
   fw_dns_plug: fw_dns_plug-4.0.1.fb800c9
   fw_ftp_plug: fw_ftp_plug-3.1.1.32e1a9f
   fw_http_plug: fw_http_plug-4.0.12.010ebc5
@@ -15,7 +15,7 @@ firewall_rpm_version:
   http: http-2.0.8.1acf1e8
   mail: mail-1.0.15.b23de6c
   quic: quic-2.0.2.d76065f
-  ssl: ssl-2.0.7.ed9c9c3
+  ssl: ssl-2.0.8.6d9ed75
   tsg_conn_sketch:  tsg_conn_sketch-3.2.12.e5c8d16
   rtp: rtp-1.0.5.93e978a
   mesa_sip: mesa_sip-1.2.0.287cadc
@@ -58,9 +58,9 @@ mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.4.11.ad801d9
 
 sapp_rpm_version:
-  sapp: sapp-4.2.73.3b3af62
+  sapp: sapp-4.2.74.0741a11
   tcpdump_mesa: tcpdump_mesa-1.0.9.ca549c5
-  sapp-pr: sapp-pr-4.2.73.3b3af62
+  sapp-pr: sapp-pr-4.2.74.0741a11
 
 tfe_rpm_version:
   tfe: tfe-4.5.35.9ddc606 
@@ -70,7 +70,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.3.1.6038e0a
   
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.5.2.286c308
+  tsg_master: tsg_master-5.5.4.f7cbaf5
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-22.01.1.ef53d7e
