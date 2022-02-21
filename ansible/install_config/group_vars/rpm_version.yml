@@ -10,7 +10,7 @@ firewall_rpm_version:
   fw_ftp_plug: fw_ftp_plug-3.1.1.32e1a9f
   fw_http_plug: fw_http_plug-4.0.12.010ebc5
   fw_mail_plug: fw_mail_plug-4.1.0.6836cdf
-  fw_quic_plug: fw_quic_plug-4.1.0.17dd812
+  fw_quic_plug: fw_quic_plug-4.1.1.f53be18
   fw_ssl_plug: fw_ssl_plug-3.2.2.58bac95
   http: http-2.0.8.1acf1e8
   mail: mail-1.0.15.b23de6c
