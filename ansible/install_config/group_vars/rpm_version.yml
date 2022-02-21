@@ -1,5 +1,5 @@
 certstore_rpm_version:
-  certstore: certstore-2.1.8.20210604.8077136
+  certstore: certstore-2.1.9.20220221.975913c
 
 firewall_rpm_version:
   capture_packet_plug:  capture_packet_plug-4.0.7.f30ff40
