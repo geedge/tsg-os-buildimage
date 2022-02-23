@@ -10,10 +10,16 @@
       - /tmp/i40e_drive/i40e-2.11.29-1.x86_64.rpm
     state: present
 
+- name: "install auxiliary"
+  yum:
+    name:
+      - /tmp/i40e_drive/auxiliary-1.0.0-1.x86_64.rpm
+    state: present
+
 - name: "install iavf"
   yum:
     name:
-      - /tmp/i40e_drive/iavf-4.1.1-1.x86_64.rpm
+      - /tmp/i40e_drive/iavf-4.3.19-1.x86_64.rpm
     state: present
 
 - name: "update  depmod"
