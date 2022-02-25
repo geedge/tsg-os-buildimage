@@ -11,7 +11,7 @@ firewall_rpm_version:
   fw_http_plug: fw_http_plug-4.0.12.010ebc5
   fw_mail_plug: fw_mail_plug-4.1.0.6836cdf
   fw_quic_plug: fw_quic_plug-4.1.1.f53be18
-  fw_ssl_plug: fw_ssl_plug-3.2.2.58bac95
+  fw_ssl_plug: fw_ssl_plug-3.2.4.77a4bc4
   http: http-2.0.8.1acf1e8
   mail: mail-1.0.15.b23de6c
   quic: quic-2.0.2.d76065f
@@ -27,7 +27,7 @@ firewall_rpm_version:
   deal_socks: deal_socks-1.0.3.651bc6f
   tsg_ddos_sketch: tsg_ddos_sketch-1.2.2.6ed20a6
   radius: radius-1.0.5.b330829
-  radius_collect_plug: radius_collect_plug-2.0.4.7057cc5
+  radius_collect_plug: radius_collect_plug-2.0.5.cb3b4aa
   ssh: ssh-2.1.6.76bc2d1
   tsg_vulpes: tsg_vulpes-1.0.5.13c0f59
   stratum: stratum-1.0.2.e317c55
@@ -35,9 +35,9 @@ firewall_rpm_version:
 framework_rpm_version:
   libcjson: libcjson-1.7.11.93ffba0
   libdocumentanalyze: libdocumentanalyze-2.0.7.eb1f13b
-  libmaatframe: libmaatframe-3.5.3.dd86ba5
+  libmaatframe: libmaatframe-3.6.0.7e1f3eb
   libMESA_field_stat: libMESA_field_stat-1.0.2.6d45eed
-  libMESA_field_stat2: libMESA_field_stat2-2.9.12.b531617
+  libMESA_field_stat2: libMESA_field_stat2-2.10.2.0c4afa7
   libMESA_handle_logger: libMESA_handle_logger-2.0.8.f76af2f
   libMESA_htable: libMESA_htable-3.10.12.cf4ccfc
   libMESA_prof_load: libMESA_prof_load-1.0.6.c6da36a
@@ -70,7 +70,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.3.1.6038e0a
   
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.5.6.36121a2
+  tsg_master: tsg_master-5.5.8.28782d2
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-22.01.1.ef53d7e
