@@ -63,8 +63,8 @@ sapp_rpm_version:
   sapp-pr: sapp-pr-4.2.78.a2d0f86
 
 tfe_rpm_version:
-  tfe: tfe-4.5.35.9ddc606 
-  tfe-pr: tfe-pr-4.5.35.9ddc606
+  tfe: tfe-4.5.36.421723f
+  tfe-pr: tfe-pr-4.5.36.421723f
 
 tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.3.1.6038e0a
