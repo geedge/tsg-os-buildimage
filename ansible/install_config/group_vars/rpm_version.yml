@@ -19,7 +19,7 @@ firewall_rpm_version:
   tsg_conn_sketch:  tsg_conn_sketch-3.2.13.f54ef63
   rtp: rtp-1.0.5.93e978a
   mesa_sip: mesa_sip-1.2.0.287cadc
-  fw_voip_plug: fw_voip_plug-1.0.9.02b65bb
+  fw_voip_plug: fw_voip_plug-1.0.10.8edecd4
   app_proto_identify: app_proto_identify-2.0.19.8148990
   app_proto_engine: app_proto_engine-2.2.3.02030e3
   gtp: gtp-1.0.5.afa055c
