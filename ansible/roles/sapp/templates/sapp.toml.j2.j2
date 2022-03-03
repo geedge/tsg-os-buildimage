@@ -36,7 +36,9 @@ dictator_enable=1
         {% endraw %}
 {% endif %}
     [packet_io.feature]
-	
+
+    destroy_all_plug_enabled = 0	
+
 	### note, used to represent inbound or outbound direction value,
 	### because it comes from Third party device, so it needs to be specified manually,
 	### if inbound_route_dir=1, then outbound_route_dir=0, vice versa,
