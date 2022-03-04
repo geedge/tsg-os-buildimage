@@ -35,7 +35,7 @@ firewall_rpm_version:
 framework_rpm_version:
   libcjson: libcjson-1.7.11.93ffba0
   libdocumentanalyze: libdocumentanalyze-2.0.7.eb1f13b
-  libmaatframe: libmaatframe-3.6.0.7e1f3eb
+  libmaatframe: libmaatframe-3.6.2.a184be5
   libMESA_field_stat: libMESA_field_stat-1.0.2.6d45eed
   libMESA_field_stat2: libMESA_field_stat2-2.10.2.0c4afa7
   libMESA_handle_logger: libMESA_handle_logger-2.0.8.f76af2f
@@ -58,9 +58,9 @@ mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.4.11.ad801d9
 
 sapp_rpm_version:
-  sapp: sapp-4.2.78.a2d0f86
+  sapp: sapp-4.2.79.1c1a506
   tcpdump_mesa: tcpdump_mesa-1.0.9.ca549c5
-  sapp-pr: sapp-pr-4.2.78.a2d0f86
+  sapp-pr: sapp-pr-4.2.79.1c1a506
 
 tfe_rpm_version:
   tfe: tfe-4.5.36.421723f
