@@ -16,7 +16,7 @@ firewall_rpm_version:
   mail: mail-1.0.15.b23de6c
   quic: quic-2.0.2.d76065f
   ssl: ssl-2.0.8.6d9ed75
-  tsg_conn_sketch:  tsg_conn_sketch-3.2.13.f54ef63
+  tsg_conn_sketch:  tsg_conn_sketch-3.2.15.9b20c2e
   rtp: rtp-1.0.5.93e978a
   mesa_sip: mesa_sip-1.2.0.287cadc
   fw_voip_plug: fw_voip_plug-1.0.10.8edecd4
