@@ -21,6 +21,9 @@ capturepacket:
 radius:
   enable: 1
 
+app_behavior:
+  enable: 0
+
 gtp:
   enable_gtp_c_record: 1
 
