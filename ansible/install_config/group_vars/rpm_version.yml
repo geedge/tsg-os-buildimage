@@ -21,7 +21,7 @@ firewall_rpm_version:
   mesa_sip: mesa_sip-1.2.0.287cadc
   fw_voip_plug: fw_voip_plug-1.0.10.8edecd4
   app_proto_identify: app_proto_identify-2.0.19.8148990
-  app_proto_engine: app_proto_engine-2.2.3.02030e3
+  app_proto_engine: app_proto_engine-2.3.1.61270ee
   gtp: gtp-1.0.5.afa055c
   gtp_signaling_plug: gtp_signaling_plug-1.0.3.c3d2c93
   deal_socks: deal_socks-1.0.3.651bc6f
