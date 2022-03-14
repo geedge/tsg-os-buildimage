@@ -1,0 +1,136 @@
+---
+# systemctl set-property user.slice     CPUShares=1500 MemoryLimit=13G
+# systemctl set-property system.slice   CPUShares=1000 MemoryLimit=13G
+# systemctl set-property workload.slice CPUShares=7500 MemoryLimit=100G
+
+# workload.slice
+- name: "Create /usr/lib/systemd/system/workload.slice.d/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/workload.slice.d/
+
+- name: "copy 50-CPUShares.conf to workload.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_workload_slice_cpu.conf.j2"
+    dest: /usr/lib/systemd/system/workload.slice.d/50-CPUShares.conf
+    mode: 0644
+
+- name: "copy 50-MemoryLimit.conf to workload.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_workload_slice_mem.conf.j2"
+    dest: /usr/lib/systemd/system/workload.slice.d/50-MemoryLimit.conf
+    mode: 0644
+
+# user.slice
+- name: "Create /usr/lib/systemd/system/user.slice.d/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/user.slice.d/
+
+- name: "copy 50-CPUShares.conf to user.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_user_slice_cpu.conf.j2"
+    dest: /usr/lib/systemd/system/user.slice.d/50-CPUShares.conf
+    mode: 0644
+
+- name: "copy 50-MemoryLimit.conf to user.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_user_slice_mem.conf.j2"
+    dest: /usr/lib/systemd/system/user.slice.d/50-MemoryLimit.conf
+    mode: 0644
+
+# system.slice
+- name: "Create /usr/lib/systemd/system/system.slice.d/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/systemd/system/system.slice.d/
+
+- name: "copy 50-CPUShares.conf to system.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_system_slice_cpu.conf.j2"
+    dest: /usr/lib/systemd/system/system.slice.d/50-CPUShares.conf
+    mode: 0644
+
+- name: "copy 50-MemoryLimit.conf to system.slice.d"
+  copy:
+    src: "{{ role_path }}/templates/override_system_slice_mem.conf.j2"
+    dest: /usr/lib/systemd/system/system.slice.d/50-MemoryLimit.conf
+    mode: 0644
+
+# 启用 IPMI
+- name: "copy ipmi.conf to /etc/sysconfig/ipmi"
+  copy:
+    src: "{{ role_path }}/templates/ipmi.conf.j2"
+    dest: /etc/sysconfig/ipmi
+    mode: 0644
+
+- name: "enable ipmi"
+  systemd:
+    name: ipmi
+    enabled: yes
+
+# 启用 Watchdog
+- name: "copy watchdog.conf to /etc/watchdog.conf"
+  copy:
+    src: "{{ role_path }}/templates/watchdog.conf.j2"
+    dest: /etc/watchdog.conf
+    mode: 0644
+
+- name: "enable watchdog"
+  systemd:
+    name: watchdog
+    enabled: yes
+
+- name: "enable irqbalance"
+  systemd:
+    name: irqbalance
+    enabled: yes
+
+# poweroff guard
+- name: "templates poweroff-guard.service.j2"
+  template:
+    src: "{{role_path}}/templates/poweroff-guard.service.j2"
+    dest: /usr/lib/systemd/system/poweroff-guard.service
+  tags: template
+
+- name: "templates start-poweroff-guard.service.j2"
+  template:
+    src: "{{role_path}}/templates/start-poweroff-guard.service.j2"
+    dest: /usr/lib/systemd/system/start-poweroff-guard.service
+  tags: template
+
+- name: 'poweroff-guard service start'
+  systemd:
+    name: poweroff-guard
+    enabled: yes
+
+- name: 'start-poweroff-guard service start'
+  systemd:
+    name: start-poweroff-guard
+    enabled: yes
+#Set CPU frequency scaling
+- name: "copy cpupower.j2 to /etc/sysconfig/cpupower"
+  copy:
+    src: "{{ role_path }}/templates/cpupower.j2"
+    dest: /etc/sysconfig/cpupower
+    mode: 0644
+
+- name: "enable cpupower"
+  systemd:
+    name: cpupower
+    enabled: yes
+
+#not wanted dev-hugepages.mount
+- name: 'do not wanted dev-hugepages.mount'
+  file:
+    path: "/usr/lib/systemd/system/sysinit.target.wants/dev-hugepages.mount"
+    state: absent

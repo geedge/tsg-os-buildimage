@@ -56,6 +56,14 @@
     src: "{{ role_path }}/templates/send_raw_pkt.conf.j2"
     dest: /opt/tsg/sapp/etc/send_raw_pkt.conf
   tags: template
+  when: runtime_env != 'TSG-X-P1403'
+
+- name: Template the send_raw_pkt.conf
+  template:
+    src: "{{ role_path }}/templates/send_raw_pkt.conf.j2"
+    dest: /opt/tsg/tsg-os-provision/templates/send_raw_pkt.conf.j2
+  tags: template
+  when: runtime_env == 'TSG-X-P1403'
 
 - name: Template the conflist.inf - tsg_server
   template:
@@ -96,6 +104,14 @@
   tags: template
   when:
     - runtime_env == 'TSG-7400-mcn0'
+
+- name: Template the vlan_flipping_map.conf - tsg-x-p1403
+  template:
+    src: "{{ role_path }}/templates/vlan_flipping_map.conf.j2.TSGXNXR620G40R01P1403"
+    dest: /opt/tsg/sapp/etc/vlan_flipping_map.conf
+  tags: template
+  when:
+    - runtime_env == 'TSG-X-P1403'
 
 - name: Template the sapp_log.conf
   template:

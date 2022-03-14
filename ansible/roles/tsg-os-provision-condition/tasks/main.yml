@@ -45,3 +45,17 @@
     - tfe-env
     - tfe
   when: runtime_env == 'TSG-7400-mcn123'
+
+- name: "add condition into service depend provision result TSG-X-P1403"
+  copy:
+    src: "{{ role_path }}/files/service_add_ConditionPathExists.conf"
+    dest: "/usr/lib/systemd/system/{{ item }}.service.d/"
+    mode: 0644
+  with_items:
+    - mrapm_device
+    - mrapm_stream
+    - mrenv
+    - mrzcpd
+    - sapp
+    - telegraf_statistic
+  when: runtime_env == 'TSG-X-P1403'

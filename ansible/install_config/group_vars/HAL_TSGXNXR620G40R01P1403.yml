@@ -1,0 +1,36 @@
+control_and_policy:
+  nic_name: "{% raw %}{{ network_setting.nic_policy_log.name }}{% endraw %}"
+
+workload_zcpd:
+  cpu_affinity: "{% raw %}{{ workload_zcpd_cpu_affinity }}{% endraw %}"
+  hugepage_num_1G: 32
+
+workload_firewall:
+  cpu_affinity: "{% raw %}{{ workload_firewall_cpu_affinity }}{% endraw %}"
+  worker_threads: "{% raw %}{{ workload_firewall_worker_threads }}{% endraw %}"
+  send_only_threads_max: 0
+
+dp_traffic_mirror:
+  nic_name: eth_mirr_d 
+  traffic_mirror_vlan_id: 0
+
+dp_steering_firewall:
+  #deloyment value: mirror,inline, transparent. mirror = one arm + mirror, inline = one arm + series, transparent = two arm + series 
+  deployment: inline
+  #encapsulation value: vlan, vxlan, raw, provision
+  encapsulation: vxlan 
+  # capture_packet value: pcap, driver
+  capture_packet: driver
+  nic_internal: "{% raw %}{{ network_setting.nic_raw.name }}{% endraw %}"
+  enable_mirror: 0
+
+prefix_path:
+  mrzcpd: /opt/tsg/mrzcpd
+  framework: /opt/tsg/framework
+  sapp: /opt/tsg/sapp
+
+monitor:
+  enable_redis_exporter: 1
+  enable_ipmi_exporter: 1
+### TSG-server, TSG-7400-mcn0 TSG-7400-mcn123 TSG-9140
+runtime_env: TSG-X-P1403

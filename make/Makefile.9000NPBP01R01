@@ -40,7 +40,7 @@ installer: builddir
 	sed -i '/sapp-pr:/d;/tfe-pr:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
 
 sysroot-base: builddir
-	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum.conf $(TARGET_SYSROOT_DIR) $(PROJECTDIR)
+	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum.conf $(TARGET_SYSROOT_DIR) $(PROJECTDIR) $(PROFILE_ID)
 
 sysroot-verfile: sysroot-base
 	sed -i -e "s/^NAME=.*/NAME=\"TSG-OS\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release

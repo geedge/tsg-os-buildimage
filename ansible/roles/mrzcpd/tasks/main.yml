@@ -77,6 +77,13 @@
   when:
     - runtime_env == 'TSG-server'
 
+- name: "update mrglobal.conf - TSG-X-P1403"
+  template:
+    src: "{{ role_path }}/templates/mrglobal.conf.j2.j2.TSGXNXR620G40R01P1403"
+    dest: /opt/tsg/tsg-os-provision/templates/mrglobal.conf.j2
+  when:
+    - runtime_env == 'TSG-X-P1403'
+
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:
     path: "{{ item }}"

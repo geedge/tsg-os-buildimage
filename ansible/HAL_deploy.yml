@@ -86,3 +86,26 @@
     - {role: nz-talon, tags: nz-talon}
     - {role: tsg-os-provision-condition, tags: tsg-os-provision-condition}
     - {role: hasp, tags: hasp}
+
+- hosts: TSG-X-NXR620G40-R01-P1403
+  remote_user: root
+  vars_files:
+    - install_config/group_vars/HAL_TSGXNXR620G40R01P1403.yml
+    - install_config/group_vars/rpm_version.yml
+  roles:
+    - {role: tsg-os-provision, tags: tsg-os-provision}
+    - {role: tsg_device_tag, tags: tsg_device_tag}
+    - {role: tsg_sn, tags: tsg_sn}
+    - {role: framework, tags: framework}
+    - {role: mrzcpd, tags: mrzcpd}
+    - {role: sapp, tags: sapp}
+    - {role: tsg_master, tags: tsg_master}
+    - {role: firewall, tags: firewall}
+    - {role: tsg_app, tags: tsg_app}
+    - {role: telegraf_statistic, tags: telegraf_statistic}
+    - {role: exporter, tags: exporter}
+    - {role: system-init-TSG-X-P1403, tags: system-init-TSG-X-P1403}
+    - {role: system-init, tags: system-init}
+    - {role: tsg-os-provision-condition, tags: tsg-os-provision-condition}
+    - {role: hasp, tags: hasp}
+    - {role: OFED, tags: OFED}

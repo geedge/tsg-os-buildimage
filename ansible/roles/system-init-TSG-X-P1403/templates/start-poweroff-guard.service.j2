@@ -1,0 +1,6 @@
+[Unit]
+Description=Start Poweroff Guard
+[Service]
+ExecStart=/bin/systemctl enable poweroff-guard
+[Install]
+WantedBy=multi-user.target
