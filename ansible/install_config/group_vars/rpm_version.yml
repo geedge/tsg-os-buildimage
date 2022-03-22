@@ -31,7 +31,7 @@ firewall_rpm_version:
   ssh: ssh-2.1.6.76bc2d1
   tsg_vulpes: tsg_vulpes-1.0.5.13c0f59
   stratum: stratum-1.0.4.d18a561
-  
+
 framework_rpm_version:
   libcjson: libcjson-1.7.11.93ffba0
   libdocumentanalyze: libdocumentanalyze-2.0.7.eb1f13b
@@ -55,7 +55,7 @@ kni_rpm_version:
   kni: kni-22.02.04.e15a467
 
 mrzcpd_rpm_version:
-  mrzcpd: mrzcpd-4.4.11.ad801d9
+  mrzcpd: mrzcpd-4.5.0.42186ea
 
 sapp_rpm_version:
   sapp: sapp-4.2.80.9821e5f
@@ -68,7 +68,7 @@ tfe_rpm_version:
 
 tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.3.3.73f7277
-  
+
 tsg_master_rpm_version:
   tsg_master: tsg_master-5.5.11.7f97d13
 
@@ -82,6 +82,6 @@ wannat_wangw_rpm_version:
   libwangw: libwangw-1.5.1.7e0480f
   libwannat_common: libwannat_common-1.0.1.8cc3bda
 
-wire_graft_rpm_version:  
+wire_graft_rpm_version:
   wire_graft: wire_graft_plug-1.5.2.36b072a
   libwire_graft: libwire_graft-1.5.2.36b072a
