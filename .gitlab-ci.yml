@@ -1,6 +1,8 @@
-image: "git.mesalab.cn:7443/mesa_platform/build-env:master"
+#image: "git.mesalab.cn:7443/mesa_platform/build-env:master"
 variables:
   GIT_STRATEGY: "clone"
+  BUILD_BASED_IMAGE_CENTOS7: "git.mesalab.cn:7443/mesa_platform/build-env:master"
+  BUILD_BASED_IMAGE_ROCKYLINUX8: "git.mesalab.cn:7443/mesa_platform/build-env:rockylinux"
 
 .build_tsg-buildimage:
   script:
@@ -13,6 +15,7 @@ variables:
     - tsg-os-installer
 
 feature_branch_build_7400_mcn0:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -25,6 +28,7 @@ feature_branch_build_7400_mcn0:
     - /^update-.*$/i
 
 feature_branch_build_7400_mcn123:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -37,6 +41,7 @@ feature_branch_build_7400_mcn123:
     - /^update-.*$/i
 
 feature_branch_build_9000:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -49,6 +54,7 @@ feature_branch_build_9000:
     - /^update-.*$/i
 
 feature_branch_build_TSGXP1403:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -61,6 +67,7 @@ feature_branch_build_TSGXP1403:
     - /^update-.*$/i
 
 feature_branch_build_server_unlocked:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -74,6 +81,7 @@ feature_branch_build_server_unlocked:
     - /^update-.*$/i
 
 feature_branch_build_server_locked:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -87,6 +95,7 @@ feature_branch_build_server_locked:
     - /^update-.*$/i
 
 develop_build_7400_mcn0:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -100,6 +109,7 @@ develop_build_7400_mcn0:
     - /^dev-.*$/i
 
 develop_build_7400_mcn123:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -113,6 +123,7 @@ develop_build_7400_mcn123:
     - /^dev-.*$/i
 
 develop_build_9000:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -126,6 +137,7 @@ develop_build_9000:
     - /^dev-.*$/i
 
 develop_build_TSGXP1403:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -139,6 +151,7 @@ develop_build_TSGXP1403:
     - /^dev-.*$/i
 
 develop_build_server_unlocked:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -153,6 +166,7 @@ develop_build_server_unlocked:
     - /^dev-.*$/i
 
 develop_build_server_locked:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -167,6 +181,7 @@ develop_build_server_locked:
     - /^dev-.*$/i
 
 testing_build_7400_mcn0:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -180,6 +195,7 @@ testing_build_7400_mcn0:
     - /^rel-.*$/i
 
 testing_build_7400_mcn123:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -193,6 +209,7 @@ testing_build_7400_mcn123:
     - /^rel-.*$/i
 
 testing_build_9000:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -206,6 +223,7 @@ testing_build_9000:
     - /^rel-.*$/i
 
 testing_build_TSGXP1403:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -219,6 +237,7 @@ testing_build_TSGXP1403:
     - /^rel-.*$/i
 
 testing_build_server_unlocked:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -233,6 +252,7 @@ testing_build_server_unlocked:
     - /^rel-.*$/i
 
 testing_build_server_locked:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -247,6 +267,7 @@ testing_build_server_locked:
     - /^rel-.*$/i
 
 rc_build_7400_mcn0:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -260,6 +281,7 @@ rc_build_7400_mcn0:
     - /^.*-rc.*$/i
 
 rc_build_7400_mcn123:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -273,6 +295,7 @@ rc_build_7400_mcn123:
     - /^.*-rc.*$/i
 
 rc_build_9000:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -286,6 +309,7 @@ rc_build_9000:
     - /^.*-rc.*$/i
 
 rc_build_TSGXP1403:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -299,6 +323,7 @@ rc_build_TSGXP1403:
     - /^.*-rc.*$/i
 
 rc_build_server_unlocked:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -313,6 +338,7 @@ rc_build_server_unlocked:
     - /^.*-rc.*$/i
 
 rc_build_server_locked:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -327,6 +353,7 @@ rc_build_server_locked:
     - /^.*-rc.*$/i
 
 release_build_7400_mcn0:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -342,6 +369,7 @@ release_build_7400_mcn0:
     - /^.*-rc.*$/i
 
 release_build_7400_mcn123:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -357,6 +385,7 @@ release_build_7400_mcn123:
     - /^.*-rc.*$/i
 
 release_build_9000:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -372,6 +401,7 @@ release_build_9000:
     - /^.*-rc.*$/i
 
 release_build_TSGXP1403:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -387,6 +417,7 @@ release_build_TSGXP1403:
     - /^.*-rc.*$/i
 
 release_build_server_unlocked:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
@@ -403,6 +434,7 @@ release_build_server_unlocked:
     - /^.*-rc.*$/i
 
 release_build_server_locked:
+  image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
   extends: .build_tsg-buildimage
   variables:
