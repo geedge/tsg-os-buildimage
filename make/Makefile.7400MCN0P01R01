@@ -40,7 +40,7 @@ installer: builddir
 	sed -i '/sapp-pr:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
 
 sysroot-base: builddir
-	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum.conf $(TARGET_SYSROOT_DIR) $(PROJECTDIR) $(PROFILE_ID)
+	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum-CentOS-7.conf $(TARGET_SYSROOT_DIR) $(PROJECTDIR) $(PROFILE_ID)
 
 sysroot-verfile: sysroot-base
 	sed -i -e "s/^NAME=.*/NAME=\"TSG-OS\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
@@ -48,11 +48,11 @@ sysroot-verfile: sysroot-base
 	sed -i -e "s/^PRETTY_NAME=.*/PRETTY_NAME=\"TSG-OS $(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
 
 sysroot-ansible: sysroot-verfile sysroot-base
-	cp $(CONFDIR)/yum.conf $(TARGET_SYSROOT_DIR)/tmp/ -r
+	cp $(CONFDIR)/yum-CentOS-7.conf $(TARGET_SYSROOT_DIR)/tmp/ -r
 	cp $(CONFDIR)/resolv.conf $(TARGET_SYSROOT_DIR)/etc/ -r
 	cp $(TARGET_SYSROOT_DIR)/etc/hosts $(TARGET_SYSROOT_DIR)/tmp/ -r
 	cp /etc/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
-	$(TOOLSDIR)/ansible-HAL $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR) /tmp/yum.conf
+	$(TOOLSDIR)/ansible-HAL $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR) /tmp/yum-CentOS-7.conf
 	cp $(TARGET_SYSROOT_DIR)/tmp/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
 
 sysroot-cleanup:

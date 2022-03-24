@@ -40,7 +40,7 @@ endif
 ifeq ($(LOCK_STATE),LOCKED)
 	sed -i '/sapp:/d;/tfe:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
 endif
-	$(TOOLSDIR)/ansible-HAL-server $(PROFILE_ID) $(PROJECTDIR) $(TARGET_COMPRESS_DIR)/rpm_download $(PROJECTDIR)/conf/yum.conf
+	$(TOOLSDIR)/ansible-HAL-server $(PROFILE_ID) $(PROJECTDIR) $(TARGET_COMPRESS_DIR)/rpm_download $(PROJECTDIR)/conf/yum-CentOS-7.conf
 
 packages_directory_assemble:
 	mkdir -p $(TARGET_COMPRESS_DIR)
