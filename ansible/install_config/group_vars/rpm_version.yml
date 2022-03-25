@@ -30,7 +30,7 @@ firewall_rpm_version:
   radius_collect_plug: radius_collect_plug-2.0.5.cb3b4aa
   ssh: ssh-2.1.6.76bc2d1
   tsg_vulpes: tsg_vulpes-1.0.5.13c0f59
-  stratum: stratum-1.0.4.d18a561
+  stratum: stratum-1.0.6.16c1c35
   
 framework_rpm_version:
   libcjson: libcjson-1.7.11.93ffba0
