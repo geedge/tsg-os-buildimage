@@ -95,28 +95,6 @@
     name: irqbalance
     enabled: yes
 
-# poweroff guard
-- name: "templates poweroff-guard.service.j2"
-  template:
-    src: "{{role_path}}/templates/poweroff-guard.service.j2"
-    dest: /usr/lib/systemd/system/poweroff-guard.service
-  tags: template
-
-- name: "templates start-poweroff-guard.service.j2"
-  template:
-    src: "{{role_path}}/templates/start-poweroff-guard.service.j2"
-    dest: /usr/lib/systemd/system/start-poweroff-guard.service
-  tags: template
-
-- name: 'poweroff-guard service start'
-  systemd:
-    name: poweroff-guard
-    enabled: yes
-
-- name: 'start-poweroff-guard service start'
-  systemd:
-    name: start-poweroff-guard
-    enabled: yes
 #Set CPU frequency scaling
 - name: "copy cpupower.j2 to /etc/sysconfig/cpupower"
   copy:
