@@ -9,15 +9,15 @@
       - "/tmp/ansible_deploy/aksusbd-8.23-1.x86_64.rpm"
     state: present
 
-- name: "hasp_update rpm install: copy file to device"
-  copy:
-    src: '{{ role_path }}/files/hasp_update-1.0.1.b836a3b-1.el7.x86_64.rpm'
-    dest: /tmp/ansible_deploy/
-  
-- name: "hasp_update rpm install: install hasp_update"
+- name: "Get hasp_update rpm path"
+  find:
+    path: /tmp/rpm_download/
+    pattern: "{{ hasp_update_rpm_version.hasp_update }}*"
+  register: hasp_update_rpm_fullname
+
+- name: "Install hasp_update from local path" 
   yum:
-    name:
-      - "/tmp/ansible_deploy/hasp_update-1.0.1.b836a3b-1.el7.x86_64.rpm"
+    name: "{{ hasp_update_rpm_fullname.files[0].path }}" 
     state: present
 
 - name: "Create /etc/tsg/licence/ directory if it does not exist"

@@ -140,3 +140,12 @@
     state: latest
     download_only: yes
     download_dir: "{{ path_download }}"
+
+- name: "download rpm packages: hasp_update"
+  yum:
+    name:
+      - "{{ hasp_update_rpm_version.hasp_update }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: "{{ path_download }}"
