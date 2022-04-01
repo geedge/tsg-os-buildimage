@@ -3,53 +3,53 @@ certstore_rpm_version:
 
 firewall_rpm_version:
   capture_packet_plug:  capture_packet_plug-4.0.9.64e0c46
-  conn_telemetry: conn_telemetry-1.0.2.8d6da43
-  dns: dns-2.1.2.20270fa
-  ftp: ftp-1.0.12.1f3255d
-  fw_dns_plug: fw_dns_plug-4.0.1.fb800c9
-  fw_ftp_plug: fw_ftp_plug-3.1.3.f87867d
-  fw_http_plug: fw_http_plug-4.0.12.010ebc5
+  conn_telemetry: conn_telemetry-1.0.3.4ef6df6
+  fw_dns_plug: fw_dns_plug-4.0.3.3b4db47
+  fw_ftp_plug: fw_ftp_plug-3.1.4.46f553d
+  fw_http_plug: fw_http_plug-4.1.0.d3a8afc
   fw_mail_plug: fw_mail_plug-4.1.2.4f0fe4b
-  fw_quic_plug: fw_quic_plug-4.1.1.f53be18
+  fw_quic_plug: fw_quic_plug-4.1.2.c79dbde
   fw_ssl_plug: fw_ssl_plug-3.2.4.77a4bc4
-  http: http-2.0.8.1acf1e8
-  mail: mail-1.0.15.b23de6c
-  quic: quic-2.0.2.d76065f
-  ssl: ssl-2.0.8.6d9ed75
   tsg_conn_sketch:  tsg_conn_sketch-3.3.0.a2aedac
-  rtp: rtp-1.0.5.93e978a
-  mesa_sip: mesa_sip-1.2.0.287cadc
   fw_voip_plug: fw_voip_plug-1.0.10.8edecd4
-  app_proto_identify: app_proto_identify-2.0.19.8148990
+  gtp_signaling_plug: gtp_signaling_plug-1.0.4.eb9cd29
+  tsg_vulpes: tsg_vulpes-1.0.6.f9a54fe
+  radius_collect_plug: radius_collect_plug-2.0.6.ccdc363
+  app_proto_identify: app_proto_identify-2.1.0.7cb2e2e
   app_proto_engine: app_proto_engine-2.3.3.3233e10
-  gtp: gtp-1.0.5.afa055c
-  gtp_signaling_plug: gtp_signaling_plug-1.0.3.c3d2c93
-  deal_socks: deal_socks-1.0.3.651bc6f
-  tsg_ddos_sketch: tsg_ddos_sketch-1.3.1.3c090b5
+  tsg_ddos_sketch: tsg_ddos_sketch-1.2.2.6ed20a6
+  dns: ddns-2.1.3.ac4dda4
+  ftp: ftp-1.0.14.02d6a2c
+  http: http-2.0.9.b672af8
+  mail: mail-1.0.16.1d527ef
+  quic: quic-2.0.3.98c567c
+  ssl: ssl-2.0.10.e8f6986
+  rtp: rtp-1.0.7.530ac76
+  gtp: gtp-1.0.6.68fe81f
+  ssh: ssh-2.1.7.b053e65
   radius: radius-1.0.7.54b70b2
-  radius_collect_plug: radius_collect_plug-2.0.5.cb3b4aa
-  ssh: ssh-2.1.6.76bc2d1
-  tsg_vulpes: tsg_vulpes-1.0.5.13c0f59
+  mesa_sip: mesa_sip-1.2.3.ccf9b90
+  deal_socks: deal_socks-1.0.4.329bba3
   stratum: stratum-1.0.6.16c1c35
 
 framework_rpm_version:
-  libcjson: libcjson-1.7.11.93ffba0
-  libdocumentanalyze: libdocumentanalyze-2.0.7.eb1f13b
+  libcjson: libcjson-1.7.12.6c09dcf
+  libdocumentanalyze: libdocumentanalyze-2.0.10.4c04402
   libmaatframe: libmaatframe-3.6.3.a4fcb73
-  libMESA_field_stat: libMESA_field_stat-1.0.2.6d45eed
+  libMESA_field_stat: libMESA_field_stat-1.0.3.0de785d
   libMESA_field_stat2: libMESA_field_stat2-2.10.8.8b70dcb
-  libMESA_handle_logger: libMESA_handle_logger-2.0.8.f76af2f
-  libMESA_htable: libMESA_htable-3.10.12.cf4ccfc
-  libMESA_prof_load: libMESA_prof_load-1.0.6.c6da36a
-  librulescan: librulescan-2.2.4.865219d
+  libMESA_handle_logger: libMESA_handle_logger-2.0.9.b677bb6
+  libMESA_htable: libMESA_htable-3.10.13.bd6fc34
+  libMESA_prof_load: libMESA_prof_load-1.0.9.16148e7
+  librulescan: librulescan-2.3.1.b3a667a
   libtsglua: libtsglua-1.0.8.0dbf2e6
-  libwiredcfg: libwiredcfg-2.0.6.67ae0ab
-  libWiredLB: libWiredLB-2.0.5.4629165
-  libbreakpad_mini: libbreakpad_mini-1.0.7.c421107
+  libwiredcfg: libwiredcfg-2.0.8.cafaf49
+  libWiredLB: libWiredLB-2.0.6.54a039d
+  libbreakpad_mini: libbreakpad_mini-1.0.9.9d98968
   libhos-client-cpp: libhos-client-cpp-3.0.2.31c56ed
-  libMV_Sketch: libMV_Sketch-2.1.2.20220225.dc6bb95
-  librdkfka: librdkafka-1.2.0.4b8dd6d
-  libMESA_jump_layer: libMESA_jump_layer-1.0.9.1b30b6d
+  libMV_Sketch: libMV_Sketch-1.1.3.20220118.5473791
+  librdkfka: librdkafka-1.2.2.1218b3c
+  libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
 
 kni_rpm_version:
   kni: kni-22.02.04.e15a467
@@ -59,7 +59,7 @@ mrzcpd_rpm_version:
 
 sapp_rpm_version:
   sapp: sapp-4.2.83.7068d44
-  tcpdump_mesa: tcpdump_mesa-1.0.9.ca549c5
+  tcpdump_mesa: tcpdump_mesa-1.0.12.91900e1
   sapp-pr: sapp-pr-4.2.83.7068d44
 
 tfe_rpm_version:
@@ -79,12 +79,12 @@ http_healthcheck_rpm_version:
   http_healthcheck: http_healthcheck-21.06.01.d0685bb
 
 wannat_wangw_rpm_version:
-  libwangw: libwangw-1.5.1.7e0480f
-  libwannat_common: libwannat_common-1.0.1.8cc3bda
+  libwangw: libwangw-1.5.4.bd3edfa
+  libwannat_common: libwannat_common-1.0.3.6dc42b6
 
 wire_graft_rpm_version:
-  wire_graft: wire_graft_plug-1.5.2.36b072a
-  libwire_graft: libwire_graft-1.5.2.36b072a
+  wire_graft: wire_graft_plug-1.5.3.daab447
+  libwire_graft: libwire_graft-1.5.3.daab447
 
 hasp_update_rpm_version:
   hasp_update: hasp_update-1.0.1.b836a3b
