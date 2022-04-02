@@ -52,7 +52,7 @@ framework_rpm_version:
   libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
 
 kni_rpm_version:
-  kni: kni-22.02.04.e15a467
+  kni: kni-4.0.0.f97907b
 
 mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.5.0.42186ea
@@ -76,7 +76,7 @@ tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-22.01.1.ef53d7e
 
 http_healthcheck_rpm_version:
-  http_healthcheck: http_healthcheck-21.06.01.d0685bb
+  http_healthcheck: http_healthcheck-2.0.1.0884451
 
 wannat_wangw_rpm_version:
   libwangw: libwangw-1.5.4.bd3edfa
