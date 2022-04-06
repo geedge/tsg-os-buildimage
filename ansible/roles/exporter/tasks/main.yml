@@ -7,7 +7,8 @@
 - name: "Install freeipmi from local path" 
   yum: 
     name: "{{ freeipmi_rpm_fullname.files[0].path }}" 
-    state: present 
+    state: present
+    disable_gpg_check: yes
 
 - name: "mkdir /opt/tsg/exporter/"
   file:

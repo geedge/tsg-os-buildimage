@@ -8,6 +8,7 @@
     name:
       - "/tmp/ansible_deploy/aksusbd-8.23-1.x86_64.rpm"
     state: present
+    disable_gpg_check: yes
 
 - name: "Get hasp_update rpm path"
   find:
@@ -19,6 +20,7 @@
   yum:
     name: "{{ hasp_update_rpm_fullname.files[0].path }}" 
     state: present
+    disable_gpg_check: yes
 
 - name: "Create /etc/tsg/licence/ directory if it does not exist"
   file:

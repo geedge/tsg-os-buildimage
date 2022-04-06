@@ -8,6 +8,7 @@
     name:
       - /tmp/telegraf-1.13.0-1.x86_64.rpm
     state: present
+    disable_gpg_check: yes
 
 - name: "Templates telegraf.conf"
   template:
