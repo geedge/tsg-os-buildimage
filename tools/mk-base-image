@@ -10,9 +10,7 @@ yum_config=$1
 target=$2
 projectdir=$3
 profile_id=$4
-if [ $profile_id  == "TSG-X-NXR620G40-R01-P1403" ];then
-    kernel_version="4.18.0-348.12.2.el8_5.x86_64"
-else
+if [ $profile_id  != "TSG-X-NXR620G40-R01-P1403" ];then
     kernel_version="5.4.159-1.el7.elrepo.x86_64"
 fi
 
@@ -28,8 +26,10 @@ package_to_install_RockyLinux85="@base @core @debugging @anaconda-tools @additio
                     grub2 epel-release efibootmgr ansible yum-utils ipmitool OpenIPMI docker-ce docker-ce-cli containerd.io lrzsz python3 watchdog pcm git tmux fish kernel kernel-devel
                     kernel-tools-libs kernel-modules kernel-tools kernel-core"
 
-locak_package_to_install_CentOS7="$projectdir/package/kernel-lt-$kernel_version.rpm
-                          $projectdir/package/kernel-lt-devel-$kernel_version.rpm"
+if [ $profile_id  != "TSG-X-NXR620G40-R01-P1403" ];then
+    locak_package_to_install_CentOS7="$projectdir/package/kernel-lt-$kernel_version.rpm
+                            $projectdir/package/kernel-lt-devel-$kernel_version.rpm"
+fi
 
 kernel_package_to_install="kernel-3.10.0-1160.59.1.el7.x86_64 kernel-devel-3.10.0-1160.59.1.el7.x86_64"
 
@@ -41,6 +41,10 @@ if [ $profile_id  != "TSG-X-NXR620G40-R01-P1403" ];then
     yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt localinstall $locak_package_to_install_CentOS7
 else
     yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install_RockyLinux85
+fi
+
+if [ $profile_id  == "TSG-X-NXR620G40-R01-P1403" ];then
+    kernel_version=$(ls $target/boot/vmlinuz-*.x86_64 | grep -oP "^$target/boot/vmlinuz-\K.*")
 fi
 #git clone --depth 1 https://github.com/brendangregg/FlameGraph.git /opt/tools/FlameGraph/
 #git clone --depth 1 https://github.com/brendangregg/perf-tools.git /opt/tools/perf-tools/

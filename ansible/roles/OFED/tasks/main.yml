@@ -15,8 +15,12 @@
     dest: /tmp/OFED/unarchived/
     remote_src: yes
 
+- name: "Get linux kernel file path"
+  shell: ls /boot/vmlinuz-*.x86_64 | grep -oP "^/boot/vmlinuz-\K.*"
+  register: obtain_kernel_version
+
 - name: "execute OFED installer"
-  shell: /tmp/OFED/unarchived/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel7.9-x86_64-ext/mlnxofedinstall --add-kernel-support --kernel 4.18.0-348.12.2.el8_5.x86_64 --force --without-depcheck
+  shell: /tmp/OFED/unarchived/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel7.9-x86_64-ext/mlnxofedinstall --add-kernel-support --kernel {{obtain_kernel_version.stdout}} --force --without-depcheck
 
 - name: "enable auto update firmware on boot"
   replace:
