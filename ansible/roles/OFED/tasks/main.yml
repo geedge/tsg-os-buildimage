@@ -17,3 +17,9 @@
 
 - name: "execute OFED installer"
   shell: /tmp/OFED/unarchived/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel7.9-x86_64-ext/mlnxofedinstall --add-kernel-support --kernel 3.10.0-1160.59.1.el7.x86_64 --force --without-depcheck
+
+- name: "enable auto update firmware on boot"
+  replace:
+    path: "/etc/infiniband/openib.conf"
+    regexp: 'RUN_FW_UPDATER_ONBOOT=no'
+    replace: 'RUN_FW_UPDATER_ONBOOT=yes'
