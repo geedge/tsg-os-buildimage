@@ -11,7 +11,7 @@
 
 - name: "unarchive OFED installer"
   unarchive:
-    src: /tmp/OFED/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel7.9-x86_64-ext.tgz
+    src: /tmp/OFED/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel8.5-x86_64-ext.tgz
     dest: /tmp/OFED/unarchived/
     remote_src: yes
 
@@ -20,7 +20,7 @@
   register: obtain_kernel_version
 
 - name: "execute OFED installer"
-  shell: /tmp/OFED/unarchived/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel7.9-x86_64-ext/mlnxofedinstall --add-kernel-support --kernel {{obtain_kernel_version.stdout}} --force --without-depcheck
+  shell: /tmp/OFED/unarchived/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel8.5-x86_64-ext/mlnxofedinstall  -k {{obtain_kernel_version.stdout}} --distro rhel8.5 --force
 
 - name: "enable auto update firmware on boot"
   replace:
