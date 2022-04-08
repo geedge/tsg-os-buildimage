@@ -25,12 +25,16 @@ package_to_install="@base @core @debugging @directory-client @guest-agents
 locak_package_to_install="$projectdir/package/kernel-lt-$kernel_version.rpm
                           $projectdir/package/kernel-lt-devel-$kernel_version.rpm"
 
+kernel_package_to_install="kernel-3.10.0-1160.59.1.el7.x86_64 kernel-devel-3.10.0-1160.59.1.el7.x86_64"
+
 setopt="group_package_types=mandatory,default,optional"
 
 yum -c "$yum_config" --installroot="$target" -y makecache
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install
 if [ $profile_id  != "TSG-X-NXR620G40-R01-P1403" ];then
     yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt localinstall $locak_package_to_install
+else
+    yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $kernel_package_to_install
 fi
 #git clone --depth 1 https://github.com/brendangregg/FlameGraph.git /opt/tools/FlameGraph/
 #git clone --depth 1 https://github.com/brendangregg/perf-tools.git /opt/tools/perf-tools/
