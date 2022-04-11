@@ -2,7 +2,7 @@ certstore_rpm_version:
   certstore: certstore-2.2.1.20220222.1a3955d
 
 firewall_rpm_version:
-  capture_packet_plug:  capture_packet_plug-4.0.10.d1e7650
+  capture_packet_plug:  capture_packet_plug-4.0.11.5751d64
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   fw_dns_plug: fw_dns_plug-4.0.3.3b4db47
   fw_ftp_plug: fw_ftp_plug-3.1.4.46f553d
