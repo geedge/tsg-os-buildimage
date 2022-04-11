@@ -77,7 +77,7 @@ rm -rf "$target"/var/cache/ldconfig/*
 
 cd $target/boot
 ln -sf vmlinuz-$kernel_version vmlinuz
-ln -sf $(ls -1 initramfs-* | tail -1) initrd.img
+ln -sf initramfs-$kernel_version.img initrd.img
 cd -
 
 cp -a /dev/null $target/dev/
