@@ -9,18 +9,36 @@
     path: "/tmp/OFED/unarchived"
     state: directory
 
+######TSG-X-P0804 install start######
 - name: "unarchive OFED installer"
   unarchive:
     src: /tmp/OFED/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel8.5-x86_64-ext.tgz
     dest: /tmp/OFED/unarchived/
     remote_src: yes
+  when: runtime_env == 'TSG-X-P0804'
 
 - name: "Get linux kernel file path"
   shell: ls /boot/vmlinuz-*.x86_64 | grep -oP "^/boot/vmlinuz-\K.*"
   register: obtain_kernel_version
+  when: runtime_env == 'TSG-X-P0804'
 
 - name: "execute OFED installer"
   shell: /tmp/OFED/unarchived/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel8.5-x86_64-ext/mlnxofedinstall  -k {{obtain_kernel_version.stdout}} --distro rhel8.5 --force
+  when: runtime_env == 'TSG-X-P0804'
+######TSG-X-P0804 install end ######
+
+######TSG-X-P1403 install start######
+- name: "unarchive OFED installer"
+  unarchive:
+    src: /tmp/OFED/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel7.9-x86_64-ext.tgz
+    dest: /tmp/OFED/unarchived/
+    remote_src: yes
+  when: runtime_env == 'TSG-X-P1403'
+
+- name: "execute OFED installer"
+  shell: /tmp/OFED/unarchived/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel7.9-x86_64-ext/mlnxofedinstall --add-kernel-support --kernel 3.10.0-1160.59.1.el7.x86_64 --force --without-depcheck
+  when: runtime_env == 'TSG-X-P1403'
+######TSG-X-P1403 install end ######
 
 - name: "enable auto update firmware on boot"
   replace:

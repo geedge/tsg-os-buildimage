@@ -58,4 +58,4 @@
     - mrzcpd
     - sapp
     - telegraf_statistic
-  when: runtime_env == 'TSG-X-P1403'
+  when: runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804'
