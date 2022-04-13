@@ -1,0 +1,77 @@
+version: 1
+
+device:
+  tags:
+    - key1: value1
+    - key2: value2
+
+session_id_generator:
+  snowflake_worker_id_base: 1
+  snowflake_worker_id_offset: 1
+
+feature:
+  enable_stream_bypass_under_ddos: 0
+
+firewall:
+  enable: 0/1
+
+proxy:
+  enable: 0/1
+
+sessionrecord:
+  enable: 0/1
+  enable_dns_record: 0/1
+  enable_rtp_record: 0/1
+
+capturepacket:
+  enable: 0/1
+
+radius:
+  enable: 0/1
+
+gtp:
+  enable_gtp_c_record: 0/1
+
+wannat:
+  enable: 0/1
+  nat_gateway_address: "127.0.0.1"
+  reachability_test_server_address: "127.0.0.1"
+
+ddossketch:
+  enable: 0/1
+
+app:
+  identify_by:
+    user_defined_signature: 0/1
+    builtin_app_engine: 0/1
+
+cm:
+  policy_server:
+    address: "127.0.0.1"
+    port: 7002
+
+olap:
+  kafka_broker:
+    address_list: ['1.1.1.1:9092','2.2.2.2:9092']
+  hos_server:
+    address: "127.0.0.1"
+    port: 9098
+
+# npb_device value in [inline_device, tera,direct,etherfabric]
+npb_device: etherfabric
+
+etherfabric_settings:
+  keepalive:
+    ip: 127.0.0.1
+    mask: 255.255.255.0
+
+network_setting:
+  nic_policy_log:
+    name: eth0
+  nic_raw:
+    name: eth0
+
+coredump:
+  format: minidump/core/none
+  collect: local/sentry
+  sentry_url: http://127.0.0.1:9000/api/2/minidump/?sentry_key=3203b43fd5384a7dbe6a48ecb1f3c595

@@ -75,7 +75,14 @@
     src: "{{ role_path }}/files/tasks/provision.yml.TSGXNXR620G40R01P1403"
     dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
     mode: 0644
-  when: runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804'
+  when: runtime_env == 'TSG-X-P1403'
+
+- name: "tsg-os-provision: copy tasks file that excutes provision to dest - tsg-x p0804"
+  copy:
+    src: "{{ role_path }}/files/tasks/provision.yml.TSGXNXR620G40R01P0804"
+    dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
+    mode: 0644
+  when: runtime_env == 'TSG-X-P0804'
 
 - name: "tsg-os-provision: copy provision.yml.sample file to dest - tsg9140"
   copy:
@@ -117,7 +124,14 @@
     src: "{{ role_path }}/files/config_sample/provision.default.yml.TSGXNXR620G40R01P1403"
     dest: /opt/tsg/tsg-os-provision/provision.default.yml
     mode: 0644
-  when: runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804'
+  when: runtime_env == 'TSG-X-P1403'
+
+- name: "tsg-os-provision: copy provision.default.yml - TSG-X-P0804"
+  copy:
+    src: "{{ role_path }}/files/config_sample/provision.default.yml.TSGXNXR620G40R01P0804"
+    dest: /opt/tsg/tsg-os-provision/provision.default.yml
+    mode: 0644
+  when: runtime_env == 'TSG-X-P0804'
 
 - name: "tsg-os-provision: copy provision.yml.sample to dest - tsg7400 mcn0"
   copy:
@@ -145,7 +159,14 @@
     src: "{{ role_path }}/files/config_sample/provision.yml.sample.TSGXNXR620G40R01P1403"
     dest: /opt/tsg/tsg-os-provision/provision.yml.sample
     mode: 0644
-  when: runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804'
+  when: runtime_env == 'TSG-X-P1403'
+
+- name: "tsg-os-provision: copy provision.yml.sample to dest - TSG-X-P0804"
+  copy:
+    src: "{{ role_path }}/files/config_sample/provision.yml.sample.TSGXNXR620G40R01P0804"
+    dest: /opt/tsg/tsg-os-provision/provision.yml.sample
+    mode: 0644
+  when: runtime_env == 'TSG-X-P0804'
 
 - name: "tsg-os-provision: copy provision.sh file to dest"
   copy:

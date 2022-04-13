@@ -123,12 +123,22 @@
     - {role: mrzcpd, tags: mrzcpd}
     - {role: sapp, tags: sapp}
     - {role: tsg_master, tags: tsg_master}
+    - {role: kni, tags: kni}
     - {role: firewall, tags: firewall}
     - {role: tsg_app, tags: tsg_app}
+    - {role: redis, tags: redis}
+    - {role: certstore, tags: certstore}
+    - {role: tfe, tags: tfe}
     - {role: telegraf_statistic, tags: telegraf_statistic}
     - {role: exporter, tags: exporter}
+    - {role: docker, tags: docker}
+    - {role: tsg-diagnose, tags: tsg-diagnose}
+    - {role: tsg-exporter-proxy-TSGXP0804, tags: tsg-exporter-proxy-TSGXP0804}
     - {role: system-init-TSG-X-P1403, tags: system-init-TSG-X-P1403}
     - {role: system-init, tags: system-init}
+    - {role: wannat_wangw, tags: wannat_wangw}
+    - {role: wannat_common, tags: wannat_common}
+    - {role: wire_graft, tags: wire_graft}
     - {role: tsg-os-provision-condition, tags: tsg-os-provision-condition}
     - {role: hasp, tags: hasp}
     - {role: OFED, tags: OFED}

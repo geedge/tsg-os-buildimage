@@ -1,0 +1,64 @@
+
+user  nobody;
+worker_processes  1;
+daemon off;
+
+error_log  logs/error.log;
+error_log  logs/error.log  notice;
+error_log  logs/error.log  info;
+pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+
+    sendfile        on;
+    tcp_nopush     on;
+
+    keepalive_timeout  65;
+    gzip  on;
+
+    server {
+            listen       9000;
+            server_name  localhost;
+
+            location /metrics/blade/node_exporter {
+              proxy_pass   http://127.0.0.1:9100/metrics;
+            }
+
+            location /metrics/blade/systemd_exporter {
+              proxy_pass   http://127.0.0.1:9558/metrics;
+            }
+
+            location /metrics/blade/certstore {
+                    proxy_pass   http://127.0.0.1:9002/metrics;
+            }
+
+            location /metrics/blade/tfe {
+                    proxy_pass   http://127.0.0.1:9001/metrics;
+            }
+
+            location /metrics/blade/sapp {
+                    proxy_pass   http://127.0.0.1:9273/metrics;
+            }
+
+            location /metrics/blade/mrapm_device {
+                    proxy_pass   http://127.0.0.1:8901/metrics;
+            }
+
+            location /metrics/blade/mrapm_stream {
+                    proxy_pass   http://127.0.0.1:8902/metrics;
+            }
+    }
+}
