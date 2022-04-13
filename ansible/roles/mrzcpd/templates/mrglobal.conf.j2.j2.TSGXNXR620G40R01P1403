@@ -12,7 +12,7 @@ vlan-pvid=0
 vlan-pvid-mode=2
 promisc=1
 allmulticast=1
-rssmode=0
+rssmode=3
 mtu=2048
 
 [service]
