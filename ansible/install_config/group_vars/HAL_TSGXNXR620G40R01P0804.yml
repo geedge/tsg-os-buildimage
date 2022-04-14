@@ -16,7 +16,7 @@ workload_proxy:
   worker_thread: "{% raw %}{{ workload_proxy_worker_thread }}{% endraw %}"
 
 dp_traffic_mirror:
-  nic_name: eth_mirr_d 
+  nic_name: "{% raw %}{{ network_setting.nic_mirror.name }}{% endraw %}"
   traffic_mirror_vlan_id: 0
 
 dp_steering_firewall:
