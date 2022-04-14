@@ -10,7 +10,8 @@
 - name: "Install tsg_diagnose from local path" 
   yum: 
     name: "{{ tsg_diagnose_rpm_fullname.files[0].path }}" 
-    state: present 
+    state: present
+    disable_gpg_check: yes
 
 - name: "Templates docker-compose.yml"
   template:
