@@ -112,3 +112,8 @@
   file:
     path: "/usr/lib/systemd/system/sysinit.target.wants/dev-hugepages.mount"
     state: absent
+
+- name: "disabled firewalld"
+  systemd:
+    name: firewalld
+    enabled: no
