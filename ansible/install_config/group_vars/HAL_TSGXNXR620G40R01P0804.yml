@@ -27,7 +27,7 @@ dp_steering_firewall:
   # capture_packet value: pcap, driver
   capture_packet: driver
   nic_internal: "{% raw %}{{ network_setting.nic_raw.name }}{% endraw %}"
-  enable_mirror: 0
+  enable_mirror: 1
 
 dp_steering_proxy:
   ###### location: value {local, foreign}

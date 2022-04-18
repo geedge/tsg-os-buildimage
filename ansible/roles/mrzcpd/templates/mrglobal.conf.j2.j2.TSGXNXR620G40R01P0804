@@ -1,5 +1,5 @@
 [device]
-device={{ dp_steering_firewall.nic_internal }}
+device={{ dp_steering_firewall.nic_internal }},{{ dp_traffic_mirror.nic_name }}
 virtio_user={{ diagnose.virtual_client_nic }},{{ diagnose.virtual_server_nic }},{{ dp_steering_proxy.node_list[0].nic_name }}
 sz_tunnel=8192
 sz_buffer=0
@@ -29,6 +29,12 @@ promisc=1
 allmulticast=1
 rssmode=3
 mtu=2048
+
+[device:{{ dp_traffic_mirror.nic_name }}]
+mtu=2048
+hw_strip_crc=1
+rssmode=2
+vlan-strip=1
 
 [service]
 # lcore id for i/o service, use comma to split
