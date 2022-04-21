@@ -8,3 +8,11 @@
     src: "{{ role_path }}/templates/kni.conf.j2"
     dest: /opt/tsg/sapp/etc/kni/kni.conf
   tags: template
+  when: runtime_env != 'TSG-X-P0804'
+
+- name: Template the kni.conf
+  template:
+    src: "{{ role_path }}/templates/kni.conf.j2"
+    dest: /opt/tsg/tsg-os-provision/templates/kni.conf.j2
+  tags: template
+  when: runtime_env == 'TSG-X-P0804'

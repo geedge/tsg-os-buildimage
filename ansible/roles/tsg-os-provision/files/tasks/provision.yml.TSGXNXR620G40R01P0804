@@ -99,6 +99,12 @@
         dest: /opt/tsg/sapp/etc/send_raw_pkt.conf
       tags: sapp
 
+    - name: "tsg-os-provision: template the kni.conf"
+      template:
+        src: "../templates/kni.conf.j2"
+        dest: /opt/tsg/sapp/etc/kni/kni.conf
+      tags: sapp
+
     - name: "tsg-os-provision: Templates telegraf.conf"
       template:
         src: "../templates/telegraf_statistic.conf.j2"
