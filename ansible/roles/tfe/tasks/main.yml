@@ -100,6 +100,11 @@
     - /usr/lib/systemd/system/tfe-env.service
     - /usr/lib/systemd/system/tfe.service
 
+- name: "template the pangu_pxy.conf"
+  template:
+    src: "{{ role_path }}/templates/service_add_StartPostForRps.conf.j2.j2"
+    dest: /opt/tsg/tsg-os-provision/templates/service_add_StartPostForRps.conf.j2
+
 ##################### tfe #####################
 - name: "systemctl daemon-reload"
   systemd:

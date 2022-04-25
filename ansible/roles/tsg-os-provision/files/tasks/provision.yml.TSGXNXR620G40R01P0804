@@ -36,6 +36,39 @@
 
 ######setting cpu affinity end######
 
+######setting nic cpu affinity mask start######
+    - name: output cpu_layouts config to config .cpu_layouts.json
+      copy:
+        content: "{{ cpu_layouts| to_json }}"
+        dest: /opt/tsg/tsg-os-provision/.cpu_layouts.json
+
+    - name: "tsg-os-provision: obtain rps_mask"
+      shell: /opt/tsg/tsg-os-provision/scripts/obtain_rps_mask.py
+      register: result_exec_obtain_rps_mask
+
+    - name: "tsg-os-provision: check result_exec_obtain_rps_mask"
+      assert:
+        that:
+          - result_exec_obtain_rps_mask.rc == 0
+          - result_exec_obtain_rps_mask.failed == False
+        fail_msg: "error:{{ result_exec_obtain_rps_mask.stderr }},stdout:{{ result_exec_obtain_rps_mask.stdout_lines }}"
+        success_msg: "Successded: obtain rpm mask"
+
+    - name: "set rps_mask into tfe-env-config"
+      set_fact:
+        tfe_env_rps_info: "{{ result_exec_obtain_rps_mask.stdout | from_json }}"
+
+    - name: "output tfe_env_rps_info"
+      debug:
+        msg: "{{ tfe_env_rps_info }}"
+
+    - name: "template tfe-env service for rps mask"
+      template:
+        src: ../templates/service_add_StartPostForRps.conf.j2
+        dest: /usr/lib/systemd/system/tfe-env.service.d/service_add_StartPostForRps.conf
+
+######setting nic cpu affinity mask end######
+
     - name: "set keep_alive_ip"
       set_fact:
         gdev_conf_keep_alive_ip: "{{ etherfabric_settings.keepalive.ip }}"
