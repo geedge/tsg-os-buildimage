@@ -248,6 +248,17 @@
     dest: /opt/tsg/tsg-os-provision/
     mode: 0755
   when: runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804'
+
+- name: "tsg-os-provision: obtain_rps_mask and obtain_cpu_core_range to dest - TSG-X-P0804"
+  copy:
+    src: "{{ role_path }}/files/script/{{ item }}"
+    dest: /opt/tsg/tsg-os-provision/scripts/
+    mode: 0755
+  with_items:
+    - obtain_rps_mask.py 
+    - obtain_isolate_cpu_range.py
+  when: runtime_env == 'TSG-X-P0804'
+
 ######TSG-X-P1403 end######
 
 #- name: "tsg-os-provision: install yaml module using pip3"

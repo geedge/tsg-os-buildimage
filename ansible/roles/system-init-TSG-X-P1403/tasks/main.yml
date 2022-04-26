@@ -66,6 +66,12 @@
     dest: /usr/lib/systemd/system/system.slice.d/50-MemoryLimit.conf
     mode: 0644
 
+- name: Template the grub config 
+  template:
+    src: "{{ role_path }}/templates/grub.j2.j2"
+    dest: /opt/tsg/tsg-os-provision/templates/grub.j2
+  tags: template
+
 # 启用 IPMI
 - name: "copy ipmi.conf to /etc/sysconfig/ipmi"
   copy:

@@ -69,6 +69,40 @@
 
 ######setting nic cpu affinity mask end######
 
+######get isolate cpu core start######
+    - name: redirect proxy config to config .proxy.json
+      copy:
+        content: "{{ proxy | to_json }}"
+        dest: /opt/tsg/tsg-os-provision/.proxy.json
+
+    - name: "tsg-os-provision: execute obtain_isolate_cpu_range.py"
+      shell: /opt/tsg/tsg-os-provision/scripts/obtain_isolate_cpu_range.py
+      register: result_exec_obtain_isolate_cpu_range
+
+    - name: "tsg-os-provision: check result_exec_obtain_isolate_cpu_range"
+      assert:
+        that:
+          - result_exec_obtain_isolate_cpu_range.rc == 0
+          - result_exec_obtain_isolate_cpu_range.failed == False
+        fail_msg: "error:{{ result_exec_obtain_isolate_cpu_range.stderr }},stdout:{{ result_exec_obtain_isolate_cpu_range.stdout_lines }}"
+        success_msg: "Successded: obtain isolate cpu range"
+
+    - name: "set fact  grub_cpu_isolate"
+      set_fact:
+        grub_cpu_isolate: "{{ result_exec_obtain_isolate_cpu_range.stdout }}"
+
+    - name: "template grub config for cpu isolate"
+      template:
+        src: ../templates/grub.j2
+        dest: /etc/default/grub
+
+    - name: "update grub: BIOS"
+      shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+
+    - name: "update grub: EFI"
+      shell: grub2-mkconfig -o /boot/efi/EFI/rocky/grub.cfg
+######get isolate cpu core end######
+
     - name: "set keep_alive_ip"
       set_fact:
         gdev_conf_keep_alive_ip: "{{ etherfabric_settings.keepalive.ip }}"
