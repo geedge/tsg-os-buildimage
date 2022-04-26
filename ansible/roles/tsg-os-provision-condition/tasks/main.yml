@@ -58,4 +58,22 @@
     - mrzcpd
     - sapp
     - telegraf_statistic
-  when: runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804'
+  when: runtime_env == 'TSG-X-P1403'
+
+- name: "add condition into service depend provision result TSG-X-P0804"
+  copy:
+    src: "{{ role_path }}/files/service_add_ConditionPathExists.conf"
+    dest: "/usr/lib/systemd/system/{{ item }}.service.d/"
+    mode: 0644
+  with_items:
+    - cert-redis
+    - certstore
+    - mrapm_device
+    - mrapm_stream
+    - mrenv
+    - mrzcpd
+    - sapp
+    - telegraf_statistic
+    - tfe-env
+    - tfe
+  when: runtime_env == 'TSG-X-P0804'
