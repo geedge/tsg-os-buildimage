@@ -49,7 +49,7 @@ framework_rpm_version:
   libMV_Sketch: libMV_Sketch-2.1.2.20220225.dc6bb95
   librdkfka: librdkafka-1.2.2.1218b3c
   libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
-  libmaatframe: libmaatframe-3.6.6.d814b4e
+  libmaatframe: libmaatframe-3.6.7.af4cdeb
 
 kni_rpm_version:
   kni: kni-4.0.1.6d75cbe
