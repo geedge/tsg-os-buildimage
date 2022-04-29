@@ -68,11 +68,6 @@
       debug:
         msg: "{{ tfe_env_rps_info }}"
 
-    - name: "template tfe-env service for rps mask"
-      template:
-        src: ../templates/service_add_StartPostForRps.conf.j2
-        dest: /usr/lib/systemd/system/tfe-env.service.d/service_add_StartPostForRps.conf
-
 ######setting nic cpu affinity mask end######
 
 ######get isolate cpu core start######
@@ -97,6 +92,28 @@
       set_fact:
         grub_cpu_isolate: "{{ result_exec_obtain_isolate_cpu_range.stdout }}"
 
+######get isolate cpu core end######
+
+    - name: get /proc/cmdline
+      shell: cat /proc/cmdline
+      register: result_exec_cat_cmdline
+
+    - name: need to reboot
+      fail:
+        msg: "Detected that the configuration of cpu isolate has changed, please run command \"provision-config-apply --reboot\" to reboot the machine that make the configuration take effect!"
+      when:
+        - result_exec_cat_cmdline is not search(grub_cpu_isolate)
+        - enable_config_apply == '1'
+
+    - name: "set keep_alive_ip"
+      set_fact:
+        gdev_conf_keep_alive_ip: "{{ etherfabric_settings.keepalive.ip }}"
+
+    - name: "set cm_policy_server_ip  and cm_policy_server_port"
+      set_fact:
+        cm_policy_server_ip: "{{cm.policy_server.address}}"
+        cm_policy_server_port: "{{ cm.policy_server.port }}"
+
     - name: "template grub config for cpu isolate"
       template:
         src: ../templates/grub.j2
@@ -107,16 +124,6 @@
 
     - name: "update grub: EFI"
       shell: grub2-mkconfig -o /boot/efi/EFI/rocky/grub.cfg
-######get isolate cpu core end######
-
-    - name: "set keep_alive_ip"
-      set_fact:
-        gdev_conf_keep_alive_ip: "{{ etherfabric_settings.keepalive.ip }}"
-
-    - name: "set cm_policy_server_ip  and cm_policy_server_port"
-      set_fact:
-        cm_policy_server_ip: "{{cm.policy_server.address}}"
-        cm_policy_server_port: "{{ cm.policy_server.port }}"
 
     - name: "tsg-os-provision: Template the conflist.inf"
       template:
@@ -183,6 +190,12 @@
         src: "../templates/telegraf_statistic.conf.j2"
         dest: /etc/telegraf/telegraf_statistic.conf
       tags: telegraf_statistic
+
+    - name: "template tfe-env service for rps mask"
+      template:
+        src: ../templates/service_add_StartPostForRps.conf.j2
+        dest: /usr/lib/systemd/system/tfe-env.service.d/service_add_StartPostForRps.conf
+      tags: tfe
 
     - name: "tsg-os-provision: template the tfe.conf"
       template:
