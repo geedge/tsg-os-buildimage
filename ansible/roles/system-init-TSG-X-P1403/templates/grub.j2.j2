@@ -1,1 +1,0 @@
-GRUB_CMDLINE_LINUX="crashkernel=512M default_hugepagesz=1G hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt mitigations=off psi=1 isolcpus={% raw %}{{ grub_cpu_isolate }}{% endraw %}"

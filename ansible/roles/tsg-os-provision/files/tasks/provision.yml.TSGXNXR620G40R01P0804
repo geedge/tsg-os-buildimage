@@ -103,7 +103,7 @@
         msg: "Detected that the configuration of cpu isolate has changed, please run command \"provision-config-apply --reboot\" to reboot the machine that make the configuration take effect!"
       when:
         - result_exec_cat_cmdline is not search(grub_cpu_isolate)
-        - enable_config_apply == '1'
+        - enable_config_apply != '2'
 
     - name: "set keep_alive_ip"
       set_fact:
@@ -114,16 +114,14 @@
         cm_policy_server_ip: "{{cm.policy_server.address}}"
         cm_policy_server_port: "{{ cm.policy_server.port }}"
 
-    - name: "template grub config for cpu isolate"
-      template:
-        src: ../templates/grub.j2
-        dest: /etc/default/grub
-
-    - name: "update grub: BIOS"
-      shell: grub2-mkconfig -o /boot/grub2/grub.cfg
-
-    - name: "update grub: EFI"
-      shell: grub2-mkconfig -o /boot/efi/EFI/rocky/grub.cfg
+    - name: "replace action: grub config isolate cpu"
+      replace:
+        path: "{{ item }}"
+        regexp: 'isolcpus=\d+-+\d+'
+        replace: 'isolcpus={{grub_cpu_isolate}}'
+      with_items:
+        - /boot/grub/grub.cfg
+        - /etc/grub.d/40_onie_grub
 
     - name: "tsg-os-provision: Template the conflist.inf"
       template:
