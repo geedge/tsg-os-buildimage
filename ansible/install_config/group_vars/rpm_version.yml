@@ -47,7 +47,7 @@ framework_rpm_version:
   libbreakpad_mini: libbreakpad_mini-1.0.9.9d98968
   libhos-client-cpp: libhos-client-cpp-3.0.4.96deefb
   libMV_Sketch: libMV_Sketch-2.1.2.20220225.dc6bb95
-  librdkfka: librdkafka-1.2.2.1218b3c
+  librdkafka: librdkafka-1.2.2.1218b3c
   libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
   libmaatframe: libmaatframe-3.6.9.432337d
 

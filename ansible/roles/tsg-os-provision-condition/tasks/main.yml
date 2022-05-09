@@ -14,7 +14,7 @@
     - telegraf_statistic
     - tfe-env
     - tfe
-  when: runtime_env == 'TSG-9140' or 'TSG-server'
+  when: runtime_env == 'TSG-9140' or runtime_env =='TSG-server'
 
 - name: "add condition into service depend provision result TSG7400 MCN0"
   copy:
