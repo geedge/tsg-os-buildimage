@@ -31,7 +31,7 @@ firewall_rpm_version:
   mesa_sip: mesa_sip-1.2.3.ccf9b90
   deal_socks: deal_socks-1.0.4.329bba3
   stratum: stratum-1.0.6.16c1c35
-  rdp: rdp-1.0.0.e278ee9
+  rdp: rdp-1.0.1.cd36d8a
 
 framework_rpm_version:
   libcjson: libcjson-1.7.12.6c09dcf
@@ -71,7 +71,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.3.5.04e821f
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.6.2.0c18146
+  tsg_master: tsg_master-5.6.3.89deb48
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.1.8c7e9cc
