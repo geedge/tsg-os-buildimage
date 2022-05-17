@@ -23,7 +23,7 @@
   when: runtime_env == 'TSG-X-P0804'
 
 - name: "execute OFED installer"
-  shell: /tmp/OFED/unarchived/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel8.5-x86_64-ext/mlnxofedinstall  -k {{obtain_kernel_version.stdout}} --distro rhel8.5 --force
+  shell: /tmp/OFED/unarchived/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel8.5-x86_64-ext/mlnxofedinstall  -k {{obtain_kernel_version.stdout}} --distro rhel8.5 --force --add-kernel-support
   when: runtime_env == 'TSG-X-P0804'
 ######TSG-X-P0804 install end ######
 
