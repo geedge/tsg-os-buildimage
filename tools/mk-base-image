@@ -24,11 +24,12 @@ package_to_install_CentOS7="@base @core @debugging @directory-client @guest-agen
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management
                     grub2 epel-release efibootmgr ansible yum-utils ipmitool docker-ce docker-ce-cli containerd.io lrzsz python3 vconfig watchdog pcm git tmux fish"
 
-package_to_install_RockyLinux85="@base @core @debugging @anaconda-tools @additional-devel @guest-agents @system-tools 
+package_to_install_RockyLinux85="@base @core @debugging @anaconda-tools @additional-devel @guest-agents @system-tools
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management
-                    adcli certmonger ipa-client clevis-dracut clevis-udisks2 krb5-pkinit krb5-workstation sssd-polkit-rules krb5-pkinit luksmeta nscd nss-pam-ldapd 
+                    adcli certmonger ipa-client clevis-dracut clevis-udisks2 krb5-pkinit krb5-workstation sssd-polkit-rules krb5-pkinit luksmeta nscd nss-pam-ldapd
                     grub2 epel-release efibootmgr ansible yum-utils ipmitool OpenIPMI docker-ce docker-ce-cli containerd.io lrzsz python3 watchdog pcm git tmux fish kernel kernel-devel
-                    kernel-tools-libs kernel-modules kernel-tools kernel-core rpm-build libtool kernel-rpm-macros python36-devel tcsh kernel-modules-extra gcc-gfortran libnsl"
+                    kernel-tools-libs kernel-modules kernel-tools kernel-core rpm-build libtool kernel-rpm-macros python36-devel tcsh kernel-modules-extra gcc-gfortran
+                    libdb-devel fuse-devel python3-Cython cmake perl-generators libstdc++-devel libmnl-devel bison flex gcc-c++ python3-docutils"
 
 if [ $profile_id  != "TSG-X-NXR620G40-R01-P0804" ];then
     locak_package_to_install_CentOS7="$projectdir/package/kernel-lt-$kernel_version.rpm
@@ -105,12 +106,18 @@ cp -rf $projectdir/rootconf/sysroot-usr/sysctl/* $target/usr/lib/sysctl.d/
 ln -vfs --relative  $target/usr/lib/systemd/system/ldconfig.service $target/usr/lib/systemd/system/sysinit.target.wants/ldconfig.service
 
 #tty audit using pam
-mv $target/etc/pam.d/system-auth $target/etc/pam.d/system-auth-local
-mv $target/etc/pam.d/password-auth $target/etc/pam.d/password-auth-local
-echo "session     required      pam_tty_audit.so  enable=*" >> $target/etc/pam.d/system-auth-local
-echo "session     required      pam_tty_audit.so  enable=*" >> $target/etc/pam.d/password-auth-local
-ln -vfs --relative $target/etc/pam.d/system-auth-local $target/etc/pam.d/system-auth
-ln -vfs --relative $target/etc/pam.d/password-auth-local $target/etc/pam.d/password-auth
+if [ ! -f "$target/etc/pam.d/system-auth-local" ]; then
+    mv $target/etc/pam.d/system-auth $target/etc/pam.d/system-auth-local
+    echo "session     required      pam_tty_audit.so  enable=*" >> $target/etc/pam.d/system-auth-local
+    ln -vfs --relative $target/etc/pam.d/system-auth-local $target/etc/pam.d/system-auth
+
+fi
+
+if [ ! -f "$target/etc/pam.d/password-auth-local" ]; then
+    mv $target/etc/pam.d/password-auth $target/etc/pam.d/password-auth-local
+    echo "session     required      pam_tty_audit.so  enable=*" >> $target/etc/pam.d/password-auth-local
+    ln -vfs --relative $target/etc/pam.d/password-auth-local $target/etc/pam.d/password-auth
+fi
 
 cp -rf $projectdir/rootconf/sysroot-usr/target/* $target/usr/lib/systemd/system
 mkdir -p $target/usr/lib/systemd/system/workload.target.wants

@@ -12,7 +12,7 @@
 ######TSG-X-P0804 install start######
 - name: "unarchive OFED installer"
   unarchive:
-    src: /tmp/OFED/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel8.5-x86_64-ext.tgz
+    src: /tmp/OFED/MLNX_OFED_SRC-5.6-1.0.3.3.tgz
     dest: /tmp/OFED/unarchived/
     remote_src: yes
   when: runtime_env == 'TSG-X-P0804'
@@ -23,8 +23,20 @@
   when: runtime_env == 'TSG-X-P0804'
 
 - name: "execute OFED installer"
-  shell: /tmp/OFED/unarchived/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel8.5-x86_64-ext/mlnxofedinstall  -k {{obtain_kernel_version.stdout}} --distro rhel8.5 --force --add-kernel-support
+  shell: /tmp/OFED/unarchived/MLNX_OFED_SRC-5.6-1.0.3.3/install.pl -k {{obtain_kernel_version.stdout}}  --all --force
   when: runtime_env == 'TSG-X-P0804'
+
+- name: "unarchive MFT RPM"
+  unarchive:
+    src: /tmp/OFED/mft-4.20.0-34-x86_64-rpm.tgz
+    dest: /tmp/OFED/unarchived/
+    remote_src: yes
+  when: runtime_env == 'TSG-X-P0804'
+
+- name: "execute MFT installer"
+  shell: /tmp/OFED/unarchived/mft-4.20.0-34-x86_64-rpm/install.sh
+  when: runtime_env == 'TSG-X-P0804'
+
 ######TSG-X-P0804 install end ######
 
 ######TSG-X-P1403 install start######
