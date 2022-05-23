@@ -9,6 +9,16 @@
     path: "/tmp/OFED/unarchived"
     state: directory
 
+- name: "Backup and Replace the uname tools"
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    remote_src: yes
+  with_items:
+    - { src: "/usr/bin/uname" , dest: "/usr/bin/uname-back" , mode: "0755" }
+    - { src: "/tmp/OFED/uname" , dest: "/usr/bin/uname" , mode: "0755" }
+
 ######TSG-X-P0804 install start######
 - name: "unarchive OFED installer"
   unarchive:
@@ -59,3 +69,10 @@
     path: "/etc/infiniband/openib.conf"
     regexp: 'RUN_FW_UPDATER_ONBOOT=no'
     replace: 'RUN_FW_UPDATER_ONBOOT=yes'
+
+- name: "Restore the uname tools"
+  copy:
+    src: "/usr/bin/uname-back"
+    dest: "/usr/bin/uname"
+    mode: "0755"
+    remote_src: yes

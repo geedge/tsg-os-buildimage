@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ "$1" == "-r" ]
+then
+	ls /boot/vmlinuz-*.x86_64 | grep -oP "^/boot/vmlinuz-\K.*"
+else
+	/usr/bin/uname-back $1
+fi
+exit 0
