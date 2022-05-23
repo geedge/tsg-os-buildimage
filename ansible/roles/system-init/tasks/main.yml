@@ -62,3 +62,8 @@
 - name: "update initramfs"
   shell: dracut --force -v /boot/initramfs-5.4.159-1.el7.elrepo.x86_64.img 5.4.159-1.el7.elrepo.x86_64
   when: runtime_env != 'TSG-X-P1403' and runtime_env != 'TSG-X-P0804'
+
+- name: "Export MLX5_GLUE_PATH"
+  lineinfile:
+     dest: /etc/profile
+     line: 'export MLX5_GLUE_PATH=/opt/tsg/mrzcpd/lib'
