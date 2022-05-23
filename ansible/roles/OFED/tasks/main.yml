@@ -24,6 +24,8 @@
 
 - name: "execute OFED installer"
   shell: /tmp/OFED/unarchived/MLNX_OFED_SRC-5.6-1.0.3.3/install.pl -k {{obtain_kernel_version.stdout}}  --all --force
+  environment:
+    MAKEFLAGS :
   when: runtime_env == 'TSG-X-P0804'
 
 - name: "unarchive MFT RPM"
