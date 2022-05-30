@@ -29,7 +29,7 @@ package_to_install_RockyLinux85="@base @core @debugging @anaconda-tools @additio
                     adcli certmonger ipa-client clevis-dracut clevis-udisks2 krb5-pkinit krb5-workstation sssd-polkit-rules krb5-pkinit luksmeta nscd nss-pam-ldapd
                     grub2 epel-release efibootmgr ansible yum-utils ipmitool OpenIPMI docker-ce docker-ce-cli containerd.io lrzsz python3 watchdog pcm git tmux fish kernel kernel-devel
                     kernel-tools-libs kernel-modules kernel-tools kernel-core rpm-build libtool kernel-rpm-macros python36-devel tcsh kernel-modules-extra gcc-gfortran
-                    libdb-devel fuse-devel python3-Cython cmake perl-generators libstdc++-devel libmnl-devel bison flex gcc-c++ python3-docutils"
+                    libdb-devel fuse-devel python3-Cython cmake perl-generators libstdc++-devel libmnl-devel bison flex gcc-c++ python3-docutils libnsl"
 
 if [ $profile_id  != "TSG-X-NXR620G40-R01-P0804" ];then
     locak_package_to_install_CentOS7="$projectdir/package/kernel-lt-$kernel_version.rpm
