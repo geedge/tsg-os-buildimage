@@ -20,7 +20,7 @@ firewall_rpm_version:
   tsg_ddos_sketch: tsg_ddos_sketch-1.3.1.3c090b5
   dns: dns-2.1.3.ac4dda4
   ftp: ftp-1.0.14.02d6a2c
-  http: http-2.0.9.b672af8
+  http: http-2.0.10.274614c
   mail: mail-1.0.17.eb41cef
   quic: quic-2.0.3.98c567c
   ssl: ssl-2.0.10.e8f6986
@@ -31,7 +31,7 @@ firewall_rpm_version:
   mesa_sip: mesa_sip-1.2.3.ccf9b90
   deal_socks: deal_socks-1.0.4.329bba3
   stratum: stratum-1.0.6.16c1c35
-  rdp: rdp-1.0.1.cd36d8a
+  rdp: rdp-1.0.3.f392ffd
 
 framework_rpm_version:
   libcjson: libcjson-1.7.12.6c09dcf
@@ -71,7 +71,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.3.5.04e821f
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.6.3.89deb48
+  tsg_master: tsg_master-5.7.0.9163b65
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.1.8c7e9cc
