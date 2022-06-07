@@ -84,8 +84,8 @@ wannat_wangw_rpm_version:
   libwannat_common: libwannat_common-1.0.3.6dc42b6
 
 wire_graft_rpm_version:
-  wire_graft: wire_graft_plug-1.5.3.daab447
-  libwire_graft: libwire_graft-1.5.3.daab447
+  wire_graft: wire_graft_plug-1.5.4.8ff26ca
+  libwire_graft: libwire_graft-1.5.4.8ff26ca
 
 hasp_update_rpm_version:
   hasp_update: hasp_update-1.0.1.b836a3b
