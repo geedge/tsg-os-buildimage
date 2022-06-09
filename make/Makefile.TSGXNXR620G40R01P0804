@@ -53,7 +53,7 @@ sysroot-ansible: sysroot-verfile sysroot-base
 	cp $(CONFDIR)/resolv.conf $(TARGET_SYSROOT_DIR)/etc/ -r
 	cp $(TARGET_SYSROOT_DIR)/etc/hosts $(TARGET_SYSROOT_DIR)/tmp/ -r
 	cp /etc/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
-	$(TOOLSDIR)/ansible-HAL $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR) /tmp/yum-RockyLinux-8.conf
+	$(TOOLSDIR)/ansible-HAL $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR) /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER)
 	cp $(TARGET_SYSROOT_DIR)/tmp/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
 	umount $(TARGET_SYSROOT_DIR)/proc
 

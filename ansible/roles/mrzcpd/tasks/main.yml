@@ -1,4 +1,12 @@
 ---
+- name: "download rpm packages: mrzcpd"
+  yum:
+    name: "{{ mrzcpd_rpm_version.mrzcpd }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: "{{ path_download }}"
+
 - name: "Install mrzcpd rpm package"
   shell: rpm -i /tmp/rpm_download/{{ mrzcpd_rpm_version.mrzcpd }}* --prefix {{ prefix_path.mrzcpd }}
 
@@ -89,7 +97,7 @@
     src: "{{ role_path }}/templates/mrglobal.conf.j2.j2.TSGXNXR620G40R01P0804"
     dest: /opt/tsg/tsg-os-provision/templates/mrglobal.conf.j2
   when:
-    - runtime_env == 'TSG-X-P0804'
+    - runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:

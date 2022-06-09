@@ -8,7 +8,11 @@ tfe_node_count = 1
 tfe_node_count = {{ dp_steering_proxy.node_count }}
 {% endif %}
 manage_eth = {{ control_and_policy.nic_name }}
+{% if dp_steering_proxy.tun_mode is defined %}
+deploy_mode = tun
+{% else %}
 deploy_mode = normal
+{% endif %}
 tun_name = tun_kni
 src_mac_addr = 00:0e:c6:d6:72:c1
 dst_mac_addr = fe:65:b7:03:50:bd

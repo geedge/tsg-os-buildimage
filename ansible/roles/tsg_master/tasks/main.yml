@@ -1,2 +1,11 @@
+- name: "download rpm packages: tsg_master"
+  yum:
+    name:
+      - "{{ tsg_master_rpm_version.tsg_master }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: "{{ path_download }}"
+
 - name: "Install tsg_master that is sapp plugins"
   shell: rpm -i /tmp/rpm_download/{{ tsg_master_rpm_version.tsg_master }}* --prefix {{ prefix_path.sapp }}

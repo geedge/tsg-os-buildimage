@@ -1,4 +1,12 @@
 ---
+- name: "download rpm packages: sapp and tcpdump_mesa"
+  yum:
+    name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: "{{ path_download }}"
+  with_dict: "{{ sapp_rpm_version }}"
 
 - name: "Create directory /opt/tsg/framework and /opt/tsg/sapp if they not exist"
   file:
@@ -56,14 +64,14 @@
     src: "{{ role_path }}/templates/send_raw_pkt.conf.j2"
     dest: /opt/tsg/sapp/etc/send_raw_pkt.conf
   tags: template
-  when: runtime_env != 'TSG-X-P1403' and runtime_env != 'TSG-X-P0804'
+  when: runtime_env != 'TSG-X-P1403' and runtime_env != 'TSG-X-P0804' and runtime_env != 'TSG-X-P0906'
 
 - name: Template the send_raw_pkt.conf
   template:
     src: "{{ role_path }}/templates/send_raw_pkt.conf.j2"
     dest: /opt/tsg/tsg-os-provision/templates/send_raw_pkt.conf.j2
   tags: template
-  when: runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804'
+  when: runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
 
 - name: Template the conflist.inf - tsg_server
   template:
@@ -111,7 +119,7 @@
     dest: /opt/tsg/sapp/etc/vlan_flipping_map.conf
   tags: template
   when:
-    - runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804'
+    - runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
 
 - name: Template the sapp_log.conf
   template:

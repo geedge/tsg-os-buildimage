@@ -1,4 +1,13 @@
 ---
+- name: "download rpm packages: wire_graft"
+  yum:
+    name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: "{{ path_download }}"
+  with_dict: "{{ wire_graft_rpm_version }}"
+
 - name: "Install wire_graft that is sapp plugins"
   shell: rpm -i /tmp/rpm_download/{{ item.rpm_version }}* --prefix {{ item.prefix }}
   with_items:

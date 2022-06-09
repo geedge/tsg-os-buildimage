@@ -1,3 +1,14 @@
+- name: "download rpm packages: freeipmi"
+  yum:
+    name: "{{ item }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: latest
+    download_only: yes
+    download_dir: "{{ path_download }}"
+  with_items:
+    - freeipmi
+    - systemd-sysv
+
 - name: "Get freeipmi rpm path"
   find:
     path: /tmp/rpm_download/

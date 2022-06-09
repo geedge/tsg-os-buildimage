@@ -5,6 +5,15 @@
 #- name: "Install certstore"
 #  shell: rpm -i /tmp/rpm_download/{{ certstore_rpm_version.certstore }}*
 
+- name: "download rpm packages: certstore"
+  yum:
+    name:
+      - "{{ certstore_rpm_version.certstore }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: "{{ path_download }}"
+
 - name: "Get certstore rpm path"
   find:
     path: /tmp/rpm_download/

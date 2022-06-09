@@ -1,0 +1,174 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: tsg
+  labels:
+    app: tsg
+
+spec:
+  selector:
+    matchLabels:
+      app: tsg
+  template:
+    metadata:
+      labels:
+        app: tsg
+
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: firewall
+        image: docker.io/library/tsg-firewall:{{os_release_ver}}
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/sapp
+        command: ["/bin/bash", "-c", "./sapp"]        
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: opt-tsg-mrzcpd
+          mountPath: /opt/tsg/mrzcpd
+          readOnly: false
+        - name: var-run-mrzcpd
+          mountPath: /var/run/mrzcpd
+          readOnly: false
+        - name: var-run-dpdk
+          mountPath: /var/run/dpdk
+          readOnly: false
+        - name: root-sys
+          mountPath: /root/sys
+          readOnly: false
+        - name: switch-partion
+          mountPath: "/opt/tsg/sapp/plug/conflist.inf"
+          subPath: "opt/tsg/sapp/plug/conflist.inf"
+        - name: switch-partion
+          mountPath: "/opt/tsg/sapp/etc/gdev.conf"
+          subPath: "opt/tsg/sapp/etc/gdev.conf"
+        - name: switch-partion
+          mountPath: "/opt/tsg/sapp/tsgconf/main.conf"
+          subPath: "opt/tsg/sapp/tsgconf/main.conf"
+        - name: switch-partion
+          mountPath: "/opt/tsg/sapp/tsgconf/maat.conf"
+          subPath: "opt/tsg/sapp/tsgconf/maat.conf"
+        - name: switch-partion
+          mountPath: "/opt/tsg/sapp/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf"
+          subPath: "opt/tsg/sapp/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf"
+        - name: switch-partion
+          mountPath: "/opt/tsg/sapp/etc/sapp.toml"
+          subPath: "opt/tsg/sapp/etc/sapp.toml"
+        - name: switch-partion
+          mountPath: "/opt/tsg/sapp/etc/send_raw_pkt.conf"
+          subPath: "opt/tsg/sapp/etc/send_raw_pkt.conf"
+        - name: switch-partion
+          mountPath: "/opt/tsg/sapp/etc/kni/kni.conf"
+          subPath: "opt/tsg/sapp/etc/kni/kni.conf"
+        - name: switch-partion
+          mountPath: "/opt/tsg/sapp/etc/wannat/wangw.conf"
+          subPath: "opt/tsg/sapp/etc/wannat/wangw.conf"
+        - name: switch-partion
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+
+{% raw %}{% if proxy.enable == 1 %}
+{% endraw %}
+      - name: proxy
+        image: docker.io/library/tsg-proxy:{{os_release_ver}}
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/tfe
+        command: ["/bin/bash", "-c", "./bin/tfe"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: opt-tsg-mrzcpd
+          mountPath: /opt/tsg/mrzcpd
+          readOnly: false
+        - name: var-run-mrzcpd
+          mountPath: /var/run/mrzcpd
+          readOnly: false
+        - name: var-run-dpdk
+          mountPath: /var/run/dpdk
+          readOnly: false
+        - name: root-sys
+          mountPath: /root/sys
+          readOnly: false
+        - name: switch-partion
+          mountPath: "/opt/tsg/tfe/conf/tfe/tfe.conf"
+          subPath: "opt/tsg/tfe/conf/tfe/tfe.conf"
+        - name: switch-partion
+          mountPath: "/opt/tsg/tfe/conf/pangu/pangu_pxy.conf"
+          subPath: "opt/tsg/tfe/conf/pangu/pangu_pxy.conf"
+        - name: switch-partion
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+{% raw %}{% endif %}
+{% endraw %}
+
+      - name: certstore
+        image: docker.io/library/tsg-certstore:{{os_release_ver}}
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/certstore
+        command: ["/bin/bash", "-c", "/usr/bin/redis-server /etc/cert-redis.conf;./bin/certstore"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: switch-partion
+          mountPath: "/opt/tsg/certstore/conf/cert_store.ini"
+          subPath: "opt/tsg/certstore/conf/cert_store.ini"
+        - name: switch-partion
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+
+      - name: telegraf
+        image: docker.io/library/tsg-telegraf:{{os_release_ver}}
+        imagePullPolicy: Never
+        command: ["/bin/bash", "-c", "/usr/bin/telegraf -config /etc/telegraf/telegraf_statistic.conf -config-directory /etc/telegraf/telegraf_statistic.d"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: switch-partion
+          mountPath: "/etc/telegraf/telegraf_statistic.conf"
+          subPath: "etc/telegraf/telegraf_statistic.conf"
+        - name: switch-partion
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: switch-partion
+          mountPath: "/etc/default/telegraf"
+          subPath: "etc/default/telegraf"
+
+      initContainers:
+      - name: tsg-init
+        image: docker.io/library/tsg-init:{{os_release_ver}}
+        imagePullPolicy: Never
+        command: ["sh", "-c", "ansible-playbook -i /opt/tsg/tsg-os-provision/hosts /opt/tsg/tsg-os-provision/tasks/provision.yml"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: switch-partion
+          mountPath: /target_config 
+        - name: provision
+          mountPath: /data/tsg-os-provision
+          readOnly: true
+
+      volumes:
+      - name: opt-tsg-mrzcpd
+        hostPath:
+          path: /opt/tsg/mrzcpd
+      - name: var-run-mrzcpd
+        hostPath:
+          path: /var/run/mrzcpd
+      - name: var-run-dpdk
+        hostPath:
+          path: /var/run/dpdk
+      - name: root-sys
+        hostPath:
+          path: /root/sys
+      - name: provision
+        configMap:
+          name: vsys1-provision
+      - name: switch-partion
+        emptyDir: {}

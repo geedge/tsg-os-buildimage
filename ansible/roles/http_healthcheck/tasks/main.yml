@@ -1,2 +1,10 @@
+- name: "download rpm packages: http_healthcheck"
+  yum:
+    name: "{{ http_healthcheck_rpm_version.http_healthcheck }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: "{{ path_download }}"
+
 - name: "Install http_healthcheck that is sapp plugins"
   shell: rpm -i /tmp/rpm_download/{{ http_healthcheck_rpm_version.http_healthcheck }}* --prefix {{ prefix_path.sapp }}

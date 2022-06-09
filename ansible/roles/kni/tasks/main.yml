@@ -1,4 +1,12 @@
 ---
+- name: "download rpm packages: kni"
+  yum:
+    name:
+      - "{{ kni_rpm_version.kni }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: "{{ path_download }}"
 
 - name: "Install kni that is sapp plugin with prefix option"
   shell: rpm -i /tmp/rpm_download/{{ kni_rpm_version.kni }}* --prefix {{ prefix_path.sapp }}
@@ -8,11 +16,11 @@
     src: "{{ role_path }}/templates/kni.conf.j2"
     dest: /opt/tsg/sapp/etc/kni/kni.conf
   tags: template
-  when: runtime_env != 'TSG-X-P0804'
+  when: runtime_env != 'TSG-X-P0804' and runtime_env != 'TSG-X-P0906'
 
 - name: Template the kni.conf
   template:
     src: "{{ role_path }}/templates/kni.conf.j2"
     dest: /opt/tsg/tsg-os-provision/templates/kni.conf.j2
   tags: template
-  when: runtime_env == 'TSG-X-P0804'
+  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'

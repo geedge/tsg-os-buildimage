@@ -1,0 +1,14 @@
+[Unit]
+Description=Tsg container images loading
+DefaultDependencies=no
+Conflicts=shutdown.target
+Requires=k3s.service
+After=local-fs.target k3s.service
+Before=sysinit.target shutdown.target systemd-update-done.service
+ConditionNeedsUpdate=|/etc
+ConditionFileNotEmpty=|/usr
+
+[Service]
+ExecStart=/bin/sh -c "/opt/tsg/vsys1/scripts/tsg-traffic-image-load.sh"
+Type=oneshot
+RemainAfterExit=yes

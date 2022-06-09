@@ -1,0 +1,241 @@
+---
+- hosts: provision
+  tasks:
+    - name: Load default config file variable
+      include_vars:
+        file: /opt/tsg/tsg-os-provision/provision.default.yml
+
+    - name: Load general config file variable 
+      include_vars:
+        file: /data/tsg-os-provision/provision.yml
+
+    - name: Load provision.yml.d config file variable
+      include_vars:
+        dir: /data/tsg-os-provision/provision.yml.d/
+        ignore_unknown_extensions: yes
+        extensions:
+          - 'yml'
+          - 'yaml'
+
+######setting cpu affinity start######
+    - name: obtain cpu layout info
+      set_fact:
+        cpu_layout_obtained: "{{ item }}"
+      loop: "{{ cpu_layouts }}"
+      when:
+        - ansible_facts.processor[2] is search(item.match.model_name)
+        - ansible_facts.processor_count == item.match.sockets
+
+    - name: set cpu affinity variable
+      set_fact:
+        workload_firewall_cpu_affinity: "{{ cpu_layout_obtained.sapp_affinity | join(',')  }}"
+        workload_zcpd_cpu_affinity: "{{ cpu_layout_obtained.mrzcpd_affinity | join(',')}}"
+        workload_firewall_worker_threads: "{{ cpu_layout_obtained.sapp_affinity | length }}"
+        workload_proxy_cpu_affinity: "{{ cpu_layout_obtained.tfe_affinity | join(',') }}"
+        workload_proxy_worker_thread: "{{ cpu_layout_obtained.tfe_affinity | length | int - 1 }}"
+
+    - name: "tsg-os-provision: rewrite sapp_cpu_affinity and sapp_worker_threads"
+      set_fact:
+        workload_firewall_cpu_affinity: "{{ (cpu_layout_obtained.sapp_affinity + cpu_layout_obtained.tfe_affinity) | join(',') }}"
+        workload_firewall_worker_threads: "{{ (cpu_layout_obtained.sapp_affinity + cpu_layout_obtained.tfe_affinity) | length }}"
+      when: proxy.enable == 0
+
+######setting cpu affinity end######
+
+######setting nic cpu affinity mask start######
+    - name: output cpu_layouts config to config .cpu_layouts.json
+      copy:
+        content: "{{ cpu_layouts| to_json }}"
+        dest: /opt/tsg/tsg-os-provision/.cpu_layouts.json
+
+    - name: "tsg-os-provision: obtain rps_mask"
+      shell: /opt/tsg/tsg-os-provision/scripts/obtain_rps_mask.py
+      register: result_exec_obtain_rps_mask
+
+    - name: "tsg-os-provision: check result_exec_obtain_rps_mask"
+      assert:
+        that:
+          - result_exec_obtain_rps_mask.rc == 0
+          - result_exec_obtain_rps_mask.failed == False
+        fail_msg: "error:{{ result_exec_obtain_rps_mask.stderr }},stdout:{{ result_exec_obtain_rps_mask.stdout_lines }}"
+        success_msg: "Successded: obtain rpm mask"
+
+    - name: "set rps_mask into tfe-env-config"
+      set_fact:
+        tfe_env_rps_info: "{{ result_exec_obtain_rps_mask.stdout | from_json }}"
+
+    - name: "output tfe_env_rps_info"
+      debug:
+        msg: "{{ tfe_env_rps_info }}"
+
+######setting nic cpu affinity mask end######
+
+######get isolate cpu core start######
+    - name: redirect proxy config to config .proxy.json
+      copy:
+        content: "{{ proxy | to_json }}"
+        dest: /opt/tsg/tsg-os-provision/.proxy.json
+
+    - name: "tsg-os-provision: execute obtain_isolate_cpu_range.py"
+      shell: /opt/tsg/tsg-os-provision/scripts/obtain_isolate_cpu_range.py
+      register: result_exec_obtain_isolate_cpu_range
+
+    - name: "tsg-os-provision: check result_exec_obtain_isolate_cpu_range"
+      assert:
+        that:
+          - result_exec_obtain_isolate_cpu_range.rc == 0
+          - result_exec_obtain_isolate_cpu_range.failed == False
+        fail_msg: "error:{{ result_exec_obtain_isolate_cpu_range.stderr }},stdout:{{ result_exec_obtain_isolate_cpu_range.stdout_lines }}"
+        success_msg: "Successded: obtain isolate cpu range"
+
+    - name: "set fact  grub_cpu_isolate"
+      set_fact:
+        grub_cpu_isolate: "{{ result_exec_obtain_isolate_cpu_range.stdout }}"
+
+######get isolate cpu core end######
+
+    - name: get /proc/cmdline
+      shell: cat /proc/cmdline
+      register: result_exec_cat_cmdline
+
+    - name: need to reboot
+      fail:
+        msg: "Detected that the configuration of cpu isolate has changed, please run command \"provision-config-apply --reboot\" to reboot the machine that make the configuration take effect!"
+      when:
+        - result_exec_cat_cmdline is not search(grub_cpu_isolate)
+        - enable_config_apply != '2'
+
+    - name: "set keep_alive_ip"
+      set_fact:
+        gdev_conf_keep_alive_ip: "{{ etherfabric_settings.keepalive.ip }}"
+
+    - name: "set cm_policy_server_ip  and cm_policy_server_port"
+      set_fact:
+        cm_policy_server_ip: "{{cm.policy_server.address}}"
+        cm_policy_server_port: "{{ cm.policy_server.port }}"
+
+    - name: "tsg-os-provision: execute obtain policy_and_log nic ip address"
+      shell: ip addr show {{ network_setting.nic_policy_log.name }} | grep "inet " | awk '{ print $2 }' | awk -F "/" '{ print $1 }'
+      register: result_exec_obtain_policy_and_log_nic_ip
+
+    - name: "tsg-os-provision: check result_exec_obtain_policy_and_log_nic_ip"
+      assert:
+        that:
+          - result_exec_obtain_policy_and_log_nic_ip.rc == 0
+          - result_exec_obtain_policy_and_log_nic_ip.failed == False
+        fail_msg: "error:{{ result_exec_obtain_policy_and_log_nic_ip.stderr }},stdout:{{ result_exec_obtain_policy_and_log_nic_ip.stdout_lines }}"
+        success_msg: "Successded: obtain policy_and_log nic ip address"
+
+    - name: "set fact  policy_and_log_nic_ip"
+      set_fact:
+        policy_and_log_nic_ip: "{{ result_exec_obtain_policy_and_log_nic_ip.stdout }}"
+
+    - name: redirect proxy config to config policy_and_log_nic_ip
+      copy:
+        content: "policy_and_log_nic_ip: {{ policy_and_log_nic_ip }}"
+        dest: /opt/tsg/tsg-os-provision/.policy_and_log_nic_ip.yaml
+
+    - name: "replace action: grub config isolate cpu"
+      replace:
+        path: "{{ item }}"
+        regexp: 'isolcpus=\d+-+\d+'
+        replace: 'isolcpus={{grub_cpu_isolate}}'
+      with_items:
+        - /boot/grub/grub.cfg
+        - /etc/grub.d/40_onie_grub
+
+    - name: "tsg-os-provision: template mrglobal.conf file"
+      template:
+        src: "../templates/mrglobal.conf.j2"
+        dest: /opt/tsg/mrzcpd/etc/mrglobal.conf
+      tags: mrzcpd
+
+    - name: "tsg-os-provision: template tsg_workload_resource.yml file"
+      template:
+        src: "../templates/tsg_workload_resource.yml.j2"
+        dest: /opt/tsg/vsys1/workload_resource/tsg_workload_resource.yml
+      tags: vsys1
+
+    - name: "mkdir /opt/tsg/etc/"
+      file:
+        path: /opt/tsg/etc
+        state: directory
+
+    - name: "tsg-os-provision: obtain sn and write sn to tsg_sn.json"
+      shell: /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
+      register: result_exec_obtain_sn_and_write_sn_in_file
+
+    - name: "tsg-os-provision: check result_exec_obtain_sn_and_write_sn_in_file"
+      assert:
+        that:
+          - result_exec_obtain_sn_and_write_sn_in_file.rc == 0
+          - result_exec_obtain_sn_and_write_sn_in_file.failed == False
+        fail_msg: "error:{{ result_exec_obtain_sn_and_write_sn_in_file.stderr }},stdout:{{ result_exec_obtain_sn_and_write_sn_in_file.stdout_lines }}"
+        success_msg: "Successded: obtain the sn  and write sn into tsg_sn.json"
+
+    - name: "tsg-os-provision: template the tsg_device_tag"
+      template:
+        src: "../templates/tsg_device_tag.json.j2"
+        dest: /opt/tsg/etc/tsg_device_tag.json
+      tags: tsg_device_tag
+
+    - name: 'tsg-os-provision: execute command - systemctl daemon-reload'
+      systemd:
+        daemon_reload: yes
+
+    - name: "tsg-os-provision: coredump setup override - mkdir"
+      file:
+        path: /usr/lib/systemd/coredump.conf.d/
+        state: directory
+
+    - name: "tsg-os-provision: coredump setup override - override"
+      template:
+        src: "../templates/coredump_setup_override.conf.j2"
+        dest: /usr/lib/systemd/coredump.conf.d/coredump_setup_override.conf
+
+    - name: "tsg-os-provision: snapshot the stage2 config files"
+      copy:
+        src: /data/tsg-os-provision/provision.yml
+        dest: /data/tsg-os-provision/provision.yml.snapshot
+
+#    - name: load tsg images
+#      shell: /opt/tsg/vsys1/scripts/tsg-traffic-image-load.sh
+
+    - name: add porvision successed sign
+      file:
+        path: /data/tsg-os-provision/.provision_succeeded
+        state: touch
+
+    - name: "tsg-os-provision: restart mrenv"
+      systemd:
+        name: mrenv
+        state: restarted
+      when: enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart mrzcpd"
+      systemd:
+        name: mrzcpd
+        state: restarted
+      when: enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart mrapm_device"
+      systemd:
+        name: mrapm_device
+        state: restarted
+      when: enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart mrapm_stream"
+      systemd:
+        name: mrapm_stream
+        state: restarted
+      when: enable_config_apply == '1'
+
+    - name: exec image load
+      shell: /opt/tsg/vsys1/scripts/tsg-traffic-image-load.sh
+      when: enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart tsg-traffic-engine"
+      systemd:
+        name: tsg-traffic-engine
+        state: restarted
+      when: enable_config_apply == '1'

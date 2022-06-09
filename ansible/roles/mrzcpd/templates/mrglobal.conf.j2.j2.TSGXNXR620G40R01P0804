@@ -73,3 +73,10 @@ sz_direct_pktmbuf=4194304
 sz_indirect_pktmbuf=8192
 sz_cache=256
 sz_data=4096
+
+{% if runtime_env == 'TSG-X-P0906' %}
+[ctrlmsg]
+listen_addr={% raw %}{{ ansible_cni0.ipv4.address }}
+{% endraw %}
+listen_port=46789
+{% endif %}

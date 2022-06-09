@@ -81,7 +81,7 @@ EOF2
 echo "HOSTNAME=localhost" > /etc/sysconfig/network
 
 # Disable selinux
-sed -ie "s/SELINUX=/SELINUX=disabled/g" /etc/selinux/config
+sed -ie "s/SELINUX=.*/SELINUX=disabled/g" /etc/selinux/config
 
 ldconfig
 exit 0

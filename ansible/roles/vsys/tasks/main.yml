@@ -1,0 +1,45 @@
+- name: "create directory for workload resource"
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /usr/lib/systemd/system/tsg-traffic-engine.service.d/
+    - /opt/tsg/vsys1/workload_resource/
+    - /usr/lib/systemd/system/tsg-images-load.service.d/
+    - /opt/tsg/vsys1/scripts/
+
+- name: "copy vsys1 service file to dest"
+  copy:
+    src: "{{ role_path }}/files/tsg-traffic-engine.service"
+    dest: "/usr/lib/systemd/system/"
+    mode: 0644
+
+#- name: "copy images load service file to dest"
+#  copy:
+#    src: "{{ role_path }}/files/tsg-images-load.service"
+#    dest: "/usr/lib/systemd/system/tsg-images-load.service"
+#    mode: 0644
+
+- name: 'tsg-traffic-engine service enable'
+  systemd:
+    name: tsg-traffic-engine
+    enabled: yes
+
+
+- name: "templates tsg_workload_resource.yml"
+  template:
+    src: "{{role_path}}/templates/tsg_workload_resource.yml.j2.j2"
+    dest: /opt/tsg/tsg-os-provision/templates/tsg_workload_resource.yml.j2
+  tags: template
+
+- name: "copy slice file to tsg-traffic-engine.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_override_slice.conf.j2"
+    dest: /usr/lib/systemd/system/tsg-traffic-engine.service.d/service_override_slice.conf
+    mode: 0644
+
+- name: "templates tsg-traffic-image-load.sh.j2"
+  template:
+    src: "{{role_path}}/templates/tsg-traffic-image-load.sh.j2"
+    dest: /opt/tsg/vsys1/scripts/tsg-traffic-image-load.sh
+    mode: 0755

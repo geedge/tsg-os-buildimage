@@ -1,6 +1,15 @@
 #- name: "Install  tsg-diagnose"
 #  shell: rpm -i /tmp/rpm_download/{{ tsg_diagnose_rpm_version.tsg_diagnose }}*
 #
+- name: "download rpm packages: tsg-diagnose"
+  yum:
+    name:
+      - "{{ tsg_diagnose_rpm_version.tsg_diagnose }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: "{{ path_download }}"
+
 - name: "Get tsg_diagnose rpm path"
   find:
     path: /tmp/rpm_download/

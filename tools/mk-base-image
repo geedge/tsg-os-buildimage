@@ -10,69 +10,66 @@ yum_config=$1
 target=$2
 projectdir=$3
 profile_id=$4
+
+setopt="group_package_types=mandatory,default,optional"
+
 case $profile_id in
-    "TSG-X-NXR620G40-R01-P0804")
+    "TSG-X-NXR620G40-R01-P0804" | "TSG-X-NXR620G40-R01-P0906" )
         kernel_version="5.17.15-1.el8.x86_64"
+        append_package_to_install="$projectdir/package/kernel-ml-core-$kernel_version.rpm
+                    $projectdir/package/kernel-ml-modules-$kernel_version.rpm
+                    $projectdir/package/kernel-ml-$kernel_version.rpm
+                    $projectdir/package/kernel-ml-devel-$kernel_version.rpm"
         ;;
     "TSG-X-NXR620G40-R01-P1403")
         kernel_version="3.10.0-1160.59.1.el7.x86_64"
+        append_package_to_install="kernel-3.10.0-1160.59.1.el7.x86_64
+                    kernel-devel-3.10.0-1160.59.1.el7.x86_64"
         ;;
     "7400-MCN0-P01R01" | "7400-MCN123-P01R01" |"9000-NPB-P01R01")
         kernel_version="5.4.159-1.el7.elrepo.x86_64"
+        append_package_to_install="$projectdir/package/kernel-lt-$kernel_version.rpm
+                    $projectdir/package/kernel-lt-devel-$kernel_version.rpm"
         ;;
     *)
         kernel_version="error_profile_id"
-        echo "Set kernel_version failed, profile_id: $profile_id"
+        echo "Set kernel_version failed, error profile_id: $profile_id"
+        exit 1
+        ;;
+esac
+
+case $profile_id in
+    "TSG-X-NXR620G40-R01-P0804" | "TSG-X-NXR620G40-R01-P0906" )
+        base_package_to_install="@base @core @debugging @anaconda-tools @additional-devel @guest-agents @system-tools
+                    @hardware-monitoring @network-file-system-client @performance @remote-system-management adcli certmonger
+                    ipa-client clevis-dracut clevis-udisks2 krb5-pkinit krb5-workstation sssd-polkit-rules krb5-pkinit luksmeta
+                    nscd nss-pam-ldapd grub2 epel-release efibootmgr ansible yum-utils ipmitool OpenIPMI docker-ce docker-ce-cli
+                    containerd.io lrzsz python3 watchdog pcm git tmux fish kernel kernel-devel kernel-tools-libs kernel-modules
+                    kernel-tools kernel-core rpm-build libtool kernel-rpm-macros python36-devel tcsh kernel-modules-extra gcc-gfortran
+                    libdb-devel fuse-devel python3-Cython cmake perl-generators libstdc++-devel libmnl-devel bison flex gcc-c++
+                    python3-docutils libnsl"
+
+        ;;
+    "TSG-X-NXR620G40-R01-P1403" | "7400-MCN0-P01R01" | "7400-MCN123-P01R01" |"9000-NPB-P01R01")
+        base_package_to_install="@base @core @debugging @directory-client @guest-agents
+                    @hardware-monitoring @network-file-system-client @performance @remote-system-management
+                    grub2 epel-release efibootmgr ansible yum-utils ipmitool docker-ce docker-ce-cli 
+                    containerd.io lrzsz python3 vconfig watchdog pcm git tmux fish"
+        ;;
+    *)
+        base_package_to_install="error_profile_id"
+        echo "Set base_package_to_install failed, error profile_id: $profile_id"
         exit 1
         ;;
 esac
 
 set -ex
 
-package_to_install_CentOS7="@base @core @debugging @directory-client @guest-agents
-                    @hardware-monitoring @network-file-system-client @performance @remote-system-management
-                    grub2 epel-release efibootmgr ansible yum-utils ipmitool docker-ce docker-ce-cli containerd.io lrzsz python3 vconfig watchdog pcm git tmux fish"
-
-package_to_install_RockyLinux85="@base @core @debugging @anaconda-tools @additional-devel @guest-agents @system-tools
-                    @hardware-monitoring @network-file-system-client @performance @remote-system-management
-                    adcli certmonger ipa-client clevis-dracut clevis-udisks2 krb5-pkinit krb5-workstation sssd-polkit-rules krb5-pkinit luksmeta nscd nss-pam-ldapd
-                    grub2 epel-release efibootmgr ansible yum-utils ipmitool OpenIPMI docker-ce docker-ce-cli containerd.io lrzsz python3 watchdog pcm git tmux fish kernel kernel-devel
-                    kernel-tools-libs kernel-modules kernel-tools kernel-core rpm-build libtool kernel-rpm-macros python36-devel tcsh kernel-modules-extra gcc-gfortran
-                    libdb-devel fuse-devel python3-Cython cmake perl-generators libstdc++-devel libmnl-devel bison flex gcc-c++ python3-docutils libnsl"
-
-if [ $profile_id  != "TSG-X-NXR620G40-R01-P0804" ];then
-    locak_package_to_install_CentOS7="$projectdir/package/kernel-lt-$kernel_version.rpm
-                            $projectdir/package/kernel-lt-devel-$kernel_version.rpm"
-else
-    local_package_to_install="$projectdir/package/kernel-ml-core-$kernel_version.rpm
-                            $projectdir/package/kernel-ml-modules-$kernel_version.rpm
-                            $projectdir/package/kernel-ml-$kernel_version.rpm
-                            $projectdir/package/kernel-ml-devel-$kernel_version.rpm"
-fi
-
-kernel_package_to_install="kernel-3.10.0-1160.59.1.el7.x86_64 kernel-devel-3.10.0-1160.59.1.el7.x86_64"
-
-setopt="group_package_types=mandatory,default,optional"
-
 yum -c "$yum_config" --installroot="$target" -y makecache
-case $profile_id in
-    "TSG-X-NXR620G40-R01-P0804")
-        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install_RockyLinux85
-        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $local_package_to_install
-        ;;
-    "TSG-X-NXR620G40-R01-P1403")
-        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install_CentOS7
-        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $kernel_package_to_install
-        ;;
-    "7400-MCN0-P01R01" | "7400-MCN123-P01R01" |"9000-NPB-P01R01")
-        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install_CentOS7
-        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt localinstall $locak_package_to_install_CentOS7
-        ;;
-    *)
-        echo "Error profile id, profile_id: $profile_id"
-        exit 1
-        ;;
-esac
+
+yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $base_package_to_install
+yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $append_package_to_install
+
 
 #if [ $profile_id  == "TSG-X-NXR620G40-R01-P0804" ];then
 #    kernel_version=$(ls $target/boot/vmlinuz-*.x86_64 | grep -oP "^$target/boot/vmlinuz-\K.*")

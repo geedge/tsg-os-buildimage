@@ -1,0 +1,13 @@
+#!/bin/bash -ex
+
+#fileLoadImageSucceeded="/data/tsg-os-provision/.images_load_succeeded"
+#if [  -f $fileLoadImageSucceeded ]; then
+#    rm $fileLoadImageSucceeded
+#fi
+
+/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-container-firewall-{{os_release_ver}}-images.tar
+/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-container-proxy-{{os_release_ver}}-images.tar
+/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-container-certstore-{{os_release_ver}}-images.tar
+/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-container-telegraf-{{os_release_ver}}-images.tar
+/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-container-init-{{os_release_ver}}-images.tar
+#touch $fileLoadImageSucceeded

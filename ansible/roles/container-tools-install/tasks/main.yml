@@ -1,0 +1,76 @@
+- name: "install ansible"
+  yum:
+    name: ansible
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+  when: PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init'
+
+- name: "Generate ansiblg.cfg after ansible upgrade in rockylinux8"
+  shell: ansible-config init --disabled > /etc/ansible/ansible.cfg
+  when: PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init'
+
+- name: 'change ansible hash_behaviour value replace to merge'
+  lineinfile:
+    path: /etc/ansible/ansible.cfg
+    backrefs: yes
+    regexp: "^(.*hash_behaviour.*=.*replace.*)$"
+    line: '\1\nhash_behaviour = merge'
+  when: PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init'
+
+- name: 'install psutil'
+  shell: pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple psutil
+  when: PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init'
+
+- name: "install tcpdump"
+  yum:
+    name: tcpdump
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install numactl-libs"
+  yum:
+    name: numactl-libs
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install iproute"
+  yum:
+    name: iproute
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install iptables"
+  yum:
+    name: iptables
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install procps"
+  yum:
+    name: procps
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install net-tools"
+  yum:
+    name: net-tools
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install ethtool"
+  yum:
+    name: ethtool
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install gdb"
+  yum:
+    name: gdb
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install ipmitool"
+  yum:
+    name: ipmitool
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present

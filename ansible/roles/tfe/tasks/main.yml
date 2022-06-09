@@ -1,4 +1,13 @@
 ---
+- name: "download rpm packages: tfe"
+  yum:
+    name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: "{{ path_download }}"
+  with_dict: "{{ tfe_rpm_version }}"
+
 - name: "copy tfe program to destination server"
   copy:
     src: "{{ role_path }}/files/"
@@ -110,7 +119,17 @@
     src: "{{ role_path }}/files/service_override_Requires.conf"
     dest: "/usr/lib/systemd/system/tfe-env.service.d/"
     mode: 0644
-  when: runtime_env == 'TSG-X-P0804'
+  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+
+- name: "template tfe-env shell to dest"
+  template:
+    src: "{{ role_path }}/templates/{{ item.src }}"
+    dest: "/opt/tsg/tfe/{{ item.dest }}"
+    mode: 0755
+  when: runtime_env == 'TSG-X-P0906'
+  with_items:
+    - {src: "tfe-env-start.sh.j2", dest: "tfe-env-start.sh" }
+    - {src: "tfe-env-stop.sh.j2",  dest: "tfe-env-stop.sh" }
 
 ##################### tfe #####################
 - name: "systemctl daemon-reload"
