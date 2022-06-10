@@ -10,7 +10,7 @@ firewall_rpm_version:
   fw_mail_plug: fw_mail_plug-4.1.2.4f0fe4b
   fw_quic_plug: fw_quic_plug-4.1.2.c79dbde
   fw_ssl_plug: fw_ssl_plug-3.2.4.77a4bc4
-  tsg_conn_sketch:  tsg_conn_sketch-3.3.5.cf032dd
+  tsg_conn_sketch:  tsg_conn_sketch-debug-3.3.6.8f61053
   fw_voip_plug: fw_voip_plug-1.0.11.301c698
   gtp_signaling_plug: gtp_signaling_plug-1.0.4.eb9cd29
   tsg_vulpes: tsg_vulpes-1.0.7.2215ac7
