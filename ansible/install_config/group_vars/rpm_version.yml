@@ -59,19 +59,19 @@ mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.5.2.6ffddf8
 
 sapp_rpm_version:
-  sapp: sapp-4.2.84.11fa03b
+  sapp: sapp-4.2.86.eab63fb
   tcpdump_mesa: tcpdump_mesa-1.0.12.91900e1
-  sapp-pr: sapp-pr-4.2.84.11fa03b
+  sapp-pr: sapp-pr-4.2.86.eab63fb
 
 tfe_rpm_version:
   tfe: tfe-4.6.15.1c59946
   tfe-pr: tfe-pr-4.6.15.1c59946
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-4.3.5.04e821f
+  app_sketch_local: app_sketch_local-5.3.6.ccf87ec
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.7.1.fff3e72
+  tsg_master: tsg_master-5.7.2.81e1428
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.1.8c7e9cc
