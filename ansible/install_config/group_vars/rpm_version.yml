@@ -22,7 +22,7 @@ firewall_rpm_version:
   ftp: ftp-1.0.14.02d6a2c
   http: http-2.0.10.274614c
   mail: mail-1.0.17.eb41cef
-  quic: quic-2.0.3.98c567c
+  quic: quic-2.0.4.ffb443e
   ssl: ssl-2.0.10.e8f6986
   rtp: rtp-1.0.7.530ac76
   gtp: gtp-1.0.7.e1041b2
@@ -59,16 +59,16 @@ mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.5.2.6ffddf8
 
 sapp_rpm_version:
-  sapp: sapp-4.2.86.eab63fb
+  sapp: sapp-4.2.88.ff46c8d
   tcpdump_mesa: tcpdump_mesa-1.0.12.91900e1
-  sapp-pr: sapp-pr-4.2.86.eab63fb
+  sapp-pr: sapp-pr-4.2.88.ff46c8d
 
 tfe_rpm_version:
   tfe: tfe-4.6.15.1c59946
   tfe-pr: tfe-pr-4.6.15.1c59946
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-5.3.6.ccf87ec
+  app_sketch_local: app_sketch_local-4.3.6.b9388e8
 
 tsg_master_rpm_version:
   tsg_master: tsg_master-5.7.2.81e1428
