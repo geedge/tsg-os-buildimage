@@ -48,6 +48,7 @@ sysroot-verfile: sysroot-base
 	sed -i -e "s/^PRETTY_NAME=.*/PRETTY_NAME=\"TSG-OS $(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
 
 sysroot-ansible: sysroot-verfile sysroot-base
+	mount --bind /proc $(TARGET_SYSROOT_DIR)/proc
 	cp $(CONFDIR)/yum-RockyLinux-8.conf $(TARGET_SYSROOT_DIR)/tmp/ -r
 	cp $(CONFDIR)/resolv.conf $(TARGET_SYSROOT_DIR)/etc/ -r
 	cp $(TARGET_SYSROOT_DIR)/etc/hosts $(TARGET_SYSROOT_DIR)/tmp/ -r
