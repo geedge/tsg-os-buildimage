@@ -48,12 +48,14 @@ sysroot-verfile: sysroot-base
 	sed -i -e "s/^PRETTY_NAME=.*/PRETTY_NAME=\"TSG-OS $(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
 
 sysroot-ansible: sysroot-verfile sysroot-base
+	mount --bind /proc $(TARGET_SYSROOT_DIR)/proc
 	cp $(CONFDIR)/yum-CentOS-7.conf $(TARGET_SYSROOT_DIR)/tmp/ -r
 	cp $(CONFDIR)/resolv.conf $(TARGET_SYSROOT_DIR)/etc/ -r
 	cp $(TARGET_SYSROOT_DIR)/etc/hosts $(TARGET_SYSROOT_DIR)/tmp/ -r
 	cp /etc/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
 	$(TOOLSDIR)/ansible-HAL $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR) /tmp/yum-CentOS-7.conf
 	cp $(TARGET_SYSROOT_DIR)/tmp/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
+	umount $(TARGET_SYSROOT_DIR)/proc
 
 sysroot-cleanup:
 	rm -rf $(TARGET_SYSROOT_DIR)/tmp/*
