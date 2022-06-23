@@ -67,3 +67,14 @@
   lineinfile:
      dest: /etc/profile
      line: 'export MLX5_GLUE_PATH=/opt/tsg/mrzcpd/lib'
+
+- name: "Generate ansiblg.cfg after ansible upgrade in rockylinux8"
+  shell: ansible-config init --disabled > /etc/ansible/ansible.cfg
+  when: runtime_env == 'TSG-X-P0804'
+
+- name: 'change ansible hash_behaviour value replace to merge'
+  lineinfile:
+    path: /etc/ansible/ansible.cfg
+    backrefs: yes
+    regexp: "^(.*hash_behaviour.*=.*replace.*)$"
+    line: '\1\nhash_behaviour = merge'
