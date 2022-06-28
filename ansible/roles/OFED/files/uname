@@ -2,8 +2,8 @@
 
 if [ "$1" == "-r" ]
 then
-	ls /boot/vmlinuz-*.x86_64 | grep -oP "^/boot/vmlinuz-\K.*"
+	echo 5.17.15-1.el8.x86_64
 else
-	/usr/bin/uname-back $1
+	/usr/bin/uname-bak $1
 fi
 exit 0
