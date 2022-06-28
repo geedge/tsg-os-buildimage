@@ -10,13 +10,21 @@ yum_config=$1
 target=$2
 projectdir=$3
 profile_id=$4
-if [ $profile_id  != "TSG-X-NXR620G40-R01-P0804" ];then
-    if [ $profile_id  != "TSG-X-NXR620G40-R01-P1403" ];then
-        kernel_version="5.4.159-1.el7.elrepo.x86_64"
-    else
+case $profile_id in
+    "TSG-X-NXR620G40-R01-P0804")
+        kernel_version="5.17.15-1.el8.x86_64"
+        ;;
+    "TSG-X-NXR620G40-R01-P1403")
         kernel_version="3.10.0-1160.59.1.el7.x86_64"
-    fi
-fi
+        ;;
+    "7400MCN0P01R01" | "7400MCN123P01R01" |"9000NPBP01R01")
+        kernel_version="5.4.159-1.el7.elrepo.x86_64"
+        ;;
+    *)
+        kernel_version="error_profile_id"
+        exit 1
+        ;;
+esac
 
 set -ex
 
@@ -34,6 +42,11 @@ package_to_install_RockyLinux85="@base @core @debugging @anaconda-tools @additio
 if [ $profile_id  != "TSG-X-NXR620G40-R01-P0804" ];then
     locak_package_to_install_CentOS7="$projectdir/package/kernel-lt-$kernel_version.rpm
                             $projectdir/package/kernel-lt-devel-$kernel_version.rpm"
+else
+    local_package_to_install="$projectdir/package/kernel-ml-core-$kernel_version.rpm
+                            $projectdir/package/kernel-ml-modules-$kernel_version.rpm
+                            $projectdir/package/kernel-ml-$kernel_version.rpm
+                            $projectdir/package/kernel-ml-devel-$kernel_version.rpm"
 fi
 
 kernel_package_to_install="kernel-3.10.0-1160.59.1.el7.x86_64 kernel-devel-3.10.0-1160.59.1.el7.x86_64"
@@ -41,20 +54,28 @@ kernel_package_to_install="kernel-3.10.0-1160.59.1.el7.x86_64 kernel-devel-3.10.
 setopt="group_package_types=mandatory,default,optional"
 
 yum -c "$yum_config" --installroot="$target" -y makecache
-if [ $profile_id  != "TSG-X-NXR620G40-R01-P0804" ];then
-    yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install_CentOS7
-    if [ $profile_id  != "TSG-X-NXR620G40-R01-P1403" ];then
-        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt localinstall $locak_package_to_install_CentOS7
-    else
+case $profile_id in
+    "TSG-X-NXR620G40-R01-P0804")
+        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install_RockyLinux85
+        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $local_package_to_install
+        ;;
+    "TSG-X-NXR620G40-R01-P1403")
+        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install_CentOS7
         yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $kernel_package_to_install
-    fi
-else
-    yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install_RockyLinux85
-fi
+        ;;
+    "7400MCN0P01R01" | "7400MCN123P01R01" |"9000NPBP01R01")
+        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $package_to_install_CentOS7
+        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt localinstall $locak_package_to_install_CentOS7
+        ;;
+    *)
+        echo "Error profile id"
+        exit 1
+        ;;
+esac
 
-if [ $profile_id  == "TSG-X-NXR620G40-R01-P0804" ];then
-    kernel_version=$(ls $target/boot/vmlinuz-*.x86_64 | grep -oP "^$target/boot/vmlinuz-\K.*")
-fi
+#if [ $profile_id  == "TSG-X-NXR620G40-R01-P0804" ];then
+#    kernel_version=$(ls $target/boot/vmlinuz-*.x86_64 | grep -oP "^$target/boot/vmlinuz-\K.*")
+#fi
 #git clone --depth 1 https://github.com/brendangregg/FlameGraph.git /opt/tools/FlameGraph/
 #git clone --depth 1 https://github.com/brendangregg/perf-tools.git /opt/tools/perf-tools/
 test -d "$target"/opt/tools/ || mkdir -p "$target"/opt/tools/
