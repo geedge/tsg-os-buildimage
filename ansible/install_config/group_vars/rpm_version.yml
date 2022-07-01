@@ -53,7 +53,7 @@ framework_rpm_version:
   libmaatframe: libmaatframe-3.6.10.d482a8d
 
 kni_rpm_version:
-  kni: kni-4.0.1.6d75cbe
+  kni: kni-5.0.1.3cc6d58
 
 mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.5.2.6ffddf8

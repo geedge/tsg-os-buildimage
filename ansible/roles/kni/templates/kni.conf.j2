@@ -8,14 +8,39 @@ tfe_node_count = 1
 tfe_node_count = {{ dp_steering_proxy.node_count }}
 {% endif %}
 manage_eth = {{ control_and_policy.nic_name }}
+# deploy_mode: normal/tap
 {% if dp_steering_proxy.tun_mode is defined %}
-deploy_mode = tun
+deploy_mode = tap
 {% else %}
 deploy_mode = normal
 {% endif %}
-tun_name = tap0
 src_mac_addr = 00:0e:c6:d6:72:c1
 dst_mac_addr = fe:65:b7:03:50:bd
+
+[tap]
+tap_name=tap0
+
+# tap_allow_mutilthread=1     load bpf
+# tap_allow_mutilthread=0 not load bpf
+tap_allow_mutilthread=1
+bpf_obj=/opt/tsg/sapp/plug/business/kni/bpf_tun_rss_steering.o
+bpf_default_queue=-1
+# tap_bpf_debug_log: cat /sys/kernel/debug/tracing/trace_pipe
+bpf_debug_log=0
+# 2: BPF 使用二元组分流; 4: BPF 使用四元组分流
+bpf_hash_mode=2
+
+tap_rps_enable=0
+# cat /sys/class/net/tap0/queues/rx-%{d}/rps_cpus
+tap_rps_mask=0,1fffffff,c0000000,00000000
+
+[io_uring]
+enable_iouring=1
+enable_debuglog=0
+ring_size=1024
+buff_size=2048
+flags=0
+sq_thread_idle=0
 
 {% for tfe_node_info in dp_steering_proxy.node_list %}
 {% if dp_steering_proxy.location == 'local' %}
