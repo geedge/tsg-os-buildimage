@@ -209,8 +209,8 @@
     - name: "create tap device ctrl_mock"
       shell: ip tuntap add mode tap ctrl_mock; ifconfig ctrl_mock up; ifconfig ctrl_mock {{ policy_and_log_nic_ip }}/32
 
-    - name: "create tap device tun_kni"
-      shell: ip tuntap add mode tap tun_kni
+    - name: "create tap device tap0"
+      shell: ip tuntap add dev tap0 mode tap multi_queue
       when: proxy.enable == 1
 
     - name: "execute tfe-env shell"
