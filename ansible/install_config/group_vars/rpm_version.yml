@@ -6,8 +6,8 @@ firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   fw_dns_plug: fw_dns_plug-4.0.3.3b4db47
   fw_ftp_plug: fw_ftp_plug-3.1.4.46f553d
-  fw_http_plug: fw_http_plug-4.1.4.360b531
-  fw_mail_plug: fw_mail_plug-4.1.2.4f0fe4b
+  fw_http_plug: fw_http_plug-4.1.5.647dbbe
+  fw_mail_plug: fw_mail_plug-4.1.3.8316056
   fw_quic_plug: fw_quic_plug-4.1.2.c79dbde
   fw_ssl_plug: fw_ssl_plug-3.2.4.77a4bc4
   tsg_conn_sketch:  tsg_conn_sketch-3.3.7.85af1b9
@@ -15,7 +15,7 @@ firewall_rpm_version:
   gtp_signaling_plug: gtp_signaling_plug-1.0.4.eb9cd29
   tsg_vulpes: tsg_vulpes-1.0.7.2215ac7
   radius_collect_plug: radius_collect_plug-2.0.6.ccdc363
-  app_proto_identify: app_proto_identify-2.1.0.7cb2e2e
+  app_proto_identify: app_proto_identify-2.1.1.87c3b05
   app_proto_engine: app_proto_engine-2.3.3.3233e10
   tsg_ddos_sketch: tsg_ddos_sketch-1.3.1.3c090b5
   dns: dns-2.1.3.ac4dda4
@@ -50,7 +50,7 @@ framework_rpm_version:
   libMV_Sketch: libMV_Sketch-2.1.2.20220225.dc6bb95
   librdkafka: librdkafka-1.2.2.1218b3c
   libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
-  libmaatframe: libmaatframe-3.6.9.432337d
+  libmaatframe: libmaatframe-3.6.10.d482a8d
 
 kni_rpm_version:
   kni: kni-4.0.1.6d75cbe
@@ -68,10 +68,10 @@ tfe_rpm_version:
   tfe-pr: tfe-pr-4.6.15.1c59946
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-4.3.6.b9388e8
+  app_sketch_local: app_sketch_local-4.3.7.00fa406
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.7.2.81e1428
+  tsg_master: tsg_master-5.7.5.c89e3dc
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.1.8c7e9cc
