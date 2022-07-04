@@ -9,7 +9,7 @@ tfe_node_count = {{ dp_steering_proxy.node_count }}
 {% endif %}
 manage_eth = {{ control_and_policy.nic_name }}
 # deploy_mode: normal/tap
-{% if dp_steering_proxy.tun_mode is defined %}
+{% if dp_steering_proxy.tap_mode is defined %}
 deploy_mode = tap
 {% else %}
 deploy_mode = normal
@@ -18,7 +18,9 @@ src_mac_addr = 00:0e:c6:d6:72:c1
 dst_mac_addr = fe:65:b7:03:50:bd
 
 [tap]
-tap_name=tap0
+{% for tfe_node_info in dp_steering_proxy.node_list %}
+tap_name= {{ tfe_node_info.nic_name }}
+{% endfor %}
 
 # tap_allow_mutilthread=1     load bpf
 # tap_allow_mutilthread=0 not load bpf
@@ -30,9 +32,9 @@ bpf_debug_log=0
 # 2: BPF 使用二元组分流; 4: BPF 使用四元组分流
 bpf_hash_mode=2
 
-tap_rps_enable=0
+tap_rps_enable=1
 # cat /sys/class/net/tap0/queues/rx-%{d}/rps_cpus
-tap_rps_mask=0,1fffffff,c0000000,00000000
+tap_rps_mask="{% raw %}{{ tfe_env_rps_info.rps_mask }}{% endraw %}"
 
 [io_uring]
 enable_iouring=1

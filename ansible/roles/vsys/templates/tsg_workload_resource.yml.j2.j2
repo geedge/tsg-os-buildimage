@@ -144,7 +144,7 @@ spec:
       - name: tsg-init
         image: docker.io/library/tsg-init:{{os_release_ver}}
         imagePullPolicy: Never
-        command: ["sh", "-c", "ansible-playbook -i /opt/tsg/tsg-os-provision/hosts /opt/tsg/tsg-os-provision/tasks/provision.yml"]
+        command: ["sh", "-c", "ansible-playbook -i /opt/tsg/tsg-os-provision/hosts /opt/tsg/tsg-os-provision/tasks/provision.yml ; mount -o remount,rw /sys"]
         securityContext:
           privileged: true
         volumeMounts:
