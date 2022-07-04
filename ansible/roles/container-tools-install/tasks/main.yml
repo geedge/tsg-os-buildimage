@@ -74,3 +74,27 @@
     name: ipmitool
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+
+- name: "install liburing"
+  yum:
+    name: liburing
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install vim"
+  yum:
+    name: vim
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install lrzsz"
+  yum:
+    name: lrzsz
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install perf"
+  yum:
+    name: perf
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
