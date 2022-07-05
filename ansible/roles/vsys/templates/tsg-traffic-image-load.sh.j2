@@ -5,9 +5,9 @@
 #    rm $fileLoadImageSucceeded
 #fi
 
-/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-container-firewall-{{os_release_ver}}-images.tar
-/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-container-proxy-{{os_release_ver}}-images.tar
-/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-container-certstore-{{os_release_ver}}-images.tar
-/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-container-telegraf-{{os_release_ver}}-images.tar
-/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-container-init-{{os_release_ver}}-images.tar
+/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-firewall-{{os_release_ver}}-docker.tar
+/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-proxy-{{os_release_ver}}-docker.tar
+/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-certstore-{{os_release_ver}}-docker.tar
+/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-telegraf-{{os_release_ver}}-docker.tar
+/usr/local/bin/k3s ctr image import /opt/tsg/images/tsg-init-{{os_release_ver}}-docker.tar
 #touch $fileLoadImageSucceeded
