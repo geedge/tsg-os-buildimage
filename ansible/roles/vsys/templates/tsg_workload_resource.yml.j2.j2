@@ -80,7 +80,7 @@ spec:
         image: docker.io/library/tsg-proxy:{{os_release_ver}}
         imagePullPolicy: Never
         workingDir: /opt/tsg/tfe
-        command: ["/bin/bash", "-c", "./bin/tfe"]
+        command: ["/bin/bash", "-c", "sleep 1;./bin/tfe"]
         securityContext:
           privileged: true
         volumeMounts:
