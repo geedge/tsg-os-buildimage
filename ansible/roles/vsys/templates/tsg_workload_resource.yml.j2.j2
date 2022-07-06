@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: tsg
+  name: traffic-engine
   labels:
-    app: tsg
+    app: traffic-engine
 
 spec:
   selector:
     matchLabels:
-      app: tsg
+      app: traffic-engine
   template:
     metadata:
       labels:
-        app: tsg
+        app: traffic-engine
 
     spec:
       tolerations:
@@ -27,9 +27,19 @@ spec:
         image: docker.io/library/tsg-firewall:{{os_release_ver}}
         imagePullPolicy: Never
         workingDir: /opt/tsg/sapp
-        command: ["/bin/bash", "-c", "./sapp"]        
+        command: ["/bin/bash", "-c", "/opt/tsg/sapp/sapp"]        
         securityContext:
           privileged: true
+        livenessProbe:
+          tcpSocket:
+            port: 9273
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9273
+          failureThreshold: 90
+          periodSeconds: 10
         volumeMounts:
         - name: opt-tsg-mrzcpd
           mountPath: /opt/tsg/mrzcpd
@@ -43,34 +53,34 @@ spec:
         - name: root-sys
           mountPath: /root/sys
           readOnly: false
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/sapp/plug/conflist.inf"
           subPath: "opt/tsg/sapp/plug/conflist.inf"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/sapp/etc/gdev.conf"
           subPath: "opt/tsg/sapp/etc/gdev.conf"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/sapp/tsgconf/main.conf"
           subPath: "opt/tsg/sapp/tsgconf/main.conf"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/sapp/tsgconf/maat.conf"
           subPath: "opt/tsg/sapp/tsgconf/maat.conf"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/sapp/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf"
           subPath: "opt/tsg/sapp/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/sapp/etc/sapp.toml"
           subPath: "opt/tsg/sapp/etc/sapp.toml"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/sapp/etc/send_raw_pkt.conf"
           subPath: "opt/tsg/sapp/etc/send_raw_pkt.conf"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/sapp/etc/kni/kni.conf"
           subPath: "opt/tsg/sapp/etc/kni/kni.conf"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/sapp/etc/wannat/wangw.conf"
           subPath: "opt/tsg/sapp/etc/wannat/wangw.conf"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
 
@@ -83,6 +93,16 @@ spec:
         command: ["/bin/bash", "-c", "sleep 1;./bin/tfe"]
         securityContext:
           privileged: true
+        livenessProbe:
+          tcpSocket:
+            port: 9001
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9001
+          failureThreshold: 30
+          periodSeconds: 10
         volumeMounts:
         - name: opt-tsg-mrzcpd
           mountPath: /opt/tsg/mrzcpd
@@ -96,13 +116,13 @@ spec:
         - name: root-sys
           mountPath: /root/sys
           readOnly: false
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/tfe/conf/tfe/tfe.conf"
           subPath: "opt/tsg/tfe/conf/tfe/tfe.conf"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/tfe/conf/pangu/pangu_pxy.conf"
           subPath: "opt/tsg/tfe/conf/pangu/pangu_pxy.conf"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
 {% raw %}{% endif %}
@@ -116,10 +136,10 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/certstore/conf/cert_store.ini"
           subPath: "opt/tsg/certstore/conf/cert_store.ini"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
 
@@ -130,13 +150,13 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/etc/telegraf/telegraf_statistic.conf"
           subPath: "etc/telegraf/telegraf_statistic.conf"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
-        - name: switch-partion
+        - name: config-volume
           mountPath: "/etc/default/telegraf"
           subPath: "etc/default/telegraf"
 
@@ -148,7 +168,7 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
-        - name: switch-partion
+        - name: config-volume
           mountPath: /target_config 
         - name: provision
           mountPath: /data/tsg-os-provision
@@ -170,5 +190,5 @@ spec:
       - name: provision
         configMap:
           name: vsys1-provision
-      - name: switch-partion
+      - name: config-volume
         emptyDir: {}
