@@ -6,8 +6,5 @@ After=k3s.service mrzcpd.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/bin/sh -c "/opt/tsg/vsys1/scripts/tsg-traffic-image-load.sh;\
-                      k3s kubectl create configmap vsys1-provision --from-file=/data/tsg-os-provision/provision.yml --from-file=/opt/tsg/tsg-os-provision/.policy_and_log_nic_ip.yaml;\
-                      k3s kubectl apply -f /opt/tsg/vsys1/workload_resource/tsg_workload_resource.yml"
-ExecStop=/bin/sh -c "k3s kubectl delete -f /opt/tsg/vsys1/workload_resource/tsg_workload_resource.yml;\
-                     k3s kubectl delete configmap vsys1-provision"
+ExecStart=/bin/sh -c "/opt/tsg/vsys1/scripts/tsg-traffic-engine.sh start"
+ExecStop=/bin/sh -c "/opt/tsg/vsys1/scripts/tsg-traffic-engine.sh stop"

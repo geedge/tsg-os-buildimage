@@ -38,8 +38,14 @@
     dest: /usr/lib/systemd/system/tsg-traffic-engine.service.d/service_override_slice.conf
     mode: 0644
 
-- name: "templates tsg-traffic-image-load.sh.j2"
-  template:
-    src: "{{role_path}}/templates/tsg-traffic-image-load.sh.j2"
-    dest: /opt/tsg/vsys1/scripts/tsg-traffic-image-load.sh
+# - name: "templates tsg-traffic-image-load.sh.j2"
+#   template:
+#     src: "{{role_path}}/templates/tsg-traffic-image-load.sh.j2"
+#     dest: /opt/tsg/vsys1/scripts/tsg-traffic-image-load.sh
+#     mode: 0755
+
+- name: "copy tsg-traffic-engine.sh to dest"
+  copy:
+    src: "{{role_path}}/files/tsg-traffic-engine.sh"
+    dest: /opt/tsg/vsys1/scripts/tsg-traffic-engine.sh
     mode: 0755
