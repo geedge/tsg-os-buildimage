@@ -27,7 +27,7 @@ spec:
         image: docker.io/library/tsg-firewall:{{os_release_ver}}
         imagePullPolicy: Never
         workingDir: /opt/tsg/sapp
-        command: ["/bin/bash", "-c", "/opt/tsg/sapp/sapp"]        
+        command: ["/opt/tsg/sapp/sapp"]        
         securityContext:
           privileged: true
         livenessProbe:
@@ -90,7 +90,7 @@ spec:
         image: docker.io/library/tsg-proxy:{{os_release_ver}}
         imagePullPolicy: Never
         workingDir: /opt/tsg/tfe
-        command: ["/bin/bash", "-c", "sleep 1;./bin/tfe"]
+        command: ["/bin/bash", "-c", "sleep 1;/opt/tsg/tfe/bin/tfe"]
         securityContext:
           privileged: true
         livenessProbe:
@@ -132,7 +132,7 @@ spec:
         image: docker.io/library/tsg-certstore:{{os_release_ver}}
         imagePullPolicy: Never
         workingDir: /opt/tsg/certstore
-        command: ["/bin/bash", "-c", "/usr/bin/redis-server /etc/cert-redis.conf;./bin/certstore"]
+        command: ["/opt/tsg/certstore/bin/certstore"]
         securityContext:
           privileged: true
         volumeMounts:
@@ -143,10 +143,17 @@ spec:
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
 
+      - name: cert-redis
+        image: docker.io/library/tsg-certstore:{{os_release_ver}}
+        imagePullPolicy: Never
+        command: ["/bin/bash","-c","/usr/bin/redis-server /etc/cert-redis.conf"]
+        securityContext:
+          privileged: true
+
       - name: telegraf
         image: docker.io/library/tsg-telegraf:{{os_release_ver}}
         imagePullPolicy: Never
-        command: ["/bin/bash", "-c", "/usr/bin/telegraf -config /etc/telegraf/telegraf_statistic.conf -config-directory /etc/telegraf/telegraf_statistic.d"]
+        command: ["/bin/bash","-c","/usr/bin/telegraf -config /etc/telegraf/telegraf_statistic.conf -config-directory /etc/telegraf/telegraf_statistic.d"]
         securityContext:
           privileged: true
         volumeMounts:
@@ -164,7 +171,7 @@ spec:
       - name: tsg-init
         image: docker.io/library/tsg-init:{{os_release_ver}}
         imagePullPolicy: Never
-        command: ["sh", "-c", "ansible-playbook -i /opt/tsg/tsg-os-provision/hosts /opt/tsg/tsg-os-provision/tasks/provision.yml ; mount -o remount,rw /sys"]
+        command: ["/bin/bash","-c","ansible-playbook -i /opt/tsg/tsg-os-provision/hosts /opt/tsg/tsg-os-provision/tasks/provision.yml ; mount -o remount,rw /sys"]
         securityContext:
           privileged: true
         volumeMounts:
