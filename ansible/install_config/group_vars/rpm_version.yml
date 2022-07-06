@@ -56,7 +56,7 @@ kni_rpm_version:
   kni: kni-5.0.1.3cc6d58
 
 mrzcpd_rpm_version:
-  mrzcpd: mrzcpd-4.5.2.6ffddf8
+  mrzcpd: mrzcpd-4.5.3.23c9f9f
 
 sapp_rpm_version:
   sapp: sapp-4.2.88.ff46c8d
