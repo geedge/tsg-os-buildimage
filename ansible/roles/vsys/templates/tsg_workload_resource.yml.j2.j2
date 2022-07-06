@@ -30,6 +30,11 @@ spec:
         command: ["/opt/tsg/sapp/sapp"]        
         securityContext:
           privileged: true
+        resources:
+          requests:
+            memory: "60Gi"
+          limits:
+            memory: "80Gi"
         livenessProbe:
           tcpSocket:
             port: 9273
@@ -93,6 +98,11 @@ spec:
         command: ["/bin/bash", "-c", "sleep 1;/opt/tsg/tfe/bin/tfe"]
         securityContext:
           privileged: true
+        resources:
+          requests:
+            memory: "20Gi"
+          limits:
+            memory: "20Gi"
         livenessProbe:
           tcpSocket:
             port: 9001
@@ -135,6 +145,11 @@ spec:
         command: ["/opt/tsg/certstore/bin/certstore"]
         securityContext:
           privileged: true
+        resources:
+          requests:
+            memory: "10Gi"
+          limits:
+            memory: "10Gi"
         volumeMounts:
         - name: config-volume
           mountPath: "/opt/tsg/certstore/conf/cert_store.ini"
@@ -149,6 +164,11 @@ spec:
         command: ["/bin/bash","-c","/usr/bin/redis-server /etc/cert-redis.conf"]
         securityContext:
           privileged: true
+        resources:
+          requests:
+            memory: "5Gi"
+          limits:
+            memory: "10Gi"
 
       - name: telegraf
         image: docker.io/library/tsg-telegraf:{{os_release_ver}}
@@ -156,6 +176,11 @@ spec:
         command: ["/bin/bash","-c","/usr/bin/telegraf -config /etc/telegraf/telegraf_statistic.conf -config-directory /etc/telegraf/telegraf_statistic.d"]
         securityContext:
           privileged: true
+        resources:
+          requests:
+            memory: "5Gi"
+          limits:
+            memory: "10Gi"
         volumeMounts:
         - name: config-volume
           mountPath: "/etc/telegraf/telegraf_statistic.conf"
