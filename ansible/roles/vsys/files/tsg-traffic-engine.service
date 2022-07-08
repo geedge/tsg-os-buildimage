@@ -8,3 +8,6 @@ Type=oneshot
 RemainAfterExit=yes
 ExecStart=/bin/sh -c "/opt/tsg/vsys1/scripts/tsg-traffic-engine.sh start"
 ExecStop=/bin/sh -c "/opt/tsg/vsys1/scripts/tsg-traffic-engine.sh stop"
+
+[Install]
+WantedBy=workload.target
