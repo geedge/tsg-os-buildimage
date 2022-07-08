@@ -230,10 +230,6 @@
         state: restarted
       when: enable_config_apply == '1'
 
-    - name: exec image load
-      shell: /opt/tsg/vsys1/scripts/tsg-traffic-image-load.sh
-      when: enable_config_apply == '1'
-
     - name: "tsg-os-provision: restart tsg-traffic-engine"
       systemd:
         name: tsg-traffic-engine

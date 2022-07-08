@@ -76,7 +76,6 @@ sz_data=4096
 
 {% if runtime_env == 'TSG-X-P0906' %}
 [ctrlmsg]
-listen_addr={% raw %}{{ ansible_cni0.ipv4.address }}
-{% endraw %}
+listen_addr=10.42.0.1
 listen_port=46789
 {% endif %}
