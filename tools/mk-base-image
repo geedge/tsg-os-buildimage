@@ -47,7 +47,7 @@ case $profile_id in
                     containerd.io lrzsz python3 watchdog pcm git tmux fish kernel kernel-devel kernel-tools-libs kernel-modules
                     kernel-tools kernel-core rpm-build libtool kernel-rpm-macros python36-devel tcsh kernel-modules-extra gcc-gfortran
                     libdb-devel fuse-devel python3-Cython cmake perl-generators libstdc++-devel libmnl-devel bison flex gcc-c++
-                    python3-docutils libnsl"
+                    python3-docutils libnsl liburing"
 
         ;;
     "TSG-X-NXR620G40-R01-P1403" | "7400-MCN0-P01R01" | "7400-MCN123-P01R01" |"9000-NPB-P01R01")
