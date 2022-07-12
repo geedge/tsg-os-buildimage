@@ -15,7 +15,7 @@ firewall_rpm_version:
   gtp_signaling_plug: gtp_signaling_plug-1.0.4.eb9cd29
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
   radius_collect_plug: radius_collect_plug-2.0.6.ccdc363
-  app_proto_identify: app_proto_identify-2.1.1.87c3b05
+  app_proto_identify: app_proto_identify-2.1.2.b5953d8
   app_proto_engine: app_proto_engine-2.3.4.e5750e2
   tsg_ddos_sketch: tsg_ddos_sketch-1.3.1.3c090b5
   dns: dns-2.1.3.ac4dda4
@@ -68,7 +68,7 @@ tfe_rpm_version:
   tfe-pr: tfe-pr-4.6.15.1c59946
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-4.3.7.00fa406
+  app_sketch_local: app_sketch_local-4.3.8.12a9882
 
 tsg_master_rpm_version:
   tsg_master: tsg_master-5.7.5.c89e3dc
