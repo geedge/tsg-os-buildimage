@@ -2,7 +2,7 @@ certstore_rpm_version:
   certstore: certstore-2.2.2.20220412.2eeae52
 
 firewall_rpm_version:
-  capture_packet_plug: capture_packet_plug-4.1.1.b3bdca2
+  capture_packet_plug: capture_packet_plug-4.1.2.bf08f47
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   fw_dns_plug: fw_dns_plug-4.0.3.3b4db47
   fw_ftp_plug: fw_ftp_plug-3.1.4.46f553d
@@ -10,7 +10,7 @@ firewall_rpm_version:
   fw_mail_plug: fw_mail_plug-4.1.3.8316056
   fw_quic_plug: fw_quic_plug-4.1.2.c79dbde
   fw_ssl_plug: fw_ssl_plug-3.2.4.77a4bc4
-  tsg_conn_sketch:  tsg_conn_sketch-3.3.8.60dbac3
+  tsg_conn_sketch:  tsg_conn_sketch-3.3.9.ac5eb76
   fw_voip_plug: fw_voip_plug-1.0.11.301c698
   gtp_signaling_plug: gtp_signaling_plug-1.0.4.eb9cd29
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
