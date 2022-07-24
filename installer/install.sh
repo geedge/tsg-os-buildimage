@@ -1,6 +1,24 @@
 #!/bin/sh
 
-blk_dev=/dev/sda
+install_device_platform()
+{
+    # Virtual IO block device
+    if grep -q vda /proc/partitions ; then
+        echo /dev/vda
+        return 0
+    fi
+
+    # SATA, SCSI, USB block device
+    if grep -q sda /proc/partitions ; then
+        echo /dev/sda
+        return 0
+    fi
+
+    echo /dev/sda
+}
+
+blk_dev=$(install_device_platform)
+echo "TSG-OS install on ${blk_dev}"
 random_dev=/dev/urandom
 root_disk=hd0
 distro_part=4
@@ -26,9 +44,9 @@ exp_part_tsg_os_update=3
 exp_part_tsg_os_sysroot=4
 exp_part_tsg_os_data=5
 
-dev_part_tsg_os_update="/dev/sda${exp_part_tsg_os_update}"
-dev_part_tsg_os_sysroot="/dev/sda${exp_part_tsg_os_sysroot}"
-dev_part_tsg_os_data="/dev/sda${exp_part_tsg_os_data}"
+dev_part_tsg_os_update="${blk_dev}${exp_part_tsg_os_update}"
+dev_part_tsg_os_sysroot="${blk_dev}${exp_part_tsg_os_sysroot}"
+dev_part_tsg_os_data="${blk_dev}${exp_part_tsg_os_data}"
 
 tsg_os_efi_prefix="TSG-OS"
 tsg_os_efi_label="TSG-OS: ${DISTR0_VER} (${MACHINE_ID})"
@@ -255,10 +273,10 @@ cp -a ${blk_dev} ${distro_mnt}/${blk_dev}
 cp -a ${random_dev} ${distro_mnt}/${random_dev}
 
 mkdir -p ${distro_mnt}/data
-mount -t ext4 /dev/sda${exp_part_tsg_os_data} ${distro_mnt}/data
+mount -t ext4 ${blk_dev}${exp_part_tsg_os_data} ${distro_mnt}/data
 
 echo "Setting up TSG-OS sysroot .."
-chroot ${distro_mnt} /distro-setup.sh ${distro_dev}
+chroot ${distro_mnt} /distro-setup.sh ${blk_dev}
 
 [ -e ${distro_mnt}/dev/pts ] && {
    umount ${distro_mnt}/dev/pts

@@ -1,5 +1,7 @@
 #!/bin/sh -x
 
+blk_dev=${1}
+
 #  mount /data/home
 mkdir -p /data/home/
 mount  --bind  /data/home/    /home/
@@ -67,10 +69,10 @@ rm -rf /data/overlay/rootfs_etc/rw/ld.so.conf.d
 
 # Setup o/s mount points
 (cat <<EOF2
-${1}               	    /                       ext4    defaults        1 1
-/dev/sda2               /mnt/onie-boot/         ext4    defaults        1 1
-/dev/sda3               /update                 ext4    defaults        1 1
-/dev/sda5               /data                   ext4    defaults        1 1
+${blk_dev}4             /                       ext4    defaults        1 1
+${blk_dev}2             /mnt/onie-boot/         ext4    defaults        1 1
+${blk_dev}3             /update                 ext4    defaults        1 1
+${blk_dev}5             /data                   ext4    defaults        1 1
 overlay                 /etc                    overlay x-systemd.requires=/,x-systemd.requires=/data,lowerdir=/etc,upperdir=/data/overlay/rootfs_etc/rw,workdir=/data/overlay/rootfs_etc/work 0 0
 /data/var               /var/              none     bind,x-systemd.requires=/,x-systemd.requires=/data           0 0
 /data/home              /home/             none     bind,x-systemd.requires=/,x-systemd.requires=/data           0 0
