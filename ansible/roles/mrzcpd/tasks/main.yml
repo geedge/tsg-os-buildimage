@@ -111,6 +111,17 @@
     - /usr/lib/systemd/system/mrtunnat.service
     - /usr/lib/systemd/system/mrzcpd.service
 
+- name: "replace action: replace service unit Requires and after option, TSG-X-0906"
+  replace:
+    path: "/usr/lib/systemd/system/mrzcpd.service"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  with_items:
+    - { regexp: "Requires=mrenv.service",replace: "Requires=mrenv.service k3s.service"}
+    - { regexp: "After=mrenv.service",replace: "After=mrenv.service k3s.service"}
+  when:
+    - runtime_env == 'TSG-X-P0906'
+
 ##################### mrzcpd #####################
 - name: "enable mrenv"
   systemd:
