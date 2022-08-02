@@ -28,7 +28,7 @@ image_check_loaded_and_load(){
             echo "Contaimer iamage loaded,  repo name:${IMAGE_REPO}, tag:${IMAGES_RELEASE_VAR}"
         else
             IMAGE_PATH="/opt/tsg/images/${IMAGE_REPO}-${IMAGES_RELEASE_VAR}-docker.tar"
-            echo "Contaimer images not load, repo name:${IMAGE_REPO}, tag:${IMAGES_RELEASE_VAR}"
+            echo "Container images not load, repo name:${IMAGE_REPO}, tag:${IMAGES_RELEASE_VAR}"
             if [ ! -f ${IMAGE_PATH} ]; then
                 echo "Containers images ${IMAGE_PATH} is not exsit! exit now"
                 exit 1

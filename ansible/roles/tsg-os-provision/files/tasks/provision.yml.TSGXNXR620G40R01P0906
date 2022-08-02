@@ -114,8 +114,12 @@
         cm_policy_server_ip: "{{cm.policy_server.address}}"
         cm_policy_server_port: "{{ cm.policy_server.port }}"
 
+ #   - name: "tsg-os-provision: execute obtain policy_and_log nic ip address"
+ #     shell: ip addr show {{ network_setting.nic_policy_log.name }} | grep "inet " | awk '{ print $2 }' | awk -F "/" '{ print $1 }'
+ #     register: result_exec_obtain_policy_and_log_nic_ip
+
     - name: "tsg-os-provision: execute obtain policy_and_log nic ip address"
-      shell: ip addr show {{ network_setting.nic_policy_log.name }} | grep "inet " | awk '{ print $2 }' | awk -F "/" '{ print $1 }'
+      shell: grep "IPADDR" /etc/sysconfig/network-scripts/ifcfg-{{ network_setting.nic_policy_log.name }} | sed 's/IPADDR=//g'
       register: result_exec_obtain_policy_and_log_nic_ip
 
     - name: "tsg-os-provision: check result_exec_obtain_policy_and_log_nic_ip"
