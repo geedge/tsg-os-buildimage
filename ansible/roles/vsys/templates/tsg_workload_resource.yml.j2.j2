@@ -30,11 +30,6 @@ spec:
         command: ["/opt/tsg/sapp/sapp"]        
         securityContext:
           privileged: true
-        resources:
-          limits:
-            memory: "80Gi"
-          requests:
-            memory: "30Gi"
         livenessProbe:
           tcpSocket:
             port: 9273
