@@ -117,3 +117,13 @@
   systemd:
     name: firewalld
     enabled: no
+
+- name: "disable pmcd"
+  systemd:
+    name: pmcd
+    enabled: no
+
+- name: "disable pmlogger"
+  systemd:
+    name: pmlogger
+    enabled: no
