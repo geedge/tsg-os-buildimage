@@ -98,12 +98,12 @@
       shell: cat /proc/cmdline
       register: result_exec_cat_cmdline
 
-    - name: need to reboot
-      fail:
-        msg: "Detected that the configuration of cpu isolate has changed, please run command \"provision-config-apply --reboot\" to reboot the machine that make the configuration take effect!"
-      when:
-        - result_exec_cat_cmdline is not search(grub_cpu_isolate)
-        - enable_config_apply != '2'
+#    - name: need to reboot
+#      fail:
+#        msg: "Detected that the configuration of cpu isolate has changed, please run command \"provision-config-apply --reboot\" to reboot the machine that make the configuration take effect!"
+#      when:
+#        - result_exec_cat_cmdline is not search(grub_cpu_isolate)
+#        - enable_config_apply != '2'
 
     - name: "set keep_alive_ip"
       set_fact:
@@ -139,14 +139,14 @@
         content: "policy_and_log_nic_ip: {{ policy_and_log_nic_ip }}"
         dest: /opt/tsg/tsg-os-provision/.policy_and_log_nic_ip.yaml
 
-    - name: "replace action: grub config isolate cpu"
-      replace:
-        path: "{{ item }}"
-        regexp: 'isolcpus=\d+-+\d+'
-        replace: 'isolcpus={{grub_cpu_isolate}}'
-      with_items:
-        - /boot/grub/grub.cfg
-        - /etc/grub.d/40_onie_grub
+#    - name: "replace action: grub config isolate cpu"
+#      replace:
+#        path: "{{ item }}"
+#        regexp: 'isolcpus=\d+-+\d+'
+#        replace: 'isolcpus={{grub_cpu_isolate}}'
+#      with_items:
+#        - /boot/grub/grub.cfg
+#        - /etc/grub.d/40_onie_grub
 
     - name: "tsg-os-provision: template mrglobal.conf file"
       template:
