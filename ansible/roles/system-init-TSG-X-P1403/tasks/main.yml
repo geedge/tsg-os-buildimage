@@ -127,3 +127,8 @@
   systemd:
     name: pmlogger
     enabled: no
+
+- name: "disable pmie"
+  systemd:
+    name: pmie
+    enabled: no
