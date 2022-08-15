@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: provisioninit
+  namespace: default
+data:
+  provision.yml: {{ tpl (.Files.Get "conf/provision.yml") . | quote }}

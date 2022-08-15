@@ -1,0 +1,72 @@
+[PLUGINFO]
+PLUGNAME=TSG_CONN_SKETCH
+SO_PATH=./plug/business/tsg_conn_sketch/tsg_conn_sketch.so
+INIT_FUNC=tsg_conn_record_init
+DESTROY_FUNC=tsg_conn_record_destroy
+
+
+[TCP]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_tcp_entry
+
+[TCP_ALL]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_tcpall_entry
+
+[UDP]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_udp_entry
+
+[HTTP]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_http_entry
+
+[SSL]
+FUNC_FLAG=SSL_CLIENT_HELLO,SSL_SERVER_HELLO,SSL_APPLICATION_DATA,SSL_CERTIFICATE_DETAIL
+FUNC_NAME=tsg_record_ssl_entry
+
+[DNS]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_dns_entry
+
+[MAIL]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_mail_entry
+
+{{ if eq .Values.voip_record.enable_rtp .Values.define_enable_val_yes }}
+[RTP]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_rtp_entry
+{{- end }}
+
+{{ if eq .Values.voip_record.enable_sip .Values.define_enable_val_yes }}
+[SIP]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_sip_entry
+{{- end }}
+
+[FTP]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_ftp_entry
+
+[QUIC]
+FUNC_FLAG=QUIC_CLIENT_HELLO,QUIC_SERVER_HELLO,QUIC_CACHED_CERT,QUIC_COMM_CERT,QUIC_CERT_CHAIN,QUIC_VERSION,QUIC_APPLICATION_DATA
+FUNC_NAME=tsg_record_quic_entry
+
+[SSH]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_ssh_entry
+
+[STRATUM]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_stratum_entry
+
+[RDP]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_rdp_entry
+
+{{ if eq .Values.bgp_record.enable .Values.define_enable_val_yes }}
+[BGP]
+FUNC_FLAG=ALL
+FUNC_NAME=tsg_record_bgp_entry
+{{- end }}

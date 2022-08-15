@@ -1,0 +1,36 @@
+---
+- name: "create /opt/tsg/packages/charts/"
+  file:
+    path: /opt/tsg/packages/charts/
+    state: directory
+
+- name: "create unarchive directory"
+  file:
+    path: "/tmp/helm/"
+    state: directory
+
+- name: "copy chart directory to dest"
+  copy:
+    src: "{{ role_path }}/files/helm"
+    dest: /tmp/traffic-engine/
+
+- name: "install helm: unarchive helm tar package"
+  unarchive:
+    src: "{{ role_path }}/files/helm-linux-amd64.tar.gz"
+    dest: /tmp/helm/
+
+- name: "install helm: copy helm to dest"
+  copy:
+    src: "/tmp/helm/linux-amd64/helm"
+    dest: /usr/local/bin/helm
+    mode: 0755
+    remote_src: yes
+
+- name: "create charts packages"
+  shell: helm package --app-version {{os_release_ver}}  -d /opt/tsg/packages/charts/  /tmp/traffic-engine/helm
+
+- name: "copy kubeconfig.sh to destination"
+  copy:
+    src: "{{ role_path }}/files/kubeconfig.sh"
+    dest: /etc/profile.d/
+    mode: 0755

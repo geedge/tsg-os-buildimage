@@ -1,0 +1,149 @@
+external_resources:
+  cm:
+    address: 10.X.X.X
+    port: 7002
+    db_static: 0
+    db_dynamic: 1
+    port_num: 1
+
+  olap:
+    kafka_brokers:
+      sasl_username: 
+      sasl_password:
+      addresses:
+      - address:
+        port:
+    hos_servers:
+      use: yes
+      addresses:
+      - address:
+        port:
+      token:
+    
+  nat_gateway:
+    address: 10.0.X.X
+    connection_table_listen_port: 5671
+    data_listen_port: 3544
+
+  reachability_test_server:
+    address: 10.0.Y.Y
+    link_table_listen_port: 8888
+    connection_table_listen_port: 5672
+    data_listen_port: 3542
+
+device:
+  tags:
+    - key1: value1
+    - key2: value2
+
+session_id_generator:
+  snowflake_worker_id_base: 1
+  snowflake_worker_id_offset: 1
+
+firewall:
+  enable: yes
+  rapidjson_chunk_capacity: 8192
+  enable_smartoffload: no
+
+appsketch:
+  enable: yes
+  builtin_engine: yes   
+  user_defined_signature: yes
+
+encrypt_traffic_identify:
+  voice_bahavior_engine: yes
+
+sessionrecord:
+  enable: yes
+  interim_record:
+    enable: yes
+    intervals_in_sec: 120
+  transaction_record:
+    enable: yes
+
+session_manager:
+  tcp_session_max: 20021
+  tcp_session_unordered_pkt_max: 128
+  tcp_session_timeout_in_sec: 30
+  udp_session_timeout_in_sec: 60
+  udp_session_max: 5021
+  tcp_duplicated_packet_filter: yes
+  udp_duplicated_packet_filter: yes
+
+traffic_mirror:
+  enable_raw_traffic: yes
+  enable_decrypted_traffic: yes
+
+ddos_event:
+  enable: yes
+  tcp_traffic_report_ratio: 0.0008
+  udp_traffic_report_ratio: 0.0008
+  icmp_traffic_report_ratio: 0.0008
+  dns_traffic_report_ratio: 0.0008
+
+packet_capture:
+  enable: yes
+
+proxy:
+  enable: yes
+
+voip_record:
+  enable_sip: yes
+  enable_rtp: yes
+     
+radius_record:
+  enable: yes
+
+bgp_record:
+  enable: yes
+
+gtpc_record:
+  enable: yes
+
+overload_protection:
+  enable: yes
+  detect_interval_in_ms: 500
+  detect_smooth_avg_window: 2
+  detect_threshold_cpu_usages: 90
+  recovery_detect_cycle_in_sec: 30
+
+wannat:
+  enable: yes
+  link_table_report_interval: 30
+  wan_gateway_listen_port_range_left_edge: 3545
+
+vsys_id: "xxxxxxxxx"
+
+etherfabric_settings:
+  keepalive:
+    ip: 10.254.19.1
+    mask: 255.255.255.0
+
+sapp_affinity: [5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76]
+mrzcpd_affinity: [1,2,3,4]
+tfe_affinity: [77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92]
+
+tfe_env_rps_info:
+  rps_mask: "0,1fffe000,00000000,00000000"
+
+network_setting:
+  nic_policy_log:
+    name: eth0
+  nic_raw:
+    name: ctrl_mock
+  nic_mirror:
+    name: eth0
+
+define_enable_val_yes:  yes
+define_enable_val_no: no
+
+
+
+coredump:
+    format: "core"
+    collect: "local"
+    sentry_url: "www.testing.com"
+
+session_id_generator:
+  snowflake_worker_id_base: 1
+  snowflake_worker_id_offset: 1

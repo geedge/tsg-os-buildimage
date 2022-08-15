@@ -1,0 +1,207 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traffic-engine-{{ .Release.Name }}
+  labels:
+    app: traffic-engine-{{ .Release.Name }}
+
+spec:
+  selector:
+    matchLabels:
+      app: traffic-engine
+  template:
+    metadata:
+      labels:
+        app: traffic-engine
+
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: firewall
+        image: docker.io/library/tsg-firewall:{{ .Chart.AppVersion }}
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/sapp
+        command: ["/opt/tsg/sapp/sapp"]
+        securityContext:
+          privileged: true
+        livenessProbe:
+          tcpSocket:
+            port: 9273
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9273
+          failureThreshold: 90
+          periodSeconds: 10
+        volumeMounts:
+        - name: opt-tsg-mrzcpd
+          mountPath: /opt/tsg/mrzcpd
+          readOnly: false
+        - name: var-run-mrzcpd
+          mountPath: /var/run/mrzcpd
+          readOnly: false
+        - name: var-run-dpdk
+          mountPath: /var/run/dpdk
+          readOnly: false
+        - name: root-sys
+          mountPath: /root/sys
+          readOnly: false
+        - name: sapp
+          mountPath: "/opt/tsg/sapp/plug/conflist.inf"
+          subPath: "conflist.inf"
+        - name: sapp
+          mountPath: "/opt/tsg/sapp/etc/gdev.conf"
+          subPath: "gdev.conf"
+        - name: sapp
+          mountPath: "/opt/tsg/sapp/tsgconf/main.conf"
+          subPath: "main.conf"
+        - name: sapp
+          mountPath: "/opt/tsg/sapp/tsgconf/maat.conf"
+          subPath: "maat.conf"
+        - name: sapp
+          mountPath: "/opt/tsg/sapp/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf"
+          subPath: "tsg_conn_sketch.inf"
+        - name: sapp
+          mountPath: "/opt/tsg/sapp/etc/sapp.toml"
+          subPath: "sapp.toml"
+        - name: sapp
+          mountPath: "/opt/tsg/sapp/etc/send_raw_pkt.conf"
+          subPath: "send_raw_pkt.conf"
+        - name: sapp
+          mountPath: "/opt/tsg/sapp/etc/kni/kni.conf"
+          subPath: "kni.conf"
+        - name: sapp
+          mountPath: "/opt/tsg/sapp/etc/wannat/wangw.conf"
+          subPath: "wangw.conf"
+        - name: sapp
+          mountPath: "/opt/tsg/sapp/etc/wire_graft/wire_graft.conf"
+          subPath: "wire_graft.conf"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+
+{{- if eq .Values.proxy.enable .Values.define_enable_val_yes }}
+      - name: proxy
+        image: docker.io/library/tsg-proxy:{{ .Chart.AppVersion }}
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/tfe
+        command: ["/bin/bash", "-c", "sleep 1;/opt/tsg/tfe/bin/tfe"]
+        securityContext:
+          privileged: true
+        livenessProbe:
+          tcpSocket:
+            port: 9001
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9001
+          failureThreshold: 30
+          periodSeconds: 10
+        volumeMounts:
+        - name: tfe
+          mountPath: "/opt/tsg/tfe/conf/tfe/tfe.conf"
+          subPath: "tfe.conf"
+        - name: tfe
+          mountPath: "/opt/tsg/tfe/conf/pangu/pangu_pxy.conf"
+          subPath: "pangu_pxy.conf"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+{{- end }}
+
+      - name: certstore
+        image: docker.io/library/tsg-certstore:{{ .Chart.AppVersion }}
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/certstore
+        command: ["/opt/tsg/certstore/bin/certstore"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: certstore
+          mountPath: "/opt/tsg/certstore/conf/cert_store.ini"
+          subPath: "cert_store.ini"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+
+      - name: cert-redis
+        image: docker.io/library/tsg-certstore:{{ .Chart.AppVersion }}
+        imagePullPolicy: Never
+        command: ["/bin/bash","-c","/usr/bin/redis-server /etc/cert-redis.conf"]
+        securityContext:
+          privileged: true
+
+      - name: telegraf
+        image: docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}
+        imagePullPolicy: Never
+        command: ["/bin/bash","-c","/usr/bin/telegraf -config /etc/telegraf/telegraf_statistic.conf -config-directory /etc/telegraf/telegraf_statistic.d"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: telegraf
+          mountPath: "/etc/telegraf/telegraf_statistic.conf"
+          subPath: "telegraf_statistic.conf"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: config-volume
+          mountPath: "/etc/default/telegraf"
+          subPath: "etc/default/telegraf"
+
+      initContainers:
+      - name: tsg-init
+        image: docker.io/library/tsg-init:{{ .Chart.AppVersion }}
+        imagePullPolicy: Never
+        command: ["/bin/bash","-c","ansible-playbook -i /opt/tsg/tsg-os-provision/hosts /opt/tsg/tsg-os-provision/tasks/provision.yml ; mount -o remount,rw /sys"]
+        securityContext:
+          privileged: true
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        volumeMounts:
+        - name: provisioninit
+          mountPath: "/opt/tsg/tsg-os-provision/tasks/provision.yml"
+          subPath: "provision.yml"
+        - name: config-volume
+          mountPath: /target_config 
+
+      volumes:
+      - name: opt-tsg-mrzcpd
+        hostPath:
+          path: /opt/tsg/mrzcpd
+      - name: var-run-mrzcpd
+        hostPath:
+          path: /var/run/mrzcpd
+      - name: var-run-dpdk
+        hostPath:
+          path: /var/run/dpdk
+      - name: root-sys
+        hostPath:
+          path: /root/sys
+      - name: telegraf
+        configMap:
+          name: telegraf
+      - name: certstore
+        configMap:
+          name: certstore
+      - name: tfe
+        configMap:
+          name: tfe
+      - name: sapp
+        configMap:
+          name: sapp
+      - name: provisioninit
+        configMap:
+          name: provisioninit      
+      - name: config-volume
+        emptyDir: {}

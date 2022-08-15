@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf
+  namespace: default
+data:
+  telegraf_statistic.conf: {{ tpl (.Files.Get "conf/telegraf_statistic.conf") . | quote }}

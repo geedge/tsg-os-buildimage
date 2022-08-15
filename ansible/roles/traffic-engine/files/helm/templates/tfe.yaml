@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tfe
+  namespace: default
+data:
+  tfe.conf: {{ tpl (.Files.Get "conf/tfe.conf") . | quote }}
+  pangu_pxy.conf: {{ tpl (.Files.Get "conf/pangu_pxy.conf") . | quote }}

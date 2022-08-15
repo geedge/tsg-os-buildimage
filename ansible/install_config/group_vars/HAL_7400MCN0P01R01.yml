@@ -57,3 +57,21 @@ monitor:
   enable_ipmi_exporter: 1
 ### TSG-server, TSG-7400-mcn0 TSG-7400-mcn123 TSG-9140
 runtime_env: TSG-7400-mcn0
+
+decoders:
+  DNS: yes
+  QUIC: yes
+  HTTP: yes
+  MAIL: yes
+  FTP: yes
+  SSL: yes
+  RTP: yes
+  SIP: yes
+  SSH: yes
+  RADIUS: yes
+  SOCKS: yes
+  STRATUM: yes
+  RDP: yes
+  BGP: yes
+  DTLS: yes
+  GTPC: yes 

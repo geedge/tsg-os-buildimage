@@ -14,7 +14,7 @@ profile_id=$4
 setopt="group_package_types=mandatory,default,optional"
 
 case $profile_id in
-    "TSG-X-NXR620G40-R01-P0804" | "TSG-X-NXR620G40-R01-P0906" )
+    "TSG-X-NXR620G40-R01-P0804" | "TSG-X-NXR620G40-R01-P0906" | "TSG-X-NXR620G40-R01-P1808" )
         kernel_version="5.17.15-1.el8.x86_64"
         append_package_to_install="$projectdir/package/kernel-ml-core-$kernel_version.rpm
                     $projectdir/package/kernel-ml-modules-$kernel_version.rpm
@@ -39,7 +39,7 @@ case $profile_id in
 esac
 
 case $profile_id in
-    "TSG-X-NXR620G40-R01-P0804" | "TSG-X-NXR620G40-R01-P0906" )
+    "TSG-X-NXR620G40-R01-P0804" | "TSG-X-NXR620G40-R01-P0906" | "TSG-X-NXR620G40-R01-P1808" )
         base_package_to_install="@base @core @debugging @anaconda-tools @additional-devel @guest-agents @system-tools
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management adcli certmonger
                     ipa-client clevis-dracut clevis-udisks2 krb5-pkinit krb5-workstation sssd-polkit-rules krb5-pkinit luksmeta
