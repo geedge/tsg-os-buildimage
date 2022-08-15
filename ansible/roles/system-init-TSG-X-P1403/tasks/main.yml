@@ -147,4 +147,4 @@
     src: "{{ role_path }}/templates/service_override_RuntimeMaxSec.conf"
     dest: /usr/lib/systemd/system/systemd-coredump@.service.d/service_override_RuntimeMaxSec.conf
     mode: 0644
-  when: rruntime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
