@@ -23,3 +23,10 @@
     src: "{{ role_path }}/files/k3s.sh"
     dest: /etc/profile.d/
     mode: 0755
+
+- name: "add sudo secure_path"
+  lineinfile:
+    path: /etc/sudoers
+    backrefs: yes
+    regexp: "^(.*Defaults    secure_path =.*)$"
+    line: '\1:/usr/local/bin'
