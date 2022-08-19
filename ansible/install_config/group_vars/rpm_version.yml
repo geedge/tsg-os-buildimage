@@ -38,7 +38,7 @@ framework_rpm_version:
   libcjson: libcjson-1.7.12.6c09dcf
   libdocumentanalyze: libdocumentanalyze-2.0.10.4c04402
   libMESA_field_stat: libMESA_field_stat-1.0.3.0de785d
-  libMESA_field_stat2: libMESA_field_stat2-2.10.9.b762500
+  libMESA_field_stat2: libMESA_field_stat2-2.10.11.b2095aa
   libMESA_handle_logger: libMESA_handle_logger-2.0.9.b677bb6
   libMESA_htable: libMESA_htable-3.10.13.bd6fc34
   libMESA_prof_load: libMESA_prof_load-1.0.9.16148e7
