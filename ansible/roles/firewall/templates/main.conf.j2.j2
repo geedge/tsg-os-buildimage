@@ -99,8 +99,18 @@ udp_min_bytes=5
 log_service=2
 interim_service=6
 transaction_service=7
+{% raw %}
+{% if sessionrecord.enable_interim_record == 1 %}
 interim_service_switch=1
+{% else %}
+interim_service_switch=0
+{% endif %}
+{% if sessionrecord.enable_transcation_record == 1 %}
 transaction_service_switch=1
+{% else %}
+transaction_service_switch=0
+{% endif %}
+{% endraw %}
 interim_intervals_time = 120
 sendlog_in_tcp_close=1
 

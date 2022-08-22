@@ -22,6 +22,8 @@ sessionrecord:
   enable: 0/1
   enable_dns_record: 0/1
   enable_rtp_record: 0/1
+  enable_interim_record: 0/1
+  enable_transcation_record: 0/1
 
 capturepacket:
   enable: 0/1
