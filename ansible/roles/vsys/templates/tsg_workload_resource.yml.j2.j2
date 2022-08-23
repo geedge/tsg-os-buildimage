@@ -86,6 +86,8 @@ spec:
         - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: firewall-minidump
+          mountPath: /run/sapp/crashreport
 
 {% raw %}{% if proxy.enable == 1 %}
 {% endraw %}
@@ -133,6 +135,8 @@ spec:
         - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: proxy-minidump
+          mountPath: /run/tfe/crashreport
 {% raw %}{% endif %}
 {% endraw %}
 
@@ -155,6 +159,8 @@ spec:
         - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: certstore-minidump
+          mountPath: /run/certstore/crashreport
 
       - name: cert-redis
         image: docker.io/library/tsg-certstore:{{os_release_ver}}
@@ -220,3 +226,13 @@ spec:
           name: vsys1-provision
       - name: config-volume
         emptyDir: {}
+      - name: firewall-minidump
+        hostPath:
+          path: /run/sapp/crashreport
+      - name: proxy-minidump
+        hostPath:
+          path: /run/tfe/crashreport
+      - name: certstore-minidump
+        hostPath:
+          path: /run/certstore/crashreport
+
