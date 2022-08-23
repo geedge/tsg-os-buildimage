@@ -86,6 +86,10 @@ spec:
         - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: firewall-minidump
+          mountPath: /run/sapp/crashreport
+        - name: firewall-log
+          mountPath: /opt/tsg/sapp/log
 
 {{- if eq .Values.proxy.enable .Values.define_enable_val_yes }}
       - name: proxy
@@ -115,6 +119,10 @@ spec:
         - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: proxy-minidump
+          mountPath: /run/tfe/crashreport
+        - name: proxy-log
+          mountPath: /opt/tsg/tfe/log
 {{- end }}
 
       - name: certstore
@@ -131,6 +139,10 @@ spec:
         - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: certstore-minidump
+          mountPath: /run/certstore/crashreport
+        - name: certstore-log
+          mountPath: /opt/tsg/certstore/logs
 
       - name: cert-redis
         image: docker.io/library/tsg-certstore:{{ .Chart.AppVersion }}
@@ -205,3 +217,21 @@ spec:
           name: provisioninit      
       - name: config-volume
         emptyDir: {}
+      - name: firewall-minidump
+        hostPath:
+          path: /run/sapp/crashreport
+      - name: proxy-minidump
+        hostPath:
+          path: /run/tfe/crashreport
+      - name: certstore-minidump
+        hostPath:
+          path: /run/certstore/crashreport
+      - name: firewall-log
+        hostPath: 
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sapp/log
+      - name: proxy-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/tfe/log
+      - name: certstore-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/certstore/log
