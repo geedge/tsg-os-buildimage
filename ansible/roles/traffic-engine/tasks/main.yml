@@ -34,3 +34,8 @@
     src: "{{ role_path }}/files/kubeconfig.sh"
     dest: /etc/profile.d/
     mode: 0755
+
+- name: "install tmpfiles.d for clean log"
+  copy:
+    src: "{{ role_path }}/files/tmpfiles.d/traffic-engine.conf"
+    dest: /usr/lib/tmpfiles.d/

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: certstore
+  name: certstore-{{ .Release.Name }}
   namespace: default
 data:
   cert_store.ini: {{ tpl (.Files.Get "conf/cert_store.ini") . | quote }}

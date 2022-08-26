@@ -6,7 +6,7 @@
 ###################################################################################################
 
 [SYSTEM]
-instance_name = "sapp4"
+instance_name = "sapp4-{{ .Release.Name }}"
 
 [CPU]
 ### note, bind_mask, if you do not want to bind thread to special CPU core, keep it empty as []
@@ -25,7 +25,7 @@ dictator_enable=0
     l2_l3_tunnel_support=1
 
 ### note, optional value is [none, vxlan]
-        overlay_mode=vxlan
+        overlay_mode=none
     [packet_io.feature]
 
     destroy_all_plug_enabled = 0	
@@ -67,7 +67,7 @@ dictator_enable=0
 ### note, interface.type options: [pag,pcap,marsio]
     [packet_io.internal.interface]
         type=marsio
-        name={{ .Values.network_setting.nic_raw.name }}
+        name={{ .Values.nic_raw_name }}
     [packet_io.external.interface]
         type=pcap
     name=lo

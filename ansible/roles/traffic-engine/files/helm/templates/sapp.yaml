@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: sapp
+  name: sapp-{{ .Release.Name }}
   namespace: default
 data:
   conflist.inf: {{ tpl (.Files.Get "conf/conflist.inf") . | quote }}
@@ -14,4 +14,4 @@ data:
   kni.conf: {{ tpl (.Files.Get "conf/kni.conf") . | quote }}
   wangw.conf: {{ tpl (.Files.Get "conf/wangw.conf") . | quote }}
   wire_graft.conf: {{ tpl (.Files.Get "conf/wire_graft.conf") . | quote }}
-
+  vlan_flipping_map.conf: {{ tpl (.Files.Get "conf/vlan_flipping_map.conf") . | quote }}

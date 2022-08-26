@@ -83,6 +83,9 @@ spec:
         - name: sapp
           mountPath: "/opt/tsg/sapp/etc/wire_graft/wire_graft.conf"
           subPath: "wire_graft.conf"
+        - name: sapp
+          mountPath: "/opt/tsg/sapp/etc/vlan_flipping_map.conf"
+          subPath: "vlan_flipping_map.conf"
         - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
@@ -96,7 +99,7 @@ spec:
         image: docker.io/library/tsg-proxy:{{ .Chart.AppVersion }}
         imagePullPolicy: Never
         workingDir: /opt/tsg/tfe
-        command: ["/bin/bash", "-c", "sleep 1;/opt/tsg/tfe/bin/tfe"]
+        command: ["/opt/tsg/tfe/bin/tfe"]
         securityContext:
           privileged: true
         livenessProbe:
@@ -202,19 +205,19 @@ spec:
           path: /root/sys
       - name: telegraf
         configMap:
-          name: telegraf
+          name: telegraf-{{ .Release.Name }}
       - name: certstore
         configMap:
-          name: certstore
+          name: certstore-{{ .Release.Name }}
       - name: tfe
         configMap:
-          name: tfe
+          name: tfe-{{ .Release.Name }}
       - name: sapp
         configMap:
-          name: sapp
+          name: sapp-{{ .Release.Name }}
       - name: provisioninit
         configMap:
-          name: provisioninit      
+          name: provisioninit-{{ .Release.Name }}
       - name: config-volume
         emptyDir: {}
       - name: firewall-minidump
@@ -228,10 +231,10 @@ spec:
           path: /run/certstore/crashreport
       - name: firewall-log
         hostPath: 
-          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sapp/log
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sapp/
       - name: proxy-log
         hostPath:
-          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/tfe/log
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/tfe/
       - name: certstore-log
         hostPath:
-          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/certstore/log
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/certstore/

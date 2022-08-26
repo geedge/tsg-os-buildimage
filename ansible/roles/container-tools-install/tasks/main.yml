@@ -3,11 +3,11 @@
     name: ansible
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
-  when: PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init'
+  when: PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init' or PROFILE_ID == 'TSG-X-NXR620G40-R01-P1808-init'
 
 - name: "Generate ansiblg.cfg after ansible upgrade in rockylinux8"
   shell: ansible-config init --disabled > /etc/ansible/ansible.cfg
-  when: PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init'
+  when: PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init' or PROFILE_ID == 'TSG-X-NXR620G40-R01-P1808-init'
 
 - name: 'change ansible hash_behaviour value replace to merge'
   lineinfile:
@@ -15,11 +15,11 @@
     backrefs: yes
     regexp: "^(.*hash_behaviour.*=.*replace.*)$"
     line: '\1\nhash_behaviour = merge'
-  when: PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init'
+  when: PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init' or PROFILE_ID == 'TSG-X-NXR620G40-R01-P1808-init'
 
 - name: 'install psutil'
   shell: pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple psutil
-  when: PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init'
+  when: PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init' or PROFILE_ID == 'TSG-X-NXR620G40-R01-P1808-init'
 
 - name: "install tcpdump"
   yum:
