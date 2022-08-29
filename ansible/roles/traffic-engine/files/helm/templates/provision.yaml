@@ -4,4 +4,4 @@ metadata:
   name: provisioninit-{{ .Release.Name }}
   namespace: default
 data:
-  provision.yml: {{ tpl (.Files.Get "conf/provision.yml") . | quote }}
+  provision-init.sh: {{ tpl (.Files.Get "conf/provision-init.sh") . | quote }}

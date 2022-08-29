@@ -166,7 +166,6 @@
     - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
     - install_config/group_vars/rpm_version.yml
   roles:
-    - {role: tsg-os-provision, tags: tsg-os-provision}
     - {role: container-tools-install, tags: container-tools-install}
     - {role: tsg_sn, tags: tsg_sn}
 

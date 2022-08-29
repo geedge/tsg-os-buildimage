@@ -175,7 +175,7 @@ spec:
       - name: tsg-init
         image: docker.io/library/tsg-init:{{ .Chart.AppVersion }}
         imagePullPolicy: Never
-        command: ["/bin/bash","-c","ansible-playbook -i /opt/tsg/tsg-os-provision/hosts /opt/tsg/tsg-os-provision/tasks/provision.yml ; mount -o remount,rw /sys"]
+        command: ["/bin/bash","-c","/opt/tsg/provision-init.sh"]
         securityContext:
           privileged: true
         env:
@@ -185,8 +185,8 @@ spec:
               fieldPath: status.hostIP
         volumeMounts:
         - name: provisioninit
-          mountPath: "/opt/tsg/tsg-os-provision/tasks/provision.yml"
-          subPath: "provision.yml"
+          mountPath: "/opt/tsg/provision-init.sh"
+          subPath: "provision-init.sh"
         - name: config-volume
           mountPath: /target_config 
 
@@ -217,6 +217,7 @@ spec:
           name: sapp-{{ .Release.Name }}
       - name: provisioninit
         configMap:
+          defaultMode: 493
           name: provisioninit-{{ .Release.Name }}
       - name: config-volume
         emptyDir: {}
