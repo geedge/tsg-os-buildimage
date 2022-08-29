@@ -34,11 +34,11 @@ endif
 
 packages_download: builddir
 ifeq ($(LOCK_STATE),UNLOCKED)
-	sed -i '/sapp-pr:/d;/tfe-pr:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
+	sed -i '/sapp-pr:/d;/tfe-pr:/d;/mrzcpd-0906:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
 	sed -i '/role: hasp/d' $(PROJECTDIR)/ansible/HAL_server_deploy.yml
 endif
 ifeq ($(LOCK_STATE),LOCKED)
-	sed -i '/sapp:/d;/tfe:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
+	sed -i '/sapp:/d;/tfe:/d;/mrzcpd-0906:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
 endif
 	$(TOOLSDIR)/ansible-HAL-server $(PROFILE_ID) $(PROJECTDIR) $(TARGET_COMPRESS_DIR)/rpm_download $(PROJECTDIR)/conf/yum-CentOS-7.conf
 

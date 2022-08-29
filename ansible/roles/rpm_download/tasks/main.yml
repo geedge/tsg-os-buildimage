@@ -45,11 +45,12 @@
 
 - name: "download rpm packages: mrzcpd"
   yum:
-    name: "{{ mrzcpd_rpm_version.mrzcpd }}"
+    name: "{{ item.value }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
     download_dir: "{{ path_download }}"
+  with_dict: "{{ mrzcpd_rpm_version }}"
 
 - name: "download rpm packages: sapp and tcpdump_mesa"
   yum:

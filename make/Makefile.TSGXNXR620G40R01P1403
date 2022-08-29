@@ -37,7 +37,7 @@ installer: builddir
 	sed -i -e "s/%%SIZE_PART_SYSROOT%%/$(SIZE_PART_SYSROOT)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%SIZE_PART_UPDATE%%/$(SIZE_PART_UPDATE)/" $(TARGET_INSTALLER_DIR)/install.sh
 
-	sed -i '/sapp:/d;/tfe:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
+	sed -i '/sapp:/d;/tfe:/d;/mrzcpd-0906:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
 
 sysroot-base: builddir
 	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum-CentOS-7.conf $(TARGET_SYSROOT_DIR) $(PROJECTDIR) $(PROFILE_ID)

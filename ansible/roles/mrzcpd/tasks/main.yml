@@ -1,14 +1,16 @@
 ---
 - name: "download rpm packages: mrzcpd"
   yum:
-    name: "{{ mrzcpd_rpm_version.mrzcpd }}"
+    name: "{{ item.value }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
     download_dir: "{{ path_download }}"
+  with_dict: "{{ mrzcpd_rpm_version }}"
 
 - name: "Install mrzcpd rpm package"
-  shell: rpm -i /tmp/rpm_download/{{ mrzcpd_rpm_version.mrzcpd }}* --prefix {{ prefix_path.mrzcpd }}
+  shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ prefix_path.mrzcpd }}
+  with_dict: "{{ mrzcpd_rpm_version }}"
 
 - name: "update /etc/ld.so.conf.d/mrzcpd.conf"
   template:
@@ -97,7 +99,14 @@
     src: "{{ role_path }}/templates/mrglobal.conf.j2.j2.TSGXNXR620G40R01P0804"
     dest: /opt/tsg/tsg-os-provision/templates/mrglobal.conf.j2
   when:
-    - runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+    - runtime_env == 'TSG-X-P0804'
+
+- name: "update mrglobal.conf - TSG-X-P0906"
+  copy:
+    src: "{{ role_path }}/templates/mrglobal.conf.TSGXNXR620G40R01P0906"
+    dest: /opt/tsg/mrzcpd/etc/mrglobal.conf
+  when:
+    - runtime_env == 'TSG-X-P0906'    
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:
