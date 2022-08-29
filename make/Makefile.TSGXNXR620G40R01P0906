@@ -203,15 +203,15 @@ sysroot-cleanup:
 	rm -rf $(TARGET_SYSROOT_DIR)/dev/*
 
 add-images-into-sysroot: container-images-generate
-	mkdir -p $(TARGET_SYSROOT_DIR)/opt/tsg/images/
-	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_FIREWALL_TAR) $(TARGET_SYSROOT_DIR)/opt/tsg/images/
-	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_RPOXY_TAR) $(TARGET_SYSROOT_DIR)/opt/tsg/images/
-	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_CERTSTORE_TAR) $(TARGET_SYSROOT_DIR)/opt/tsg/images/
-	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_TELEGRAF_TAR) $(TARGET_SYSROOT_DIR)/opt/tsg/images/
-	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_INIT_TAR) $(TARGET_SYSROOT_DIR)/opt/tsg/images/
+	mkdir -p $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
+	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_FIREWALL_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
+	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_RPOXY_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
+	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_CERTSTORE_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
+	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_TELEGRAF_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
+	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_INIT_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
 
 sysroot-archive: installer add-images-into-sysroot sysroot-cleanup
-	cp $(TARGET_CONTAINER_INIT_SYSROOT_DIR)/etc/sysctl.d/80-tfe.conf $(TARGET_SYSROOT_DIR)/etc/sysctl.d/
+	cp $(TARGET_CONTAINER_RPOXY_SYSROOT_DIR)/etc/sysctl.d/80-tfe.conf $(TARGET_SYSROOT_DIR)/etc/sysctl.d/
 	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_SYSROOT_DIR) . | pbzip2 -p9 > $(TARGET_INSTALLER_DIR)/$(CHROOT_PKG)
 
 sysroot-binary: sysroot-archive

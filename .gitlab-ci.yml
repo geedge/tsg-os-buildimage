@@ -92,19 +92,6 @@ feature_branch_build_TSGXP0906:
     - /^rel-.*$/i
     - /^update-.*$/i
 
-feature_branch_build_TSGXP1808:
-  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: TSGXNXR620G40R01P1808
-    DALIY_BUILD_VERSION: 1
-  except:
-    - tags
-    - /^dev-.*$/i
-    - /^rel-.*$/i
-    - /^update-.*$/i
-
 feature_branch_build_server_unlocked:
   image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
@@ -209,20 +196,6 @@ develop_build_TSGXP0906:
   extends: .build_tsg-buildimage
   variables:
     PROFILE_LIST: TSGXNXR620G40R01P0906
-    UPLOAD_TO_FILE_REPO: 1
-    PULP3_FILE_REPO_NAME: tsg-os-images-develop
-    PULP3_FILE_DIST_NAME: tsg-os-images-develop
-    DALIY_BUILD_VERSION: 1
-    FILE_REPO_PATH: install/develop/tsg-os-images
-  only:
-    - /^dev-.*$/i
-
-develop_build_TSGXP1808:
-  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: TSGXNXR620G40R01P1808
     UPLOAD_TO_FILE_REPO: 1
     PULP3_FILE_REPO_NAME: tsg-os-images-develop
     PULP3_FILE_DIST_NAME: tsg-os-images-develop
@@ -345,20 +318,6 @@ testing_build_TSGXP0906:
   only:
     - /^rel-.*$/i
 
-testing_build_TSGXP1808:
-  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: TSGXNXR620G40R01P1808
-    UPLOAD_TO_FILE_REPO: 1
-    PULP3_FILE_REPO_NAME: tsg-os-images-testing
-    PULP3_FILE_DIST_NAME: tsg-os-images-testing
-    FILE_REPO_PATH: install/testing/tsg-os-images
-    DALIY_BUILD_VERSION: 1
-  only:
-    - /^rel-.*$/i
-
 testing_build_server_unlocked:
   image: $BUILD_BASED_IMAGE_CENTOS7
   stage: build
@@ -465,20 +424,6 @@ rc_build_TSGXP0906:
   extends: .build_tsg-buildimage
   variables:
     PROFILE_LIST: TSGXNXR620G40R01P0906
-    UPLOAD_TO_FILE_REPO: 1
-    DALIY_BUILD_VERSION: 0
-    PULP3_FILE_REPO_NAME: tsg-os-images-rc
-    PULP3_FILE_DIST_NAME: tsg-os-images-rc
-    FILE_REPO_PATH: install/rc/tsg-os-images
-  only:
-    - /^.*-rc.*$/i
-
-rc_build_TSGXP1808:
-  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: TSGXNXR620G40R01P1808
     UPLOAD_TO_FILE_REPO: 1
     DALIY_BUILD_VERSION: 0
     PULP3_FILE_REPO_NAME: tsg-os-images-rc
@@ -612,22 +557,6 @@ release_build_TSGXP0906:
     - tags
   except:
     - /^.*-rc.*$/i
-
-release_build_TSGXP1808:
-  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: TSGXNXR620G40R01P1808
-    UPLOAD_TO_FILE_REPO: 1
-    DALIY_BUILD_VERSION: 0
-    PULP3_FILE_REPO_NAME: tsg-os-images-release
-    PULP3_FILE_DIST_NAME: tsg-os-images-release
-    FILE_REPO_PATH: install/release/tsg-os-images
-  only:
-    - tags
-  except:
-    - /^.*-rc.*$/i    
 
 release_build_server_unlocked:
   image: $BUILD_BASED_IMAGE_CENTOS7
