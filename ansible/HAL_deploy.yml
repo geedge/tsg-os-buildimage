@@ -148,6 +148,7 @@
     - {role: tsg_sn, tags: tsg_sn}
     - {role: framework, tags: framework}
     - {role: mrzcpd, tags: mrzcpd}
+    - {role: clixon, tags: clixon}
     - {role: redis, tags: redis}
     - {role: exporter, tags: exporter}
     - {role: docker, tags: docker}

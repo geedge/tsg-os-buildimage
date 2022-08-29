@@ -1,4 +1,9 @@
 ---
+- name: "Create /opt/tsg/tsg-os-provision/scripts/"
+  file:
+    path: "/opt/tsg/tsg-os-provision/scripts/"
+    state: directory
+
 - name: "deploy obtain sn tsg-7400"
   copy:
     src: "{{ role_path }}/files/{{ item.src }}"
