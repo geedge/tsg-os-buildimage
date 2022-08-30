@@ -144,7 +144,6 @@
   roles:
     - {role: k3s-install, tags: k3s-install}
     - {role: tsg-os-provision, tags: tsg-os-provision}
-    - {role: tsg_device_tag, tags: tsg_device_tag}
     - {role: tsg_sn, tags: tsg_sn}
     - {role: framework, tags: framework}
     - {role: mrzcpd, tags: mrzcpd}

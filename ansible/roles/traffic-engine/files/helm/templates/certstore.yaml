@@ -5,3 +5,4 @@ metadata:
   namespace: default
 data:
   cert_store.ini: {{ tpl (.Files.Get "conf/cert_store.ini") . | quote }}
+  tsg_device_tag.json: {{ tpl (.Files.Get "conf/tsg_device_tag.json") . | quote }}

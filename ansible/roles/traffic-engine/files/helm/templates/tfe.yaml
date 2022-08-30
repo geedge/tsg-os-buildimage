@@ -6,3 +6,4 @@ metadata:
 data:
   tfe.conf: {{ tpl (.Files.Get "conf/tfe.conf") . | quote }}
   pangu_pxy.conf: {{ tpl (.Files.Get "conf/pangu_pxy.conf") . | quote }}
+  tsg_device_tag.json: {{ tpl (.Files.Get "conf/tsg_device_tag.json") . | quote }}

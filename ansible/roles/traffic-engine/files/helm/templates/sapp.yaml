@@ -15,3 +15,4 @@ data:
   wangw.conf: {{ tpl (.Files.Get "conf/wangw.conf") . | quote }}
   wire_graft.conf: {{ tpl (.Files.Get "conf/wire_graft.conf") . | quote }}
   vlan_flipping_map.conf: {{ tpl (.Files.Get "conf/vlan_flipping_map.conf") . | quote }}
+  tsg_device_tag.json: {{ tpl (.Files.Get "conf/tsg_device_tag.json") . | quote }}
