@@ -150,14 +150,14 @@ spec:
       - name: cert-redis
         image: docker.io/library/tsg-certstore:{{ .Chart.AppVersion }}
         imagePullPolicy: Never
-        command: ["/bin/bash","-c","/usr/bin/redis-server /etc/cert-redis.conf"]
+        command: ["/usr/bin/redis-server", "/etc/cert-redis.conf"]
         securityContext:
           privileged: true
 
       - name: telegraf
         image: docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}
         imagePullPolicy: Never
-        command: ["/bin/bash","-c","/usr/bin/telegraf -config /etc/telegraf/telegraf_statistic.conf -config-directory /etc/telegraf/telegraf_statistic.d"]
+        command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_statistic.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
         securityContext:
           privileged: true
         volumeMounts:
@@ -175,7 +175,7 @@ spec:
       - name: tsg-init
         image: docker.io/library/tsg-init:{{ .Chart.AppVersion }}
         imagePullPolicy: Never
-        command: ["/bin/bash","-c","/opt/tsg/provision-init.sh"]
+        command: ["/opt/tsg/provision-init.sh"]
         securityContext:
           privileged: true
         env:
@@ -186,7 +186,13 @@ spec:
         volumeMounts:
         - name: provisioninit
           mountPath: "/opt/tsg/provision-init.sh"
-          subPath: "provision-init.sh"
+          subPath: "provision-init.sh" 
+        - name: provisioninit
+          mountPath: "/opt/tsg/tfe/tfe-env-start.sh"
+          subPath: "tfe-env-start.sh"       
+        - name: provisioninit
+          mountPath: "/opt/tsg/tfe/tfe-env-stop.sh"
+          subPath: "tfe-env-stop.sh"
         - name: config-volume
           mountPath: /target_config 
 

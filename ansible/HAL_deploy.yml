@@ -157,7 +157,6 @@
     - {role: traffic-engine, tags: traffic-engine}
     - {role: system-init-TSG-X-P1403, tags: system-init-TSG-X-P1403}
     - {role: system-init, tags: system-init}
-    - {role: tsg-os-provision-condition, tags: tsg-os-provision-condition}
     - {role: hasp, tags: hasp}
     - {role: OFED, tags: OFED}
 

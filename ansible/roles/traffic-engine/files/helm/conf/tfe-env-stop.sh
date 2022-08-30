@@ -1,0 +1,12 @@
+#!/bin/bash -ex
+/usr/sbin/ip6tables -D INPUT -i tap0 -m bpf --bytecode '17,48 0 0 0,84 0 0 240,21 0 13 96,48 0 0 6,21 0 11 6,40 0 0 4,37 0 9 24,48 0 0 52,84 0 0 240,116 0 0 2,53 0 5 24,48 0 0 60,21 0 3 88,48 0 0 61,21 0 1 4,6 0 0 65535,6 0 0 0' -j NFQUEUE --queue-num 1
+/usr/sbin/iptables -D INPUT -i tap0 -m bpf --bytecode '18,48 0 0 0,84 0 0 240,21 0 14 64,48 0 0 9,21 0 12 6,40 0 0 6,69 10 0 8191,177 0 0 0,80 0 0 12,84 0 0 240,116 0 0 2,53 0 5 24,80 0 0 20,21 0 3 88,80 0 0 21,21 0 1 4,6 0 0 65535,6 0 0 0' -j NFQUEUE --queue-num 1
+/usr/sbin/ip rule del iif tap0 tab 100
+/usr/sbin/ip route del local default dev lo table 100
+/usr/sbin/ip rule del fwmark 0x65 lookup 101
+/usr/sbin/ip route del default dev tap0 via 172.16.241.1 table 101
+/usr/sbin/ip -6 rule del iif tap0 tab 102
+/usr/sbin/ip -6 route del default via fd00::01
+/usr/sbin/ip -6 route del local default dev lo table 102
+/usr/sbin/ip addr del fd00::02/64 dev tap0
+/usr/sbin/ip link set tap0 down

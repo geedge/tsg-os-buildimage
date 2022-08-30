@@ -10,7 +10,6 @@ ifconfig ctrl_mock $NODE_IP/32
 ifconfig ctrl_mock mtu 2000
 {{ if eq .Values.proxy.enable .Values.define_enable_val_yes }}
 ip tuntap add dev tap0 mode tap multi_queue
-chmod 0755 /opt/tsg/tfe/tfe-env-start.sh
 /opt/tsg/tfe/tfe-env-start.sh
 {{- end }}
 mount -o remount,rw /sys
