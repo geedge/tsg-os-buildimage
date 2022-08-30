@@ -66,6 +66,26 @@ cp -a /var/lib/rpm    /data/var/lib/
 #
 rm -rf /data/var/lib/docker
 rm -rf /data/overlay/rootfs_etc/rw/ld.so.conf.d
+#  copy k3s image tar file to air-gap dir
+air_gap_image_dir="/var/lib/rancher/k3s/agent/images"
+if [ -d "$air_gap_image_dir" ]; then
+    echo "$air_gap_image_dir is exist"
+    rm -rf /data$air_gap_image_dir
+    mkdir -p /data$air_gap_image_dir
+    cp -a $air_gap_image_dir/* /data$air_gap_image_dir
+else
+    echo "$air_gap_image_dir is not exist"
+fi
+#  copy helm packages to dest 
+helm_charts_dir="/var/lib/rancher/k3s/server/static/charts"
+if [ -d "$helm_charts_dir" ]; then
+    echo "$helm_charts_dir is exist"
+    rm -rf /data$helm_charts_dir
+    mkdir -p /data$helm_charts_dir
+    cp -a $helm_charts_dir/* /data$helm_charts_dir
+else
+    echo "$helm_charts_dir is not exist"
+fi
 
 # Setup o/s mount points
 (cat <<EOF2
