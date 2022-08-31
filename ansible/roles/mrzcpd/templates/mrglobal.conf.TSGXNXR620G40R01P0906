@@ -45,9 +45,31 @@ sz_cache=256
 sz_data=4096
 
 [ctrlmsg]
-listen_addr=10.42.1.1
+listen_addr=0.0.0.0
 listen_port=46789
 
 [rpc]
-addr=10.42.1.1
+addr=127.0.0.1
 port=56789
+
+[vlan_flipping_adapter]
+enable=1
+enable_devices=nf_0,nf_1,nf_2,nf_3,nf_4,nf_5,nf_6,nf_7,nf_8,nf_9,nf_10,nf_11,nf_12,nf_13,nf_14,nf_15
+etherfabric_vlan_range_start=1000
+etherfabric_vlan_range_end=3047
+default_si_table_0=nf_0,0
+default_si_table_1=nf_1,1
+default_si_table_2=nf_2,2
+default_si_table_3=nf_3,3
+default_si_table_4=nf_4,4
+default_si_table_5=nf_5,5
+default_si_table_6=nf_6,6
+default_si_table_7=nf_7,7
+default_si_table_8=nf_8,8
+default_si_table_9=nf_9,9
+default_si_table_10=nf_10,10
+default_si_table_11=nf_11,11
+default_si_table_12=nf_12,12
+default_si_table_13=nf_13,13
+default_si_table_14=nf_14,14
+default_si_table_15=nf_15,15
