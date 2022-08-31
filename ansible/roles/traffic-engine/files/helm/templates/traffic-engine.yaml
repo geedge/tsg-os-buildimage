@@ -6,6 +6,7 @@ metadata:
     app: traffic-engine-{{ .Release.Name }}
 
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: traffic-engine
@@ -28,6 +29,11 @@ spec:
         imagePullPolicy: Never
         workingDir: /opt/tsg/sapp
         command: ["/opt/tsg/sapp/sapp"]
+        env:
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
         securityContext:
           privileged: true
         livenessProbe:
@@ -103,6 +109,11 @@ spec:
         imagePullPolicy: Never
         workingDir: /opt/tsg/tfe
         command: ["/opt/tsg/tfe/bin/tfe"]
+        env:
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
         securityContext:
           privileged: true
         livenessProbe:
