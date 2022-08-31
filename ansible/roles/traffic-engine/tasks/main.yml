@@ -39,3 +39,8 @@
   copy:
     src: "{{ role_path }}/files/tmpfiles.d/traffic-engine.conf"
     dest: /usr/lib/tmpfiles.d/
+
+- name: "install sudoers.d for sudo helm"
+  copy:
+    src: "{{ role_path }}/files/sudoers.d/00-kubconfig"
+    dest: /etc/sudoers.d/
