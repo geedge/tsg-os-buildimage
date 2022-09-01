@@ -1,0 +1,16 @@
+- name: "mkdir -p /usr/lib/systemd/coredump.conf.d/"
+  file:
+    path: /usr/lib/systemd/coredump.conf.d/
+    state: directory
+
+- name: "copy coredump config file to dest -- tsg-x-p0906"
+  copy:
+    src: '{{ role_path }}/files/coredump_setup_override.conf.TSGXNXR620G40R01P0906'
+    dest: /usr/lib/systemd/coredump.conf.d/coredump_setup_override.conf
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "copy coredump config file to dest -- not tsg-x-p0906"
+  copy:
+    src: '{{ role_path }}/files/coredump_setup_override.conf.j2.j2'
+    dest: /opt/tsg/tsg-os-provision/templates/coredump_setup_override.conf.j2
+  when: runtime_env != 'TSG-X-P0906'

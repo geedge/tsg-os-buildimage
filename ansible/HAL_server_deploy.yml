@@ -10,6 +10,7 @@
     - {role: hasp, tags: hasp}
     - {role: workload_target, tags: workload_target}
     - {role: tsg-os-provision, tags: tsg-os-provision}
+    - {role: coredump, tags: coredump}
     - {role: tsg_device_tag, tags: tsg_device_tag}
     - {role: tsg_sn, tags: tsg_sn}
     - {role: framework, tags: framework}

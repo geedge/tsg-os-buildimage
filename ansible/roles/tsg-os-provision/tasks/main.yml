@@ -35,13 +35,6 @@
     - adapt_tera_network_setting.sh.j2
     - setup_policy_log_nic_network.sh.j2
 
-- name: "tsg-os-provision: template coredump settings"
-  copy:
-    src: "{{ role_path }}/files/coredump/{{ item }}"
-    dest: "/opt/tsg/tsg-os-provision/templates/"
-  with_items:
-    - coredump_setup_override.conf.j2
-
 - name: "tsg-os-provision: copy tasks file that excutes provision to dest  - tsg9140"
   copy:
     src: "{{ role_path }}/files/tasks/provision.yml.9000NPBP01R01"

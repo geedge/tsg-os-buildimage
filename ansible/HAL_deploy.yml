@@ -5,6 +5,7 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}
+    - {role: coredump, tags: coredump}
     - {role: system-init-7400-mcn0, tags: system-init-7400-mcn0}
     - {role: tsg_device_tag, tags: tsg_device_tag}
     - {role: tsg_sn, tags: tsg_sn}
@@ -36,6 +37,7 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}
+    - {role: coredump, tags: coredump}
     - {role: system-init-7400-mcn123, tags: system-init-7400-mcn123}
     - {role: tsg_device_tag, tags: tsg_device_tag}
     - {role: framework, tags: framework}
@@ -53,6 +55,7 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}
+    - {role: coredump, tags: coredump}
     - {role: tsg_device_tag, tags: tsg_device_tag}
     - {role: tsg_sn, tags: tsg_sn}
     - {role: framework, tags: framework}
@@ -87,6 +90,7 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}
+    - {role: coredump, tags: coredump}
     - {role: tsg_device_tag, tags: tsg_device_tag}
     - {role: tsg_sn, tags: tsg_sn}
     - {role: framework, tags: framework}
@@ -110,6 +114,7 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg-os-provision, tags: tsg-os-provision}
+    - {role: coredump, tags: coredump}
     - {role: tsg_device_tag, tags: tsg_device_tag}
     - {role: tsg_sn, tags: tsg_sn}
     - {role: framework, tags: framework}
@@ -144,6 +149,7 @@
   roles:
     - {role: k3s-install, tags: k3s-install}
     - {role: tsg-os-provision, tags: tsg-os-provision}
+    - {role: coredump, tags: coredump}
     - {role: tsg_sn, tags: tsg_sn}
     - {role: framework, tags: framework}
     - {role: mrzcpd, tags: mrzcpd}

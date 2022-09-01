@@ -132,7 +132,7 @@ define_enable_val_yes: yes
 define_enable_val_no: no
 
 coredump:
-    format: "core"
+    format: "minidump"
     collect: "local"
     sentry_url: "www.testing.com"
 
