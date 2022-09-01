@@ -43,6 +43,7 @@
     src: "{{ role_path }}/templates/maat-redis.conf.j2.j2"
     dest: /opt/tsg/tsg-os-provision/templates/maat-redis.conf.j2
   tags: template
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:

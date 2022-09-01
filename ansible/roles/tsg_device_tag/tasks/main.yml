@@ -4,3 +4,4 @@
     src: "{{ role_path }}/templates/tsg_device_tag.json.j2.j2"
     dest: /opt/tsg/tsg-os-provision/templates/tsg_device_tag.json.j2
   tags: template
+  when: runtime_env != 'TSG-X-P0906'

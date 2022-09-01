@@ -51,6 +51,7 @@
   template:
     src: "{{ role_path }}/templates/tfe.conf.j2.j2"
     dest: /opt/tsg/tsg-os-provision/templates/tfe.conf.j2
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "template the zlog.conf"
   template:
@@ -66,6 +67,7 @@
   template:
     src: "{{ role_path }}/templates/pangu_pxy.conf.j2.j2"
     dest: /opt/tsg/tsg-os-provision/templates/pangu_pxy.conf.j2
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "create conf/doh/"
   file:
@@ -114,6 +116,7 @@
   template:
     src: "{{ role_path }}/templates/service_add_StartPostForRps.conf.j2.j2"
     dest: /opt/tsg/tsg-os-provision/templates/service_add_StartPostForRps.conf.j2
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "add condition into service depend provision result TSG-X-P0804"
   copy:

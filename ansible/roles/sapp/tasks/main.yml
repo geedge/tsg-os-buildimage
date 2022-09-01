@@ -52,6 +52,7 @@
     src: "{{ role_path }}/templates/sapp.toml.j2.j2"
     dest: /opt/tsg/tsg-os-provision/templates/sapp.toml.j2
   tags: template
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: Template the project_list.conf
   template:
@@ -71,13 +72,14 @@
     src: "{{ role_path }}/templates/send_raw_pkt.conf.j2"
     dest: /opt/tsg/tsg-os-provision/templates/send_raw_pkt.conf.j2
   tags: template
-  when: runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+  when: runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804'
 
 - name: Template the conflist.inf - tsg_server
   template:
     src: "{{ role_path }}/templates/conflist.inf.j2.j2"
     dest: /opt/tsg/tsg-os-provision/templates/conflist.inf.j2
   tags: template
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: Template the entrylist.conf.j2
   template:
@@ -119,8 +121,7 @@
     dest: /opt/tsg/sapp/etc/vlan_flipping_map.conf
   tags: template
   when:
-    - runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
-
+    - runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804'
 - name: Template the sapp_log.conf
   template:
     src: "{{ role_path }}/templates/sapp_log.conf.j2"
@@ -138,6 +139,7 @@
     src: "{{ role_path }}/templates/gdev.conf.j2.j2"
     dest: /opt/tsg/tsg-os-provision/templates/gdev.conf.j2
   tags: template
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: Template the well_known_port.conf
   template:

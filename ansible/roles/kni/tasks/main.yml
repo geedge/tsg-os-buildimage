@@ -23,4 +23,4 @@
     src: "{{ role_path }}/templates/kni.conf.j2"
     dest: /opt/tsg/tsg-os-provision/templates/kni.conf.j2
   tags: template
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+  when: runtime_env == 'TSG-X-P0804'
