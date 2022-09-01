@@ -149,15 +149,8 @@
   roles:
     - {role: k3s-install, tags: k3s-install}
     - {role: coredump, tags: coredump}
-    - {role: tsg_sn, tags: tsg_sn}
-    - {role: framework, tags: framework}
     - {role: mrzcpd, tags: mrzcpd}
     - {role: clixon, tags: clixon}
-    - {role: redis, tags: redis}
-    - {role: exporter, tags: exporter}
-    - {role: docker, tags: docker}
-    - {role: tsg-diagnose, tags: tsg-diagnose}
-    - {role: tsg-exporter-proxy-TSGXP0804, tags: tsg-exporter-proxy-TSGXP0804}
     - {role: traffic-engine, tags: traffic-engine}
     - {role: system-init-TSG-X-P1403, tags: system-init-TSG-X-P1403}
     - {role: system-init, tags: system-init}
