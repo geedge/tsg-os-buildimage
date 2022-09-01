@@ -35,7 +35,7 @@ enable_breakpad_upload=0
 {{- end -}}
 
 {{- define "traffic-engine.tfe.workerthread" -}}
-{{ len .Values.tfe_affinity }}
+{{ sub (len .Values.tfe_affinity) 1 }}
 {{- end -}}
 
 {{- define "traffic-engine.tfe.cpu-affinity" -}}
