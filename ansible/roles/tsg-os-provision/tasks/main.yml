@@ -1,5 +1,6 @@
 - name: "set system default.target"
   shell: ln -vfs /usr/lib/systemd/system/workload.target /etc/systemd/system/default.target
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "tsg-os-provision: build tsg-os-provision directory and sub directory"
   file:

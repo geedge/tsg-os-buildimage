@@ -197,7 +197,8 @@
     regexp: 'WantedBy=multi-user.target'
     replace: 'WantedBy=workload.target'
   with_items:
-    - /usr/lib/systemd/system/sapp.service   
+    - /usr/lib/systemd/system/sapp.service
+  when: runtime_env != 'TSG-X-P0906' 
 
 - name: 'delete r2,r3'
   file:

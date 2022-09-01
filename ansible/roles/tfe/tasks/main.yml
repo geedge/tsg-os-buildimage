@@ -108,6 +108,7 @@
   with_items:
     - /usr/lib/systemd/system/tfe-env.service
     - /usr/lib/systemd/system/tfe.service
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "template the pangu_pxy.conf"
   template:

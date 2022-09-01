@@ -87,6 +87,7 @@
   with_items:
     - /usr/lib/systemd/system/cert-redis.service
     - /usr/lib/systemd/system/certstore.service
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "replace action: close redis-server daemonize  TSG-X-0906"
   replace:

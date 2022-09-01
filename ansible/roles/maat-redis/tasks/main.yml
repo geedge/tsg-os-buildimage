@@ -52,3 +52,4 @@
   with_items:
     - /usr/lib/systemd/system/maat-redis.service
     - /usr/lib/systemd/system/maat-redis-exporter.service
+  when: runtime_env != 'TSG-X-P0906'

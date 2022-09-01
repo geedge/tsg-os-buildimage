@@ -123,6 +123,7 @@
   with_items:
     - /usr/lib/systemd/system/exporter-node.service
     - /usr/lib/systemd/system/exporter-systemd.service
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:
@@ -131,7 +132,9 @@
     replace: 'WantedBy=workload.target'
   with_items:
     - /usr/lib/systemd/system/exporter-ipmi.service
-  when: monitor.enable_ipmi_exporter == 1
+  when: 
+    - monitor.enable_ipmi_exporter == 1
+    - runtime_env != 'TSG-X-P0906'
 
 ##################### exporter #####################
 - name: 'exporter-node service start'

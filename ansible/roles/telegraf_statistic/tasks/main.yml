@@ -43,6 +43,7 @@
     replace: 'WantedBy=workload.target'
   with_items:
     - /usr/lib/systemd/system/telegraf_statistic.service
+  when: runtime_env != 'TSG-X-P0906'
 
 ##################### telegraf #####################
 

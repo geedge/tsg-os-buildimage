@@ -138,9 +138,15 @@ if [ ! -f "$target/etc/pam.d/password-auth-local" ]; then
     ln -vfs --relative $target/etc/pam.d/password-auth-local $target/etc/pam.d/password-auth
 fi
 
-cp -rf $projectdir/rootconf/sysroot-usr/target/* $target/usr/lib/systemd/system
-mkdir -p $target/usr/lib/systemd/system/workload.target.wants
-
+case $profile_id in
+    "TSG-X-NXR620G40-R01-P0804" | "TSG-X-NXR620G40-R01-P1403" | "7400-MCN0-P01R01" | "7400-MCN123-P01R01" |"9000-NPB-P01R01")
+        cp -rf $projectdir/rootconf/sysroot-usr/target/* $target/usr/lib/systemd/system
+        mkdir -p $target/usr/lib/systemd/system/workload.target.wants
+        ;;
+    *)
+        echo "Profile_id: $profile_id not need workload.target"
+        ;;
+esac
 # ansible-playbook -i tsg-9140-scripts/install_config/tsg_9140_host tsg-9140-scripts/tsg_9140_deploy.yml
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
 

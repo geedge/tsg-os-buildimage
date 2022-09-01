@@ -55,6 +55,7 @@
     replace: 'WantedBy=workload.target'
   with_items:
     - /usr/lib/systemd/system/tsg-diagnose.service
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "add sudo secure_path"
   lineinfile:
