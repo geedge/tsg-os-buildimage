@@ -22,16 +22,5 @@
     name: k3s
     enabled: yes
 
-
-- name: "copy k3s.sh to destination"
-  copy:
-    src: "{{ role_path }}/files/k3s.sh"
-    dest: /etc/profile.d/
-    mode: 0755
-
-- name: "add sudo secure_path"
-  lineinfile:
-    path: /etc/sudoers
-    backrefs: yes
-    regexp: "^(.*Defaults    secure_path =.*)$"
-    line: '\1:/usr/local/bin'
+- name: "kubectl bash auto-completion"
+  shell: kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
