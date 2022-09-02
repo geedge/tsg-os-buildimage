@@ -30,7 +30,12 @@
     state: present
     disable_gpg_check: yes
 
-- name: "clixon: enable tsg-clixon"
+- name: "clixon: enable tsg-clixon-backend"
   systemd:
-    name: tsg-clixon
+    name: tsg-clixon-backend
+    enabled: yes
+
+- name: "clixon: enable tsg-clixon-restconf"
+  systemd:
+    name: tsg-clixon-restconf
     enabled: yes
