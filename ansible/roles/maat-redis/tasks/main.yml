@@ -31,12 +31,14 @@
     src: "{{ role_path }}/templates/service_override_slice.conf.j2"
     dest: /usr/lib/systemd/system/maat-redis.service.d/service_override_slice.conf
     mode: 0644
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "copy slice file to maat-redis-exporter.service.d"
   copy:
     src: "{{ role_path }}/templates/service_override_slice.conf.j2"
     dest: /usr/lib/systemd/system/maat-redis-exporter.service.d/service_override_slice.conf
     mode: 0644
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "Template the maat-redis.conf"
   template:

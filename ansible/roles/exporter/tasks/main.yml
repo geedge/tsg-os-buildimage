@@ -101,19 +101,23 @@
     src: "{{ role_path }}/templates/service_override_slice.conf.j2"
     dest: /usr/lib/systemd/system/exporter-node.service.d/service_override_slice.conf
     mode: 0644
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "copy slice file to exporter-systemd.service.d"
   copy:
     src: "{{ role_path }}/templates/service_override_slice.conf.j2"
     dest: /usr/lib/systemd/system/exporter-systemd.service.d/service_override_slice.conf
     mode: 0644
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "copy slice file to exporter-ipmi.service.d"
   copy:
     src: "{{ role_path }}/templates/service_override_slice.conf.j2"
     dest: /usr/lib/systemd/system/exporter-ipmi.service.d/service_override_slice.conf
     mode: 0644
-  when: monitor.enable_ipmi_exporter == 1
+  when: 
+    - monitor.enable_ipmi_exporter == 1
+    - runtime_env != 'TSG-X-P0906'
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:

@@ -34,6 +34,7 @@
     src: "{{ role_path }}/templates/service_override_slice.conf.j2"
     dest: /usr/lib/systemd/system/exporter-proxy.service.d/service_override_slice.conf
     mode: 0644
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:
