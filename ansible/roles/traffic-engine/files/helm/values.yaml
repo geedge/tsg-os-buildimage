@@ -139,3 +139,30 @@ coredump:
 session_id_generator:
   snowflake_worker_id_base: 1
   snowflake_worker_id_offset: 1
+
+replicaCount: 1
+image:
+  firewall:
+    repository: docker.io/library/tsg-firewall
+    pullPolicy: Never
+    tag: ""
+  proxy:
+    repository: docker.io/library/tsg-proxy
+    pullPolicy: Never
+    tag: ""
+  certstore:
+    repository: docker.io/library/tsg-certstore
+    pullPolicy: Never
+    tag: ""
+  certRedis:
+    repository: docker.io/library/tsg-certstore
+    pullPolicy: Never
+    tag: ""
+  telegraf:
+    repository: docker.io/library/tsg-telegraf
+    pullPolicy: Never
+    tag: ""
+  tsgInit:
+    repository: docker.io/library/tsg-init
+    pullPolicy: Never
+    tag: ""

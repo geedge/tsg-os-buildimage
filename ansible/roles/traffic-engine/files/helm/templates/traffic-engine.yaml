@@ -6,7 +6,7 @@ metadata:
     app: traffic-engine-{{ .Release.Name }}
 
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: traffic-engine
@@ -25,8 +25,8 @@ spec:
         effect: NoSchedule
       containers:
       - name: firewall
-        image: docker.io/library/tsg-firewall:{{ .Chart.AppVersion }}
-        imagePullPolicy: Never
+        image: "{{ .Values.image.firewall.repository }}:{{ .Values.image.firewall.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.firewall.pullPolicy }}
         workingDir: /opt/tsg/sapp
         command: ["/opt/tsg/sapp/sapp"]
         env:
@@ -105,8 +105,8 @@ spec:
 
 {{- if eq .Values.proxy.enable .Values.define_enable_val_yes }}
       - name: proxy
-        image: docker.io/library/tsg-proxy:{{ .Chart.AppVersion }}
-        imagePullPolicy: Never
+        image: "{{ .Values.image.proxy.repository }}:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.proxy.pullPolicy }}
         workingDir: /opt/tsg/tfe
         command: ["/opt/tsg/tfe/bin/tfe"]
         env:
@@ -146,8 +146,8 @@ spec:
 {{- end }}
 
       - name: certstore
-        image: docker.io/library/tsg-certstore:{{ .Chart.AppVersion }}
-        imagePullPolicy: Never
+        image: "{{ .Values.image.certstore.repository }}:{{ .Values.image.certstore.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.certstore.pullPolicy }}
         workingDir: /opt/tsg/certstore
         command: ["/opt/tsg/certstore/bin/certstore"]
         securityContext:
@@ -168,15 +168,15 @@ spec:
           mountPath: /opt/tsg/certstore/logs
 
       - name: cert-redis
-        image: docker.io/library/tsg-certstore:{{ .Chart.AppVersion }}
-        imagePullPolicy: Never
+        image: "{{ .Values.image.certRedis.repository }}:{{ .Values.image.certRedis.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.certRedis.pullPolicy }}
         command: ["/usr/bin/redis-server", "/etc/cert-redis.conf"]
         securityContext:
           privileged: true
 
       - name: telegraf
-        image: docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}
-        imagePullPolicy: Never
+        image: "{{ .Values.image.telegraf.repository }}:{{ .Values.image.telegraf.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.telegraf.pullPolicy }}
         command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_statistic.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
         securityContext:
           privileged: true
@@ -193,8 +193,8 @@ spec:
 
       initContainers:
       - name: tsg-init
-        image: docker.io/library/tsg-init:{{ .Chart.AppVersion }}
-        imagePullPolicy: Never
+        image: "{{ .Values.image.tsgInit.repository }}:{{ .Values.image.tsgInit.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.tsgInit.pullPolicy }}
         command: ["/opt/tsg/provision-init.sh"]
         securityContext:
           privileged: true
