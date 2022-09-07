@@ -1,8 +1,3 @@
-- name: "clixon: copy file to dest"
-  copy:
-    src: '{{ role_path }}/files/'
-    dest: /tmp/ansible_deploy/
-
 - name: "clixon: install libyaml"
   yum:
     name: "libyaml"
@@ -12,23 +7,12 @@
 - name: "clixon: set symlink"
   shell: ln -vfs /lib64/libyaml-0.so.2.0.5 /usr/lib64/libyaml.so
 
-- name: "clixon: install cligen from local"
+- name: "install rpm packages: tsg-os-clixon"
   yum:
-    name: "/tmp/ansible_deploy/cligen-5.8.0-release.x86_64.rpm"
+    name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
     state: present
-    disable_gpg_check: yes
-
-- name: "clixon: install clixon from local"
-  yum:
-    name: "/tmp/ansible_deploy/clixon-5.8.0-release.x86_64.rpm"
-    state: present
-    disable_gpg_check: yes
-
-- name: "clixon: install tsg-os-mgnt-srv from local"
-  yum:
-    name: "/tmp/ansible_deploy/tsg-os-mgnt-srv-1.0.0-1.el8.x86_64.rpm"
-    state: present
-    disable_gpg_check: yes
+  with_dict: "{{ tsg_os_clixon_rpm_version }}"
 
 - name: "clixon: enable tsg-clixon-backend"
   systemd:
