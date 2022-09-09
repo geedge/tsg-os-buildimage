@@ -34,6 +34,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
         securityContext:
           privileged: true
         livenessProbe:
@@ -114,6 +118,10 @@ spec:
         command: ["/opt/tsg/tfe/bin/tfe"]
         env:
         - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
