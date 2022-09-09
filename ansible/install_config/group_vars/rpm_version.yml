@@ -6,7 +6,7 @@ firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   fw_dns_plug: fw_dns_plug-4.0.3.3b4db47
   fw_ftp_plug: fw_ftp_plug-3.1.4.46f553d
-  fw_http_plug: fw_http_plug-4.1.5.647dbbe
+  fw_http_plug: fw_http_plug-4.1.6.9a178df
   fw_mail_plug: fw_mail_plug-4.1.3.8316056
   fw_quic_plug: fw_quic_plug-4.1.2.c79dbde
   fw_ssl_plug: fw_ssl_plug-3.2.4.77a4bc4
