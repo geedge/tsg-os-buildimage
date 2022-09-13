@@ -31,6 +31,7 @@
 ./plug/protocol/stratum/stratum.inf
 ./plug/protocol/rdp/rdp.inf
 ./plug/protocol/bgp/bgp.inf
+./plug/protocol/dtls/dtls.inf
 
 [business]
 {{- if eq .Values.encrypt_traffic_identify.voice_bahavior_engine .Values.define_enable_val_yes }}
