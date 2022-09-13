@@ -37,23 +37,23 @@ firewall_rpm_version:
   bgp: bgp-1.1.0.ec59191
 
 framework_rpm_version:
-  libcjson: libcjson-1.7.12.6c09dcf
-  libdocumentanalyze: libdocumentanalyze-2.0.10.4c04402
-  libMESA_field_stat: libMESA_field_stat-1.0.3.0de785d
-  libMESA_field_stat2: libMESA_field_stat2-2.10.11.b2095aa
-  libMESA_handle_logger: libMESA_handle_logger-2.0.9.b677bb6
-  libMESA_htable: libMESA_htable-3.10.13.bd6fc34
-  libMESA_prof_load: libMESA_prof_load-1.0.9.16148e7
-  librulescan: librulescan-2.3.1.b3a667a
-  libelua: libelua-2.0.0.ca53d85
-  libwiredcfg: libwiredcfg-2.0.8.cafaf49
-  libWiredLB: libWiredLB-2.0.6.54a039d
-  libbreakpad_mini: libbreakpad_mini-1.0.9.9d98968
-  libhos-client-cpp: libhos-client-cpp-3.0.13.8108a5e
-  libMV_Sketch: libMV_Sketch-2.1.2.20220225.dc6bb95
-  librdkafka: librdkafka-1.2.2.1218b3c
-  libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
-  libmaatframe: libmaatframe-3.6.11.47a7101
+  00_libcjson: libcjson-1.7.12.6c09dcf
+  01_libdocumentanalyze: libdocumentanalyze-2.0.10.4c04402
+  02_libMESA_field_stat: libMESA_field_stat-1.0.3.0de785d
+  03_libMESA_field_stat2: libMESA_field_stat2-2.10.11.b2095aa
+  04_libMESA_handle_logger: libMESA_handle_logger-2.0.9.b677bb6
+  05_libMESA_htable: libMESA_htable-3.10.13.bd6fc34
+  06_libMESA_prof_load: libMESA_prof_load-1.0.9.16148e7
+  07_librulescan: librulescan-2.3.1.b3a667a
+  08_libelua: libelua-2.0.0.ca53d85
+  09_libwiredcfg: libwiredcfg-2.0.8.cafaf49
+  10_libWiredLB: libWiredLB-2.0.6.54a039d
+  11_libbreakpad_mini: libbreakpad_mini-1.0.9.9d98968
+  12_libhos-client-cpp: libhos-client-cpp-3.0.13.8108a5e
+  13_libMV_Sketch: libMV_Sketch-2.1.2.20220225.dc6bb95
+  14_librdkafka: librdkafka-1.2.2.1218b3c
+  15_libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
+  16_libmaatframe: libmaatframe-3.6.11.47a7101
 
 kni_rpm_version:
   kni: kni-5.0.2.6cb27c3

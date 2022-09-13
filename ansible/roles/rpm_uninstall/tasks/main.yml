@@ -11,11 +11,11 @@
     state: absent
   with_dict: "{{ firewall_rpm_version }}"
 
-- name: "uninstall framework"
-  yum:
-    name: "{{ item.key }}"
-    state: absent
-  with_dict: "{{ framework_rpm_version }}"
+#- name: "uninstall framework"
+#  yum:
+#    name: "{{ item.key }}"
+#    state: absent
+#  with_dict: "{{ framework_rpm_version }}"
 
 - name: "uninstall kni"
   yum:

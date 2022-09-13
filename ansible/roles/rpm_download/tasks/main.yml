@@ -27,12 +27,12 @@
 
 - name: "download rpm packages: framework"
   yum:
-    name: "{{ item.value }}"
+    name: "{{ item.1 }}"
     state: present
     conf_file: "{{ rpm_repo_config_path }}"
     download_only: yes
     download_dir: "{{ path_download }}"
-  with_dict: "{{ framework_rpm_version }}"
+  loop: "{{ framework_rpm_version | dictsort }}"
 
 - name: "download rpm packages: kni"
   yum:
