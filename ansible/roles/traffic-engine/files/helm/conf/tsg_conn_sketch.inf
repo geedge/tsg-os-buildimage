@@ -17,60 +17,93 @@ FUNC_NAME=tsg_record_tcpall_entry
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_udp_entry
 
+
+{{- if eq .Values.decoders.HTTP .Values.define_enable_val_yes }}
 [HTTP]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_http_entry
+{{- end }}
 
+
+{{- if eq .Values.decoders.SSL .Values.define_enable_val_yes }}
 [SSL]
 FUNC_FLAG=SSL_CLIENT_HELLO,SSL_SERVER_HELLO,SSL_APPLICATION_DATA,SSL_CERTIFICATE_DETAIL
 FUNC_NAME=tsg_record_ssl_entry
+{{- end }}
 
+
+{{- if eq .Values.decoders.DNS .Values.define_enable_val_yes }}
 [DNS]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_dns_entry
+{{- end }}
 
+
+{{- if eq .Values.decoders.MAIL .Values.define_enable_val_yes }}
 [MAIL]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_mail_entry
+{{- end }}
 
-{{ if eq .Values.voip_record.enable_rtp .Values.define_enable_val_yes }}
+
+{{- if and (eq .Values.voip_record.enable_rtp .Values.define_enable_val_yes) (eq .Values.decoders.RTP .Values.define_enable_val_yes ) }}
 [RTP]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_rtp_entry
 {{- end }}
 
-{{ if eq .Values.voip_record.enable_sip .Values.define_enable_val_yes }}
+
+{{- if and (eq .Values.voip_record.enable_sip .Values.define_enable_val_yes) (eq .Values.decoders.SIP .Values.define_enable_val_yes ) }}
 [SIP]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_sip_entry
 {{- end }}
 
+
+{{- if eq .Values.decoders.FTP .Values.define_enable_val_yes }}
 [FTP]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_ftp_entry
+{{- end }}
 
+
+{{- if eq .Values.decoders.QUIC .Values.define_enable_val_yes }}
 [QUIC]
 FUNC_FLAG=QUIC_CLIENT_HELLO,QUIC_SERVER_HELLO,QUIC_CACHED_CERT,QUIC_COMM_CERT,QUIC_CERT_CHAIN,QUIC_VERSION,QUIC_APPLICATION_DATA
 FUNC_NAME=tsg_record_quic_entry
+{{- end }}
 
+
+{{- if eq .Values.decoders.SSH .Values.define_enable_val_yes }}
 [SSH]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_ssh_entry
+{{- end }}
 
+
+{{- if eq .Values.decoders.STRATUM .Values.define_enable_val_yes }}
 [STRATUM]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_stratum_entry
+{{- end }}
 
+
+{{- if eq .Values.decoders.RDP .Values.define_enable_val_yes }}
 [RDP]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_rdp_entry
+{{- end }}
 
-{{ if eq .Values.bgp_record.enable .Values.define_enable_val_yes }}
+
+{{- if and (eq .Values.bgp_record.enable .Values.define_enable_val_yes) (eq .Values.decoders.BGP .Values.define_enable_val_yes) }}
 [BGP]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_bgp_entry
 {{- end }}
 
+
+{{- if eq .Values.decoders.DTLS .Values.define_enable_val_yes }}
 [DTLS]
 FUNC_FLAG=DTLS_CLIENT_HELLO,DTLS_SERVER_HELLO,DTLS_HELLO_VERIFY_REQUEST,DTLS_CLIENT_EXTENSION
 FUNC_NAME=tsg_record_dtls_entry
+{{- end }}

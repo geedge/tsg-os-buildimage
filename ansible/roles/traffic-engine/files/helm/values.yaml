@@ -166,3 +166,21 @@ image:
     repository: docker.io/library/tsg-init
     pullPolicy: Never
     tag: ""
+
+decoders:
+  DNS: yes
+  QUIC: yes
+  HTTP: yes
+  MAIL: yes
+  FTP: yes
+  SSL: yes
+  RTP: yes
+  SIP: yes
+  SSH: yes
+  RADIUS: yes
+  SOCKS: yes
+  STRATUM: yes
+  RDP: yes
+  BGP: yes
+  DTLS: yes
+  GTPC: yes

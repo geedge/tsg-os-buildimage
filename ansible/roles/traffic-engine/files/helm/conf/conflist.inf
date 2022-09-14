@@ -15,23 +15,55 @@
 {{- end }}
 
 [protocol]
-./plug/protocol/deal_socks/deal_socks.inf 
+{{- if eq .Values.decoders.SOCKS .Values.define_enable_val_yes }}
+./plug/protocol/deal_socks/deal_socks.inf
+{{- end }}
+{{- if eq .Values.decoders.SIP .Values.define_enable_val_yes }}
 ./plug/protocol/sip/sip.inf
+{{- end }}
+{{- if eq .Values.decoders.RTP .Values.define_enable_val_yes }}
 ./plug/protocol/rtp/rtp.inf
+{{- end }}
+{{- if eq .Values.decoders.SSL .Values.define_enable_val_yes }}
 ./plug/protocol/ssl/ssl.inf
+{{- end }}
+{{- if eq .Values.decoders.HTTP .Values.define_enable_val_yes }}
 ./plug/protocol/http/http.inf
+{{- end }}
+{{- if eq .Values.decoders.DNS .Values.define_enable_val_yes }}
 ./plug/protocol/dns/dns.inf
+{{- end }}
+{{- if eq .Values.decoders.MAIL .Values.define_enable_val_yes }}
 ./plug/protocol/mail/mail.inf
+{{- end }}
+{{- if eq .Values.decoders.FTP .Values.define_enable_val_yes }}
 ./plug/protocol/ftp/ftp.inf
+{{- end }}
+{{- if eq .Values.decoders.QUIC .Values.define_enable_val_yes }}
 ./plug/protocol/quic/quic.inf
+{{- end }}
 ./plug/protocol/l2tp_protocol_plug/l2tp_protocol_plug.inf
+{{- if eq .Values.decoders.GTPC .Values.define_enable_val_yes }}
 ./plug/protocol/gtp/gtp.inf
+{{- end }}
+{{- if eq .Values.decoders.RADIUS .Values.define_enable_val_yes }}
 ./plug/protocol/radius/radius.inf
+{{- end }}
+{{- if eq .Values.decoders.SSH .Values.define_enable_val_yes }}
 ./plug/protocol/ssh/ssh.inf
+{{- end }}
+{{- if eq .Values.decoders.STRATUM .Values.define_enable_val_yes }}
 ./plug/protocol/stratum/stratum.inf
+{{- end }}
+{{- if eq .Values.decoders.RDP .Values.define_enable_val_yes }}
 ./plug/protocol/rdp/rdp.inf
+{{- end }}
+{{- if eq .Values.decoders.BGP .Values.define_enable_val_yes }}
 ./plug/protocol/bgp/bgp.inf
+{{- end }}
+{{- if eq .Values.decoders.DTLS .Values.define_enable_val_yes }}
 ./plug/protocol/dtls/dtls.inf
+{{- end }}
 
 [business]
 {{- if eq .Values.encrypt_traffic_identify.voice_bahavior_engine .Values.define_enable_val_yes }}
@@ -47,13 +79,29 @@
 ./plug/business/kni/kni.inf
 {{- end }}
 {{- if eq .Values.firewall.enable .Values.define_enable_val_yes }}
+{{- if eq .Values.decoders.SSL .Values.define_enable_val_yes }}
 ./plug/business/fw_ssl_plug/fw_ssl_plug.inf
+{{- end }}
+{{- if eq .Values.decoders.HTTP .Values.define_enable_val_yes }}
 ./plug/business/fw_http_plug/fw_http_plug.inf
+{{- end }}
+{{- if eq .Values.decoders.DNS .Values.define_enable_val_yes }}
 ./plug/business/fw_dns_plug/fw_dns_plug.inf
+{{- end }}
+{{- if eq .Values.decoders.MAIL .Values.define_enable_val_yes }}
 ./plug/business/fw_mail_plug/fw_mail_plug.inf
+{{- end }}
+{{- if eq .Values.decoders.FTP .Values.define_enable_val_yes }}
 ./plug/business/fw_ftp_plug/fw_ftp_plug.inf
+{{- end }}
+{{- if eq .Values.decoders.QUIC .Values.define_enable_val_yes }}
 ./plug/business/fw_quic_plug/fw_quic_plug.inf
+{{- end }}
+{{- if and (eq .Values.decoders.RTP .Values.define_enable_val_yes) (eq .Values.decoders.SIP .Values.define_enable_val_yes) }}
 ./plug/business/fw_voip_plug/fw_voip_plug.inf
+{{- end }}
+{{- end }}
+{{- if eq .Values.decoders.GTPC .Values.define_enable_val_yes }}
 ./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
 {{- end }}
 ./plug/business/conn_telemetry/conn_telemetry.inf
@@ -62,6 +110,6 @@
 ./plug/business/app_sketch_local/app_sketch_local.inf
 {{- end }}
 {{- end }}
-{{- if eq .Values.radius_record.enable .Values.define_enable_val_yes }}
+{{- if and (eq .Values.radius_record.enable .Values.define_enable_val_yes) (eq .Values.decoders.RADIUS .Values.define_enable_val_yes) }}
 ./plug/business/radius_collect_plug/radius_collect_plug.inf
 {{- end }}

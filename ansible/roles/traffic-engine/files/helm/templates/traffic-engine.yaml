@@ -99,6 +99,9 @@ spec:
         - name: sapp
           mountPath: "/opt/tsg/etc/tsg_device_tag.json"
           subPath: "tsg_device_tag.json"
+        - name: sapp
+          mountPath: "/opt/tsg/sapp/plug/business/app_sketch_local/app_sketch_local.inf"
+          subPath: "app_sketch_local.inf"
         - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"

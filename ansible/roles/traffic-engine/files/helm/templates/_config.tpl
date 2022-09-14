@@ -73,3 +73,14 @@ enable_breakpad_upload=0
 {{- $address_dict := index .Values.external_resources.olap.hos_servers.addresses 0 -}}
 {{- $address_dict.port }}
 {{- end -}}
+
+{{- define "traffic-engine.config.identify-proto-name" -}}
+{{- $proto_name := "" -}}
+{{- $val_yes := .Values.define_enable_val_yes }}
+{{- range $key, $val := .Values.decoders }}
+{{- if eq $val $val_yes }}
+{{- $proto_name = print $proto_name $key ";" }}
+{{- end }}
+{{- end }}
+{{- $proto_name }}
+{{- end -}}
