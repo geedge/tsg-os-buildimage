@@ -187,13 +187,6 @@
   when:
     - runtime_env == 'TSG-7400-mcn0'
 
-- name: "copy zlog.conf to dest"
-  copy:
-    src: "{{ role_path }}/files/sapp_log.conf"
-    dest: /opt/tsg/sapp/etc/
-  when:
-    - runtime_env == 'TSG-X-P0906'
-
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:
     path: "{{ item }}"

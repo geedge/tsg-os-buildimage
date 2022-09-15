@@ -136,13 +136,6 @@
     - {src: "tfe-env-start.sh.j2", dest: "tfe-env-start.sh" }
     - {src: "tfe-env-stop.sh.j2",  dest: "tfe-env-stop.sh" }
 
-- name: "copy zlog.conf to dest"
-  copy:
-    src: "{{ role_path }}/files/zlog.conf"
-    dest: /opt/tsg/tfe/conf/tfe/
-  when:
-    - runtime_env == 'TSG-X-P0906'
-
 ##################### tfe #####################
 - name: "systemctl daemon-reload"
   systemd:
