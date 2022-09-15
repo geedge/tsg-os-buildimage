@@ -13,7 +13,7 @@ firewall_rpm_version:
   fw_dtls_plug: fw_dtls_plug-1.0.0.47d2d7e
   tsg_conn_sketch:  tsg_conn_sketch-3.3.12.aa6f2b1
   fw_voip_plug: fw_voip_plug-1.0.11.301c698
-  gtp_signaling_plug: gtp_signaling_plug-1.0.4.eb9cd29
+  gtp_signaling_plug: gtp_signaling_plug-1.0.5.8d64946
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
   radius_collect_plug: radius_collect_plug-2.0.7.13b33a3
   app_proto_identify: app_proto_identify-2.1.3.50ba01f
