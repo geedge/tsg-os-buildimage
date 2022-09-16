@@ -124,7 +124,7 @@ tfe_affinity: [77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92]
 
 tfe_rps_mask: "00000000"
 
-nic_policy_log_name: ctrl_mock
+nic_policy_log_name: eth0
 nic_raw_name: eth0
 nic_mirror_name: eth0
 
