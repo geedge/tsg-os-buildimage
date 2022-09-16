@@ -28,7 +28,7 @@ firewall_rpm_version:
   rtp: rtp-1.0.7.530ac76
   gtp: gtp-1.0.7.e1041b2
   ssh: ssh-2.1.7.b053e65
-  dtls: dtls-1.0.2.700a7b3
+  dtls: dtls-1.0.3.76d3795
   radius: radius-1.0.7.54b70b2
   mesa_sip: mesa_sip-1.2.3.ccf9b90
   deal_socks: deal_socks-1.0.4.329bba3
