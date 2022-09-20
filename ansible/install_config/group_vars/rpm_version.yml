@@ -44,7 +44,7 @@ framework_rpm_version:
   04_libMESA_handle_logger: libMESA_handle_logger-2.0.9.b677bb6
   05_libMESA_htable: libMESA_htable-3.10.13.bd6fc34
   06_libMESA_prof_load: libMESA_prof_load-1.0.9.16148e7
-  07_librulescan: librulescan-2.3.1.b3a667a
+  07_librulescan: librulescan-3.0.1.6145620
   08_libelua: libelua-2.0.0.ca53d85
   09_libwiredcfg: libwiredcfg-2.0.8.cafaf49
   10_libWiredLB: libWiredLB-2.0.6.54a039d
@@ -53,7 +53,7 @@ framework_rpm_version:
   13_libMV_Sketch: libMV_Sketch-2.1.2.20220225.dc6bb95
   14_librdkafka: librdkafka-1.2.2.1218b3c
   15_libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
-  16_libmaatframe: libmaatframe-3.6.12.f88f730
+  16_libmaatframe: libmaatframe-3.6.14.f88f730
 
 kni_rpm_version:
   kni: kni-5.0.2.6cb27c3
@@ -63,9 +63,9 @@ mrzcpd_rpm_version:
   mrzcpd-0906: mrzcpd-4.6.3.34ea49b
 
 sapp_rpm_version:
-  sapp: sapp-4.2.89.f36ee77
+  sapp: sapp-4.2.90.8c77537
   tcpdump_mesa: tcpdump_mesa-1.0.12.91900e1
-  sapp-pr: sapp-pr-4.2.89.f36ee77
+  sapp-pr: sapp-pr-4.2.90.8c77537
 
 tfe_rpm_version:
   tfe: tfe-4.6.18.69f76bb
@@ -75,7 +75,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.5.0.af92eb0
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.8.4.7e6dcfb
+  tsg_master: tsg_master-5.8.5.8758d0b
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.1.8c7e9cc
