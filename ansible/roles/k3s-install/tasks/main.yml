@@ -15,7 +15,7 @@
     dest: /var/lib/rancher/k3s/agent/images/
 
 - name: "execute k3s install"
-  shell: curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_SKIP_ENABLE=true INSTALL_K3S_BIN_DIR=/usr/bin sh -
+  shell: curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_SKIP_ENABLE=true INSTALL_K3S_BIN_DIR=/usr/bin sh -s - --flannel-backend=none
 
 - name: "enable k3s"
   systemd:
@@ -24,3 +24,28 @@
 
 - name: "kubectl bash auto-completion"
   shell: kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
+
+- name: "copy k3s resouce file to k3s manifests directory"
+  copy:
+    src: "{{ role_path }}/files/multus-daemonset.yml"
+    dest: /var/lib/rancher/k3s/server/manifests/
+
+- name: "copy multus-cni.tar to destination"
+  copy:
+    src: "{{ role_path }}/files/multus-cni.tar"
+    dest: /var/lib/rancher/k3s/agent/images/
+
+- name: "create cni bin directory"
+  file:
+    path: "/opt/cni/bin"
+    state: directory
+
+- name: "unarchive cni plugin tar package"
+  unarchive:
+    src: "{{ role_path }}/files/cni-plugins-linux-amd64.tgz"
+    dest: /opt/cni/bin/
+
+- name: "copy 10-bridge.conf to destination"
+  copy:
+    src: "{{ role_path }}/files/10-bridge.conf"
+    dest: /etc/cni/net.d/

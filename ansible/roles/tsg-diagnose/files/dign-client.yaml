@@ -1,0 +1,78 @@
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: macvlan-client
+spec:
+  config: '{
+            "cniVersion": "0.3.0",
+            "type": "macvlan",
+            "master": "ens4f1",
+            "mode": "bridge",
+            "ipam": {
+                "type": "host-local",
+                "ranges": [
+                    [ {
+                         "subnet": "192.0.2.0/24",
+                         "rangeStart": "192.0.2.211",
+                         "rangeEnd": "192.0.2.220",
+                         "gateway": "192.0.2.1"
+                    } ]
+                ]
+            }
+        }'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dign-client
+  labels:
+    app: dign-client
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dign-client
+  template:
+    metadata:
+      labels:
+        app: dign-client
+      annotations:
+        k8s.v1.cni.cncf.io/networks: macvlan-client
+    spec:
+      containers:
+      - name: dign-client
+        image: "dign-client:latest"
+        imagePullPolicy: Never
+        workingDir: /opt/dign_client
+        command: ["/bin/sh", "-c", "update-ca-certificates; tail -f /dev/null"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true
+        - name: ca-cert-file
+          mountPath: /usr/local/share/ca-certificates
+        - name: log-path
+          mountPath: /opt/dign_client/log
+        - name: config-path
+          mountPath: /opt/dign_client/etc/client.conf
+          subPath: "client.conf"
+
+      volumes:
+      - name: localtime-node
+        hostPath:
+          path: /etc/localtime
+      - name: ca-cert-file
+        hostPath:
+          path: /opt/tsg/tsg-diagnose/etc/.certs_import/certs/sets/current/gen/crt
+      - name: log-path
+        hostPath:
+          path: /opt/tsg/tsg-diagnose/log
+      - name: config-path
+        hostPath:
+          path: /opt/tsg/tsg-diagnose/etc
+---
+

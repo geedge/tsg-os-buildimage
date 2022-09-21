@@ -63,3 +63,12 @@
     backrefs: yes
     regexp: "^(.*Defaults    secure_path =.*)$"
     line: '\1:/opt/tsg/tsg-diagnose/scripts'
+
+- name: "copy k3s resouce file to k3s manifests directory"
+  copy:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: /var/lib/rancher/k3s/server/manifests/
+  with_items:
+    - dign-client.yaml
+    - dign-server.yaml
+  when: runtime_env == 'TSG-X-P0906'

@@ -152,6 +152,7 @@
     - {role: mrzcpd, tags: mrzcpd}
     - {role: clixon, tags: clixon}
     - {role: traffic-engine, tags: traffic-engine}
+    - {role: tsg-diagnose, tags: tsg-diagnose}
     - {role: system-init-TSG-X-P1403, tags: system-init-TSG-X-P1403}
     - {role: system-init, tags: system-init}
     - {role: hasp, tags: hasp}

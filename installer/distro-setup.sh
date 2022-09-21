@@ -72,10 +72,20 @@ if [ -d "$air_gap_image_dir" ]; then
     echo "$air_gap_image_dir is exist"
     rm -rf /data$air_gap_image_dir
     mkdir -p /data$air_gap_image_dir
-    cp -a $air_gap_image_dir/* /data$air_gap_image_dir
+    mv $air_gap_image_dir/* /data$air_gap_image_dir
 else
     echo "$air_gap_image_dir is not exist"
 fi
+
+tsg_diagnose_images_dir="/opt/tsg/tsg-diagnose/images"
+if [ -d "$tsg_diagnose_images_dir" ]; then
+    echo "$tsg_diagnose_images_dir is exist"
+    mkdir -p /data$air_gap_image_dir
+    mv $tsg_diagnose_images_dir/* /data$air_gap_image_dir
+else
+    echo "$tsg_diagnose_images_dir is not exist"
+fi
+
 #  copy helm packages to dest 
 helm_charts_dir="/var/lib/rancher/k3s/server/static/charts"
 if [ -d "$helm_charts_dir" ]; then

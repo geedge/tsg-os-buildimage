@@ -1,0 +1,99 @@
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: macvlan-server
+spec:
+  config: '{
+            "cniVersion": "0.3.0",
+            "type": "macvlan",
+            "master": "ens4f0",
+            "mode": "bridge",
+            "ipam": {
+                "type": "host-local",
+                "ranges": [
+                    [ {
+                         "subnet": "192.0.2.0/24",
+                         "rangeStart": "192.0.2.201",
+                         "rangeEnd": "192.0.2.210",
+                         "gateway": "192.0.2.1"
+                    } ]
+                ]
+            }
+        }'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dign-server
+  labels:
+    app: dign-server
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dign-server
+  template:
+    metadata:
+      labels:
+        app: dign-server
+      annotations:
+        k8s.v1.cni.cncf.io/networks: macvlan-server
+
+    spec:
+      containers:
+      - name: dign-server-dns
+        image: "dign-server-dns:latest"
+        imagePullPolicy: Never
+        command: ["/bin/sh", "-c", "echo 66.66.66.66  www.1testanswer-cname.com >> /etc/hosts; webproc --config /etc/dnsmasq.conf -- dnsmasq --no-daemon"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true
+        - name: config-path
+          mountPath: /etc/dnsmasq.conf
+          subPath: dnsmasq.conf
+          readOnly: true
+
+      - name: dign-server-web
+        image: "dign-server-web:latest"
+        imagePullPolicy: Never
+        command: ["/bin/bash", "-c", "make inside-docker;nginx;tail -f /dev/null"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true
+        - name: certs-path
+          mountPath: /badssl.com/certs
+          readOnly: true
+        - name: common-path
+          mountPath: /badssl.com/common
+          readOnly: true
+
+      initContainers:
+      - name: tsg-dign-init
+        image: "dign-server-dns:latest"
+        imagePullPolicy: Never
+        command: ["/bin/sh","-c","i=1;while [ \"$i\" -le 64 ]; do ip_suffix=$(( i + 100 ));ifconfig net1:$i 192.0.2.$ip_suffix;i=$(( i + 1 ));done;"]
+        securityContext:
+          privileged: true
+
+      volumes:
+      - name: localtime-node
+        hostPath:
+          path: /etc/localtime
+      - name: config-path
+        hostPath:
+          path: /opt/tsg/tsg-diagnose/etc/
+      - name: certs-path
+        hostPath:
+          path: /opt/tsg/tsg-diagnose/etc/.certs_import/certs
+      - name: common-path
+        hostPath:
+          path: /opt/tsg/tsg-diagnose/etc/.certs_import/common
+---
