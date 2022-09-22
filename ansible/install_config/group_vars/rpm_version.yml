@@ -45,11 +45,11 @@ framework_rpm_version:
   05_libMESA_htable: libMESA_htable-3.10.13.bd6fc34
   06_libMESA_prof_load: libMESA_prof_load-1.0.9.16148e7
   07_librulescan: librulescan-3.0.1.6145620
-  08_libelua: libelua-2.0.0.ca53d85
+  08_libelua: libelua-2.0.1.7760c27
   09_libwiredcfg: libwiredcfg-2.0.8.cafaf49
   10_libWiredLB: libWiredLB-2.0.6.54a039d
   11_libbreakpad_mini: libbreakpad_mini-1.0.9.9d98968
-  12_libhos-client-cpp: libhos-client-cpp-3.0.15.5277814
+  12_libhos-client-cpp: libhos-client-cpp-3.0.16.c229087
   13_libMV_Sketch: libMV_Sketch-2.1.2.20220225.dc6bb95
   14_librdkafka: librdkafka-1.2.2.1218b3c
   15_libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
