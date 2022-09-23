@@ -97,6 +97,18 @@ else
     echo "$helm_charts_dir is not exist"
 fi
 
+#  copy manifests config to dest 
+k3s_manifests_dir="/var/lib/rancher/k3s/server/manifests"
+if [ -d "$k3s_manifests_dir" ]; then
+    echo "$k3s_manifests_dir is exist"
+    rm -rf /data$k3s_manifests_dir
+    mkdir -p /data$k3s_manifests_dir
+    cp -a $k3s_manifests_dir/* /data$k3s_manifests_dir
+else
+    echo "$k3s_manifests_dir is not exist"
+fi
+
+
 # Setup o/s mount points
 (cat <<EOF2
 ${blk_dev}4             /                       ext4    defaults        1 1
