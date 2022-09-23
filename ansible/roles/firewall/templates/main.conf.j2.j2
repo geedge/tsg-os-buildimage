@@ -40,7 +40,8 @@ LOCATION_TABLE_TYPE=19
 
 [TSG_LOG]
 MODE=1
-VSYSTEM_ID=1
+VSYSTEM_ID={% raw %}{{ vsys_id }}
+{% endraw %}
 NAMESPACE_ID=1
 NIC_NAME="{{ control_and_policy.nic_name }}"
 MAX_SERVICE=1

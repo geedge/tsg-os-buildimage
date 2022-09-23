@@ -2,8 +2,6 @@ external_resources:
   cm:
     address: 10.X.X.X
     port: 7002
-    db_static: 0
-    db_dynamic: 1
     port_num: 1
 
   olap:
@@ -112,7 +110,7 @@ wannat:
   link_table_report_interval: 30
   wan_gateway_listen_port_range_left_edge: 3545
 
-vsys_id: "xxxxxxxxx"
+vsys_id: 1
 
 etherfabric_settings:
   keepalive:

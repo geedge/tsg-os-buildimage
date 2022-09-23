@@ -10,26 +10,7 @@ REDIS_IP={% raw %}{{ cm_policy_server_ip }}
 {% endraw %}
 REDIS_PORT={% raw %}{{ cm_policy_server_port }}
 {% endraw %}
-{% raw %}REDIS_INDEX={{ cm.policy_server.db_static }}
-{% endraw %}
-JSON_CFG_FILE=tsgconf/tsg_maat.json
-INC_CFG_DIR=tsgrule/inc/index/
-FULL_CFG_DIR=tsgrule/full/index/
-EFFECTIVE_RANGE_FILE=/opt/tsg/etc/tsg_device_tag.json
-
-[DYNAMIC]
-###0:location 1:json 2:redis
-MAAT_MODE=2
-STAT_SWITCH=1
-PERF_SWITCH=1
-TABLE_INFO=tsgconf/tsg_dynamic_tableinfo.conf
-STAT_FILE=tsg_dynamic_maat.status
-EFFECT_INTERVAL_S=1
-REDIS_IP={% raw %}{{ cm_policy_server_ip }}
-{% endraw %}
-REDIS_PORT={% raw %}{{ cm_policy_server_port }}
-{% endraw %}
-{% raw %}REDIS_INDEX={{ cm.policy_server.db_dynamic }}
+{% raw %}REDIS_INDEX={{ vsys_id }}
 {% endraw %}
 JSON_CFG_FILE=tsgconf/tsg_maat.json
 INC_CFG_DIR=tsgrule/inc/index/
@@ -47,7 +28,7 @@ REDIS_IP={% raw %}{{ cm_policy_server_ip }}
 {% endraw %}
 REDIS_PORT={% raw %}{{ cm_policy_server_port }}
 {% endraw %}
-{% raw %}REDIS_INDEX={{ cm.policy_server.db_static }}
+{% raw %}REDIS_INDEX={{ cm.policy_server. }}
 {% endraw %}
 JSON_CFG_FILE=tsgconf/app_sketch_maat.json
 INC_CFG_DIR=tsgrule/inc/index/
@@ -65,7 +46,7 @@ REDIS_IP={% raw %}{{ cm_policy_server_ip }}
 {% endraw %}
 REDIS_PORT={% raw %}{{ cm_policy_server_port }}
 {% endraw %}
-{% raw %}REDIS_INDEX={{ cm.policy_server.db_static }}
+{% raw %}REDIS_INDEX={{ vsys_id }}
 {% endraw %}
 JSON_CFG_FILE=tsgconf/capture_packet_maat.json
 INC_CFG_DIR=tsgrule/inc/index/

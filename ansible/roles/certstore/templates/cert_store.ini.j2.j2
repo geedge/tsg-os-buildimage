@@ -73,7 +73,7 @@ ip = {% raw %}{{ cm_policy_server_ip }}
 {% endraw %}
 port = {% raw %}{{ cm_policy_server_port }}
 {% endraw %}
-{% raw %}dbindex =  {{ cm.policy_server.db_static }}
+{% raw %}dbindex =  {{ vsys_id }}
 {% endraw %}
 [stat]
 statsd_server=127.0.0.1

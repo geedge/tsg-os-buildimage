@@ -74,7 +74,7 @@ redis_server_ip={% raw %}{{ cm_policy_server_ip }}
 redis_server_port={% raw %}{{ cm_policy_server_port }}
 {% endraw %}
 {% raw %}REDIS_PORT_NUM={{ cm.policy_server.port_num }}
-redis_index={{ cm.policy_server.db_static }}
+redis_index={{ vsys_id }}
 {% endraw %}
 
 

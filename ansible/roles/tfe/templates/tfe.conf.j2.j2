@@ -122,6 +122,8 @@ key_log_file=log/sslkeylog.log
 
 # mid cert cache
 mc_cache_enable=1
+mc_vsystem_id={% raw %}{{ vsys_id }}
+{% endraw %}
 mc_cache_eth={{ control_and_policy.nic_name }}
 {% raw %}mc_cache_broker_list={{ olap.kafka_broker.address_list | join(",") }}
 {% endraw %}
@@ -212,6 +214,8 @@ kafka_topic=PROXY-EVENT
 sasl_username=admin
 sasl_passwd=galaxy2019
 device_id_filepath=/opt/tsg/etc/tsg_sn.json
+vsystem_id={% raw %}{{ vsys_id }}
+{% endraw %}
 
 [maat]
 # 0:json 1:redis 2:iris
@@ -232,7 +236,7 @@ maat_redis_server={% raw %}{{ cm_policy_server_ip }}
 {% endraw %}
 maat_redis_port_range={% raw %}{{ cm_policy_server_port }}
 {% endraw %}
-{% raw %}maat_redis_db_index={{ cm.policy_server.db_static }}
+{% raw %}maat_redis_db_index={{ vsys_id }}
 {% endraw %}
 
 # iris mode conf iterm
