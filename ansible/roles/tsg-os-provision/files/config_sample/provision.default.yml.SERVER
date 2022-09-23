@@ -75,3 +75,5 @@ cm:
 session_distribution_policy:
   mode: sym-hash
   hash_key: inner-most-sip-dip
+
+vsys_id: 1
