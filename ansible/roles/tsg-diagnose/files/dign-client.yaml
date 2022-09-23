@@ -47,6 +47,13 @@ spec:
         imagePullPolicy: Never
         workingDir: /opt/dign_client
         command: ["/bin/sh", "-c", "update-ca-certificates; tail -f /dev/null"]
+        livenessProbe:
+          exec:
+            command:
+            - ifconfig
+            - net1
+          initialDelaySeconds: 5
+          periodSeconds: 5
         securityContext:
           privileged: true
         volumeMounts:

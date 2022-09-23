@@ -49,6 +49,13 @@ spec:
         command: ["/bin/sh", "-c", "echo 66.66.66.66  www.1testanswer-cname.com >> /etc/hosts; webproc --config /etc/dnsmasq.conf -- dnsmasq --no-daemon"]
         securityContext:
           privileged: true
+        livenessProbe:
+          exec:
+            command:
+            - ifconfig
+            - net1
+          initialDelaySeconds: 5
+          periodSeconds: 5
         volumeMounts:
         - name: localtime-node
           mountPath: /etc/localtime
@@ -64,6 +71,13 @@ spec:
         command: ["/bin/bash", "-c", "make inside-docker;nginx;tail -f /dev/null"]
         securityContext:
           privileged: true
+        livenessProbe:
+          exec:
+            command:
+            - ifconfig
+            - net1
+          initialDelaySeconds: 5
+          periodSeconds: 5
         volumeMounts:
         - name: localtime-node
           mountPath: /etc/localtime
