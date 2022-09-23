@@ -76,3 +76,7 @@ cm:
 session_distribution_policy:
   mode: sym-hash
   hash_key: inner-most-sip-dip
+
+olap:
+  hos_server:
+    token: "c21f969b5f03d33d43e04f8f136e7682"

@@ -19,6 +19,7 @@ olap:
   hos_server:
     address: "127.0.0.1"
     port: 9098
+    token: "xxxxxxxxxx"
 
 network_setting:
   nic_policy_log:

@@ -16,9 +16,9 @@ entrance_id=0
 #Addresses of hos, Bucket name in hos. Format is defined by WiredLB.
 {% raw %}cache_ip_list = {{ olap.hos_server.address }}
 cache_listen_port = {{ olap.hos_server.port }}
-{% endraw %}
 cache_bucket_name=hos/proxy_hos_bucket
-cache_token=c21f969b5f03d33d43e04f8f136e7682
+cache_token={{ olap.hos_server.token }}
+{% endraw %}
 
 #Refer to the pangu_cahche definition
 max_used_memroy_size_mb=5120
@@ -62,7 +62,8 @@ enable_cache=0
 cache_ip_list=192.168.10.61-64;
 cache_listen_port=9000
 cache_bucket_name=hos/proxy_hos_bucket
-cache_token=c21f969b5f03d33d43e04f8f136e7682
+cache_token={% raw %}{{ olap.hos_server.token }}
+{% endraw %}
 
 max_cnnt_pipeline_num=20
 #Maximum size of memory used by tango_cache_client. Upload will fail if the current size of memory used exceeds this value.

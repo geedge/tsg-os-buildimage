@@ -119,7 +119,7 @@ sendlog_in_tcp_close=1
 {% if firewall.enable_hos == 1 %}
 hos_serverip="{{ olap.hos_server.address }}"
 hos_serverport={{ olap.hos_server.port }}
-hos_token="c21f969b5f03d33d43e04f8f136e7682"
+hos_token="{{ olap.hos_server.token }}"
 hos_log_level=30
 hos_each_upload_cache_size=1500
 hos_each_upload_cache_count=10

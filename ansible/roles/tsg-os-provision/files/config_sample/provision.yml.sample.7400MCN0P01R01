@@ -60,6 +60,7 @@ olap:
   hos_server:
     address: "127.0.0.1"
     port: 9098
+    token: "xxxxxxxxxx"
 
 # npb_device value in [inline_device, tera,direct]
 npb_device: inline_device
