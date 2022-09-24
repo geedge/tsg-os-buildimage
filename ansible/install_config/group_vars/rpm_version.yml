@@ -78,7 +78,7 @@ tsg_master_rpm_version:
   tsg_master: tsg_master-5.8.5.8758d0b
 
 tsg_diagnose_rpm_version:
-  tsg_diagnose: tsg-diagnose-2.0.1.8c7e9cc
+  tsg_diagnose: tsg-diagnose-2.0.2.ecdc9a2
 
 http_healthcheck_rpm_version:
   http_healthcheck: http_healthcheck-2.0.1.0884451
