@@ -28,7 +28,7 @@ firewall_rpm_version:
   rtp: rtp-1.0.7.530ac76
   gtp: gtp-1.0.7.e1041b2
   ssh: ssh-2.1.7.b053e65
-  dtls: dtls-1.0.3.76d3795
+  dtls: dtls-1.0.4.cfc47d7
   radius: radius-1.0.7.54b70b2
   mesa_sip: mesa_sip-1.2.3.ccf9b90
   deal_socks: deal_socks-1.0.4.329bba3
@@ -72,7 +72,7 @@ tfe_rpm_version:
   tfe-pr: tfe-pr-4.6.18.69f76bb
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-4.5.1.8a1f731
+  app_sketch_local: app_sketch_local-4.5.0.af92eb0
 
 tsg_master_rpm_version:
   tsg_master: tsg_master-5.8.5.8758d0b
