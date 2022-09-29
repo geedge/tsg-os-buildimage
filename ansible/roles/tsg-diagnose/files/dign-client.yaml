@@ -2,13 +2,12 @@
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
-  name: macvlan-client
+  name: br-dign-client
 spec:
   config: '{
             "cniVersion": "0.3.0",
-            "type": "macvlan",
-            "master": "virtio_dign_c",
-            "mode": "bridge",
+            "type": "bridge",
+            "bridge": "br_dign_c",
             "ipam": {
                 "type": "host-local",
                 "ranges": [
@@ -23,14 +22,13 @@ spec:
         }'
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: dign-client
   labels:
     app: dign-client
 
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: dign-client
@@ -39,7 +37,7 @@ spec:
       labels:
         app: dign-client
       annotations:
-        k8s.v1.cni.cncf.io/networks: macvlan-client
+        k8s.v1.cni.cncf.io/networks: br-dign-client
     spec:
       containers:
       - name: dign-client
@@ -47,13 +45,6 @@ spec:
         imagePullPolicy: Never
         workingDir: /opt/dign_client
         command: ["/bin/sh", "-c", "update-ca-certificates; tail -f /dev/null"]
-        livenessProbe:
-          exec:
-            command:
-            - ifconfig
-            - net1
-          initialDelaySeconds: 5
-          periodSeconds: 5
         securityContext:
           privileged: true
         volumeMounts:

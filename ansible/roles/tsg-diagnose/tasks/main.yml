@@ -72,3 +72,10 @@
     - dign-client.yaml
     - dign-server.yaml
   when: runtime_env == 'TSG-X-P0906'
+
+- name: "copy iptables shell to dispatcher.d"
+  copy:
+    src: "{{ role_path }}/files/30-add_dign_br_iptable_rule.sh"
+    dest: /etc/NetworkManager/dispatcher.d/
+    mode: 0755
+  when: runtime_env == 'TSG-X-P0906'

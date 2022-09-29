@@ -133,6 +133,13 @@
   when:
     - runtime_env == 'TSG-X-P0906'
 
+- name: "copy add_dev_to_bridge to mrzcpd.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_add_dev_to_bridge.conf"
+    dest: /usr/lib/systemd/system/mrzcpd.service.d/
+    mode: 0644
+  when: runtime_env == 'TSG-X-P0906'
+
 ##################### mrzcpd #####################
 - name: "enable mrenv"
   systemd:

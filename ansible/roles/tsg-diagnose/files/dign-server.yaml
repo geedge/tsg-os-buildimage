@@ -2,13 +2,12 @@
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
-  name: macvlan-server
+  name: br-dign-server
 spec:
   config: '{
             "cniVersion": "0.3.0",
-            "type": "macvlan",
-            "master": "virtio_dign_s",
-            "mode": "bridge",
+            "type": "bridge",
+            "bridge": "br_dign_s",
             "ipam": {
                 "type": "host-local",
                 "ranges": [
@@ -23,14 +22,13 @@ spec:
         }'
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: dign-server
   labels:
     app: dign-server
 
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: dign-server
@@ -39,7 +37,7 @@ spec:
       labels:
         app: dign-server
       annotations:
-        k8s.v1.cni.cncf.io/networks: macvlan-server
+        k8s.v1.cni.cncf.io/networks: br-dign-server
 
     spec:
       containers:
