@@ -24,7 +24,7 @@ firewall_rpm_version:
   http: http-2.0.10.274614c
   mail: mail-1.0.17.eb41cef
   quic: quic-2.0.4.ffb443e
-  ssl: ssl-2.0.11.d67f099
+  ssl: ssl-2.0.12.d55819b
   rtp: rtp-1.0.7.530ac76
   gtp: gtp-1.0.7.e1041b2
   ssh: ssh-2.1.7.b053e65
