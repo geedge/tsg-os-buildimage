@@ -4,6 +4,8 @@ metadata:
   name: tfe-{{ .Release.Name }}
   namespace: default
 data:
+{{- if and (eq .Values.proxy.enable .Values.define_enable_val_yes) (ge (len .Values.tfe_affinity) 1) }}
   tfe.conf: {{ tpl (.Files.Get "conf/tfe.conf") . | quote }}
   pangu_pxy.conf: {{ tpl (.Files.Get "conf/pangu_pxy.conf") . | quote }}
+{{- end }}
   tsg_device_tag.json: {{ tpl (.Files.Get "conf/tsg_device_tag.json") . | quote }}

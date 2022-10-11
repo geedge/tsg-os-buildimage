@@ -113,7 +113,7 @@ spec:
           mountPath: /etc/localtime
           readOnly: true
 
-{{- if eq .Values.proxy.enable .Values.define_enable_val_yes }}
+{{- if and (eq .Values.proxy.enable .Values.define_enable_val_yes) (ge (len .Values.tfe_affinity) 1) }}
       - name: proxy
         image: "{{ .Values.image.proxy.repository }}:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.proxy.pullPolicy }}

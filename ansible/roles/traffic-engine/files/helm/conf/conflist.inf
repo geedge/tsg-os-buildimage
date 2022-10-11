@@ -75,7 +75,7 @@
 {{- if eq .Values.packet_capture.enable .Values.define_enable_val_yes }}
 ./plug/business/capture_packet_plug/capture_packet_plug.inf
 {{- end }}
-{{- if eq .Values.proxy.enable .Values.define_enable_val_yes }}
+{{- if and (eq .Values.proxy.enable .Values.define_enable_val_yes) (ge (len .Values.tfe_affinity) 1) }}
 ./plug/business/kni/kni.inf
 {{- end }}
 {{- if eq .Values.firewall.enable .Values.define_enable_val_yes }}
