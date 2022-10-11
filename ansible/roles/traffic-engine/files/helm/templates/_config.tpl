@@ -35,11 +35,19 @@ enable_breakpad_upload=0
 {{- end -}}
 
 {{- define "traffic-engine.tfe.workerthread" -}}
-{{ sub (len .Values.tfe_affinity) 1 }}
+{{- if eq (len .Values.tfe_affinity) 1 }}
+{{- 1 }}
+{{- else }}
+{{- sub (len .Values.tfe_affinity) 1 }}
+{{- end }}
 {{- end -}}
 
 {{- define "traffic-engine.tfe.cpu-affinity" -}}
-{{ join "," .Values.tfe_affinity }}
+{{- if eq (len .Values.tfe_affinity) 1 }}
+{{- print (index .Values.tfe_affinity 0) "," (index .Values.tfe_affinity 0) }}
+{{- else }}
+{{- join "," .Values.tfe_affinity }}
+{{- end }}
 {{- end -}}
 
 {{- define "traffic-engine.device-tag-list" -}}
