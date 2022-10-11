@@ -55,6 +55,9 @@ framework_rpm_version:
   15_libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
   16_libmaatframe: libmaatframe-3.6.14.f88f730
 
+maat_redis_tool_version:
+  libmaatframe-tools: libmaatframe-tools-3.6.15.bf7ef3e
+
 kni_rpm_version:
   kni: kni-5.0.2.6cb27c3
 

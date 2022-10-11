@@ -34,11 +34,19 @@
     src: "{{ role_path }}/files/framework.conf"
     dest: /etc/ld.so.conf.d/
 
-- name: "copy maat_redis_tool to destination"
-  copy:
-    src: "{{ role_path }}/files/maat_redis_tool"
-    dest: /opt/tsg/framework/bin/
-    mode: 0755
+- name: "download rpm packages: maat-redis-tool"
+  yum:
+    name: "{{ item.1 }}"
+    state: present
+    conf_file: "{{ rpm_repo_config_path }}"
+    download_only: yes
+    download_dir: "{{ path_download }}"
+  loop: "{{ maat_redis_tool_version | dictsort }}"
+
+- name: "Install maat-redis-tool"
+  shell: rpm -i /tmp/rpm_download/{{ item.1 }}* --prefix {{ prefix_path.framework }} --nodeps
+  loop: "{{ maat_redis_tool_version | dictsort }}"
+
 
 - name: "copy framework.sh to destination for execute files of framework"
   copy:
