@@ -182,3 +182,5 @@ decoders:
   BGP: yes
   DTLS: yes
   GTPC: yes
+
+configHash: "defaulthash"

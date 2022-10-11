@@ -14,6 +14,8 @@ spec:
     metadata:
       labels:
         app: traffic-engine
+      annotations:
+        abcd: "{{ .Values.configHash }}"
 
     spec:
       tolerations:
