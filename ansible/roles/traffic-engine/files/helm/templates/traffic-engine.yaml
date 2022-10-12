@@ -10,12 +10,14 @@ spec:
   selector:
     matchLabels:
       app: traffic-engine
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         app: traffic-engine
       annotations:
-        abcd: "{{ .Values.configHash }}"
+        configPath: "{{ .Values.configHash }}"
 
     spec:
       tolerations:
