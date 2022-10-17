@@ -80,8 +80,10 @@ fi
 tsg_diagnose_images_dir="/opt/tsg/tsg-diagnose/images"
 if [ -d "$tsg_diagnose_images_dir" ]; then
     echo "$tsg_diagnose_images_dir is exist"
-    mkdir -p /data$air_gap_image_dir
-    mv $tsg_diagnose_images_dir/* /data$air_gap_image_dir
+    if [ -d "$air_gap_image_dir" ]; then
+        mkdir -p /data$air_gap_image_dir
+        mv $tsg_diagnose_images_dir/* /data$air_gap_image_dir
+    fi
 else
     echo "$tsg_diagnose_images_dir is not exist"
 fi
