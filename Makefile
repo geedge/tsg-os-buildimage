@@ -65,6 +65,21 @@ else
 	OS_RELEASE_VER = $(OS_BUILD_TAG)-$(OS_BUILD_HASH)
 endif
 
+ifeq ($(DALIY_BUILD_VERSION),1)
+	RESULT_BRANCH_MATCH = $(shell echo $(OS_BUILD_BRANCH) | sed -n "/\(dev\|rel\)-[0-9][0-9].[0-9][0-9]/p")
+	ifeq ($(OS_BUILD_BRANCH),$(RESULT_BRANCH_MATCH))
+		BRANCH_VER		= $(shell echo $(OS_BUILD_BRANCH) | sed 's/\(dev\|rel\)-//g')
+		BRANCH_PREFIX	= $(shell echo $(OS_BUILD_BRANCH) | sed 's/-[0-9][0-9].[0-1][0-9]//g')
+		HELM_CHART_VER	= $(BRANCH_VER)-$(BRANCH_PREFIX)-$(OS_BUILD_TIME)+$(OS_BUILD_HASH)
+	else
+		BRANCH_NAME_VER	= $(shell echo $(OS_BUILD_BRANCH) | sed 's/[^A-Za-z0-9-]\+/-/g')
+		HELM_CHART_VER	=  0.1.0-$(BRANCH_NAME_VER)-$(OS_BUILD_TIME)+$(OS_BUILD_HASH)
+	endif
+else
+		TAG_VER			= $(shell echo $(OS_BUILD_TAG) | sed 's/^\(v\|V\)//g')
+		HELM_CHART_VER	= $(TAG_VER)+$(OS_BUILD_HASH)
+endif
+
 ifndef PROFILE_LIST
 PROFILE_LIST := 7400MCN0P01R01
 endif
@@ -81,6 +96,7 @@ export BUILDDIR_BASE
 export IMAGEDIR_BASE
 export OS_RELEASE_VER
 export LOCK_STATE
+export HELM_CHART_VER
 
 .PHONY: all clean $(PROFILE_LIST)
 
@@ -91,6 +107,7 @@ all: $(PROFILE_LIST)
 	$(Q) sed -i -e 's/PULP_REPO_USERNAME/$(PULP_REPO_USERNAME)/g' $(CONFDIR)/yum-CentOS-7.conf
 	$(Q) sed -i -e 's/PULP_REPO_PASSWORD/$(PULP_REPO_PASSWORD)/g' $(CONFDIR)/yum-CentOS-7.conf
 	$(Q) echo "=== Building $< $(OS_RELEASE_VER) ==="
+	$(Q) echo "=== Building chart version $< $(HELM_CHART_VER) ==="
 	$(Q) $(MAKE) -f make/Makefile.$< all
 
 clean: $(PROFILE_LIST)

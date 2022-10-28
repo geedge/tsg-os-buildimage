@@ -5,11 +5,19 @@ PROJECTDIR=$2
 TARGET_SYSROOT_DIR=$3
 YUM_CONF_PATH=$4
 OS_RELEASE_VER=$5
+HELM_CHART_VER=$6
 
 echo "-----------------------------  Ansible Stage 1  ----------------------------"
 echo "$PROFILE_ID"
 
+
+if [ ! $HELM_CHART_VER ]; then
+    echo "HELM_CHART_VER is NULL,set HELM_CHART_VER to 0.1.0, profile_id:$PROFILE_ID,os_release_ver:$OS_RELEASE_VER"
+    HELM_CHART_VER="0.1.0"
+fi
+
+
 echo "[$PROFILE_ID]" > $PROJECTDIR/ansible/install_config/hosts
 echo "$TARGET_SYSROOT_DIR  ansible_connection=chroot" >> $PROJECTDIR/ansible/install_config/hosts
 
-ansible-playbook -i $PROJECTDIR/ansible/install_config/hosts $PROJECTDIR/ansible/HAL_deploy.yml -e "rpm_repo_config_path=$YUM_CONF_PATH PROFILE_ID=$PROFILE_ID path_download=/tmp/rpm_download os_release_ver=$OS_RELEASE_VER"
+ansible-playbook -i $PROJECTDIR/ansible/install_config/hosts $PROJECTDIR/ansible/HAL_deploy.yml -e "rpm_repo_config_path=$YUM_CONF_PATH PROFILE_ID=$PROFILE_ID path_download=/tmp/rpm_download os_release_ver=$OS_RELEASE_VER helm_chart_ver=$HELM_CHART_VER"

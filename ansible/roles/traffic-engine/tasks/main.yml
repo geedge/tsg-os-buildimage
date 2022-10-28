@@ -27,7 +27,7 @@
     remote_src: yes
 
 - name: "create charts packages"
-  shell: helm package --app-version {{os_release_ver}}  -d /var/lib/rancher/k3s/server/static/charts/  /tmp/traffic-engine/helm
+  shell: helm package --app-version {{os_release_ver}}  --version {{helm_chart_ver}} -d /var/lib/rancher/k3s/server/static/charts/  /tmp/traffic-engine/helm
 
 - name: "copy kubeconfig.sh to destination"
   copy:
