@@ -49,3 +49,8 @@
   copy:
     src: "{{ role_path }}/files/10-bridge.conf"
     dest: /etc/cni/net.d/
+
+- name: "copy config.yaml  to dest for resource management"
+  copy:
+    src: "{{ role_path }}/files/config.yaml"
+    dest: /etc/rancher/k3s/

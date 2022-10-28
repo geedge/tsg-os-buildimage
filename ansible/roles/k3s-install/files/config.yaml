@@ -1,0 +1,4 @@
+kubelet-arg:
+  - "kube-reserved=memory=2Gi"
+  - "system-reserved=memory=2Gi"
+  - "eviction-hard=memory.available<2Gi"
