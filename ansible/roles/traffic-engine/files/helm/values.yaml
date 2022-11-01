@@ -165,6 +165,8 @@ image:
     pullPolicy: Never
     tag: ""
 
+
+
 decoders:
   DNS: yes
   QUIC: yes
@@ -184,3 +186,21 @@ decoders:
   GTPC: yes
 
 configHash: "defaulthash"
+
+
+mergeExporter:
+  image:
+    repository: quay.io/rebuy/exporter-merger
+    pullPolicy: Never
+    tag: "v0.2.0"
+  port: "9004"
+  mergeUrls: "http://localhost:9273/metrics http://localhost:9001/metrics http://localhost:9002/metrics"
+  mergePort: "9004"
+
+deployment:
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9004"
+    
+    
+  

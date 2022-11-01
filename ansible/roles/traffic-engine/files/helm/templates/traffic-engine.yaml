@@ -16,8 +16,13 @@ spec:
     metadata:
       labels:
         app: traffic-engine
+        vsysId: vsys-{{ .Values.vsys_id }}
+        serviceFunction: {{ .Values.nic_raw_name }}
       annotations:
-        configPath: "{{ .Values.configHash }}"
+        configHash: "{{ .Values.configHash }}"
+  {{- with .Values.deployment.annotations }}
+        {{- toYaml . | nindent 8 }}
+  {{- end }}
 
     spec:
       tolerations:
@@ -33,6 +38,8 @@ spec:
         imagePullPolicy: {{ .Values.image.firewall.pullPolicy }}
         workingDir: /opt/tsg/sapp
         command: ["/opt/tsg/sapp/sapp"]
+        ports:
+          - containerPort: 9273
         env:
         - name: MRZCPD_CTRLMSG_LISTEN_ADDR
           valueFrom:
@@ -88,8 +95,8 @@ spec:
         - name: sapp
           mountPath: "/opt/tsg/sapp/etc/send_raw_pkt.conf"
           subPath: "send_raw_pkt.conf"
-        - name: sapp
 {{- if and (eq .Values.proxy.enable .Values.define_enable_val_yes) (ge (len .Values.tfe_affinity) 1) }}
+        - name: sapp
           mountPath: "/opt/tsg/sapp/etc/kni/kni.conf"
           subPath: "kni.conf"
 {{- end }}
@@ -125,6 +132,8 @@ spec:
         imagePullPolicy: {{ .Values.image.proxy.pullPolicy }}
         workingDir: /opt/tsg/tfe
         command: ["/opt/tsg/tfe/bin/tfe"]
+        ports:
+          - containerPort: 9001
         env:
         - name: MRZCPD_CTRLMSG_LISTEN_ADDR
           valueFrom:
@@ -175,6 +184,8 @@ spec:
         command: ["/opt/tsg/certstore/bin/certstore"]
         securityContext:
           privileged: true
+        ports:
+          - containerPort: 9002
         volumeMounts:
         - name: certstore
           mountPath: "/opt/tsg/certstore/conf/cert_store.ini"
@@ -223,6 +234,18 @@ spec:
         - name: localtime-node
           mountPath: /etc/localtime
           readOnly: true
+
+      - name: merge-exporter
+        image: "{{ .Values.mergeExporter.image.repository }}:{{ .Values.mergeExporter.image.tag }}"
+        imagePullPolicy: {{ .Values.mergeExporter.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.mergeExporter.port }}
+        env:
+        # space-separated list of URLs
+        - name: MERGER_URLS
+          value: {{ .Values.mergeExporter.mergeUrls }}
+        - name: MERGER_PORT
+          value: "{{ .Values.mergeExporter.mergePort }}"
 
       initContainers:
       - name: tsg-init
