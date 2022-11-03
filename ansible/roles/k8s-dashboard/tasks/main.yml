@@ -1,0 +1,16 @@
+- name: "copy k8s-dashboard.yaml to dest"
+  copy:
+    src: "{{ role_path }}/files/k8s-dashboard.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/
+
+- name: "get k8s dashboard images to dest"
+  get_url:
+    url: "https://repo.geedge.net/filerepo/install/release/tsg-container-images/{{ item }}"
+    dest: "/var/lib/rancher/k3s/agent/images/{{ item }}"
+    url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
+    url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
+  loop:
+    - k8s-dashboard.tar
+    - k8s-metrics-scraper.tar
+
+
