@@ -1,0 +1,15 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: tsg-ipmi
+  namespace: kube-system
+spec:
+  chart: https://%{KUBERNETES_API}%/static/charts/ipmi-exporter-0.1.9.tgz
+  targetNamespace: tsg-os-system
+  valuesContent: |-
+    ipmiExporter:
+      imagePullPolicy: Never
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+    fullnameOverride: "ipmi-exporter"

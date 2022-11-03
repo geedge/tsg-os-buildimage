@@ -2,3 +2,23 @@
   copy:
     src: "{{ role_path }}/files/ns-tsg-os-system.yaml"
     dest: /var/lib/rancher/k3s/server/manifests/
+
+- name: "copy ipmi crd file to dest"
+  copy:
+    src: "{{ role_path }}/files/ipmi/ipmi-crd.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/
+
+- name: "copy ipmi chart to dest"
+  copy:
+    src: "{{ role_path }}/files/ipmi/ipmi-exporter-0.1.9.tgz"
+    dest: /var/lib/rancher/k3s/server/static/charts/
+
+- name: "get ipmi chart images to dest"
+  get_url:
+    url: https://repo.geedge.net/filerepo/install/release/tsg-container-images/ipmi-exporter.tar
+    dest: /var/lib/rancher/k3s/agent/images/ipmi-exporter.tar
+    url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
+    url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
+
+
+
