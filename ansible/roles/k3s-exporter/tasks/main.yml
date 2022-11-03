@@ -20,5 +20,26 @@
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
 
+- name: "copy prometheus crd file to dest"
+  copy:
+    src: "{{ role_path }}/files/prometheus/prometheus-crd.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/
 
+- name: "copy prometheus chart to dest"
+  copy:
+    src: "{{ role_path }}/files/prometheus/prometheus-15.16.1.tgz"
+    dest: /var/lib/rancher/k3s/server/static/charts/
+
+- name: "get prometheus chart images to dest"
+  get_url:
+    url: "https://repo.geedge.net/filerepo/install/release/tsg-container-images/{{ item }}"
+    dest: "/var/lib/rancher/k3s/agent/images/{{ item }}"
+    url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
+    url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
+  loop:
+    - prometheus-alertmanager.tar
+    - prometheus-config-reload.tar
+    - prometheus-node-exporter.tar
+    - prometheus-pushgateway.tar
+    - prometheus.tar
 
