@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mrzcpd-exporter
+  name: mrzcpd-exporter
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mrzcpd-exporter
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mrzcpd-exporter
+    spec:
+      containers:
+      - command:
+        - /opt/tsg/mrzcpd/bin/monit_device
+        - --prometheus-client
+        image: "{{ .Values.mrzcpdExporter.image.repository }}:{{ .Values.mrzcpdExporter.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.mrzcpdExporter.image.pullPolicy }}
+        name: mrapm-device
+        volumeMounts:
+        - mountPath: /opt/tsg/mrzcpd
+          name: opt-tsg-mrzcpd
+          readOnly: true
+        - mountPath: /var/run/mrzcpd
+          name: var-run-mrzcpd
+          readOnly: true
+        - mountPath: /var/run/dpdk
+          name: var-run-dpdk
+          readOnly: true
+        - mountPath: /root/sys
+          name: root-sys
+          readOnly: true
+        - mountPath: /etc/localtime
+          name: localtime-node
+          readOnly: true
+      - command:
+        - /opt/tsg/mrzcpd/bin/monit_stream
+        - --prometheus-client
+        image: "{{ .Values.mrzcpdExporter.image.repository }}:{{ .Values.mrzcpdExporter.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.mrzcpdExporter.image.pullPolicy }}
+        name: monit-stream
+        volumeMounts:
+        - mountPath: /opt/tsg/mrzcpd
+          name: opt-tsg-mrzcpd
+          readOnly: true
+        - mountPath: /var/run/mrzcpd
+          name: var-run-mrzcpd
+          readOnly: true
+        - mountPath: /var/run/dpdk
+          name: var-run-dpdk
+          readOnly: true
+        - mountPath: /root/sys
+          name: root-sys
+          readOnly: true
+        - mountPath: /etc/localtime
+          name: localtime-node
+          readOnly: true
+      - env:
+        - name: MERGER_URLS
+          value: {{ .Values.mergeExporter.mergeUrls }}
+        - name: MERGER_PORT
+          value: "{{ .Values.mergeExporter.mergePort }}"
+        image: "{{ .Values.mergeExporter.image.repository }}:{{ .Values.mergeExporter.image.tag }}"
+        imagePullPolicy: {{ .Values.mergeExporter.image.pullPolicy }}
+        name: exporter-merger
+        ports:
+        - name: ex-mrzcpd-port
+          containerPort: {{ .Values.mergeExporter.mergePort }}
+          protocol: TCP
+      volumes:
+      - hostPath:
+          path: /opt/tsg/mrzcpd
+        name: opt-tsg-mrzcpd
+      - hostPath:
+          path: /var/run/mrzcpd
+        name: var-run-mrzcpd
+      - hostPath:
+          path: /var/run/dpdk
+        name: var-run-dpdk
+      - hostPath:
+          path: /root/sys
+        name: root-sys
+      - hostPath:
+          path: /etc/localtime
+        name: localtime-node
+

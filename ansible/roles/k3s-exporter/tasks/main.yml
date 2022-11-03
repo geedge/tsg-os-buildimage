@@ -43,3 +43,22 @@
     - prometheus-pushgateway.tar
     - prometheus.tar
 
+- name: "copy chart directory to dest"
+  copy:
+    src: "{{ role_path }}/files/mrzcpd/helm"
+    dest: /tmp/exporter-mrzcpd/
+
+- name: "create charts packages"
+  shell: helm package --app-version {{os_release_ver}}  --version {{helm_chart_ver}} -d /var/lib/rancher/k3s/server/static/charts/  /tmp/exporter-mrzcpd/helm
+
+- name: "copy prometheus crd file to dest"
+  template:
+    src: "{{ role_path }}/templates/exporter-mrzcpd-crd.yaml.j2"
+    dest: /var/lib/rancher/k3s/server/manifests/exporter-mrzcpd-crd.yaml
+
+- name: "get merge-exporter images to dest"
+  get_url:
+    url: https://repo.geedge.net/filerepo/install/release/tsg-container-images/exporter-merger.tar
+    dest: /var/lib/rancher/k3s/agent/images/ipmi-exporter.tar
+    url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
+    url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"

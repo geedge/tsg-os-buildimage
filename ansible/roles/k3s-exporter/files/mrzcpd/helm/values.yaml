@@ -1,0 +1,21 @@
+mrzcpdExporter:
+
+  image:
+    repository: docker.io/library/tsg-init
+    pullPolicy: Never
+    tag: "rel_22.10-20221009110641-f8db60e"
+  replicaCount: 1
+
+mergeExporter:
+  image:
+    repository: quay.io/rebuy/exporter-merger
+    pullPolicy: Never
+    tag: "v0.2.0"
+  mergePort: "9005"
+  mergeUrls: "http://localhost:8901/metrics http://localhost:8902/metrics"
+
+service:
+  type: ClusterIP
+#  nodePort: "30081"
+  port: "9005"
+  annotations: {}

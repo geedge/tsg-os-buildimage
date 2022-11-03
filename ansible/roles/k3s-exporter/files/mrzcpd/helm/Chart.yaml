@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: v22.10-rc2-fb83add
+description: A Helm chart for Kubernetes
+name: exporter-mrzcpd
+type: application
+version: 0.1.0

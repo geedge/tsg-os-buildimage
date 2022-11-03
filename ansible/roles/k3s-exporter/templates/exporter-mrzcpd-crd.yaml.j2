@@ -1,0 +1,13 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: exporter-mrzcpd
+  namespace: kube-system
+spec:
+  chart: https://%{KUBERNETES_API}%/static/charts/exporter-mrzcpd-{{helm_chart_ver}}.tgz
+  targetNamespace: tsg-os-system
+  valuesContent: |-
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+
