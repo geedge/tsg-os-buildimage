@@ -153,6 +153,7 @@
     - {role: clixon, tags: clixon}
     - {role: traffic-engine, tags: traffic-engine}
     - {role: k8s-dashboard, tags: k8s-dashboard}
+    - {role: k3s-exporter, tags: k3s-exporter}
     - {role: tsg-diagnose, tags: tsg-diagnose}
     - {role: system-init-TSG-X-P1403, tags: system-init-TSG-X-P1403}
     - {role: system-init, tags: system-init}

@@ -1,0 +1,4 @@
+- name: "copy namespace tsg-os-system file to dest"
+  copy:
+    src: "{{ role_path }}/files/ns-tsg-os-system.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/
