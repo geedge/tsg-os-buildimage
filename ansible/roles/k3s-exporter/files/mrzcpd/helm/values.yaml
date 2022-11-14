@@ -3,7 +3,7 @@ mrzcpdExporter:
   image:
     repository: docker.io/library/tsg-init
     pullPolicy: Never
-    tag: "rel_22.10-20221009110641-f8db60e"
+#    tag: ""
   replicaCount: 1
 
 mergeExporter:

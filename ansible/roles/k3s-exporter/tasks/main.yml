@@ -59,6 +59,6 @@
 - name: "get merge-exporter images to dest"
   get_url:
     url: https://repo.geedge.net/filerepo/install/release/tsg-container-images/exporter-merger.tar
-    dest: /var/lib/rancher/k3s/agent/images/ipmi-exporter.tar
+    dest: /var/lib/rancher/k3s/agent/images/exporter-merger.tar
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
