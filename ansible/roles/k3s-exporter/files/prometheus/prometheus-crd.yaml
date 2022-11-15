@@ -61,7 +61,22 @@ spec:
                 target_label: __metrics_path__
                 replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
             metric_relabel_configs:
+              - source_labels: [pod]
+                action: replace
+                target_label: function
+                regex: traffic-engine-(.*)-([a-z0-9]+)-([a-z0-9]+)
+                replacement: $1
               - regex:  instance
+                action: labeldrop
+              - regex: id
+                action: labeldrop
+              - regex: image
+                action: labeldrop
+              - regex: name
+                action: labeldrop
+              - regex: namespace
+                action: labeldrop
+              - regex: pod
                 action: labeldrop
 
           - job_name: 'exporter'
@@ -97,6 +112,11 @@ spec:
                 action: replace
                 target_label: service
             metric_relabel_configs:
+              - source_labels: [app]
+                action: replace
+                target_label: function
+                regex: sapp4-(.*)
+                replacement: $1
               - regex:  instance
                 action: labeldrop
 
@@ -125,7 +145,7 @@ spec:
               - source_labels: [__meta_kubernetes_pod_name]
                 action: replace
                 target_label: function
-                regex: (.*)-([a-z0-9]+)-([a-z0-9]+)
+                regex: traffic-engine-(.*)-([a-z0-9]+)-([a-z0-9]+)
                 replacement: $1
               - source_labels: [__meta_kubernetes_pod_label_vsysId]
                 action: replace
