@@ -15,7 +15,7 @@ spec:
         nodePort: 30080
         type: NodePort
       global:
-        scrape_interval: 30s
+        scrape_interval: 15s
     configmapReload:
       prometheus:
         image:
