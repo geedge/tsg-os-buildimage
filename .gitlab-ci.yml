@@ -7,7 +7,7 @@ variables:
 .build_tsg-buildimage:
   script:
     - env | sort
-    - yum -y install ansible pbzip2
+    - yum -y install pbzip2 ansible
     - make DALIY_BUILD_VERSION=$DALIY_BUILD_VERSION
     - chmod +x ./tools/upload.sh
     - ./tools/upload.sh 
@@ -73,6 +73,8 @@ feature_branch_build_TSGXP0804:
   variables:
     PROFILE_LIST: TSGXNXR620G40R01P0804
     DALIY_BUILD_VERSION: 1
+  before_script:
+    - yum -y install https://mirrors.aliyun.com/rockylinux/8.6/AppStream/x86_64/os/Packages/a/ansible-core-2.12.2-4.el8_6.rocky.0.1.x86_64.rpm
   except:
     - tags
     - /^dev-.*$/i
@@ -86,6 +88,8 @@ feature_branch_build_TSGXP0906:
   variables:
     PROFILE_LIST: TSGXNXR620G40R01P0906
     DALIY_BUILD_VERSION: 1
+  before_script:
+    - yum -y install https://mirrors.aliyun.com/rockylinux/8.6/AppStream/x86_64/os/Packages/a/ansible-core-2.12.2-4.el8_6.rocky.0.1.x86_64.rpm
   except:
     - tags
     - /^dev-.*$/i
@@ -187,6 +191,8 @@ develop_build_TSGXP0804:
     PULP3_FILE_DIST_NAME: tsg-os-images-develop
     DALIY_BUILD_VERSION: 1
     FILE_REPO_PATH: install/develop/tsg-os-images
+  before_script:
+    - yum -y install https://mirrors.aliyun.com/rockylinux/8.6/AppStream/x86_64/os/Packages/a/ansible-core-2.12.2-4.el8_6.rocky.0.1.x86_64.rpm
   only:
     - /^dev-.*$/i
 
@@ -201,6 +207,8 @@ develop_build_TSGXP0906:
     PULP3_FILE_DIST_NAME: tsg-os-images-develop
     DALIY_BUILD_VERSION: 1
     FILE_REPO_PATH: install/develop/tsg-os-images
+  before_script:
+    - yum -y install https://mirrors.aliyun.com/rockylinux/8.6/AppStream/x86_64/os/Packages/a/ansible-core-2.12.2-4.el8_6.rocky.0.1.x86_64.rpm
   only:
     - /^dev-.*$/i
 
@@ -301,6 +309,8 @@ testing_build_TSGXP0804:
     PULP3_FILE_DIST_NAME: tsg-os-images-testing
     FILE_REPO_PATH: install/testing/tsg-os-images
     DALIY_BUILD_VERSION: 1
+  before_script:
+    - yum -y install https://mirrors.aliyun.com/rockylinux/8.6/AppStream/x86_64/os/Packages/a/ansible-core-2.12.2-4.el8_6.rocky.0.1.x86_64.rpm
   only:
     - /^rel-.*$/i
 
@@ -315,6 +325,8 @@ testing_build_TSGXP0906:
     PULP3_FILE_DIST_NAME: tsg-os-images-testing
     FILE_REPO_PATH: install/testing/tsg-os-images
     DALIY_BUILD_VERSION: 1
+  before_script:
+    - yum -y install https://mirrors.aliyun.com/rockylinux/8.6/AppStream/x86_64/os/Packages/a/ansible-core-2.12.2-4.el8_6.rocky.0.1.x86_64.rpm
   only:
     - /^rel-.*$/i
 
@@ -415,6 +427,8 @@ rc_build_TSGXP0804:
     PULP3_FILE_REPO_NAME: tsg-os-images-rc
     PULP3_FILE_DIST_NAME: tsg-os-images-rc
     FILE_REPO_PATH: install/rc/tsg-os-images
+  before_script:
+    - yum -y install https://mirrors.aliyun.com/rockylinux/8.6/AppStream/x86_64/os/Packages/a/ansible-core-2.12.2-4.el8_6.rocky.0.1.x86_64.rpm
   only:
     - /^.*-rc.*$/i
 
@@ -429,6 +443,8 @@ rc_build_TSGXP0906:
     PULP3_FILE_REPO_NAME: tsg-os-images-rc
     PULP3_FILE_DIST_NAME: tsg-os-images-rc
     FILE_REPO_PATH: install/rc/tsg-os-images
+  before_script:
+    - yum -y install https://mirrors.aliyun.com/rockylinux/8.6/AppStream/x86_64/os/Packages/a/ansible-core-2.12.2-4.el8_6.rocky.0.1.x86_64.rpm
   only:
     - /^.*-rc.*$/i
 
@@ -537,6 +553,8 @@ release_build_TSGXP0804:
     PULP3_FILE_REPO_NAME: tsg-os-images-release
     PULP3_FILE_DIST_NAME: tsg-os-images-release
     FILE_REPO_PATH: install/release/tsg-os-images
+  before_script:
+    - yum -y install https://mirrors.aliyun.com/rockylinux/8.6/AppStream/x86_64/os/Packages/a/ansible-core-2.12.2-4.el8_6.rocky.0.1.x86_64.rpm
   only:
     - tags
   except:
@@ -553,6 +571,8 @@ release_build_TSGXP0906:
     PULP3_FILE_REPO_NAME: tsg-os-images-release
     PULP3_FILE_DIST_NAME: tsg-os-images-release
     FILE_REPO_PATH: install/release/tsg-os-images
+  before_script:
+    - yum -y install https://mirrors.aliyun.com/rockylinux/8.6/AppStream/x86_64/os/Packages/a/ansible-core-2.12.2-4.el8_6.rocky.0.1.x86_64.rpm
   only:
     - tags
   except:
