@@ -1,15 +1,30 @@
 ---
 - name: "copy nanomsg.rpm to destination server"
   copy:
-    src: "{{ role_path }}/files/nanomsg-1.1.5-6.el7.x86_64.rpm"
+    src: "{{ role_path }}/files/"
     dest: /tmp
 
-- name: "install nanomsg library"
+- name: "install nanomsg library centos7"
   yum:
     name:
       - /tmp/nanomsg-1.1.5-6.el7.x86_64.rpm
     state: present
     disable_gpg_check: yes
+  when:
+    - runtime_env == 'TSG-7400-mcn0'
+    - runtime_env == 'TSG-7400-mcn123'
+    - runtime_env == 'TSG-9140'
+    - runtime_env == 'TSG-X-P1403'
+
+- name: "install nanomsg library rockylinux8"
+  yum:
+    name:
+      - /tmp/nanomsg-1.1.5-6.el8.x86_64.rpm
+    state: present
+    disable_gpg_check: yes
+  when:
+    - runtime_env == 'TSG-X-P0804'
+    - runtime_env == 'TSG-X-P0906'
 
 - name: "Install wannat_common library"
   shell: rpm -i /tmp/rpm_download/{{ item.rpm_version }}* --prefix {{ item.prefix }}
