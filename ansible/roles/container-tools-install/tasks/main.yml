@@ -10,6 +10,12 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 
+- name: "install libnsl"
+  yum:
+    name: libnsl
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
 - name: "install iproute"
   yum:
     name: iproute
@@ -75,3 +81,5 @@
     name: perf
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+
+
