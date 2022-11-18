@@ -10,11 +10,7 @@
       - /tmp/nanomsg-1.1.5-6.el7.x86_64.rpm
     state: present
     disable_gpg_check: yes
-  when:
-    - runtime_env == 'TSG-7400-mcn0'
-    - runtime_env == 'TSG-7400-mcn123'
-    - runtime_env == 'TSG-9140'
-    - runtime_env == 'TSG-X-P1403'
+  when: runtime_env == 'TSG-7400-mcn0' or runtime_env == 'TSG-7400-mcn123' or runtime_env == 'TSG-9140' or runtime_env == 'TSG-X-P1403'
 
 - name: "install nanomsg library rockylinux8"
   yum:
@@ -22,9 +18,7 @@
       - /tmp/nanomsg-1.1.5-6.el8.x86_64.rpm
     state: present
     disable_gpg_check: yes
-  when:
-    - runtime_env == 'TSG-X-P0804'
-    - runtime_env == 'TSG-X-P0906'
+  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
 
 - name: "Install wannat_common library"
   shell: rpm -i /tmp/rpm_download/{{ item.rpm_version }}* --prefix {{ item.prefix }}
