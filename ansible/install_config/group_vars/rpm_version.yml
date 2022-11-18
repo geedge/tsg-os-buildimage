@@ -11,7 +11,7 @@ firewall_rpm_version:
   fw_quic_plug: fw_quic_plug-4.1.2.c79dbde
   fw_ssl_plug: fw_ssl_plug-3.2.4.77a4bc4
   fw_dtls_plug: fw_dtls_plug-1.0.1.5f7daf5
-  tsg_conn_sketch:  tsg_conn_sketch-3.3.13.11e1050
+  tsg_conn_sketch:  tsg_conn_sketch-3.3.14.74b1ffb
   fw_voip_plug: fw_voip_plug-1.0.11.301c698
   gtp_signaling_plug: gtp_signaling_plug-1.0.5.8d64946
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
