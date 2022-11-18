@@ -52,6 +52,8 @@ SASL_PASSWD="galaxy2019"
 {% raw %}BROKER_LIST="{{ olap.kafka_broker.address_list | join(",") }}"
 {% endraw %}
 COMMON_FIELD_FILE="tsgconf/tsg_log_field.conf"
+SEND_APP_ID_SWITCH=0
+SEND_NAT_LINKINFO_SWITCH=0
 
 [STATISTIC]
 CYCLE=5
@@ -114,6 +116,7 @@ transaction_service_switch=0
 {% endraw %}
 interim_intervals_time = 120
 sendlog_in_tcp_close=1
+send_dns_rr_switch=0
 
 [HOS_CONF]
 {% raw %}
