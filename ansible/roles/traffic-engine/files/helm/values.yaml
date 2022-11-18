@@ -194,7 +194,7 @@ mergeExporter:
     pullPolicy: Never
     tag: "v0.2.0"
   port: "9004"
-  mergeUrls: "http://localhost:9273/metrics http://localhost:9001/metrics http://localhost:9002/metrics"
+#  mergeUrls: "http://localhost:9273/metrics http://localhost:9001/metrics http://localhost:9002/metrics"
   mergePort: "9004"
 
 deployment:

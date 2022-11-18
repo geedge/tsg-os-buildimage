@@ -92,3 +92,11 @@ enable_breakpad_upload=0
 {{- end }}
 {{- $proto_name }}
 {{- end -}}
+
+{{- define "traffic-engine.merge-exporter.merge-urls" -}}
+{{- if and (eq .Values.proxy.enable .Values.define_enable_val_yes) (ge (len .Values.tfe_affinity) 1) }}
+{{- print "value: http://localhost:9273/metrics http://localhost:9001/metrics http://localhost:9002/metrics" }}
+{{- else }}
+{{- print "value: http://localhost:9273/metrics http://localhost:9002/metrics" }}
+{{- end }}
+{{- end -}}
