@@ -1,3 +1,13 @@
+- name: "update all"
+  yum:
+    name: '*'
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: latest
+
+- name: "hotfix for dnf broken"
+  shell:
+    cmd: "dnf upgrade --refresh rpm glibc && rm /var/lib/rpm/.rpm.lock && dnf upgrade dnf"
+
 - name: "install tcpdump"
   yum:
     name: tcpdump
@@ -7,12 +17,6 @@
 - name: "install numactl-libs"
   yum:
     name: numactl-libs
-    conf_file: "{{ rpm_repo_config_path }}"
-    state: present
-
-- name: "install libnsl"
-  yum:
-    name: libnsl
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 
@@ -76,10 +80,17 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 
+- name: "install libnsl"
+  yum:
+    name: libnsl
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
 - name: "install perf"
   yum:
     name: perf
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+    releasever: 8.6
 
 
