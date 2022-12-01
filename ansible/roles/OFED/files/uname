@@ -2,8 +2,8 @@
 
 if [ "$1" == "-r" ]
 then
-	echo 5.17.15-1.el8.x86_64
+	echo KERNEL_VERSION.x86_64
 else
-	/usr/bin/uname-bak $1
+	/usr/bin/uname-backup $1
 fi
 exit 0
