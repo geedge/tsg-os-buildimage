@@ -80,7 +80,7 @@
     line: '\1\nhash_behaviour = merge'
 
 - name: 'install psutil'
-  shell: pip3.8 install -i https://pypi.tuna.tsinghua.edu.cn/simple psutil
+  shell: pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple psutil
   when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
 
 - name: "add sudo secure_path"
