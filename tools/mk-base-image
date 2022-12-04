@@ -43,7 +43,7 @@ case $profile_id in
         base_package_to_install="@base @core @debugging @anaconda-tools @additional-devel @guest-agents @system-tools
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management adcli certmonger
                     ipa-client clevis-dracut clevis-udisks2 krb5-pkinit krb5-workstation sssd-polkit-rules krb5-pkinit luksmeta
-                    nscd nss-pam-ldapd grub2 epel-release efibootmgr yum-utils ipmitool OpenIPMI docker-ce docker-ce-cli
+                    nscd nss-pam-ldapd grub2 epel-release efibootmgr ansible yum-utils ipmitool OpenIPMI docker-ce docker-ce-cli
                     containerd.io lrzsz python3 watchdog pcm git tmux fish kernel kernel-devel kernel-tools-libs kernel-modules
                     kernel-tools kernel-core rpm-build libtool kernel-rpm-macros python36-devel tcsh kernel-modules-extra gcc-gfortran
                     libdb-devel fuse-devel python3-Cython cmake perl-generators libstdc++-devel libmnl-devel bison flex gcc-c++
@@ -70,15 +70,6 @@ yum -c "$yum_config" --installroot="$target" -y makecache
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $base_package_to_install
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $append_package_to_install
 
-case $profile_id in
-    "TSG-X-NXR620G40-R01-P0804" | "TSG-X-NXR620G40-R01-P0906" )
-        yum -y install https://mirrors.aliyun.com/rockylinux/8.6/AppStream/x86_64/os/Packages/a/ansible-core-2.12.2-4.el8_6.rocky.0.1.x86_64.rpm --installroot="$target"
-        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install ansible
-        ;;
-    *)
-        echo "Nothing to do profile_id:$profile_id"
-        ;;
-esac
 
 #if [ $profile_id  == "TSG-X-NXR620G40-R01-P0804" ];then
 #    kernel_version=$(ls $target/boot/vmlinuz-*.x86_64 | grep -oP "^$target/boot/vmlinuz-\K.*")
