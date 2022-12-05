@@ -24,11 +24,17 @@
   when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
 
 - name: "change kernel version for uname"
-  shell: sed -i -e 's/KERNEL_VERSION/3.10.0-1160.59.1.el7.x86_64/' /usr/bin/uname
+  shell: sed -i -e 's/KERNEL_VERSION/3.10.0-1160.59.1.el7/' /usr/bin/uname
+  when: runtime_env == 'TSG-X-P1403'
+
+- name: "create kernel directory"
+  file:
+    path: "/lib/modules/3.10.0-1160.59.1.el7.x86_64"
+    state: directory
   when: runtime_env == 'TSG-X-P1403'
 
 - name: "ln kernel for el7"
-  shell: mkdir -p /lib/modules/3.10.0-1160.59.1.el7.x86_64/ && ln -vfs --relative  /usr/src/kernels/3.10.0-1160.59.1.el7.x86_64/ /lib/modules/3.10.0-1160.59.1.el7.x86_64/build
+  shell: ln -vfs --relative  /usr/src/kernels/3.10.0-1160.59.1.el7.x86_64/ /lib/modules/3.10.0-1160.59.1.el7.x86_64/build
   when: runtime_env == 'TSG-X-P1403'
 
 ###### TSG-X-P0804 TSG-X-P0906 ofed install start ######
