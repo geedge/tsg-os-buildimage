@@ -66,6 +66,7 @@
 {{- end }}
 
 [business]
+./plug/business/session_marker_record/session_marker_record.inf
 {{- if eq .Values.encrypt_traffic_identify.voice_bahavior_engine .Values.define_enable_val_yes }}
 ./plug/business/tsg_vulpes/tsg_vulpes.inf
 {{- end }}
