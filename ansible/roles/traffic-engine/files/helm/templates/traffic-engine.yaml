@@ -308,13 +308,13 @@ spec:
         emptyDir: {}
       - name: firewall-minidump
         hostPath:
-          path: /run/sapp/crashreport
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-firewall:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}/
       - name: proxy-minidump
         hostPath:
-          path: /run/tfe/crashreport
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-proxy:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}/
       - name: certstore-minidump
         hostPath:
-          path: /run/certstore/crashreport
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-certstore:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}/
       - name: firewall-log
         hostPath: 
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sapp/
