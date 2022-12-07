@@ -38,7 +38,10 @@
 ./plug/protocol/stratum/stratum.inf
 ./plug/protocol/rdp/rdp.inf
 ./plug/protocol/bgp/bgp.inf
+{% raw %}{% if firewall.enable_dtls == 1 %}
 ./plug/protocol/dtls/dtls.inf
+{% endif %}
+{% endraw %}
 
 [business]
 {% raw %}{% if app_behavior.enable == 1 %}
@@ -67,7 +70,9 @@
 ./plug/business/fw_ftp_plug/fw_ftp_plug.inf
 ./plug/business/fw_quic_plug/fw_quic_plug.inf
 ./plug/business/fw_voip_plug/fw_voip_plug.inf
+{% if firewall.enable_dtls == 1 %}
 ./plug/business/fw_dtls_plug/fw_dtls_plug.inf
+{% endif %}
 ./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
 {% endif %}
 ./plug/business/conn_telemetry/conn_telemetry.inf

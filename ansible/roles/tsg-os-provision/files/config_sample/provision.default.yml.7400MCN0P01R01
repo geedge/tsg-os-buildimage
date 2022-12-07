@@ -5,6 +5,7 @@ feature:
 firewall:
   enable: 1
   enable_hos: 1
+  enable_dtls: 0
 
 proxy:
   enable: 1

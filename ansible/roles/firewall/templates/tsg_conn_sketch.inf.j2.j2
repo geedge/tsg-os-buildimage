@@ -71,6 +71,9 @@ FUNC_NAME=tsg_record_rdp_entry
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_bgp_entry
 
+{% raw %}{% if firewall.enable_dtls == 1 %}
 [DTLS]
 FUNC_FLAG=DTLS_CLIENT_HELLO,DTLS_SERVER_HELLO,DTLS_HELLO_VERIFY_REQUEST,DTLS_CLIENT_EXTENSION
 FUNC_NAME=tsg_record_dtls_entry
+{% endif %}
+{% endraw %}
