@@ -247,6 +247,18 @@ spec:
         - name: MERGER_PORT
           value: "{{ .Values.mergeExporter.mergePort }}"
 
+      - name: minidump-hook
+        image: "{{ .Values.image.tsgInit.repository }}:{{ .Values.image.tsgInit.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.tsgInit.pullPolicy }}
+        command: ["/bin/sh", "-c", "while true; do touch /run/sapp/crashreport/.minidump; touch /run/tfe/crashreport/.minidump; touch /run/certstore/crashreport/.minidump; sleep 600; done"]
+        volumeMounts:
+        - name: firewall-minidump
+          mountPath: /run/sapp/crashreport
+        - name: proxy-minidump
+          mountPath: /run/tfe/crashreport
+        - name: certstore-minidump
+          mountPath: /run/certstore/crashreport
+
       initContainers:
       - name: tsg-init
         image: "{{ .Values.image.tsgInit.repository }}:{{ .Values.image.tsgInit.tag | default .Chart.AppVersion }}"
