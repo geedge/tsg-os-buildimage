@@ -99,6 +99,12 @@
     replace: 'daemonize no'
   when: runtime_env == 'TSG-X-P0906' and PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-certstore' 
 
+- name: "copy start.sh to dest for container"
+  copy:
+    src: "{{ role_path }}/files/start.sh"
+    dest: /opt/tsg/scripts/
+    mode: 0755
+  when: runtime_env == 'TSG-X-P0906'
 
 ##################### certstore #####################
 - name: "systemctl daemon-reload"

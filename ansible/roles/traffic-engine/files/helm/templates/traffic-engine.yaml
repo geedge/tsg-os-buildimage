@@ -37,7 +37,7 @@ spec:
         image: "{{ .Values.image.firewall.repository }}:{{ .Values.image.firewall.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.firewall.pullPolicy }}
         workingDir: /opt/tsg/sapp
-        command: ["/opt/tsg/sapp/sapp"]
+        command: ["/opt/tsg/scripts/start.sh"]
         ports:
           - containerPort: 9273
         env:
@@ -75,46 +75,7 @@ spec:
           mountPath: /root/sys
           readOnly: false
         - name: sapp
-          mountPath: "/opt/tsg/sapp/plug/conflist.inf"
-          subPath: "conflist.inf"
-        - name: sapp
-          mountPath: "/opt/tsg/sapp/etc/gdev.conf"
-          subPath: "gdev.conf"
-        - name: sapp
-          mountPath: "/opt/tsg/sapp/tsgconf/main.conf"
-          subPath: "main.conf"
-        - name: sapp
-          mountPath: "/opt/tsg/sapp/tsgconf/maat.conf"
-          subPath: "maat.conf"
-        - name: sapp
-          mountPath: "/opt/tsg/sapp/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf"
-          subPath: "tsg_conn_sketch.inf"
-        - name: sapp
-          mountPath: "/opt/tsg/sapp/etc/sapp.toml"
-          subPath: "sapp.toml"
-        - name: sapp
-          mountPath: "/opt/tsg/sapp/etc/send_raw_pkt.conf"
-          subPath: "send_raw_pkt.conf"
-{{- if and (eq .Values.proxy.enable .Values.define_enable_val_yes) (ge (len .Values.tfe_affinity) 1) }}
-        - name: sapp
-          mountPath: "/opt/tsg/sapp/etc/kni/kni.conf"
-          subPath: "kni.conf"
-{{- end }}
-        - name: sapp
-          mountPath: "/opt/tsg/sapp/etc/wannat/wangw.conf"
-          subPath: "wangw.conf"
-        - name: sapp
-          mountPath: "/opt/tsg/sapp/etc/wire_graft/wire_graft.conf"
-          subPath: "wire_graft.conf"
-        - name: sapp
-          mountPath: "/opt/tsg/sapp/etc/vlan_flipping_map.conf"
-          subPath: "vlan_flipping_map.conf"
-        - name: sapp
-          mountPath: "/opt/tsg/etc/tsg_device_tag.json"
-          subPath: "tsg_device_tag.json"
-        - name: sapp
-          mountPath: "/opt/tsg/sapp/plug/business/app_sketch_local/app_sketch_local.inf"
-          subPath: "app_sketch_local.inf"
+          mountPath: "/opt/tsg/config"
         - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
@@ -125,13 +86,15 @@ spec:
         - name: localtime-node
           mountPath: /etc/localtime
           readOnly: true
+        - name: hotfix-firewall
+          mountPath: /etc/traffic-engine/hotfix/firewall
 
 {{- if and (eq .Values.proxy.enable .Values.define_enable_val_yes) (ge (len .Values.tfe_affinity) 1) }}
       - name: proxy
         image: "{{ .Values.image.proxy.repository }}:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.proxy.pullPolicy }}
         workingDir: /opt/tsg/tfe
-        command: ["/opt/tsg/tfe/bin/tfe"]
+        command: ["/opt/tsg/scripts/start.sh"]
         ports:
           - containerPort: 9001
         env:
@@ -157,14 +120,7 @@ spec:
           periodSeconds: 10
         volumeMounts:
         - name: tfe
-          mountPath: "/opt/tsg/tfe/conf/tfe/tfe.conf"
-          subPath: "tfe.conf"
-        - name: tfe
-          mountPath: "/opt/tsg/tfe/conf/pangu/pangu_pxy.conf"
-          subPath: "pangu_pxy.conf"
-        - name: tfe
-          mountPath: "/opt/tsg/etc/tsg_device_tag.json"
-          subPath: "tsg_device_tag.json"
+          mountPath: "/opt/tsg/config"
         - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
@@ -175,24 +131,22 @@ spec:
         - name: localtime-node
           mountPath: /etc/localtime
           readOnly: true
+        - name: hotfix-proxy
+          mountPath: /etc/traffic-engine/hotfix/proxy
 {{- end }}
 
       - name: certstore
         image: "{{ .Values.image.certstore.repository }}:{{ .Values.image.certstore.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.certstore.pullPolicy }}
         workingDir: /opt/tsg/certstore
-        command: ["/opt/tsg/certstore/bin/certstore"]
+        command: ["/opt/tsg/scripts/start.sh"]
         securityContext:
           privileged: true
         ports:
           - containerPort: 9002
         volumeMounts:
         - name: certstore
-          mountPath: "/opt/tsg/certstore/conf/cert_store.ini"
-          subPath: "cert_store.ini"
-        - name: certstore
-          mountPath: "/opt/tsg/etc/tsg_device_tag.json"
-          subPath: "tsg_device_tag.json"
+          mountPath: "/opt/tsg/config"
         - name: config-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
@@ -203,6 +157,8 @@ spec:
         - name: localtime-node
           mountPath: /etc/localtime
           readOnly: true
+        - name: hotfix-certstore
+          mountPath: /etc/traffic-engine/hotfix/certstore
 
       - name: cert-redis
         image: "{{ .Values.image.certRedis.repository }}:{{ .Values.image.certRedis.tag | default .Chart.AppVersion }}"
@@ -339,3 +295,12 @@ spec:
       - name: localtime-node
         hostPath:
           path: /etc/localtime
+      - name: hotfix-firewall
+        hostPath:
+          path: /etc/traffic-engine/hotfix/firewall
+      - name: hotfix-proxy
+        hostPath:
+          path: /etc/traffic-engine/hotfix/proxy
+      - name: hotfix-certstore
+        hostPath:
+          path: /etc/traffic-engine/hotfix/certstore

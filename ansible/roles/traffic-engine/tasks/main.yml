@@ -44,3 +44,24 @@
   copy:
     src: "{{ role_path }}/files/sudoers.d/00-kubconfig"
     dest: /etc/sudoers.d/
+
+- name:  "mkdir hotfix directory"
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /etc/traffic-engine/hotfix/firewall/scripts
+    - /etc/traffic-engine/hotfix/firewall/files
+    - /etc/traffic-engine/hotfix/proxy/scripts
+    - /etc/traffic-engine/hotfix/proxy/files
+    - /etc/traffic-engine/hotfix/certstore/scripts
+    - /etc/traffic-engine/hotfix/certstore/files
+
+- name: "copy prestart.sh"
+  copy:
+    src: '{{ role_path }}/files/hotfix/prestart.sh'
+    dest: '{{ item }}'
+  with_items:
+    - /etc/traffic-engine/hotfix/firewall/scripts/
+    - /etc/traffic-engine/hotfix/proxy/scripts/
+    - /etc/traffic-engine/hotfix/certstore/scripts/

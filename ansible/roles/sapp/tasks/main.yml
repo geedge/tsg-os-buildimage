@@ -169,6 +169,13 @@
     mode: 0644
   when: runtime_env != 'TSG-X-P0906'
 
+- name: "copy start.sh to dest for container"
+  copy:
+    src: "{{ role_path }}/files/start.sh"
+    dest: /opt/tsg/scripts/
+    mode: 0755
+  when: runtime_env == 'TSG-X-P0906'
+
 - name: "copy env conf to sapp.service.d"
   copy:
     src: "{{ role_path }}/templates/service_override_env.conf.j2"
