@@ -8,6 +8,9 @@ if [ -n "${UPLOAD_TO_FILE_REPO}" ]; then
 	#python3 ~/file_upload_tools.py ${PULP3_FILE_REPO_NAME} ${PULP3_FILE_DIST_NAME} ./images/*.sha256sum.txt
 	if [ "${PROFILE_LIST}" == "SERVER" ]; then
 		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.tar
+	elif [ "${PROFILE_LIST}" == "KVM" ]; then
+		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.img
+		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.gns3a
 	else
 		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.bin
 	fi

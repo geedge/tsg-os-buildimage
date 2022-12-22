@@ -1,0 +1,25 @@
+- name: "tsg-os-HAL: copy shell file to dest"
+  copy:
+    src: "{{ role_path }}/files/script/{{ item }}"
+    dest: /opt/tsg/tsg-os-HAL/scripts/
+    mode: 0755
+  with_items:
+    - tsg-os-HAL.sh
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "install tsg-os-HAL.service -- P0906"
+  copy:
+    src: "{{ role_path }}/files/service/{{ item.src }}"
+    dest: /usr/lib/systemd/system/{{ item.dest }}
+    mode: 0644
+  with_items:
+    - { "src": tsg-os-HAL.service.TSGXP0906, "dest": tsg-os-HAL.service }
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "tsg-os-HAL.service: enable -- P0906"
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+  with_items:
+    - tsg-os-HAL.service
+  when: runtime_env == 'TSG-X-P0906'

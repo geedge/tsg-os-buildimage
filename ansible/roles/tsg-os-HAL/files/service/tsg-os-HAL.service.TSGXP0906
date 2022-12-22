@@ -1,0 +1,11 @@
+[Unit]
+Description=Tsg os HAL
+Before=mrenv.service
+
+[Service]
+ExecStart=/bin/sh -c "/opt/tsg/tsg-os-HAL/scripts/tsg-os-HAL.sh"
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

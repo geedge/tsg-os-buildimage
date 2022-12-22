@@ -151,6 +151,7 @@
     - {role: coredump, tags: coredump}
     - {role: mrzcpd, tags: mrzcpd}
     - {role: clixon, tags: clixon}
+    - {role: tsg-os-HAL, tags: tsg-os-HAL}
     - {role: traffic-engine, tags: traffic-engine}
     - {role: k8s-dashboard, tags: k8s-dashboard}
     - {role: k3s-exporter, tags: k3s-exporter}

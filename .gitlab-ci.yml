@@ -4,6 +4,10 @@ variables:
   BUILD_BASED_IMAGE_CENTOS7: "git.mesalab.cn:7443/mesa_platform/build-env:master"
   BUILD_BASED_IMAGE_ROCKYLINUX8: "git.mesalab.cn:7443/mesa_platform/build-env:rockylinux-dindind"
 
+cache:
+   paths:
+     - images
+
 .build_tsg-buildimage:
   script:
     - env | sort
@@ -11,6 +15,35 @@ variables:
     - make DALIY_BUILD_VERSION=$DALIY_BUILD_VERSION
     - chmod +x ./tools/upload.sh
     - ./tools/upload.sh 
+  tags:
+    - tsg-os-installer
+
+.build_tsg_vm_image:
+  cache:
+    key: $BUILD_OS_CACHE_KEY
+    paths:
+      - images/
+    policy: pull
+  script:
+    - yum install -y qemu-img qemu-kvm telnet net-tools procps-ng httpd
+    - find / -name images
+    - ls -lh
+    - export VM_IMG_NAME=$(basename -s .bin images/*.bin)
+    - echo $VM_IMG_NAME
+    - mv images/*.bin /var/www/html/onie-installer-x86_64.bin
+    - httpd
+    - chmod +x ./tools/mk-kvm.sh
+    - cp ./tools/onie-base-kvm.img images/$VM_IMG_NAME.img
+    - ./tools/mk-kvm.sh images/$VM_IMG_NAME.img
+    - qemu-img convert -O qcow2 -c images/$VM_IMG_NAME.img images/$VM_IMG_NAME-kvm.img
+    - rm -rf images/$VM_IMG_NAME.img
+    - ls -lh images
+    - chmod +x ./tools/mk-kvm-gns3a.sh
+    - ./tools/mk-kvm-gns3a.sh images/$VM_IMG_NAME-kvm.img images/$VM_IMG_NAME.gns3a
+    - cat images/$VM_IMG_NAME.gns3a
+    - ls -lh images
+    - chmod +x ./tools/upload.sh
+    - ./tools/upload.sh
   tags:
     - tsg-os-installer
 
@@ -86,6 +119,24 @@ feature_branch_build_TSGXP0906:
   variables:
     PROFILE_LIST: TSGXNXR620G40R01P0906
     DALIY_BUILD_VERSION: 1
+  cache:
+    key: TSGXP0906
+    paths:
+      - images/
+    policy: push
+  except:
+    - tags
+    - /^dev-.*$/i
+    - /^rel-.*$/i
+    - /^update-.*$/i
+
+feature_branch_build_kvm_image_TSGXP0906:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: deploy
+  extends: .build_tsg_vm_image
+  needs: ["feature_branch_build_TSGXP0906"]
+  variables:
+    BUILD_OS_CACHE_KEY: TSGXP0906
   except:
     - tags
     - /^dev-.*$/i
@@ -201,6 +252,26 @@ develop_build_TSGXP0906:
     PULP3_FILE_DIST_NAME: tsg-os-images-develop
     DALIY_BUILD_VERSION: 1
     FILE_REPO_PATH: install/develop/tsg-os-images
+  cache:
+    key: TSGXP0906
+    paths:
+      - images/
+    policy: push
+  only:
+    - /^dev-.*$/i
+
+develop_build_kvm_image_TSGXP0906:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: deploy
+  extends: .build_tsg_vm_image
+  needs: ["develop_build_TSGXP0906"]
+  variables:
+    BUILD_OS_CACHE_KEY: TSGXP0906
+    UPLOAD_TO_FILE_REPO: 1
+    PROFILE_LIST: KVM
+    PULP3_FILE_REPO_NAME: tsg-os-images-develop
+    PULP3_FILE_DIST_NAME: tsg-os-images-develop
+    FILE_REPO_PATH: install/develop/tsg-os-images
   only:
     - /^dev-.*$/i
 
@@ -315,6 +386,26 @@ testing_build_TSGXP0906:
     PULP3_FILE_DIST_NAME: tsg-os-images-testing
     FILE_REPO_PATH: install/testing/tsg-os-images
     DALIY_BUILD_VERSION: 1
+  cache:
+    key: TSGXP0906
+    paths:
+      - images/
+    policy: push
+  only:
+    - /^rel-.*$/i
+
+testing_build_kvm_image_TSGXP0906:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: deploy
+  extends: .build_tsg_vm_image
+  needs: ["testing_build_TSGXP0906"]
+  variables:
+    BUILD_OS_CACHE_KEY: TSGXP0906
+    UPLOAD_TO_FILE_REPO: 1
+    PROFILE_LIST: KVM
+    PULP3_FILE_REPO_NAME: tsg-os-images-testing
+    PULP3_FILE_DIST_NAME: tsg-os-images-testing
+    FILE_REPO_PATH: install/testing/tsg-os-images
   only:
     - /^rel-.*$/i
 
@@ -426,6 +517,26 @@ rc_build_TSGXP0906:
     PROFILE_LIST: TSGXNXR620G40R01P0906
     UPLOAD_TO_FILE_REPO: 1
     DALIY_BUILD_VERSION: 0
+    PULP3_FILE_REPO_NAME: tsg-os-images-rc
+    PULP3_FILE_DIST_NAME: tsg-os-images-rc
+    FILE_REPO_PATH: install/rc/tsg-os-images
+  cache:
+    key: TSGXP0906
+    paths:
+      - images/
+    policy: push
+  only:
+    - /^.*-rc.*$/i
+
+rc_build_kvm_image_TSGXP0906:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: deploy
+  extends: .build_tsg_vm_image
+  needs: ["rc_build_TSGXP0906"]
+  variables:
+    BUILD_OS_CACHE_KEY: TSGXP0906
+    UPLOAD_TO_FILE_REPO: 1
+    PROFILE_LIST: KVM
     PULP3_FILE_REPO_NAME: tsg-os-images-rc
     PULP3_FILE_DIST_NAME: tsg-os-images-rc
     FILE_REPO_PATH: install/rc/tsg-os-images
@@ -550,6 +661,28 @@ release_build_TSGXP0906:
     PROFILE_LIST: TSGXNXR620G40R01P0906
     UPLOAD_TO_FILE_REPO: 1
     DALIY_BUILD_VERSION: 0
+    PULP3_FILE_REPO_NAME: tsg-os-images-release
+    PULP3_FILE_DIST_NAME: tsg-os-images-release
+    FILE_REPO_PATH: install/release/tsg-os-images
+  cache:
+    key: TSGXP0906
+    paths:
+      - images/
+    policy: push
+  only:
+    - tags
+  except:
+    - /^.*-rc.*$/i
+
+release_build_kvm_image_TSGXP0906:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: deploy
+  extends: .build_tsg_vm_image
+  needs: ["release_build_TSGXP0906"]
+  variables:
+    BUILD_OS_CACHE_KEY: TSGXP0906
+    UPLOAD_TO_FILE_REPO: 1
+    PROFILE_LIST: KVM
     PULP3_FILE_REPO_NAME: tsg-os-images-release
     PULP3_FILE_DIST_NAME: tsg-os-images-release
     FILE_REPO_PATH: install/release/tsg-os-images

@@ -1,7 +1,7 @@
 
 PROFILE_ID 				:= TSG-X-NXR620G40-R01-P0906
 SUPPORTED_MACHINE_ID 	:= TSG-X-NXR620G40-R01-P0906
-KERNEL_ARGS 			:= crashkernel=512M default_hugepagesz=1G hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt mitigations=off psi=1
+KERNEL_ARGS 			:= crashkernel=512M default_hugepagesz=1G intel_iommu=on iommu=pt mitigations=off psi=1
 GRUB_SERIAL_COMMAND 	:=
 SIZE_PART_SYSROOT		:= 16384M
 SIZE_PART_UPDATE		:= 16384M
