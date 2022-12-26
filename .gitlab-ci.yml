@@ -4,10 +4,6 @@ variables:
   BUILD_BASED_IMAGE_CENTOS7: "git.mesalab.cn:7443/mesa_platform/build-env:master"
   BUILD_BASED_IMAGE_ROCKYLINUX8: "git.mesalab.cn:7443/mesa_platform/build-env:rockylinux-dindind"
 
-cache:
-   paths:
-     - images
-
 .build_tsg-buildimage:
   script:
     - env | sort
@@ -30,7 +26,7 @@ cache:
     - ls -lh
     - export VM_IMG_NAME=$(basename -s .bin images/*.bin)
     - echo $VM_IMG_NAME
-    - mv images/*.bin /var/www/html/onie-installer-x86_64.bin
+    - cp images/*.bin /var/www/html/onie-installer-x86_64.bin
     - httpd
     - chmod +x ./tools/mk-kvm.sh
     - cp ./tools/onie-base-kvm.img images/$VM_IMG_NAME.img
@@ -120,7 +116,7 @@ feature_branch_build_TSGXP0906:
     PROFILE_LIST: TSGXNXR620G40R01P0906
     DALIY_BUILD_VERSION: 1
   cache:
-    key: TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-TSGXP0906
     paths:
       - images/
     policy: push
@@ -136,7 +132,7 @@ feature_branch_build_kvm_image_TSGXP0906:
   extends: .build_tsg_vm_image
   needs: ["feature_branch_build_TSGXP0906"]
   variables:
-    BUILD_OS_CACHE_KEY: TSGXP0906
+    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-TSGXP0906
   except:
     - tags
     - /^dev-.*$/i
@@ -253,7 +249,7 @@ develop_build_TSGXP0906:
     DALIY_BUILD_VERSION: 1
     FILE_REPO_PATH: install/develop/tsg-os-images
   cache:
-    key: TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-TSGXP0906
     paths:
       - images/
     policy: push
@@ -266,7 +262,7 @@ develop_build_kvm_image_TSGXP0906:
   extends: .build_tsg_vm_image
   needs: ["develop_build_TSGXP0906"]
   variables:
-    BUILD_OS_CACHE_KEY: TSGXP0906
+    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-TSGXP0906
     UPLOAD_TO_FILE_REPO: 1
     PROFILE_LIST: KVM
     PULP3_FILE_REPO_NAME: tsg-os-images-develop
@@ -387,7 +383,7 @@ testing_build_TSGXP0906:
     FILE_REPO_PATH: install/testing/tsg-os-images
     DALIY_BUILD_VERSION: 1
   cache:
-    key: TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-TSGXP0906
     paths:
       - images/
     policy: push
@@ -400,7 +396,7 @@ testing_build_kvm_image_TSGXP0906:
   extends: .build_tsg_vm_image
   needs: ["testing_build_TSGXP0906"]
   variables:
-    BUILD_OS_CACHE_KEY: TSGXP0906
+    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-TSGXP0906
     UPLOAD_TO_FILE_REPO: 1
     PROFILE_LIST: KVM
     PULP3_FILE_REPO_NAME: tsg-os-images-testing
@@ -521,7 +517,7 @@ rc_build_TSGXP0906:
     PULP3_FILE_DIST_NAME: tsg-os-images-rc
     FILE_REPO_PATH: install/rc/tsg-os-images
   cache:
-    key: TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-TSGXP0906
     paths:
       - images/
     policy: push
@@ -534,7 +530,7 @@ rc_build_kvm_image_TSGXP0906:
   extends: .build_tsg_vm_image
   needs: ["rc_build_TSGXP0906"]
   variables:
-    BUILD_OS_CACHE_KEY: TSGXP0906
+    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-TSGXP0906
     UPLOAD_TO_FILE_REPO: 1
     PROFILE_LIST: KVM
     PULP3_FILE_REPO_NAME: tsg-os-images-rc
@@ -665,7 +661,7 @@ release_build_TSGXP0906:
     PULP3_FILE_DIST_NAME: tsg-os-images-release
     FILE_REPO_PATH: install/release/tsg-os-images
   cache:
-    key: TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-TSGXP0906
     paths:
       - images/
     policy: push
@@ -680,7 +676,7 @@ release_build_kvm_image_TSGXP0906:
   extends: .build_tsg_vm_image
   needs: ["release_build_TSGXP0906"]
   variables:
-    BUILD_OS_CACHE_KEY: TSGXP0906
+    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-TSGXP0906
     UPLOAD_TO_FILE_REPO: 1
     PROFILE_LIST: KVM
     PULP3_FILE_REPO_NAME: tsg-os-images-release
