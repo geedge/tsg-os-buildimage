@@ -34,5 +34,5 @@ set_onie_next_boot()
     fi
 
     # Fall back to using GRUB chainload method
-    grub-reboot --boot-directory="$demo_mnt" ONIE
+    grub2-reboot --boot-directory="$demo_mnt" ONIE
 }
