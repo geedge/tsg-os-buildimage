@@ -1,7 +1,7 @@
 
 PROFILE_ID 				:= 9000-NPB-P01R01
 SUPPORTED_MACHINE_ID 	:= 9000-NPB-P01R01
-KERNEL_ARGS 			:= console=ttyS0,115200n8 crashkernel=512M default_hugepagesz=1G hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt mitigations=off pci=realloc,assign-busses psi=1 isolcpus=1-47
+KERNEL_ARGS 			:= console=ttyS0,115200n8 crashkernel=512M default_hugepagesz=1G hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt mitigations=off pci=realloc,assign-busses psi=1 isolcpus=1-47 selinux=0
 GRUB_SERIAL_COMMAND 	:=
 SIZE_PART_SYSROOT		:= 16384M
 SIZE_PART_UPDATE			:= 16384M

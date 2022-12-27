@@ -1,7 +1,7 @@
 
 PROFILE_ID 				:= 7400-MCN123-P01R01
 SUPPORTED_MACHINE_ID 	:= 7400-MCN123-P01R01
-KERNEL_ARGS 			:= console=ttyS0,115200n8 crashkernel=512M intel_iommu=on iommu=pt pci=realloc,assign-busses
+KERNEL_ARGS 			:= console=ttyS0,115200n8 crashkernel=512M intel_iommu=on iommu=pt pci=realloc,assign-busses selinux=0
 GRUB_SERIAL_COMMAND 	:=
 SIZE_PART_SYSROOT		:= 16384M
 SIZE_PART_UPDATE			:= 16384M
