@@ -19,7 +19,6 @@ variables:
     key: $BUILD_OS_CACHE_KEY
     paths:
       - images/
-    policy: pull
   script:
     - yum install -y qemu-img qemu-kvm telnet net-tools procps-ng httpd
     - find / -name images
@@ -40,6 +39,7 @@ variables:
     - ls -lh images
     - chmod +x ./tools/upload.sh
     - ./tools/upload.sh
+    - rm -rf images/*
   tags:
     - tsg-os-installer
 
