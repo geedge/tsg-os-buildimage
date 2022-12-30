@@ -54,8 +54,8 @@ framework_rpm_version:
   13_libMV_Sketch: libMV_Sketch-2.1.2.20220225.dc6bb95
   14_librdkafka: librdkafka-1.2.2.1218b3c
   15_libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
-  16_libmaatframe: libmaatframe-3.6.16.c6518d0
-  17_libmaatframe_tools: libmaatframe-tools-3.6.15.bf7ef3e
+  16_libmaatframe: libmaatframe-3.6.19.9c4741d
+  17_libmaatframe_tools: libmaatframe-tools-3.6.19.9c4741d
 
 kni_rpm_version:
   kni: kni-5.0.2.6cb27c3
@@ -77,7 +77,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.5.5.7a60af1
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.8.9.f5acead
+  tsg_master: tsg_master-5.9.1.e0f6856
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.4.b5ca5aa
