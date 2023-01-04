@@ -89,3 +89,9 @@
     backrefs: yes
     regexp: "^(.*Defaults    secure_path =.*)$"
     line: '\1:/opt/tsg/tsg-os-provision'
+
+- name: "Comment /run/nologin create on system booting up"
+  replace:
+    path: /usr/lib/tmpfiles.d/systemd-nologin.conf
+    regexp: '^(F! /run/nologin 0644*)'
+    replace: '#\1'
