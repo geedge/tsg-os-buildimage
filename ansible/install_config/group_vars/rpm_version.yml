@@ -50,7 +50,7 @@ framework_rpm_version:
   09_libwiredcfg: libwiredcfg-2.0.8.cafaf49
   10_libWiredLB: libWiredLB-2.0.6.54a039d
   11_libbreakpad_mini: libbreakpad_mini-1.0.9.9d98968
-  12_libhos-client-cpp: libhos-client-cpp-3.1.0.f569731
+  12_libhos-client-cpp: libhos-client-cpp-3.1.1.b2f3e59
   13_libMV_Sketch: libMV_Sketch-2.1.2.20220225.dc6bb95
   14_librdkafka: librdkafka-1.2.2.1218b3c
   15_libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
