@@ -66,6 +66,17 @@ cp -a /var/lib/rpm    /data/var/lib/
 #
 rm -rf /data/var/lib/docker
 rm -rf /data/overlay/rootfs_etc/rw/ld.so.conf.d
+# generate machine-id if /data/overlay/rootfs_etc/rw/persistent-machine-id not exsit
+mkdir -p /data/var/lib/tsg-os
+cat /dev/null > /etc/machine-id
+PATH_PERSISTENT_MACHINE_ID="/data/var/lib/tsg-os/persistent-machine-id"
+if [ -f "$PATH_PERSISTENT_MACHINE_ID" ]; then
+    cat $PATH_PERSISTENT_MACHINE_ID > /etc/machine-id
+else
+    /usr/bin/systemd-machine-id-setup
+    cat /etc/machine-id > $PATH_PERSISTENT_MACHINE_ID
+fi
+
 #  copy k3s image tar file to air-gap dir
 air_gap_image_dir="/var/lib/rancher/k3s/agent/images"
 if [ -d "$air_gap_image_dir" ]; then

@@ -70,7 +70,6 @@ yum -c "$yum_config" --installroot="$target" -y makecache
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $base_package_to_install
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $append_package_to_install
 
-
 #if [ $profile_id  == "TSG-X-NXR620G40-R01-P0804" ];then
 #    kernel_version=$(ls $target/boot/vmlinuz-*.x86_64 | grep -oP "^$target/boot/vmlinuz-\K.*")
 #fi
@@ -152,6 +151,8 @@ yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
 
 rm -rf $target/tmp/*
 rm -rf $target/core.*
+#rm -rf $target/etc/machine-id
+#cat /dev/null > $target/etc/machine-id
 
 # tar --numeric-owner -c -C centos_mkroot/ . | pbzip2 -p9 > input/centos-7-chroot.tar.bz2
 
