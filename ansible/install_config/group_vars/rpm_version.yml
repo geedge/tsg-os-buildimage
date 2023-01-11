@@ -78,7 +78,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.5.5.7a60af1
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.9.2.30b2f1c
+  tsg_master: tsg_master-5.9.3.5328511
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.4.b5ca5aa
