@@ -131,12 +131,14 @@ hos_serverip="{{ olap.hos_server.address }}"
 hos_serverport={{ olap.hos_server.port }}
 hos_token="{{ olap.hos_server.token }}"
 hos_log_level=30
-hos_each_upload_cache_size=1500
-hos_each_upload_cache_count=10
-hos_max_thread_task_num=5000
-hos_max_cache_size=1073741824
-hos_curl_http_timeout=20
-hos_curl_http_connection_timeout=10
+hos_timeout=20
+hos_connection_timeout=10
+hos_thread_max_store_request_num=5000
+hos_thread_max_store_size=1073741824
+hos_thread_batch_request_num=20
+hos_thread_max_connection_num=10
+hos_fd_request_cache_size=1500
+hos_fd_request_cache_count=10
 {% endif %}
 {% endraw %}
 
