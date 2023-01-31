@@ -201,6 +201,12 @@ deployment:
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9004"
-    
-    
-  
+
+service:
+  type: "NodePort"
+  port:
+    clusterAnnounce: 8551
+    healthcheckAnnounce: 8552
+  nodePort:
+    clusterAnnounce: null
+    healthcheckAnnounce: null

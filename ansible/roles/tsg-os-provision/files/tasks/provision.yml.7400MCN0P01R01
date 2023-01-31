@@ -183,6 +183,12 @@
         dest: /opt/tsg/sapp/etc/wire_graft/wire_graft.conf
       tags: wire_graft
 
+    - name: "tsg-os-provision: template consul"
+      template:
+        src: "../templates/consul.hcl.j2"
+        dest: /etc/consul.d/consul.hcl
+      tags: consul
+
     - name: "mkdir /opt/tsg/etc/"
       file:
         path: /opt/tsg/etc
@@ -250,6 +256,12 @@
       when: 
         - feature.enable_policy_local_cache == 1
         - enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart consul"
+      systemd:
+        name: consul
+        state: restarted
+      when: enable_config_apply == '1'
 
     - name: "tsg-os-provision: restart mrenv"
       systemd:

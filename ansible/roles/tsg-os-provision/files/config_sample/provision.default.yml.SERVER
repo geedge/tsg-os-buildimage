@@ -77,3 +77,9 @@ session_distribution_policy:
   hash_key: inner-most-sip-dip
 
 vsys_id: 1
+
+consul_agent:
+  mode: "server"
+  encrypt: "XN0I7fHIY1+yLWm2PjegZ7U93nI/tmzNvtmBtZLuIfo="
+  datacenter: "dc1"
+  node_name: ""

@@ -96,6 +96,12 @@
         dest: /etc/telegraf/telegraf_statistic.conf
       tags: telegraf_statistic
 
+    - name: "tsg-os-provision: template consul"
+      template:
+        src: "../templates/consul.hcl.j2"
+        dest: /etc/consul.d/consul.hcl
+      tags: consul
+
     - name: "mkdir /opt/tsg/etc/"
       file:
         path: /opt/tsg/etc
@@ -142,6 +148,12 @@
       file:
         path: /data/tsg-os-provision/.provision_succeeded
         state: touch
+
+    - name: "tsg-os-provision: restart consul"
+      systemd:
+        name: consul
+        state: restarted
+      when: enable_config_apply == '1'
 
     - name: "tsg-os-provision: restart mrenv"
       systemd:

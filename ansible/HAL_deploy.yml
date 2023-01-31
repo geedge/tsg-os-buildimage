@@ -28,6 +28,7 @@
     - {role: wannat_wangw, tags: wannat_wangw}
     - {role: wannat_common, tags: wannat_common}
     - {role: wire_graft, tags: wire_graft}
+    - {role: consul, tags: consul}
     - {role: hasp, tags: hasp}
 
 - hosts: 7400-MCN123-P01R01
@@ -81,6 +82,7 @@
     - {role: wire_graft, tags: wire_graft}
     - {role: nz-talon, tags: nz-talon}
     - {role: tsg-os-provision-condition, tags: tsg-os-provision-condition}
+    - {role: consul, tags: consul}
     - {role: hasp, tags: hasp}
 
 - hosts: TSG-X-NXR620G40-R01-P1403
@@ -104,6 +106,7 @@
     - {role: system-init-TSG-X-P1403, tags: system-init-TSG-X-P1403}
     - {role: system-init, tags: system-init}
     - {role: tsg-os-provision-condition, tags: tsg-os-provision-condition}
+    - {role: consul, tags: consul}
     - {role: hasp, tags: hasp}
     - {role: OFED, tags: OFED}
 
@@ -138,6 +141,7 @@
     - {role: wannat_common, tags: wannat_common}
     - {role: wire_graft, tags: wire_graft}
     - {role: tsg-os-provision-condition, tags: tsg-os-provision-condition}
+    - {role: consul, tags: consul}
     - {role: hasp, tags: hasp}
     - {role: OFED, tags: OFED}
 
@@ -158,6 +162,7 @@
     - {role: tsg-diagnose, tags: tsg-diagnose}
     - {role: system-init-TSG-X-P1403, tags: system-init-TSG-X-P1403}
     - {role: system-init, tags: system-init}
+    - {role: consul, tags: consul}
     - {role: hasp, tags: hasp}
     - {role: OFED, tags: OFED}
 

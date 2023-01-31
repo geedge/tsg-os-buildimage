@@ -65,3 +65,10 @@
     - /etc/traffic-engine/hotfix/firewall/scripts/
     - /etc/traffic-engine/hotfix/proxy/scripts/
     - /etc/traffic-engine/hotfix/certstore/scripts/
+
+- name: "copy clusterrole file to dest"
+  copy:
+    src: "{{ role_path }}/files/service-read-role.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/
+  when: runtime_env == 'TSG-X-P0906'
+

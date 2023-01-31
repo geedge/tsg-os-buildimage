@@ -1,0 +1,82 @@
+- name: "consul rpm install:copy file to device"
+  copy:
+    src: '{{ role_path }}/files/'
+    dest: /tmp/ansible_deploy/
+  when: runtime_env != 'TSG-X-P0906'
+
+- name: "consul rpm install:install consul"
+  yum:
+    name:
+      - "/tmp/ansible_deploy/consul-1.14.3-1.x86_64.rpm"
+    state: present
+    disable_gpg_check: yes
+  when: runtime_env != 'TSG-X-P0906'
+
+- name: "mkdir -p /etc/consul.d/"
+  file:
+    path: /etc/consul.d/
+    state: directory
+  when: runtime_env != 'TSG-X-P0906'
+
+- name: "mkdir -p /opt/tsg/consul/bin"
+  file:
+    path: /opt/tsg/consul/bin
+    state: directory
+  when: runtime_env != 'TSG-X-P0906'
+
+- name: "copy consul config file to dest"
+  template:
+    src: "{{ role_path }}/templates/consul.hcl.j2"
+    dest: /opt/tsg/tsg-os-provision/templates/consul.hcl.j2
+  when: runtime_env != 'TSG-X-P0906'
+
+- name: "copy consul config file to dest"
+  copy:
+    src: '{{ role_path }}/files/consul.service'
+    dest: /usr/lib/systemd/system/consul.service
+  when: runtime_env != 'TSG-X-P0906'
+
+- name: "copy consul config file to dest"
+  template:
+    src: "{{ role_path }}/templates/set_advertise.sh.j2"
+    dest: /opt/tsg/consul/bin/set_advertise.sh
+    mode: 0755
+  when: runtime_env != 'TSG-X-P0906'
+
+#- name: "copy consul config file to dest"
+#  copy:
+#    src: '{{ role_path }}/files/server.hcl'
+#    dest: /etc/consul.d/server.hcl
+#  when: runtime_env != 'TSG-X-P0906'
+
+- name: "start consul"
+  systemd:
+    name: consul.service
+    enabled: yes
+  when: runtime_env != 'TSG-X-P0906'
+
+- name: "get consul chart images to dest"
+  get_url:
+    url: https://repo.geedge.net/filerepo/install/release/tsg-container-images/consul.tar
+    dest: /var/lib/rancher/k3s/agent/images/consul.tar
+    url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
+    url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
+  when: runtime_env == 'TSG-X-P0906'
+
+#- name: "copy consul crd file to dest"
+#  copy:
+#    src: "{{ role_path }}/files/consul-crd.yaml"
+#    dest: /var/lib/rancher/k3s/server/manifests/
+#  when: runtime_env == 'TSG-X-P0906'
+
+- name: "copy consul chart to dest"
+  copy:
+    src: "{{ role_path }}/files/consul-1.0.2.tgz"
+    dest: /var/lib/rancher/k3s/server/static/charts/
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "copy ns-consul to dest"
+  copy:
+    src: "{{ role_path }}/files/ns-consul.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/
+  when: runtime_env == 'TSG-X-P0906'

@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: traffic-engine-announce-vsys-{{ .Values.vsys_id }}
+  name: traffic-engine-announce-vsys-{{ .Values.vsys_id }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  namespace: {{ .Release.Namespace }}
+
+spec:
+  ports:
+  - name: cluster-announce-port
+    {{- if .Values.service.type }}{{ if (and (eq .Values.service.type "NodePort") .Values.service.nodePort.clusterAnnounce) }}
+    nodePort: {{ .Values.service.nodePort.clusterAnnounce }}
+    {{- end }}{{ end }}
+    port: {{ .Values.service.port.clusterAnnounce }}
+    targetPort: cluster
+  - name: healthcheck-announce-port
+    {{- if .Values.service.type }}{{ if (and (eq .Values.service.type "NodePort") .Values.service.nodePort.healthcheckAnnounce) }}
+    nodePort: {{ .Values.service.nodePort.healthcheckAnnounce }}
+    {{- end }}{{ end }}
+    port: {{ .Values.service.port.healthcheckAnnounce }}
+    targetPort: healthcheck
+  selector:
+    app: traffic-engine-vsys-{{ .Values.vsys_id }}
+  {{- if .Values.service.type }}
+  type: {{ .Values.service.type }}
+  {{- end }}

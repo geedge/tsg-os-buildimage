@@ -9,13 +9,13 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: traffic-engine
+      app: traffic-engine-vsys-{{ .Values.vsys_id }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: traffic-engine
+        app: traffic-engine-vsys-{{ .Values.vsys_id }}
         vsysId: vsys-{{ .Values.vsys_id }}
         serviceFunction: {{ .Values.nic_raw_name }}
       annotations:
@@ -40,6 +40,10 @@ spec:
         command: ["/opt/tsg/scripts/start.sh"]
         ports:
           - containerPort: 9273
+          - name: cluster
+            containerPort: 8551
+          - name: healthcheck
+            containerPort: 8552
         env:
         - name: MRZCPD_CTRLMSG_LISTEN_ADDR
           valueFrom:
@@ -49,6 +53,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        - name: SERVICENAME
+          value: traffic-engine-announce-vsys-{{ .Values.vsys_id }}
         securityContext:
           privileged: true
         livenessProbe:

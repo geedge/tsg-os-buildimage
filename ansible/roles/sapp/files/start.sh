@@ -29,6 +29,21 @@ start(){
 	/opt/tsg/sapp/sapp
 }
 
+getServiceNodeport(){
+	export APISERVER=https://kubernetes.default.svc
+	export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+	export NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
+	export TOKEN=$(cat ${SERVICEACCOUNT}/token)
+	export CACERT=${SERVICEACCOUNT}/ca.crt
+	curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/${SERVICENAME} -o /tmp/service.txt
+	export CLUSTERANNOUNCEPORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="cluster-announce-port") | .nodePort')
+	export HEALTHCHECKANNOUNCEPORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="healthcheck-announce-port") | .nodePort')
+	echo "export CLUSTERANNOUNCEPORT=${CLUSTERANNOUNCEPORT}" > /etc/profile.d/announceinfo.sh
+	echo "export HEALTHCHECKANNOUNCEPORT=${HEALTHCHECKANNOUNCEPORT}" >> /etc/profile.d/announceinfo.sh
+	chmod 0755 /etc/profile.d/announceinfo.sh
+}
+
 copyConfigmap2Dest
+getServiceNodeport
 prestart
 start
