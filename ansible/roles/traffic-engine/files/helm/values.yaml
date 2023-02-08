@@ -210,3 +210,6 @@ service:
   nodePort:
     clusterAnnounce: null
     healthcheckAnnounce: null
+
+shaping:
+  enable: yes

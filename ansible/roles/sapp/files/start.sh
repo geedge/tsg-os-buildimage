@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 prestart_scripts_dir="/etc/traffic-engine/hotfix/firewall/scripts"
 prestart=$prestart_scripts_dir/prestart.sh
 
@@ -36,14 +36,21 @@ getServiceNodeport(){
 	export TOKEN=$(cat ${SERVICEACCOUNT}/token)
 	export CACERT=${SERVICEACCOUNT}/ca.crt
 	curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/${SERVICENAME} -o /tmp/service.txt
-	export CLUSTERANNOUNCEPORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="cluster-announce-port") | .nodePort')
-	export HEALTHCHECKANNOUNCEPORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="healthcheck-announce-port") | .nodePort')
-	echo "export CLUSTERANNOUNCEPORT=${CLUSTERANNOUNCEPORT}" > /etc/profile.d/announceinfo.sh
-	echo "export HEALTHCHECKANNOUNCEPORT=${HEALTHCHECKANNOUNCEPORT}" >> /etc/profile.d/announceinfo.sh
+	export CLUSTER_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="cluster-announce-port") | .nodePort')
+	export HEALTH_CHECK_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="healthcheck-announce-port") | .nodePort')
+	echo "export CLUSTER_ANNOUNCE_PORT=${CLUSTER_ANNOUNCE_PORT}" > /etc/profile.d/announceinfo.sh
+	echo "export HEALTH_CHECK_ANNOUNCE_PORT=${HEALTH_CHECK_ANNOUNCE_PORT}" >> /etc/profile.d/announceinfo.sh
 	chmod 0755 /etc/profile.d/announceinfo.sh
+}
+
+setShapingConfig(){
+	sed -Ei "s|NODE_IP_LOCATION|${NODE_IP?}|g" /opt/tsg/sapp/tsgconf/main.conf
+	sed -Ei "s|CLUSTER_ANNOUNCE_PORT_LOCATION|${CLUSTER_ANNOUNCE_PORT?}|g" /opt/tsg/sapp/tsgconf/main.conf
+	sed -Ei "s|HEALTH_CHECK_ANNOUNCE_PORT_LOCATION|${HEALTH_CHECK_ANNOUNCE_PORT?}|g" /opt/tsg/sapp/tsgconf/main.conf	
 }
 
 copyConfigmap2Dest
 getServiceNodeport
+setShapingConfig
 prestart
 start

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 prestart_scripts_dir="/etc/traffic-engine/hotfix/certstore/scripts"
 prestart=$prestart_scripts_dir/prestart.sh
 

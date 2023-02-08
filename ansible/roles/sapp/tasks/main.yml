@@ -203,6 +203,33 @@
     - /usr/lib/systemd/system/sapp.service
   when: runtime_env != 'TSG-X-P0906' 
 
+- name: "mkdir -p /opt/tsg/sapp/bin"
+  file:
+    path: /opt/tsg/sapp/bin
+    state: directory
+  when: runtime_env != 'TSG-X-P0906'
+
+- name: "copy set_shaping_addr.sh file to dest"
+  template:
+    src: "{{ role_path }}/templates/set_shaping_addr.sh.j2"
+    dest: /opt/tsg/sapp/bin/set_shaping_addr.sh
+    mode: 0755
+  when: runtime_env != 'TSG-X-P0906'
+
+- name: "copy set_shaping_addr.sh file to dest"
+  template:
+    src: "{{ role_path }}/templates/set_shaping_addr.sh.j2"
+    dest: /opt/tsg/sapp/bin/set_shaping_addr.sh
+    mode: 0755
+  when: runtime_env != 'TSG-X-P0906'  
+
+- name: "copy startpre file to sapp.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_startpre.conf.j2"
+    dest: /usr/lib/systemd/system/sapp.service.d/service_startpre.conf
+    mode: 0644
+  when: runtime_env != 'TSG-X-P0906'
+
 - name: 'delete r2,r3'
   file:
     path: "/opt/tsg/sapp/{{ item }}"

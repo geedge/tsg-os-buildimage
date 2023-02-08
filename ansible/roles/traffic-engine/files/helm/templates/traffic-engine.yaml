@@ -55,6 +55,10 @@ spec:
               fieldPath: status.hostIP
         - name: SERVICENAME
           value: traffic-engine-announce-vsys-{{ .Values.vsys_id }}
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
         securityContext:
           privileged: true
         livenessProbe:

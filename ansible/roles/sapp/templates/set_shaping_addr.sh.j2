@@ -1,0 +1,5 @@
+#!/bin/sh -ex
+HOST_IP=$(ip a show {{ control_and_policy.nic_name }} | grep inet | grep -v inet6 | awk '{print $2}' | awk -F '/' '{print $1}')
+echo "Log and policy nic ipv4 address:$HOST_IP"
+sed -i "s/^SWARMKV_CONSUL_IP.*$/SWARMKV_CONSUL_IP=\"$HOST_IP\"/g" /opt/tsg/sapp/tsgconf/main.conf
+sed -i "s/^SWARMKV_CLUSTER_ANNOUNCE_IP.*$/SWARMKV_CLUSTER_ANNOUNCE_IP=\"$HOST_IP\"/g" /opt/tsg/sapp/tsgconf/main.conf

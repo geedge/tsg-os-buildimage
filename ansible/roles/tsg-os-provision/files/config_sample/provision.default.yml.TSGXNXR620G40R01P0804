@@ -96,3 +96,6 @@ consul_agent:
   encrypt: "XN0I7fHIY1+yLWm2PjegZ7U93nI/tmzNvtmBtZLuIfo="
   datacenter: "dc1"
   node_name: ""
+
+shaping:
+  enable: 1
