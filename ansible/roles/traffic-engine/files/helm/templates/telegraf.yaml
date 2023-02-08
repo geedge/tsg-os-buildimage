@@ -5,3 +5,4 @@ metadata:
   namespace: default
 data:
   telegraf_statistic.conf: {{ tpl (.Files.Get "conf/telegraf_statistic.conf") . | quote }}
+  telegraf_shaping.conf: {{ tpl (.Files.Get "conf/telegraf_shaping.conf") . | quote }}
