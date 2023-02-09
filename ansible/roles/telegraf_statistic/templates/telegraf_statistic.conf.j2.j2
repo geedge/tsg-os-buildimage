@@ -1,6 +1,12 @@
 [global_tags]
    device_id = "${device_id}"
    vsys_id = "{% raw %}{{ vsys_id }}{% endraw %}"
+{% raw %}{% for device_tag in device.tags %}
+{% for key,value in device_tag.items() %}
+   {{ key }} = "{{value}}"
+{% endfor %}
+{% endfor %}
+{% endraw %}
 
 [agent]
    interval = "5s"
