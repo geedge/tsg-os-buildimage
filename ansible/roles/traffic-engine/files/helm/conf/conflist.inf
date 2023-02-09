@@ -4,6 +4,7 @@
 ./plug/platform/wire_graft/wire_graft.inf
 {{- end }}
 ./plug/platform/app_proto_identify/app_proto_identify.inf
+./plug/platform/session_marker_record/session_marker_record.inf
 ./plug/platform/tsg_master/tsg_master.inf
 {{- if eq .Values.appsketch.enable .Values.define_enable_val_yes }}
 {{- if eq .Values.appsketch.builtin_engine .Values.define_enable_val_yes }}
@@ -66,7 +67,6 @@
 {{- end }}
 
 [business]
-./plug/business/session_marker_record/session_marker_record.inf
 {{- if eq .Values.encrypt_traffic_identify.voice_bahavior_engine .Values.define_enable_val_yes }}
 ./plug/business/tsg_vulpes/tsg_vulpes.inf
 {{- end }}

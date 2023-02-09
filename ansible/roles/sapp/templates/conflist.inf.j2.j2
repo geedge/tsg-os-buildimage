@@ -12,6 +12,7 @@
 ./plug/platform/app_proto_identify/app_proto_identify.inf
 {% endif %}
 {% endif %}
+./plug/platform/session_marker_record/session_marker_record.inf
 ./plug/platform/tsg_master/tsg_master.inf
 {% if app.identify_by.builtin_app_engine == 1 %}
 ./plug/platform/app_proto_engine/app_proto_engine.inf
@@ -41,7 +42,6 @@
 ./plug/protocol/dtls/dtls.inf
 
 [business]
-./plug/business/session_marker_record/session_marker_record.inf
 {% raw %}{% if app_behavior.enable == 1 %}
 ./plug/business/tsg_vulpes/tsg_vulpes.inf
 {% endif %}
