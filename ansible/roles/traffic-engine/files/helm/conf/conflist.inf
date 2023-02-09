@@ -80,30 +80,10 @@
 ./plug/business/kni/kni.inf
 {{- end }}
 {{- if eq .Values.firewall.enable .Values.define_enable_val_yes }}
-{{- if eq .Values.decoders.SSL .Values.define_enable_val_yes }}
-./plug/business/fw_ssl_plug/fw_ssl_plug.inf
-{{- end }}
-{{- if eq .Values.decoders.HTTP .Values.define_enable_val_yes }}
-./plug/business/fw_http_plug/fw_http_plug.inf
-{{- end }}
 {{- if eq .Values.decoders.DNS .Values.define_enable_val_yes }}
 ./plug/business/fw_dns_plug/fw_dns_plug.inf
 {{- end }}
-{{- if eq .Values.decoders.MAIL .Values.define_enable_val_yes }}
-./plug/business/fw_mail_plug/fw_mail_plug.inf
-{{- end }}
-{{- if eq .Values.decoders.FTP .Values.define_enable_val_yes }}
-./plug/business/fw_ftp_plug/fw_ftp_plug.inf
-{{- end }}
-{{- if eq .Values.decoders.QUIC .Values.define_enable_val_yes }}
-./plug/business/fw_quic_plug/fw_quic_plug.inf
-{{- end }}
-{{- if eq .Values.decoders.DTLS .Values.define_enable_val_yes }}
-./plug/business/fw_dtls_plug/fw_dtls_plug.inf
-{{- end }}
-{{- if and (eq .Values.decoders.RTP .Values.define_enable_val_yes) (eq .Values.decoders.SIP .Values.define_enable_val_yes) }}
-./plug/business/fw_voip_plug/fw_voip_plug.inf
-{{- end }}
+./plug/business/firewall/firewall.inf
 {{- end }}
 {{- if eq .Values.decoders.GTPC .Values.define_enable_val_yes }}
 ./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf

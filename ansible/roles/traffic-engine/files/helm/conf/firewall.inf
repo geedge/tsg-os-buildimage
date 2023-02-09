@@ -1,0 +1,59 @@
+[PLUGINFO]
+PLUGNAME=FIREWEALL
+SO_PATH=./plug/business/firewall/firewall.so
+INIT_FUNC=firewall_init
+DESTROY_FUNC=firewall_destroy
+
+{{- if eq .Values.decoders.HTTP .Values.define_enable_val_yes }}
+[HTTP]
+FUNC_FLAG=ALL
+FUNC_NAME=fw_http_plug_entry
+{{- end }}
+
+{{- if eq .Values.decoders.SSL .Values.define_enable_val_yes }}
+[SSL]
+FUNC_FLAG=SSL_CLIENT_HELLO,SSL_SERVER_HELLO,SSL_APPLICATION_DATA,SSL_CERTIFICATE_DETAIL
+FUNC_NAME=fw_ssl_plug_entry
+{{- end }}
+
+{{- if eq .Values.decoders.DNS .Values.define_enable_val_yes }}
+[DNS]
+FUNC_FLAG=ALL
+FUNC_NAME=fw_dns_plug_entry
+{{- end }}
+
+{{- if eq .Values.decoders.MAIL .Values.define_enable_val_yes }}
+[MAIL]
+FUNC_FLAG=ALL
+FUNC_NAME=fw_mail_plug_entry
+{{- end }}
+
+{{- if eq .Values.decoders.RTP .Values.define_enable_val_yes }}
+[RTP]
+FUNC_FLAG=ALL
+FUNC_NAME=fw_rtp_plug_entry
+{{- end }}
+
+{{- if eq .Values.decoders.SIP .Values.define_enable_val_yes }}
+[SIP]
+FUNC_FLAG=ALL
+FUNC_NAME=fw_sip_plug_entry
+{{- end }}
+
+{{- if eq .Values.decoders.FTP .Values.define_enable_val_yes }}
+[FTP]
+FUNC_FLAG=ALL
+FUNC_NAME=fw_ftp_plug_entry
+{{- end }}
+
+{{- if eq .Values.decoders.QUIC .Values.define_enable_val_yes }}
+[QUIC]
+FUNC_FLAG=QUIC_CLIENT_HELLO,QUIC_SERVER_HELLO,QUIC_CACHED_CERT,QUIC_COMM_CERT,QUIC_CERT_CHAIN,QUIC_VERSION,QUIC_APPLICATION_DATA
+FUNC_NAME=fw_quic_plug_entry
+{{- end }}
+
+{{- if eq .Values.decoders.DTLS .Values.define_enable_val_yes }}
+[DTLS]
+FUNC_FLAG=DTLS_CLIENT_HELLO,DTLS_SERVER_HELLO,DTLS_HELLO_VERIFY_REQUEST,DTLS_CLIENT_EXTENSION
+FUNC_NAME=fw_dtls_plug_entry
+{{- end }}

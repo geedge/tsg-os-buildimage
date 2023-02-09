@@ -61,14 +61,8 @@
 ./plug/business/kni/kni.inf
 {% endif %}
 {% if firewall.enable == 1 %}
-./plug/business/fw_ssl_plug/fw_ssl_plug.inf
-./plug/business/fw_http_plug/fw_http_plug.inf
 ./plug/business/fw_dns_plug/fw_dns_plug.inf
-./plug/business/fw_mail_plug/fw_mail_plug.inf
-./plug/business/fw_ftp_plug/fw_ftp_plug.inf
-./plug/business/fw_quic_plug/fw_quic_plug.inf
-./plug/business/fw_voip_plug/fw_voip_plug.inf
-./plug/business/fw_dtls_plug/fw_dtls_plug.inf
+./plug/business/firewall/firewall.inf
 ./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
 {% endif %}
 ./plug/business/conn_telemetry/conn_telemetry.inf
