@@ -14,6 +14,7 @@
     - {role: mrzcpd, tags: mrzcpd}
     - {role: sapp, tags: sapp}
     - {role: tsg_master, tags: tsg_master}
+    - {role: shaping_master, tags: shaping_master}
     - {role: kni, tags: kni}
     - {role: firewall, tags: firewall}
     - {role: tsg_app, tags: tsg_app}
@@ -63,6 +64,7 @@
     - {role: mrzcpd, tags: mrzcpd}
     - {role: sapp, tags: sapp}
     - {role: tsg_master, tags: tsg_master}
+    - {role: shaping_master, tags: shaping_master}
     - {role: kni, tags: kni}
     - {role: firewall, tags: firewall}
     - {role: tsg_app, tags: tsg_app}
@@ -99,6 +101,7 @@
     - {role: mrzcpd, tags: mrzcpd}
     - {role: sapp, tags: sapp}
     - {role: tsg_master, tags: tsg_master}
+    - {role: shaping_master, tags: shaping_master}
     - {role: firewall, tags: firewall}
     - {role: tsg_app, tags: tsg_app}
     - {role: telegraf_statistic, tags: telegraf_statistic}
@@ -124,6 +127,7 @@
     - {role: mrzcpd, tags: mrzcpd}
     - {role: sapp, tags: sapp}
     - {role: tsg_master, tags: tsg_master}
+    - {role: shaping_master, tags: shaping_master}
     - {role: kni, tags: kni}
     - {role: firewall, tags: firewall}
     - {role: tsg_app, tags: tsg_app}
@@ -186,6 +190,7 @@
     - {role: mrzcpd, tags: mrzcpd}
     - {role: sapp, tags: sapp}
     - {role: tsg_master, tags: tsg_master}
+    - {role: shaping_master, tags: shaping_master}
     - {role: kni, tags: kni}
     - {role: firewall, tags: firewall}
     - {role: tsg_app, tags: tsg_app}
