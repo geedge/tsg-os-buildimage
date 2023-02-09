@@ -5,6 +5,7 @@ firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-4.1.5.b9783ff
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   fw_dns_plug: fw_dns_plug-4.0.4.7ce1b29
+  firewall: firewall-1.0.2.4b07696
   tsg_conn_sketch:  tsg_conn_sketch-3.3.17.68c08fb
   gtp_signaling_plug: gtp_signaling_plug-1.0.5.8d64946
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
@@ -59,9 +60,9 @@ mrzcpd_rpm_version:
 
 
 sapp_rpm_version:
-  sapp: sapp-4.2.90.8c77537
-  tcpdump_mesa: tcpdump_mesa-1.0.12.91900e1
-  sapp-pr: sapp-pr-4.2.90.8c77537
+  sapp: sapp-4.2.92.b87398d
+  tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
+  sapp-pr: sapp-pr-4.2.92.b87398d
 
 tfe_rpm_version:
   tfe: tfe-4.7.02.a2a4c32
@@ -71,7 +72,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.5.5.7a60af1
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.9.3.5328511
+  tsg_master: tsg_master-5.10.1.1332eed
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.4.b5ca5aa
