@@ -34,6 +34,11 @@ FUNC_FLAG=SSL_CLIENT_HELLO,SSL_SERVER_HELLO,SSL_APPLICATION_DATA,SSL_CERTIFICATE
 FUNC_NAME=APP_SKETCH_SSL_PLUG_ENTRY
 {{- end }}
 
+{{- if eq .Values.decoders.DNS .Values.define_enable_val_yes }}
+[DNS]
+FUNC_FLAG=DNS_ALL
+FUNC_NAME=APP_SKETCH_DNS_PLUG_ENTRY
+{{- end }}
 
 {{- if eq .Values.decoders.QUIC .Values.define_enable_val_yes }}
 [QUIC]
