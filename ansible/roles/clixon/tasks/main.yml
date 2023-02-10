@@ -27,8 +27,5 @@
     name: tsg-clixon-restconf
     enabled: yes
 
-- name: "Template the /opt/tsg/clixon/etc/mgnt-srv.conf"
-  template:
-    src: "{{ role_path }}/templates/mgnt-srv.conf.j2"
-    dest:  /opt/tsg/clixon/etc/mgnt-srv.conf
-  tags: template
+- name: "change chart verison to /opt/tsg/clixon/etc/mgnt-srv.conf"
+  shell: sed -i 's/chart_name=.*$/chart_name=traffic-engine-{{helm_chart_ver}}.tgz/g' /opt/tsg/clixon/etc/mgnt-srv.conf
