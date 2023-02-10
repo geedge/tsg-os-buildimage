@@ -6,7 +6,7 @@ firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   fw_dns_plug: fw_dns_plug-4.0.4.7ce1b29
   firewall: firewall-1.0.3.4390b7d
-  tsg_conn_sketch:  tsg_conn_sketch-3.3.17.68c08fb
+  tsg_conn_sketch:  tsg_conn_sketch-3.3.18.f254a24
   gtp_signaling_plug: gtp_signaling_plug-1.0.5.8d64946
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
   radius_collect_plug: radius_collect_plug-2.0.8.0575ab1
