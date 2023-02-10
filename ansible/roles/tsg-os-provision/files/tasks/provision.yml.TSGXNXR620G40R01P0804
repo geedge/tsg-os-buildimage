@@ -189,6 +189,12 @@
         dest: /etc/telegraf/telegraf_statistic.conf
       tags: telegraf_statistic
 
+    - name: "tsg-os-provision: Templates telegraf.conf"
+      template:
+        src: "../templates/telegraf_shaping.conf.j2"
+        dest: /etc/telegraf/telegraf_shaping.conf
+      tags: telegraf_shaping
+
     - name: "template tfe-env service for rps mask"
       template:
         src: ../templates/service_add_StartPostForRps.conf.j2

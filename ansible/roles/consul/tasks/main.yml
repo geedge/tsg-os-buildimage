@@ -16,6 +16,7 @@
   file:
     path: /etc/consul.d/
     state: directory
+    mode: 0777
   when: runtime_env != 'TSG-X-P0906'
 
 - name: "mkdir -p /opt/tsg/consul/bin"

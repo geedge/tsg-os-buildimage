@@ -104,7 +104,13 @@
         src: "../templates/telegraf_statistic.conf.j2"
         dest: /etc/telegraf/telegraf_statistic.conf
       tags: telegraf_statistic
-  
+
+    - name: "tsg-os-provision: Templates telegraf.conf"
+      template:
+        src: "../templates/telegraf_shaping.conf.j2"
+        dest: /etc/telegraf/telegraf_shaping.conf
+      tags: telegraf_shaping
+
     - name: "tsg-os-provision: template the tfe.conf"
       template:
         src: "../templates/tfe.conf.j2"

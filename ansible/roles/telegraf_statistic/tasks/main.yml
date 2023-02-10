@@ -1,12 +1,12 @@
 - name: "copy telegraf.rpm to destination server"
   copy:
-    src: "{{ role_path }}/files/telegraf-1.13.0-1.x86_64.rpm"
+    src: "{{ role_path }}/files/telegraf-1.25.0-1.x86_64.rpm"
     dest: /tmp
 
 - name: "install telegraf"
   yum:
     name:
-      - /tmp/telegraf-1.13.0-1.x86_64.rpm
+      - /tmp/telegraf-1.25.0-1.x86_64.rpm
     state: present
     disable_gpg_check: yes
 

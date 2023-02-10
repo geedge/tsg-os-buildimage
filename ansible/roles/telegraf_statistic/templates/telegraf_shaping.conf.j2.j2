@@ -2,12 +2,18 @@
 [global_tags]
    device_id = "${device_id}"
    vsys_id = "{% raw %}{{ vsys_id }}{% endraw %}"
-{% raw %}{% for device_tag in device.tags %}
+{% raw %}{% if data_center.name is defined %}
+   data_center = "{{ data_center.name }}"
+{% endif %}
+{% if device.tags is defined %}
+{% for device_tag in device.tags %}
 {% for key,value in device_tag.items() %}
    {{ key }} = "{{value}}"
 {% endfor %}
 {% endfor %}
+{% endif %}
 {% endraw %}
+
 
 [agent]
    interval = "1s"
