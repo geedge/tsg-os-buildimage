@@ -83,9 +83,6 @@
 ./plug/business/kni/kni.inf
 {{- end }}
 {{- if eq .Values.firewall.enable .Values.define_enable_val_yes }}
-{{- if eq .Values.decoders.DNS .Values.define_enable_val_yes }}
-./plug/business/fw_dns_plug/fw_dns_plug.inf
-{{- end }}
 ./plug/business/firewall/firewall.inf
 {{- end }}
 {{- if eq .Values.decoders.GTPC .Values.define_enable_val_yes }}
