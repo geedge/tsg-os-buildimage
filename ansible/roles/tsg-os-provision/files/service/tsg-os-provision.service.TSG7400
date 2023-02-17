@@ -11,4 +11,4 @@ RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
-RequiredBy=tfe-env.service mrenv.service certstore.service telegraf_statistic.service cert-redis.service
+RequiredBy=tfe-env.service mrenv.service certstore.service telegraf_statistic.service cert-redis.service consul.service
