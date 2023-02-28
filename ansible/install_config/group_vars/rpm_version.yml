@@ -77,7 +77,7 @@ tsg_master_rpm_version:
   tsg_master: tsg_master-5.10.6.4ba6f09
 
 shaping_master_rpm_version:
-  shaping_master: shaping_master-1.0.5.331e4b2
+  shaping_master: shaping_master-1.1.0.75d8306
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.4.b5ca5aa
