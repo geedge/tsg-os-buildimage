@@ -1,0 +1,21 @@
+---
+- name: "download rpm packages: sce"
+  yum:
+    name:
+      - "{{ sce_rpm_version.sce }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: "{{ path_download }}"
+
+- name: "Get sce rpm path"
+  find:
+    path: /tmp/rpm_download/
+    pattern: "{{ sce_rpm_version.sce }}*"
+  register: sce_rpm_fullname
+
+- name: "Install sce from local path" 
+  yum:
+    name: "{{ sce_rpm_fullname.files[0].path }}" 
+    state: present
+    disable_gpg_check: yes

@@ -1,0 +1,33 @@
+---
+#- name: "download rpm packages: bfdd"
+#  yum:
+#    name:
+#      - "{{ bfdd_rpm_version.bfdd }}"
+#    conf_file: "{{ rpm_repo_config_path }}"
+#    state: present
+#    download_only: yes
+#    download_dir: "{{ path_download }}"
+#
+#- name: "Get bfdd rpm path"
+#  find:
+#    path: /tmp/rpm_download/
+#    pattern: "{{ bfdd_rpm_version.bfdd }}*"
+#  register: bfdd_rpm_fullname
+#
+#- name: "Install bfdd from local path" 
+#  yum:
+#    name: "{{ bfdd_rpm_fullname.files[0].path }}" 
+#    state: present
+#    disable_gpg_check: yes
+
+- name: "temp: copy rpm to dest"
+  copy:
+    src: "{{ role_path }}/files/bfdd-1.1.1-release.x86_64.rpm"
+    dest: /tmp
+
+- name: "install bfdd"
+  yum:
+    name:
+      - /tmp/bfdd-1.1.1-release.x86_64.rpm"
+    state: present
+    disable_gpg_check: yes

@@ -37,7 +37,15 @@ spec:
         image: "{{ .Values.image.firewall.repository }}:{{ .Values.image.firewall.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.firewall.pullPolicy }}
         workingDir: /opt/tsg/sapp
-        command: ["/opt/tsg/scripts/start.sh"]
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.firewall.copy-config-to-dest" }}
+            {{ template "traffic-engine.firewall.get-service-node-port" }}
+            {{ template "traffic-engine.firewall.set-shaping-config" }}
+            {{ template "traffic-engine.firewall.prestart" }}
+            exec /opt/tsg/sapp/sapp
         ports:
           - containerPort: 9273
           - name: cluster
@@ -104,7 +112,13 @@ spec:
         image: "{{ .Values.image.proxy.repository }}:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.proxy.pullPolicy }}
         workingDir: /opt/tsg/tfe
-        command: ["/opt/tsg/scripts/start.sh"]
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.proxy.copy-config-to-dest" }}
+            {{ template "traffic-engine.proxy.prestart" }}
+            exec /opt/tsg/tfe/bin/tfe
         ports:
           - containerPort: 9001
         env:
@@ -149,7 +163,13 @@ spec:
         image: "{{ .Values.image.certstore.repository }}:{{ .Values.image.certstore.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.certstore.pullPolicy }}
         workingDir: /opt/tsg/certstore
-        command: ["/opt/tsg/scripts/start.sh"]
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.certstore.copy-config-to-dest" }}
+            {{ template "traffic-engine.certstore.prestart" }}
+            exec /opt/tsg/certstore/bin/certstore
         securityContext:
           privileged: true
         ports:
@@ -222,6 +242,25 @@ spec:
           mountPath: /etc/localtime
           readOnly: true
 {{- end }}
+      - name: telegraf-sce
+        image: "{{ .Values.image.telegraf.repository }}:{{ .Values.image.telegraf.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.telegraf.pullPolicy }}
+        command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_sce.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: telegraf
+          mountPath: "/etc/telegraf/telegraf_sce.conf"
+          subPath: "telegraf_sce.conf"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: config-volume
+          mountPath: "/etc/default/telegraf"
+          subPath: "etc/default/telegraf"
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true
 
       - name: merge-exporter
         image: "{{ .Values.mergeExporter.image.repository }}:{{ .Values.mergeExporter.image.tag }}"
@@ -246,6 +285,97 @@ spec:
           mountPath: /run/tfe/crashreport
         - name: certstore-minidump
           mountPath: /run/certstore/crashreport
+
+      - name: sce
+        image: "{{ .Values.image.sce.repository }}:{{ .Values.image.sce.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.sce.pullPolicy }}
+        workingDir: /opt/tsg/sce
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.sce.copy-config-to-dest" }}
+            {{ template "traffic-engine.sce.prestart" }}
+            exec /opt/tsg/sce/bin/sce
+        ports:
+          - containerPort: 9006
+        env:
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        securityContext:
+          privileged: true
+        livenessProbe:
+          tcpSocket:
+            port: 9006
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9006
+          failureThreshold: 30
+          periodSeconds: 10
+        volumeMounts:
+        - name: sce
+          mountPath: "/opt/tsg/config"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: sce-minidump
+          mountPath: /run/sce/crashreport
+        - name: sce-log
+          mountPath: /opt/tsg/sce/log
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true
+        - name: hotfix-sce
+          mountPath: /etc/traffic-engine/hotfix/sce
+        - name: bfdd-unix-socket
+          mountPath: /var/run/frr
+
+      - name: bfdd
+        image: "{{ .Values.image.bfdd.repository }}:{{ .Values.image.bfdd.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.bfdd.pullPolicy }}
+        workingDir: /opt/tsg/bfdd
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.bfdd.prestart" }}
+            exec /opt/tsg/bfdd/bfdd -u root -g root
+        env:
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: bfdd-minidump
+          mountPath: /run/bfdd/crashreport
+        - name: bfdd-log
+          mountPath: /opt/tsg/bfdd/log
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true
+        - name: hotfix-bfdd
+          mountPath: /etc/traffic-engine/hotfix/bfdd
+        - name: bfdd-unix-socket
+          mountPath: /var/run/frr
+
+
 
       initContainers:
       - name: tsg-init
@@ -300,6 +430,9 @@ spec:
       - name: sapp
         configMap:
           name: sapp-{{ .Release.Name }}
+      - name: sce
+        configMap:
+          name: sce-{{ .Release.Name }}
       - name: provisioninit
         configMap:
           defaultMode: 493
@@ -312,6 +445,12 @@ spec:
       - name: proxy-minidump
         hostPath:
           path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-proxy:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}/
+      - name: sce-minidump
+        hostPath:
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-sce:{{ .Values.image.sce.tag | default .Chart.AppVersion }}/
+      - name: bfdd-minidump
+        hostPath:
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-bfdd:{{ .Values.image.bfdd.tag | default .Chart.AppVersion }}/
       - name: certstore-minidump
         hostPath:
           path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-certstore:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}/
@@ -321,6 +460,12 @@ spec:
       - name: proxy-log
         hostPath:
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/tfe/
+      - name: sce-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sce/
+      - name: bfdd-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/bfdd/
       - name: certstore-log
         hostPath:
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/certstore/
@@ -336,3 +481,11 @@ spec:
       - name: hotfix-certstore
         hostPath:
           path: /etc/traffic-engine/hotfix/certstore
+      - name: hotfix-sce
+        hostPath:
+          path: /etc/traffic-engine/hotfix/sce
+      - name: hotfix-bfdd
+        hostPath:
+          path: /etc/traffic-engine/hotfix/bfdd
+      - name: bfdd-unix-socket
+        emptyDir: {}

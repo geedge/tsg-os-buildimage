@@ -231,6 +231,26 @@
     - {role: container-tools-install, tags: container-tools-install}
     - {role: telegraf_statistic, tags: telegraf_statistic}
 
+- hosts: TSG-X-NXR620G40-R01-P0906-sce
+  remote_user: root
+  vars_files:
+    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/rpm_version.yml
+  roles:
+    - {role: container-tools-install, tags: container-tools-install}
+    - {role: framework, tags: framework}
+    - {role: sce, tags: sce}
+
+- hosts: TSG-X-NXR620G40-R01-P0906-bfdd
+  remote_user: root
+  vars_files:
+    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/rpm_version.yml
+  roles:
+    - {role: container-tools-install, tags: container-tools-install}
+    - {role: framework, tags: framework}
+    - {role: bfdd, tags: bfdd}
+
 - hosts: server
   remote_user: root
   vars_files:

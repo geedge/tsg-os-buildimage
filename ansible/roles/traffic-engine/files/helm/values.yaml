@@ -164,6 +164,16 @@ image:
     repository: docker.io/library/tsg-init
     pullPolicy: Never
     tag: ""
+  Sce:
+    repository: docker.io/library/tsg-sce
+    pullPolicy: Never
+    tag: ""
+  bfdd:
+    repository: docker.io/library/tsg-bfdd
+    pullPolicy: Never
+    tag: ""
+
+
 
 
 
@@ -213,3 +223,17 @@ service:
 
 shaping:
   enable: yes
+
+
+sce:
+  steering_nic: nf_0_sce
+  endpoint_nic: endpoint_0_sce
+  endpoint_ip: 127.0.0.1
+  endpoint_gateway: 127.0.0.1
+  endpoint_netip: 127.0.0.1
+  endpoint_mask: 24
+  affinity: [1]
+
+sid:
+  firewall: 1
+  sce: 2

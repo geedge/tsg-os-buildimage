@@ -100,3 +100,9 @@ tsg_os_clixon_rpm_version:
   cligen: cligen-5.8.0-release
   clixon: clixon-5.8.0-release
   tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.0.25.18af22b
+
+sce_rpm_version:
+  sce: sce-1.0.02.cc397f4
+
+bfdd_rpm_version:
+  bfdd: need-to-modify

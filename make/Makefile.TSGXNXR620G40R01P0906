@@ -42,6 +42,16 @@ TARGET_CONTAINER_INIT_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/$(CONTAINER_INIT_NAME)
 CONTAINER_INIT_PKG						:= tsg-$(CONTAINER_INIT_NAME)-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-docker.tar.gz
 CONTAINER_INIT_TAR						:= tsg-$(CONTAINER_INIT_NAME)-${OS_RELEASE_VER}-docker.tar
 
+CONTAINER_SCE_NAME						:= sce
+TARGET_CONTAINER_SCE_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/$(CONTAINER_SCE_NAME)-container_sysroot
+CONTAINER_SCE_PKG						:= tsg-$(CONTAINER_SCE_NAME)-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-docker.tar.xz
+CONTAINER_SCE_TAR						:= tsg-$(CONTAINER_SCE_NAME)-${OS_RELEASE_VER}-docker.tar
+
+CONTAINER_BFDD_NAME						:= bfdd
+TARGET_CONTAINER_BFDD_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/$(CONTAINER_BFDD_NAME)-container_sysroot
+CONTAINER_BFDD_PKG						:= tsg-$(CONTAINER_BFDD_NAME)-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-docker.tar.xz
+CONTAINER_BFDD_TAR						:= tsg-$(CONTAINER_BFDD_NAME)-${OS_RELEASE_VER}-docker.tar
+
 .PHONY: all builddir installer sysroot-base sysroot-cleanup sysroot-archive sysroot-binary  container-sysroot-base container-sysroot-ansible container-images-generate add-images-into-sysroot container-sysroot-cleanup clean
 
 all: sysroot-binary
@@ -76,12 +86,16 @@ container-sysroot-base: builddir sysroot-verfile sysroot-ansible
 	rm -rf $(TARGET_CONTAINER_CERTSTORE_SYSROOT_DIR)
 	rm -rf $(TARGET_CONTAINER_TELEGRAF_SYSROOT_DIR)
 	rm -rf $(TARGET_CONTAINER_INIT_SYSROOT_DIR)
+	rm -rf $(TARGET_CONTAINER_SCE_SYSROOT_DIR)
+	rm -rf $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)
 
 	mkdir -p $(TARGET_CONTAINER_FIREWALL_SYSROOT_DIR)
 	mkdir -p $(TARGET_CONTAINER_RPOXY_SYSROOT_DIR)
 	mkdir -p $(TARGET_CONTAINER_CERTSTORE_SYSROOT_DIR)
 	mkdir -p $(TARGET_CONTAINER_TELEGRAF_SYSROOT_DIR)
 	mkdir -p $(TARGET_CONTAINER_INIT_SYSROOT_DIR)
+	mkdir -p $(TARGET_CONTAINER_SCE_SYSROOT_DIR)
+	mkdir -p $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)
 
 	mkdir -p $(TARGET_CONTAINER_IMAGE_DIR)
 
@@ -90,6 +104,8 @@ container-sysroot-base: builddir sysroot-verfile sysroot-ansible
 	tar -Jxf $(PROJECTDIR)/package/rocky-8.6-docker.tar.xz -C $(TARGET_CONTAINER_CERTSTORE_SYSROOT_DIR)
 	tar -Jxf $(PROJECTDIR)/package/rocky-8.6-docker.tar.xz -C $(TARGET_CONTAINER_TELEGRAF_SYSROOT_DIR)
 	tar -Jxf $(PROJECTDIR)/package/rocky-8.6-docker.tar.xz -C $(TARGET_CONTAINER_INIT_SYSROOT_DIR)
+	tar -Jxf $(PROJECTDIR)/package/rocky-8.6-docker.tar.xz -C $(TARGET_CONTAINER_SCE_SYSROOT_DIR)
+	tar -Jxf $(PROJECTDIR)/package/rocky-8.6-docker.tar.xz -C $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)
 	#curl -SL https://raw.githubusercontent.com/rocky-linux/sig-cloud-instance-images/Rocky-8.5-x86_64/rocky-8.5-docker-x86_64.tar.xz | tar -Jx  -C $(TARGET_CONTAINER_SYSROOT_DIR)
 
 sysroot-verfile: sysroot-base
@@ -141,6 +157,20 @@ container-sysroot-ansible: container-sysroot-base
 	$(TOOLSDIR)/ansible-HAL $(PROFILE_ID)-$(CONTAINER_INIT_NAME) $(PROJECTDIR) $(TARGET_CONTAINER_INIT_SYSROOT_DIR) /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER)
 	cp $(TARGET_CONTAINER_INIT_SYSROOT_DIR)/tmp/hosts $(TARGET_CONTAINER_INIT_SYSROOT_DIR)/etc/ -r
 
+	cp $(CONFDIR)/yum-RockyLinux-8.conf $(TARGET_CONTAINER_SCE_SYSROOT_DIR)/tmp/ -r
+	cp $(CONFDIR)/resolv.conf $(TARGET_CONTAINER_SCE_SYSROOT_DIR)/etc/ -r
+	cp $(TARGET_CONTAINER_SCE_SYSROOT_DIR)/etc/hosts $(TARGET_CONTAINER_SCE_SYSROOT_DIR)/tmp/ -r
+	cp /etc/hosts $(TARGET_CONTAINER_SCE_SYSROOT_DIR)/etc/ -r
+	$(TOOLSDIR)/ansible-HAL $(PROFILE_ID)-$(CONTAINER_SCE_NAME) $(PROJECTDIR) $(TARGET_CONTAINER_SCE_SYSROOT_DIR) /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER)
+	cp $(TARGET_CONTAINER_SCE_SYSROOT_DIR)/tmp/hosts $(TARGET_CONTAINER_SCE_SYSROOT_DIR)/etc/ -r
+
+	cp $(CONFDIR)/yum-RockyLinux-8.conf $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)/tmp/ -r
+	cp $(CONFDIR)/resolv.conf $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)/etc/ -r
+	cp $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)/etc/hosts $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)/tmp/ -r
+	cp /etc/hosts $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)/etc/ -r
+	$(TOOLSDIR)/ansible-HAL $(PROFILE_ID)-$(CONTAINER_BFDD_NAME) $(PROJECTDIR) $(TARGET_CONTAINER_BFDD_SYSROOT_DIR) /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER)
+	cp $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)/tmp/hosts $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)/etc/ -r
+
 container-sysroot-cleanup:
 	cp $(TARGET_CONTAINER_FIREWALL_SYSROOT_DIR)/tmp/ks-script-* $(TARGET_CONTAINER_FIREWALL_SYSROOT_DIR)
 	rm -rf $(TARGET_CONTAINER_FIREWALL_SYSROOT_DIR)/tmp/*
@@ -166,6 +196,16 @@ container-sysroot-cleanup:
 	rm -rf $(TARGET_CONTAINER_INIT_SYSROOT_DIR)/tmp/*
 	rm -rf $(TARGET_CONTAINER_INIT_SYSROOT_DIR)/dev/*
 	mv $(TARGET_CONTAINER_INIT_SYSROOT_DIR)/ks-script-* $(TARGET_CONTAINER_INIT_SYSROOT_DIR)/tmp
+
+	cp $(TARGET_CONTAINER_SCE_SYSROOT_DIR)/tmp/ks-script-* $(TARGET_CONTAINER_SCE_SYSROOT_DIR)
+	rm -rf $(TARGET_CONTAINER_SCE_SYSROOT_DIR)/tmp/*
+	rm -rf $(TARGET_CONTAINER_SCE_SYSROOT_DIR)/dev/*
+	mv $(TARGET_CONTAINER_SCE_SYSROOT_DIR)/ks-script-* $(TARGET_CONTAINER_SCE_SYSROOT_DIR)/tmp
+
+	cp $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)/tmp/ks-script-* $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)
+	rm -rf $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)/tmp/*
+	rm -rf $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)/dev/*
+	mv $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)/ks-script-* $(TARGET_CONTAINER_BFDD_SYSROOT_DIR)/tmp
 
 container-images-generate: container-sysroot-ansible container-sysroot-cleanup
 	tar -Jcf $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_FIREWALL_PKG) -C $(TARGET_CONTAINER_FIREWALL_SYSROOT_DIR) .
@@ -198,6 +238,18 @@ container-images-generate: container-sysroot-ansible container-sysroot-cleanup
 	docker save tsg-$(CONTAINER_INIT_NAME):$(OS_RELEASE_VER) > $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_INIT_TAR)
 	docker rmi tsg-$(CONTAINER_INIT_NAME):$(OS_RELEASE_VER)
 
+	tar -Jcf $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_SCE_PKG) -C $(TARGET_CONTAINER_SCE_SYSROOT_DIR) .
+	echo -e "FROM scratch\nADD $(CONTAINER_SCE_PKG) /\n\nCMD ["/bin/bash"]\n" > $(CONTAINER_DOCKERFILE)
+	docker build -t tsg-$(CONTAINER_SCE_NAME):$(OS_RELEASE_VER) -f $(CONTAINER_DOCKERFILE) $(TARGET_CONTAINER_IMAGE_DIR)
+	docker save tsg-$(CONTAINER_SCE_NAME):$(OS_RELEASE_VER) > $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_SCE_TAR)
+	docker rmi tsg-$(CONTAINER_SCE_NAME):$(OS_RELEASE_VER)
+
+	tar -Jcf $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_BFDD_PKG) -C $(TARGET_CONTAINER_BFDD_SYSROOT_DIR) .
+	echo -e "FROM scratch\nADD $(CONTAINER_BFDD_PKG) /\n\nCMD ["/bin/bash"]\n" > $(CONTAINER_DOCKERFILE)
+	docker build -t tsg-$(CONTAINER_BFDD_NAME):$(OS_RELEASE_VER) -f $(CONTAINER_DOCKERFILE) $(TARGET_CONTAINER_IMAGE_DIR)
+	docker save tsg-$(CONTAINER_BFDD_NAME):$(OS_RELEASE_VER) > $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_BFDD_TAR)
+	docker rmi tsg-$(CONTAINER_BFDD_NAME):$(OS_RELEASE_VER)
+
 sysroot-cleanup:
 	rm -rf $(TARGET_SYSROOT_DIR)/tmp/*
 	rm -rf $(TARGET_SYSROOT_DIR)/dev/*
@@ -209,6 +261,8 @@ add-images-into-sysroot: container-images-generate
 	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_CERTSTORE_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
 	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_TELEGRAF_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
 	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_INIT_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
+	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_SCE_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
+	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_BFDD_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
 
 sysroot-archive: installer add-images-into-sysroot sysroot-cleanup
 	cp $(TARGET_CONTAINER_RPOXY_SYSROOT_DIR)/etc/sysctl.d/80-tfe.conf $(TARGET_SYSROOT_DIR)/etc/sysctl.d/
