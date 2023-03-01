@@ -62,9 +62,9 @@ mrzcpd_rpm_version:
 
 
 sapp_rpm_version:
-  sapp: sapp-4.2.94.851bb08
+  sapp: sapp-4.2.95.7448abe
   tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
-  sapp-pr: sapp-pr-4.2.94.851bb08
+  sapp-pr: sapp-pr-4.2.95.7448abe
 
 tfe_rpm_version:
   tfe: tfe-4.7.02.a2a4c32
@@ -74,7 +74,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.5.5.7a60af1
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.10.6.4ba6f09
+  tsg_master: tsg_master-5.10.7.bbc31c8
 
 shaping_master_rpm_version:
   shaping_master: shaping_master-1.1.0.75d8306
@@ -90,8 +90,8 @@ wannat_wangw_rpm_version:
   libwannat_common: libwannat_common-1.0.3.6dc42b6
 
 wire_graft_rpm_version:
-  wire_graft: wire_graft_plug-1.5.8.211f1f1
-  libwire_graft: libwire_graft-1.5.8.211f1f1
+  wire_graft: wire_graft_plug-1.5.9.c858f08
+  libwire_graft: libwire_graft-1.5.9.c858f08
 
 hasp_update_rpm_version:
   hasp_update: hasp_update-1.0.1.b836a3b

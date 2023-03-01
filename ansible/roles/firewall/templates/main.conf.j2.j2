@@ -142,7 +142,7 @@ dns_flood_thresh="{{ ddossketch.dns_flood_report_thresh }}"
 {% if dp_steering_firewall.enable_mirror == 1 %}
 [TRAFFIC_MIRROR]
 TRAFFIC_MIRROR_ENABLE=1
-NIC_NAME={{ dp_traffic_mirror.nic_name }}
+NIC_NAME="{{ dp_traffic_mirror.nic_name }}"
 DEFAULT_VLAN_ID={{ dp_traffic_mirror.traffic_mirror_vlan_id }}
 {% endif %}
 [RADIUS_PLUG]
@@ -160,12 +160,12 @@ DEFAULT_VLAN_ID={{ dp_traffic_mirror.traffic_mirror_vlan_id }}
 {% if data_center.name is not defined and device.tags is not defined %}
 {{ device.tags }}
 {% endif %}
-DEVICE_TAGS={"tags":[{{ tags_list | join(",") }}]}
+DEVICE_TAGS="{"tags":[{{ tags_list | join(",") }}]}"
 {% endraw %}
 PACKET_TYPE_FLAG=16
-COLLECT_TOPIC=RADIUS-RECORD
+COLLECT_TOPIC="RADIUS-RECORD"
 SERVICE_ID=162
-LOG_PATH=./log/radius_collect_plug/radius_collect_plug
+LOG_PATH="./log/radius_collect_plug/radius_collect_plug"
 LOG_LEVEL=30
 
 [GTP_SIGNALING]
@@ -176,7 +176,7 @@ SENDLOG_SWITCH=0
 {% endif %}
 {% endraw %}
 #NO/HASH/REDIS
-SIGNALING_ORIGIN=REDIS
+SIGNALING_ORIGIN="REDIS"
 
 [CAPTURE]
 {% raw %}

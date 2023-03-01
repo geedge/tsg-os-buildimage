@@ -8,6 +8,12 @@
     download_dir: "{{ path_download }}"
   with_dict: "{{ sapp_rpm_version }}"
 
+- name: "download rpm packages: jemalloc"
+  yum:
+    name: "jemalloc"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
 - name: "Create directory /opt/tsg/framework and /opt/tsg/sapp if they not exist"
   file:
     path: "{{ item }}"
