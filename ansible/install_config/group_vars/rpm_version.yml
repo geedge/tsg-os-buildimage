@@ -49,8 +49,8 @@ framework_rpm_version:
   15_libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
   16_libmaatframe: libmaatframe-3.6.19.9c4741d
   17_libmaatframe_tools: libmaatframe-tools-3.6.19.9c4741d
-  18_libswarmkv: libswarmkv-3.0.1.a338d8d
-  19_libswarmkv-tools: libswarmkv-tools-3.0.1.a338d8d
+  18_libswarmkv: libswarmkv-3.0.2.b0f980a
+  19_libswarmkv-tools: libswarmkv-tools-3.0.2.b0f980a
 
 kni_rpm_version:
   kni: kni-5.0.2.6cb27c3
