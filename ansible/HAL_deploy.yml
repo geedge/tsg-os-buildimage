@@ -239,7 +239,9 @@
   roles:
     - {role: container-tools-install, tags: container-tools-install}
     - {role: framework, tags: framework}
+    - {role: mrzcpd, tags: mrzcpd}
     - {role: sce, tags: sce}
+    - {role: hasp, tags: hasp}
 
 - hosts: TSG-X-NXR620G40-R01-P0906-bfdd
   remote_user: root
