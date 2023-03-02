@@ -5,7 +5,7 @@ firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-4.1.5.b9783ff
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   firewall: firewall-1.0.7.613f1fa
-  tsg_conn_sketch:  tsg_conn_sketch-3.3.19.ac8d850
+  tsg_conn_sketch:  tsg_conn_sketch-3.4.0.ac8d850
   gtp_signaling_plug: gtp_signaling_plug-1.0.5.8d64946
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
   radius_collect_plug: radius_collect_plug-2.0.8.0575ab1
@@ -28,7 +28,7 @@ firewall_rpm_version:
   stratum: stratum-1.0.6.16c1c35
   rdp: rdp-1.0.3.f392ffd
   bgp: bgp-1.1.0.ec59191
-  session_marker_record: session_marker_record-2.0.15.1ab801e
+  session_marker_record: session_marker_record-2.0.16.d04758d
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf
