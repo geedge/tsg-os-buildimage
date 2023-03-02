@@ -99,4 +99,8 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 
-
+- name: "install libyang"
+  yum:
+    name: libyang
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
