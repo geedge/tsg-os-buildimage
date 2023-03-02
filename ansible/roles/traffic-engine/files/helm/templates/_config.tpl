@@ -61,7 +61,7 @@ enable_breakpad_upload=0
 
 {{- define "traffic-engine.sce.cpu-affinity" -}}
 {{- if eq (len .Values.sce.affinity) 1 }}
-{{- print (index .Values.sce.affinity 0) "," (index .Values.sce.affinity 0) }}
+{{- print (index .Values.sce.affinity 0) }}
 {{- else }}
 {{- join "," .Values.sce.affinity }}
 {{- end }}

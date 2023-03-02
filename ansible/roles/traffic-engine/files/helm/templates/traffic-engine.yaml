@@ -321,6 +321,18 @@ spec:
           failureThreshold: 30
           periodSeconds: 10
         volumeMounts:
+        - name: opt-tsg-mrzcpd
+          mountPath: /opt/tsg/mrzcpd
+          readOnly: false
+        - name: var-run-mrzcpd
+          mountPath: /var/run/mrzcpd
+          readOnly: false
+        - name: var-run-dpdk
+          mountPath: /var/run/dpdk
+          readOnly: false
+        - name: root-sys
+          mountPath: /root/sys
+          readOnly: false
         - name: sce
           mountPath: "/opt/tsg/config"
         - name: config-volume
@@ -336,7 +348,7 @@ spec:
         - name: hotfix-sce
           mountPath: /etc/traffic-engine/hotfix/sce
         - name: bfdd-unix-socket
-          mountPath: /var/run/frr
+          mountPath: {{ .Values.sce.bfdd_socket_path }}
 
       - name: bfdd
         image: "{{ .Values.image.bfdd.repository }}:{{ .Values.image.bfdd.tag | default .Chart.AppVersion }}"
@@ -373,7 +385,7 @@ spec:
         - name: hotfix-bfdd
           mountPath: /etc/traffic-engine/hotfix/bfdd
         - name: bfdd-unix-socket
-          mountPath: /var/run/frr
+          mountPath: {{ .Values.sce.bfdd_socket_path }}
 
 
 

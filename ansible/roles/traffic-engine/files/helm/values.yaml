@@ -233,6 +233,7 @@ sce:
   endpoint_netip: 127.0.0.1
   endpoint_mask: 24
   affinity: [1]
+  bfdd_socket_path: "/run/frr"
 
 sid:
   firewall: 1

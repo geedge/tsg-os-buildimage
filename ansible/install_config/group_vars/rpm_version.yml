@@ -105,4 +105,4 @@ sce_rpm_version:
   sce: sce-1.0.04.83e4eba
 
 bfdd_rpm_version:
-  bfdd: need-to-modify
+  bfdd: bfdd-1.0.2-release
