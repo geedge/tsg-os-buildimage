@@ -9,6 +9,7 @@ SIZE_PART_UPDATE		:= 16384M
 PROFILE_ID_IN_SHORT		:= $(subst -,$e,$(PROFILE_ID))
 CHROOT_PKG 				:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-chroot.tar.bz2
 CHROOT_BIN 				:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-ONIE.bin
+CONTAINER_IMAGES_PKG	:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-container-images.tar.bz2
 
 TARGET_BUILD_DIR 		:= $(BUILDDIR_BASE)/$(PROFILE_ID)
 TARGET_INSTALLER_DIR 	:= $(TARGET_BUILD_DIR)/installer
@@ -74,6 +75,7 @@ installer: builddir
 	sed -i -e "s/%%GRUB_SERIAL_COMMAND%%/$(GRUB_SERIAL_COMMAND)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%SIZE_PART_SYSROOT%%/$(SIZE_PART_SYSROOT)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%SIZE_PART_UPDATE%%/$(SIZE_PART_UPDATE)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%CONTAINER_IMAGES_PKG%%/$(CONTAINER_IMAGES_PKG)/" $(TARGET_INSTALLER_DIR)/install.sh
 
 	sed -i '/sapp-pr:/d;/tfe-pr:/d;/mrzcpd:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
 
@@ -255,14 +257,7 @@ sysroot-cleanup:
 	rm -rf $(TARGET_SYSROOT_DIR)/dev/*
 
 add-images-into-sysroot: container-images-generate
-	mkdir -p $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
-	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_FIREWALL_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
-	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_RPOXY_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
-	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_CERTSTORE_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
-	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_TELEGRAF_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
-	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_INIT_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
-	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_SCE_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
-	cp $(TARGET_CONTAINER_IMAGE_DIR)/$(CONTAINER_BFDD_TAR) $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images/
+	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_CONTAINER_IMAGE_DIR) . | pbzip2 -p9 > $(TARGET_INSTALLER_DIR)/$(CONTAINER_IMAGES_PKG)
 
 sysroot-archive: installer add-images-into-sysroot sysroot-cleanup
 	cp $(TARGET_CONTAINER_RPOXY_SYSROOT_DIR)/etc/sysctl.d/80-tfe.conf $(TARGET_SYSROOT_DIR)/etc/sysctl.d/

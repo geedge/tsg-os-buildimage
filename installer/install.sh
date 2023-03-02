@@ -31,6 +31,7 @@ grub_serial_command="%%GRUB_SERIAL_COMMAND%%"
 DISTR0_VER="%%DISTR0_VER%%"
 MACHINE_ID="%%MACHINE_ID%%"
 CHROOT_PKG="%%CHROOT_PKG%%"
+CONTAINER_IMAGES_PKG="%%CONTAINER_IMAGES_PKG%%"
 
 size_part_tsg_os_update="%%SIZE_PART_UPDATE%%"
 size_part_tsg_os_sysroot="%%SIZE_PART_SYSROOT%%"
@@ -281,6 +282,12 @@ chroot ${distro_mnt} /distro-setup.sh ${blk_dev}
 [ -e ${distro_mnt}/dev/pts ] && {
    umount ${distro_mnt}/dev/pts
 }
+
+if [ -f ${CONTAINER_IMAGES_PKG} ]; then
+    mkdir -p ${distro_mnt}/data/var/lib/rancher/k3s/agent/images
+    rm -rf ${distro_mnt}/data/var/lib/rancher/k3s/agent/images/tsg-*-docker.tar
+    tar -xf ${CONTAINER_IMAGES_PKG} -C ${distro_mnt}/data/var/lib/rancher/k3s/agent/images
+fi
 
 umount ${distro_mnt}/proc
 umount ${distro_mnt}/sys
