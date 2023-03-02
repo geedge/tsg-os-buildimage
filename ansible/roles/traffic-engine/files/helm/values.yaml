@@ -164,7 +164,7 @@ image:
     repository: docker.io/library/tsg-init
     pullPolicy: Never
     tag: ""
-  Sce:
+  sce:
     repository: docker.io/library/tsg-sce
     pullPolicy: Never
     tag: ""
