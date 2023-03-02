@@ -20,6 +20,24 @@
 #    state: present
 #    disable_gpg_check: yes
 
+- name: "install pcre2"
+  yum:
+    name: pcre2
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "temp: copy libyang rpm to dest"
+  copy:
+    src: "{{ role_path }}/files/libyang2-2.0.7-1.el8.x86_64.rpm"
+    dest: /tmp
+
+- name: "install libyang2"
+  yum:
+    name:
+      - /tmp/libyang2-2.0.7-1.el8.x86_64.rpm"
+    state: present
+    disable_gpg_check: yes
+
 - name: "temp: copy rpm to dest"
   copy:
     src: "{{ role_path }}/files/bfdd-1.1.1-release.x86_64.rpm"
