@@ -228,6 +228,7 @@ shaping:
 sce:
   steering_nic: nf_0_sce
   endpoint_nic: endpoint_0_sce
+  nic_index: 1
   endpoint_ip: 127.0.0.1
   endpoint_gateway: 127.0.0.1
   endpoint_netip: 127.0.0.1
