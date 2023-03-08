@@ -4,7 +4,7 @@ certstore_rpm_version:
 firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-4.1.5.b9783ff
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-1.0.7.613f1fa
+  firewall: firewall-1.0.8.caa4b57
   tsg_conn_sketch:  tsg_conn_sketch-3.4.0.ac8d850
   gtp_signaling_plug: gtp_signaling_plug-1.0.5.8d64946
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
@@ -72,7 +72,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.5.5.7a60af1
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.10.7.bbc31c8
+  tsg_master: tsg_master-5.10.8.8819217
 
 shaping_master_rpm_version:
   shaping_master: shaping_master-1.1.2.bc44ce3
