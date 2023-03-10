@@ -43,10 +43,10 @@ enable_breakpad_upload=0
 {{- end -}}
 
 {{- define "traffic-engine.sce.workerthread" -}}
-{{- if eq (len .Values.sce.affinity) 1 }}
+{{- if eq (len .Values.sce_config.affinity) 1 }}
 {{- 1 }}
 {{- else }}
-{{- sub (len .Values.sce.affinity) 1 }}
+{{- sub (len .Values.sce_config.affinity) 1 }}
 {{- end }}
 {{- end -}}
 
@@ -60,10 +60,10 @@ enable_breakpad_upload=0
 {{- end -}}
 
 {{- define "traffic-engine.sce.cpu-affinity" -}}
-{{- if eq (len .Values.sce.affinity) 1 }}
-{{- print (index .Values.sce.affinity 0) }}
+{{- if eq (len .Values.sce_config.affinity) 1 }}
+{{- print (index .Values.sce_config.affinity 0) }}
 {{- else }}
-{{- join "," .Values.sce.affinity }}
+{{- join "," .Values.sce_config.affinity }}
 {{- end }}
 {{- end -}}
 

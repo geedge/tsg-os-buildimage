@@ -224,8 +224,10 @@ service:
 shaping:
   enable: yes
 
-
 sce:
+  enable: yes
+
+sce_config:
   steering_nic: nf_0_sce
   endpoint_nic: endpoint_0_sce
   nic_index: 1

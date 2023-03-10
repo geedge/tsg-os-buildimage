@@ -242,25 +242,6 @@ spec:
           mountPath: /etc/localtime
           readOnly: true
 {{- end }}
-      - name: telegraf-sce
-        image: "{{ .Values.image.telegraf.repository }}:{{ .Values.image.telegraf.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.telegraf.pullPolicy }}
-        command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_sce.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - name: telegraf
-          mountPath: "/etc/telegraf/telegraf_sce.conf"
-          subPath: "telegraf_sce.conf"
-        - name: config-volume
-          mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "opt/tsg/etc/tsg_sn.json"
-        - name: config-volume
-          mountPath: "/etc/default/telegraf"
-          subPath: "etc/default/telegraf"
-        - name: localtime-node
-          mountPath: /etc/localtime
-          readOnly: true
 
       - name: merge-exporter
         image: "{{ .Values.mergeExporter.image.repository }}:{{ .Values.mergeExporter.image.tag }}"
@@ -285,6 +266,27 @@ spec:
           mountPath: /run/tfe/crashreport
         - name: certstore-minidump
           mountPath: /run/certstore/crashreport
+
+{{- if and (eq .Values.sce.enable .Values.define_enable_val_yes) (.Values.sce_config.endpoint_nic) }}
+      - name: telegraf-sce
+        image: "{{ .Values.image.telegraf.repository }}:{{ .Values.image.telegraf.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.telegraf.pullPolicy }}
+        command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_sce.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: telegraf
+          mountPath: "/etc/telegraf/telegraf_sce.conf"
+          subPath: "telegraf_sce.conf"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: config-volume
+          mountPath: "/etc/default/telegraf"
+          subPath: "etc/default/telegraf"
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true
 
       - name: sce
         image: "{{ .Values.image.sce.repository }}:{{ .Values.image.sce.tag | default .Chart.AppVersion }}"
@@ -348,7 +350,7 @@ spec:
         - name: hotfix-sce
           mountPath: /etc/traffic-engine/hotfix/sce
         - name: bfdd-unix-socket
-          mountPath: {{ .Values.sce.bfdd_socket_path }}
+          mountPath: {{ .Values.sce_config.bfdd_socket_path }}
 
       - name: bfdd
         image: "{{ .Values.image.bfdd.repository }}:{{ .Values.image.bfdd.tag | default .Chart.AppVersion }}"
@@ -385,8 +387,8 @@ spec:
         - name: hotfix-bfdd
           mountPath: /etc/traffic-engine/hotfix/bfdd
         - name: bfdd-unix-socket
-          mountPath: {{ .Values.sce.bfdd_socket_path }}
-
+          mountPath: {{ .Values.sce_config.bfdd_socket_path }}
+{{- end }}
 
 
       initContainers:
