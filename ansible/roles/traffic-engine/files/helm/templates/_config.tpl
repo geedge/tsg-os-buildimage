@@ -121,6 +121,7 @@ enable_breakpad_upload=0
 
 {{- define "traffic-engine.sce.copy-config-to-dest" -}}
             cp /opt/tsg/config/sce.conf  /opt/tsg/sce/conf
+            cp /opt/tsg/config/tsg_device_tag.json  /opt/tsg/etc/tsg_device_tag.json
 {{- end -}}
 
 {{- define "traffic-engine.sce.prestart" -}}
