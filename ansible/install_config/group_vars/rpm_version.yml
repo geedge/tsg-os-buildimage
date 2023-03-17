@@ -28,7 +28,7 @@ firewall_rpm_version:
   stratum: stratum-1.0.6.16c1c35
   rdp: rdp-1.0.3.f392ffd
   bgp: bgp-1.1.0.ec59191
-  session_marker_record: session_marker_record-2.1.0.09b828f
+  session_marker_record: session_marker_record-2.1.1.375caab
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf
