@@ -32,9 +32,27 @@
     - /opt/tsg/mrzcpd/lib/pkgconfig/mrzcpd.pc
     - /usr/lib/systemd/system/mrapm_device.service
     - /usr/lib/systemd/system/mrapm_stream.service
-    - /usr/lib/systemd/system/mrenv.service
     - /usr/lib/systemd/system/mrtunnat.service
     - /usr/lib/systemd/system/mrzcpd.service
+
+- name: "replace action: replace /opt/mrzcpd to /opt/tsg/mrzcpd"
+  replace:
+    path: "{{ item }}"
+    regexp: '/opt/mrzcpd'
+    replace: '{{ prefix_path.mrzcpd }}'
+  with_items:
+    - /usr/lib/systemd/system/mrenv.service
+  when: runtime_env != 'TSG-X-P0906'
+
+- name: "replace action: replace /opt/mrzcpd to /opt/tsg/mrzcpd"
+  replace:
+    path: "{{ item }}"
+    regexp: '/opt/mrzcpd'
+    replace: '{{ prefix_path.mrzcpd }}'
+  with_items:
+    - /usr/lib/systemd/system/mrzcpd-hugepages-setup.service
+    - /usr/lib/systemd/system/mrzcpd-hwdb-setup.service
+  when: runtime_env == 'TSG-X-P0906'
 
 - name: "replace action: replace Requires to Wants"
   replace:
@@ -107,7 +125,7 @@
     src: "{{ role_path }}/templates/mrglobal.conf.TSGXNXR620G40R01P0906"
     dest: /opt/tsg/mrzcpd/etc/mrglobal.conf
   when:
-    - runtime_env == 'TSG-X-P0906'    
+    - runtime_env == 'TSG-X-P0906'
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:
@@ -151,6 +169,20 @@
   systemd:
     name: mrenv
     enabled: yes
+  when: runtime_env != 'TSG-X-P0906'
+
+- name: "enable mrzcpd-hugepages-setup"
+  systemd:
+    name: mrzcpd-hugepages-setup
+    enabled: yes
+  when: runtime_env == 'TSG-X-P0906'
+
+
+- name: "enable mrzcpd-hwdb-setup"
+  systemd:
+    name: mrzcpd-hwdb-setup
+    enabled: yes
+  when: runtime_env == 'TSG-X-P0906'
 
 - name: "enable mrzcpd"
   systemd:
