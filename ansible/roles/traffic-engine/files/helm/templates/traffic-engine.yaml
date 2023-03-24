@@ -6,23 +6,22 @@ metadata:
     app: traffic-engine-{{ .Release.Name }}
 
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
-      app: traffic-engine-vsys-{{ .Values.vsys_id }}
+      app: traffic-engine-{{ .Release.Name }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: traffic-engine-vsys-{{ .Values.vsys_id }}
-        vsysId: vsys-{{ .Values.vsys_id }}
+        app: traffic-engine-{{ .Release.Name }}
+        vsysId: {{ .Values.vsys_id }}
         serviceFunction: {{ .Values.nic_raw_name }}
       annotations:
         configHash: "{{ .Values.configHash }}"
-  {{- with .Values.deployment.annotations }}
-        {{- toYaml . | nindent 8 }}
-  {{- end }}
+        prometheus.io/port: "9004"
+        prometheus.io/scrape: "true"
 
     spec:
       tolerations:
@@ -34,8 +33,8 @@ spec:
         effect: NoSchedule
       containers:
       - name: firewall
-        image: "{{ .Values.image.firewall.repository }}:{{ .Values.image.firewall.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.firewall.pullPolicy }}
+        image: "docker.io/library/tsg-firewall:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
         workingDir: /opt/tsg/sapp
         command:
           - "bash"
@@ -48,10 +47,8 @@ spec:
             exec /opt/tsg/sapp/sapp
         ports:
           - containerPort: 9273
-          - name: cluster
-            containerPort: 8551
-          - name: healthcheck
-            containerPort: 8552
+          - containerPort: 8551
+          - containerPort: 8552
         env:
         - name: MRZCPD_CTRLMSG_LISTEN_ADDR
           valueFrom:
@@ -62,7 +59,7 @@ spec:
             fieldRef:
               fieldPath: status.hostIP
         - name: SERVICENAME
-          value: traffic-engine-announce-vsys-{{ .Values.vsys_id }}
+          value: shaping-announce-port-{{ .Release.Name }}
         - name: NODE_IP
           valueFrom:
             fieldRef:
@@ -109,8 +106,8 @@ spec:
 
 {{- if and (eq .Values.proxy.enable .Values.define_enable_val_yes) (ge (len .Values.tfe_affinity) 1) }}
       - name: proxy
-        image: "{{ .Values.image.proxy.repository }}:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.proxy.pullPolicy }}
+        image: "docker.io/library/tsg-proxy:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
         workingDir: /opt/tsg/tfe
         command:
           - "bash"
@@ -160,8 +157,8 @@ spec:
 {{- end }}
 
       - name: certstore
-        image: "{{ .Values.image.certstore.repository }}:{{ .Values.image.certstore.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.certstore.pullPolicy }}
+        image: "docker.io/library/tsg-certstore:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
         workingDir: /opt/tsg/certstore
         command:
           - "bash"
@@ -191,8 +188,8 @@ spec:
           mountPath: /etc/traffic-engine/hotfix/certstore
 
       - name: cert-redis
-        image: "{{ .Values.image.certRedis.repository }}:{{ .Values.image.certRedis.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.certRedis.pullPolicy }}
+        image: "docker.io/library/tsg-certstore:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
         command: ["/usr/bin/redis-server", "/etc/cert-redis.conf"]
         securityContext:
           privileged: true
@@ -202,7 +199,7 @@ spec:
           readOnly: true       
 
       - name: telegraf
-        image: "{{ .Values.image.telegraf.repository }}:{{ .Values.image.telegraf.tag | default .Chart.AppVersion }}"
+        image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.telegraf.pullPolicy }}
         command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_statistic.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
         securityContext:
@@ -223,7 +220,7 @@ spec:
 
 {{- if eq .Values.shaping.enable .Values.define_enable_val_yes }}
       - name: telegraf-shaping
-        image: "{{ .Values.image.telegraf.repository }}:{{ .Values.image.telegraf.tag | default .Chart.AppVersion }}"
+        image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.telegraf.pullPolicy }}
         command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_shaping.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
         securityContext:
@@ -244,16 +241,16 @@ spec:
 {{- end }}
 
       - name: merge-exporter
-        image: "{{ .Values.mergeExporter.image.repository }}:{{ .Values.mergeExporter.image.tag }}"
-        imagePullPolicy: {{ .Values.mergeExporter.image.pullPolicy }}
+        image: "quay.io/rebuy/exporter-merger:v0.2.0"
+        imagePullPolicy: Never
         ports:
-        - containerPort: {{ .Values.mergeExporter.port }}
+        - containerPort: 9004
         env:
         # space-separated list of URLs
         - name: MERGER_URLS
           {{- include "traffic-engine.merge-exporter.merge-urls" . | nindent 10 }}
         - name: MERGER_PORT
-          value: "{{ .Values.mergeExporter.mergePort }}"
+          value: "9004"
 
       - name: minidump-hook
         image: "{{ .Values.image.tsgInit.repository }}:{{ .Values.image.tsgInit.tag | default .Chart.AppVersion }}"
@@ -269,7 +266,7 @@ spec:
 
 {{- if and (eq .Values.sce.enable .Values.define_enable_val_yes) (.Values.sce_config.endpoint_nic) }}
       - name: telegraf-sce
-        image: "{{ .Values.image.telegraf.repository }}:{{ .Values.image.telegraf.tag | default .Chart.AppVersion }}"
+        image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.telegraf.pullPolicy }}
         command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_sce.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
         securityContext:
@@ -289,8 +286,8 @@ spec:
           readOnly: true
 
       - name: sce
-        image: "{{ .Values.image.sce.repository }}:{{ .Values.image.sce.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.sce.pullPolicy }}
+        image: "docker.io/library/tsg-sce:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
         workingDir: /opt/tsg/sce
         command:
           - "bash"
@@ -350,11 +347,11 @@ spec:
         - name: hotfix-sce
           mountPath: /etc/traffic-engine/hotfix/sce
         - name: bfdd-unix-socket
-          mountPath: {{ .Values.sce_config.bfdd_socket_path }}
+          mountPath: /run/frr
 
       - name: bfdd
-        image: "{{ .Values.image.bfdd.repository }}:{{ .Values.image.bfdd.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.bfdd.pullPolicy }}
+        image: "docker.io/library/tsg-bfdd:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
         workingDir: /opt/tsg/bfdd
         command:
           - "bash"
@@ -387,14 +384,14 @@ spec:
         - name: hotfix-bfdd
           mountPath: /etc/traffic-engine/hotfix/bfdd
         - name: bfdd-unix-socket
-          mountPath: {{ .Values.sce_config.bfdd_socket_path }}
+          mountPath: /run/frr
 {{- end }}
 
 
       initContainers:
       - name: tsg-init
-        image: "{{ .Values.image.tsgInit.repository }}:{{ .Values.image.tsgInit.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.tsgInit.pullPolicy }}
+        image: "docker.io/library/tsg-init:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
         command: ["/opt/tsg/provision-init.sh"]
         securityContext:
           privileged: true

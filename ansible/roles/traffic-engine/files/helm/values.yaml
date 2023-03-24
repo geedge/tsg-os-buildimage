@@ -138,45 +138,6 @@ session_id_generator:
   snowflake_worker_id_base: 1
   snowflake_worker_id_offset: 1
 
-replicaCount: 1
-image:
-  firewall:
-    repository: docker.io/library/tsg-firewall
-    pullPolicy: Never
-    tag: ""
-  proxy:
-    repository: docker.io/library/tsg-proxy
-    pullPolicy: Never
-    tag: ""
-  certstore:
-    repository: docker.io/library/tsg-certstore
-    pullPolicy: Never
-    tag: ""
-  certRedis:
-    repository: docker.io/library/tsg-certstore
-    pullPolicy: Never
-    tag: ""
-  telegraf:
-    repository: docker.io/library/tsg-telegraf
-    pullPolicy: Never
-    tag: ""
-  tsgInit:
-    repository: docker.io/library/tsg-init
-    pullPolicy: Never
-    tag: ""
-  sce:
-    repository: docker.io/library/tsg-sce
-    pullPolicy: Never
-    tag: ""
-  bfdd:
-    repository: docker.io/library/tsg-bfdd
-    pullPolicy: Never
-    tag: ""
-
-
-
-
-
 decoders:
   DNS: yes
   QUIC: yes
@@ -197,30 +158,6 @@ decoders:
 
 configHash: "defaulthash"
 
-
-mergeExporter:
-  image:
-    repository: quay.io/rebuy/exporter-merger
-    pullPolicy: Never
-    tag: "v0.2.0"
-  port: "9004"
-#  mergeUrls: "http://localhost:9273/metrics http://localhost:9001/metrics http://localhost:9002/metrics"
-  mergePort: "9004"
-
-deployment:
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9004"
-
-service:
-  type: "NodePort"
-  port:
-    clusterAnnounce: 8551
-    healthcheckAnnounce: 8552
-  nodePort:
-    clusterAnnounce: null
-    healthcheckAnnounce: null
-
 shaping:
   enable: yes
 
@@ -230,13 +167,11 @@ service_chaining:
 sce_config:
   steering_nic: nf_0_sce
   endpoint_nic: endpoint_0_sce
-  nic_index: 1
   endpoint_ip: 127.0.0.1
   endpoint_gateway: 127.0.0.1
   endpoint_netip: 127.0.0.1
   endpoint_mask: 24
   affinity: [1]
-  bfdd_socket_path: "/run/frr"
 
 sid:
   firewall: 1

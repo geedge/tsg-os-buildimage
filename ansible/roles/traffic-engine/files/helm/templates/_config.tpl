@@ -139,7 +139,9 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/main.conf               /opt/tsg/sapp/tsgconf/main.conf
             cp /opt/tsg/config/maat.conf               /opt/tsg/sapp/tsgconf/maat.conf
             cp /opt/tsg/config/sapp.toml               /opt/tsg/sapp/etc/sapp.toml
+{{ if eq .Values.proxy.enable .Values.define_enable_val_yes }}
             cp /opt/tsg/config/kni.conf                /opt/tsg/sapp/etc/kni/kni.conf
+{{- end }}
             cp /opt/tsg/config/wangw.conf              /opt/tsg/sapp/etc/wannat/wangw.conf
             cp /opt/tsg/config/wire_graft.conf         /opt/tsg/sapp/etc/wire_graft/wire_graft.conf
             cp /opt/tsg/config/tsg_conn_sketch.inf     /opt/tsg/sapp/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf
@@ -158,8 +160,8 @@ enable_breakpad_upload=0
             export TOKEN=$(cat ${SERVICEACCOUNT}/token)
             export CACERT=${SERVICEACCOUNT}/ca.crt
             curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/${SERVICENAME} -o /tmp/service.txt
-            export CLUSTER_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="cluster-announce-port") | .nodePort')
-            export HEALTH_CHECK_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="healthcheck-announce-port") | .nodePort')
+            export CLUSTER_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="shaping-cluster-announce-port") | .nodePort')
+            export HEALTH_CHECK_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="shaping-healthcheck-announce-port") | .nodePort')
             echo "export CLUSTER_ANNOUNCE_PORT=${CLUSTER_ANNOUNCE_PORT}" > /etc/profile.d/announceinfo.sh
             echo "export HEALTH_CHECK_ANNOUNCE_PORT=${HEALTH_CHECK_ANNOUNCE_PORT}" >> /etc/profile.d/announceinfo.sh
             chmod 0755 /etc/profile.d/announceinfo.sh
