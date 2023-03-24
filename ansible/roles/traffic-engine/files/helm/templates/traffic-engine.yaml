@@ -16,7 +16,7 @@ spec:
     metadata:
       labels:
         app: traffic-engine-{{ .Release.Name }}
-        vsysId: {{ .Values.vsys_id }}
+        vsysId: "{{ .Values.vsys_id }}"
         serviceFunction: {{ .Values.nic_raw_name }}
       annotations:
         configHash: "{{ .Values.configHash }}"
@@ -200,7 +200,7 @@ spec:
 
       - name: telegraf
         image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.telegraf.pullPolicy }}
+        imagePullPolicy: Never
         command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_statistic.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
         securityContext:
           privileged: true
@@ -221,7 +221,7 @@ spec:
 {{- if eq .Values.shaping.enable .Values.define_enable_val_yes }}
       - name: telegraf-shaping
         image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.telegraf.pullPolicy }}
+        imagePullPolicy: Never
         command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_shaping.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
         securityContext:
           privileged: true
@@ -253,8 +253,8 @@ spec:
           value: "9004"
 
       - name: minidump-hook
-        image: "{{ .Values.image.tsgInit.repository }}:{{ .Values.image.tsgInit.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.tsgInit.pullPolicy }}
+        image: "docker.io/library/tsg-init:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
         command: ["/bin/sh", "-c", "while true; do touch /run/sapp/crashreport/.minidump; touch /run/tfe/crashreport/.minidump; touch /run/certstore/crashreport/.minidump; sleep 600; done"]
         volumeMounts:
         - name: firewall-minidump
@@ -267,7 +267,7 @@ spec:
 {{- if and (eq .Values.sce.enable .Values.define_enable_val_yes) (.Values.sce_config.endpoint_nic) }}
       - name: telegraf-sce
         image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.telegraf.pullPolicy }}
+        imagePullPolicy: Never
         command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_sce.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
         securityContext:
           privileged: true
@@ -392,7 +392,11 @@ spec:
       - name: tsg-init
         image: "docker.io/library/tsg-init:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
-        command: ["/opt/tsg/provision-init.sh"]
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.init" }}
         securityContext:
           privileged: true
         env:
@@ -401,15 +405,6 @@ spec:
             fieldRef:
               fieldPath: status.hostIP
         volumeMounts:
-        - name: provisioninit
-          mountPath: "/opt/tsg/provision-init.sh"
-          subPath: "provision-init.sh" 
-        - name: provisioninit
-          mountPath: "/opt/tsg/tfe/tfe-env-start.sh"
-          subPath: "tfe-env-start.sh"       
-        - name: provisioninit
-          mountPath: "/opt/tsg/tfe/tfe-env-stop.sh"
-          subPath: "tfe-env-stop.sh"
         - name: config-volume
           mountPath: /target_config 
         - name: localtime-node
@@ -444,27 +439,23 @@ spec:
       - name: sce
         configMap:
           name: sce-{{ .Release.Name }}
-      - name: provisioninit
-        configMap:
-          defaultMode: 493
-          name: provisioninit-{{ .Release.Name }}
       - name: config-volume
         emptyDir: {}
       - name: firewall-minidump
         hostPath:
-          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-firewall:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}/
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-firewall:{{ .Chart.AppVersion }}/
       - name: proxy-minidump
         hostPath:
-          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-proxy:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}/
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-proxy:{{ .Chart.AppVersion }}/
       - name: sce-minidump
         hostPath:
-          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-sce:{{ .Values.image.sce.tag | default .Chart.AppVersion }}/
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-sce:{{ .Chart.AppVersion }}/
       - name: bfdd-minidump
         hostPath:
-          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-bfdd:{{ .Values.image.bfdd.tag | default .Chart.AppVersion }}/
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-bfdd:{{ .Chart.AppVersion }}/
       - name: certstore-minidump
         hostPath:
-          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-certstore:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}/
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-certstore:{{ .Chart.AppVersion }}/
       - name: firewall-log
         hostPath: 
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sapp/

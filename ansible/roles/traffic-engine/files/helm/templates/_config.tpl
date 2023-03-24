@@ -202,3 +202,57 @@ enable_breakpad_upload=0
             if [ -f "/etc/traffic-engine/hotfix/certstore/scripts/prestart.sh" ]; then chmod 0755 /etc/traffic-engine/hotfix/certstore/scripts/prestart.sh; /etc/traffic-engine/hotfix/certstore/scripts/prestart.sh;fi
 {{- end -}}
 
+
+{{- define "traffic-engine.init" -}}
+            mkdir -p /target_config/opt/tsg/etc
+            mkdir -p /target_config/etc/default
+            chmod 0755 /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
+            /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
+{{ if eq .Values.proxy.enable .Values.define_enable_val_yes }}
+            ip tuntap add dev tap0 mode tap multi_queue
+            /usr/sbin/ip link set tap0 address fe:65:b7:03:50:bd
+            /usr/sbin/ip link set tap0 up
+            /usr/sbin/ip addr flush dev tap0
+            /usr/sbin/ip addr add 172.16.241.2/30 dev tap0
+            /usr/sbin/ip neigh flush dev tap0
+            /usr/sbin/ip neigh add 172.16.241.1 lladdr 00:0e:c6:d6:72:c1 dev tap0 nud permanent
+            /usr/sbin/ip6tables -A INPUT -i tap0 -m bpf --bytecode '17,48 0 0 0,84 0 0 240,21 0 13 96,48 0 0 6,21 0 11 6,40 0 0 4,37 0 9 24,48 0 0 52,84 0 0 240,116 0 0 2,53 0 5 24,48 0 0 60,21 0 3 88,48 0 0 61,21 0 1 4,6 0 0 65535,6 0 0 0' -j NFQUEUE --queue-num 1
+            /usr/sbin/iptables -A INPUT -i tap0 -m bpf --bytecode '18,48 0 0 0,84 0 0 240,21 0 14 64,48 0 0 9,21 0 12 6,40 0 0 6,69 10 0 8191,177 0 0 0,80 0 0 12,84 0 0 240,116 0 0 2,53 0 5 24,80 0 0 20,21 0 3 88,80 0 0 21,21 0 1 4,6 0 0 65535,6 0 0 0' -j NFQUEUE --queue-num 1
+            /usr/sbin/ip rule add iif tap0 tab 100
+            /usr/sbin/ip route add local default dev lo table 100
+            /usr/sbin/ip rule add fwmark 0x65 lookup 101
+            /usr/sbin/ip route add default dev tap0 via 172.16.241.1 table 101
+            /usr/sbin/ip addr add fd00::02/64 dev tap0
+            /usr/sbin/ip -6 route add default via fd00::01
+            /usr/sbin/ip -6 rule add iif tap0 tab 102
+            /usr/sbin/ip -6 route add local default dev lo table 102
+            /usr/sbin/ip -6 neigh add fd00::01 lladdr 00:0e:c6:d6:72:c1 dev tap0 nud permanent
+{{- end }}
+            mount -o remount,rw /sys
+{{ if .Values.sce_config.endpoint_nic }}
+            ip tuntap add dev {{ .Values.sce_config.endpoint_nic }} mode tap
+            ip link set dev {{ .Values.sce_config.endpoint_nic }} up
+            ip route add {{ .Values.sce_config.endpoint_netip }}/{{ .Values.sce_config.endpoint_mask }} dev {{ .Values.sce_config.endpoint_nic }} table 10
+{{ if .Values.sce_config.endpoint_gateway }}
+            ip route add default via {{ .Values.sce_config.endpoint_gateway }} table 10
+{{- end }}
+            ip a a {{ .Values.sce_config.endpoint_ip }}/{{ .Values.sce_config.endpoint_mask }} dev {{ .Values.sce_config.endpoint_nic }} noprefixroute
+            ip rule add dport 3784 table 10
+{{- end }}
+{{- end -}}
+
+{{/*
+#tfe-env-stop.sh
+#!/bin/bash -ex
+/usr/sbin/ip6tables -D INPUT -i tap0 -m bpf --bytecode '17,48 0 0 0,84 0 0 240,21 0 13 96,48 0 0 6,21 0 11 6,40 0 0 4,37 0 9 24,48 0 0 52,84 0 0 240,116 0 0 2,53 0 5 24,48 0 0 60,21 0 3 88,48 0 0 61,21 0 1 4,6 0 0 65535,6 0 0 0' -j NFQUEUE --queue-num 1
+/usr/sbin/iptables -D INPUT -i tap0 -m bpf --bytecode '18,48 0 0 0,84 0 0 240,21 0 14 64,48 0 0 9,21 0 12 6,40 0 0 6,69 10 0 8191,177 0 0 0,80 0 0 12,84 0 0 240,116 0 0 2,53 0 5 24,80 0 0 20,21 0 3 88,80 0 0 21,21 0 1 4,6 0 0 65535,6 0 0 0' -j NFQUEUE --queue-num 1
+/usr/sbin/ip rule del iif tap0 tab 100
+/usr/sbin/ip route del local default dev lo table 100
+/usr/sbin/ip rule del fwmark 0x65 lookup 101
+/usr/sbin/ip route del default dev tap0 via 172.16.241.1 table 101
+/usr/sbin/ip -6 rule del iif tap0 tab 102
+/usr/sbin/ip -6 route del default via fd00::01
+/usr/sbin/ip -6 route del local default dev lo table 102
+/usr/sbin/ip addr del fd00::02/64 dev tap0
+/usr/sbin/ip link set tap0 down
+*/}}
