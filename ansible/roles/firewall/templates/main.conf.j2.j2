@@ -49,6 +49,7 @@ LOG_LEVEL=30
 LOG_PATH="./tsglog/tsglog"
 SASL_USERNAME="admin"
 SASL_PASSWD="galaxy2019"
+COMPRESSION_TYPE="snappy"
 {% raw %}BROKER_LIST="{{ olap.kafka_broker.address_list | join(",") }}"
 {% endraw %}
 COMMON_FIELD_FILE="tsgconf/tsg_log_field.conf"

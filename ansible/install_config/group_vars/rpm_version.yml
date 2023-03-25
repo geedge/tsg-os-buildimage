@@ -4,15 +4,15 @@ certstore_rpm_version:
 firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-4.1.5.b9783ff
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  fw_dns_plug: fw_dns_plug-4.0.4.7ce1b29
-  fw_ftp_plug: fw_ftp_plug-3.1.4.46f553d
-  fw_http_plug: fw_http_plug-4.1.5.647dbbe
-  fw_mail_plug: fw_mail_plug-4.1.3.8316056
-  fw_quic_plug: fw_quic_plug-4.1.2.c79dbde
-  fw_ssl_plug: fw_ssl_plug-3.2.5.fce6a4f
-  fw_dtls_plug: fw_dtls_plug-1.0.1.5f7daf5
+  fw_dns_plug: fw_dns_plug-4.0.5.74befd9
+  fw_ftp_plug: fw_ftp_plug-3.1.6.2c3cb94
+  fw_http_plug: fw_http_plug-4.1.8.f7486f1
+  fw_mail_plug: fw_mail_plug-4.1.5.0d7141b
+  fw_quic_plug: fw_quic_plug-4.1.4.38daee8
+  fw_ssl_plug: fw_ssl_plug-3.2.7.a4346da
+  fw_dtls_plug: fw_dtls_plug-1.0.4.dbd737f
   tsg_conn_sketch:  tsg_conn_sketch-3.3.16.1.c4207a1
-  fw_voip_plug: fw_voip_plug-1.0.11.301c698
+  fw_voip_plug: fw_voip_plug-1.0.14.8e96f9d
   gtp_signaling_plug: gtp_signaling_plug-1.0.5.8d64946
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
   radius_collect_plug: radius_collect_plug-2.0.8.0575ab1
@@ -73,10 +73,10 @@ tfe_rpm_version:
   tfe-pr: tfe-pr-4.6.24.5654924
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-4.5.5.7a60af1
+  app_sketch_local: app_sketch_local-4.5.6.cb354e5
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-5.8.11.18a38e5
+  tsg_master: tsg_master-5.8.15.d211aa1
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.4.b5ca5aa
