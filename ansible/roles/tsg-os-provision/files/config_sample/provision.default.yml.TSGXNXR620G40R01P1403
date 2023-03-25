@@ -6,6 +6,8 @@ firewall:
   enable: 1
   enable_hos: 1
   enable_dtls: 0
+  enable_sip: 0
+  enable_bgp: 0
 
 proxy:
   enable: 0

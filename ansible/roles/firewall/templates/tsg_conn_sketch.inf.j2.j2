@@ -43,9 +43,12 @@ FUNC_NAME=tsg_record_rtp_entry
 {% endif %}
 {% endraw %}
 
+{% raw %}{% if firewall.enable_sip == 1 %}
 [SIP]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_sip_entry
+{% endif %}
+{% endraw %}
 
 [FTP]
 FUNC_FLAG=ALL
@@ -67,9 +70,12 @@ FUNC_NAME=tsg_record_stratum_entry
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_rdp_entry
 
+{% raw %}{% if firewall.enable_bgp == 1 %}
 [BGP]
 FUNC_FLAG=ALL
 FUNC_NAME=tsg_record_bgp_entry
+{% endif %}
+{% endraw %}
 
 {% raw %}{% if firewall.enable_dtls == 1 %}
 [DTLS]

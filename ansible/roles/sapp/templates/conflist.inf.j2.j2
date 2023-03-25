@@ -22,8 +22,11 @@
 {% endraw %}
 
 [protocol]
-./plug/protocol/deal_socks/deal_socks.inf 
+./plug/protocol/deal_socks/deal_socks.inf
+{% raw %}{% if firewall.enable_sip == 1 %}
 ./plug/protocol/sip/sip.inf
+{% endif %}
+{% endraw %}
 ./plug/protocol/rtp/rtp.inf
 ./plug/protocol/ssl/ssl.inf
 ./plug/protocol/http/http.inf
@@ -37,7 +40,10 @@
 ./plug/protocol/ssh/ssh.inf
 ./plug/protocol/stratum/stratum.inf
 ./plug/protocol/rdp/rdp.inf
+{% raw %}{% if firewall.enable_bgp == 1 %}
 ./plug/protocol/bgp/bgp.inf
+{% endif %}
+{% endraw %}
 {% raw %}{% if firewall.enable_dtls == 1 %}
 ./plug/protocol/dtls/dtls.inf
 {% endif %}
