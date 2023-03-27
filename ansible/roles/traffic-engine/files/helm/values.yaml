@@ -224,7 +224,7 @@ service:
 shaping:
   enable: yes
 
-sce:
+service_chaining:
   enable: yes
 
 sce_config:
