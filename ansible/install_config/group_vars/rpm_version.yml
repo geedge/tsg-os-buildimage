@@ -108,4 +108,4 @@ bfdd_rpm_version:
 
 
 shaping_engine_rpm_version:
-  shaping_engine: #TODO
+  shaping_engine: shaping_engine-1.1.0.54d7bdf
