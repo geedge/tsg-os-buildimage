@@ -43,13 +43,12 @@ enable_breakpad_upload=0
 {{- end -}}
 
 {{- define "traffic-engine.sce.workerthread" -}}
-{{- if eq (len .Values.sce_config.affinity) 1 }}
-{{- 1 }}
-{{- else }}
-{{- sub (len .Values.sce_config.affinity) 1 }}
-{{- end }}
+{{- len .Values.sce_affinity }}
 {{- end -}}
 
+{{- define "traffic-engine.shaping.workerthread" -}}
+{{- len .Values.shaping_affinity }}
+{{- end -}}
 
 {{- define "traffic-engine.tfe.cpu-affinity" -}}
 {{- if eq (len .Values.tfe_affinity) 1 }}
@@ -60,13 +59,12 @@ enable_breakpad_upload=0
 {{- end -}}
 
 {{- define "traffic-engine.sce.cpu-affinity" -}}
-{{- if eq (len .Values.sce_config.affinity) 1 }}
-{{- print (index .Values.sce_config.affinity 0) }}
-{{- else }}
-{{- join "," .Values.sce_config.affinity }}
-{{- end }}
+{{- join "," .Values.sce_affinity }}
 {{- end -}}
 
+{{- define "traffic-engine.shaping.cpu-affinity" -}}
+{{- join "," .Values.shaping_affinity }}
+{{- end -}}
 
 {{- define "traffic-engine.device-tag-list" -}}
 {{- $tags_list := list -}}
@@ -153,28 +151,6 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/necessary_plug_list.conf  /opt/tsg/sapp/etc/necessary_plug_list.conf
 {{- end -}}
 
-{{- define "traffic-engine.firewall.get-service-node-port" -}}
-            export APISERVER=https://kubernetes.default.svc
-            export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
-            export NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
-            export TOKEN=$(cat ${SERVICEACCOUNT}/token)
-            export CACERT=${SERVICEACCOUNT}/ca.crt
-            curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/${SERVICENAME} -o /tmp/service.txt
-            export CLUSTER_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="shaping-cluster-announce-port") | .nodePort')
-            export HEALTH_CHECK_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="shaping-healthcheck-announce-port") | .nodePort')
-            echo "export CLUSTER_ANNOUNCE_PORT=${CLUSTER_ANNOUNCE_PORT}" > /etc/profile.d/announceinfo.sh
-            echo "export HEALTH_CHECK_ANNOUNCE_PORT=${HEALTH_CHECK_ANNOUNCE_PORT}" >> /etc/profile.d/announceinfo.sh
-            chmod 0755 /etc/profile.d/announceinfo.sh
-{{- end -}}
-
-
-{{- define "traffic-engine.firewall.set-shaping-config" -}}
-            sed -Ei "s|NODE_IP_LOCATION|${NODE_IP?}|g" /opt/tsg/sapp/tsgconf/main.conf
-            sed -Ei "s|CLUSTER_ANNOUNCE_PORT_LOCATION|${CLUSTER_ANNOUNCE_PORT?}|g" /opt/tsg/sapp/tsgconf/main.conf
-            sed -Ei "s|HEALTH_CHECK_ANNOUNCE_PORT_LOCATION|${HEALTH_CHECK_ANNOUNCE_PORT?}|g" /opt/tsg/sapp/tsgconf/main.conf
-{{- end -}}
-
-
 {{- define "traffic-engine.firewall.prestart" -}}
             if [ -f "/etc/traffic-engine/hotfix/firewall/scripts/prestart.sh" ]; then chmod 0755 /etc/traffic-engine/hotfix/firewall/scripts/prestart.sh; /etc/traffic-engine/hotfix/firewall/scripts/prestart.sh;fi
 {{- end -}}
@@ -256,3 +232,33 @@ enable_breakpad_upload=0
 /usr/sbin/ip addr del fd00::02/64 dev tap0
 /usr/sbin/ip link set tap0 down
 */}}
+
+
+{{- define "traffic-engine.shaping.copy-config-to-dest" -}}
+            cp /opt/tsg/config/shaping.conf  /opt/tsg/shaping_engine/conf
+            cp /opt/tsg/config/tsg_device_tag.json  /opt/tsg/etc/tsg_device_tag.json
+{{- end -}}
+
+{{- define "traffic-engine.shaping.prestart" -}}
+            if [ -f "/etc/traffic-engine/hotfix/shaping/scripts/prestart.sh" ]; then chmod 0755 /etc/traffic-engine/hotfix/shaping/scripts/prestart.sh; /etc/traffic-engine/hotfix/shaping/scripts/prestart.sh;fi
+{{- end -}}
+
+{{- define "traffic-engine.shaping.get-service-node-port" -}}
+            export APISERVER=https://kubernetes.default.svc
+            export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+            export NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
+            export TOKEN=$(cat ${SERVICEACCOUNT}/token)
+            export CACERT=${SERVICEACCOUNT}/ca.crt
+            curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/${SERVICENAME} -o /tmp/service.txt
+            export CLUSTER_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="shaping-cluster-announce-port") | .nodePort')
+            export HEALTH_CHECK_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="shaping-healthcheck-announce-port") | .nodePort')
+            echo "export CLUSTER_ANNOUNCE_PORT=${CLUSTER_ANNOUNCE_PORT}" > /etc/profile.d/announceinfo.sh
+            echo "export HEALTH_CHECK_ANNOUNCE_PORT=${HEALTH_CHECK_ANNOUNCE_PORT}" >> /etc/profile.d/announceinfo.sh
+            chmod 0755 /etc/profile.d/announceinfo.sh
+{{- end -}}
+
+{{- define "traffic-engine.shaping.set-shaping-config" -}}
+            sed -Ei "s|NODE_IP_LOCATION|${NODE_IP?}|g" /opt/tsg/shaping_engine/conf/shaping.conf 
+            sed -Ei "s|CLUSTER_ANNOUNCE_PORT_LOCATION|${CLUSTER_ANNOUNCE_PORT?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
+            sed -Ei "s|HEALTH_CHECK_ANNOUNCE_PORT_LOCATION|${HEALTH_CHECK_ANNOUNCE_PORT?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
+{{- end -}}

@@ -82,3 +82,6 @@ consul_agent:
 
 shaping:
   enable: 1
+
+sid:
+  shaping: 1000

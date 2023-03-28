@@ -41,14 +41,10 @@ spec:
           - "-ec"
           - |
             {{ template "traffic-engine.firewall.copy-config-to-dest" }}
-            {{ template "traffic-engine.firewall.get-service-node-port" }}
-            {{ template "traffic-engine.firewall.set-shaping-config" }}
             {{ template "traffic-engine.firewall.prestart" }}
             exec /opt/tsg/sapp/sapp
         ports:
           - containerPort: 9273
-          - containerPort: 8551
-          - containerPort: 8552
         env:
         - name: MRZCPD_CTRLMSG_LISTEN_ADDR
           valueFrom:
@@ -58,8 +54,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        - name: SERVICENAME
-          value: shaping-announce-port-{{ .Release.Name }}
         - name: NODE_IP
           valueFrom:
             fieldRef:
@@ -219,6 +213,69 @@ spec:
           readOnly: true
 
 {{- if eq .Values.shaping.enable .Values.define_enable_val_yes }}
+      - name: shaping
+        image: "docker.io/library/tsg-shaping:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/shaping_engine
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.shaping.copy-config-to-dest" }}
+            {{ template "traffic-engine.shaping.get-service-node-port" }}
+            {{ template "traffic-engine.shaping.set-shaping-config" }}
+            {{ template "traffic-engine.shaping.prestart" }}
+            exec /opt/tsg/shaping_engine/bin/shaping_engine
+        ports:
+          - containerPort: 8551
+          - containerPort: 8552
+        env:
+        - name: SERVICENAME
+          value: shaping-announce-port-{{ .Release.Name }}
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        livenessProbe:
+          tcpSocket:
+            port: 8551
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 8551
+          failureThreshold: 30
+          periodSeconds: 10
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: opt-tsg-mrzcpd
+          mountPath: /opt/tsg/mrzcpd
+          readOnly: false
+        - name: var-run-mrzcpd
+          mountPath: /var/run/mrzcpd
+          readOnly: false
+        - name: var-run-dpdk
+          mountPath: /var/run/dpdk
+          readOnly: false
+        - name: root-sys
+          mountPath: /root/sys
+          readOnly: false
+        - name: shaping
+          mountPath: "/opt/tsg/config"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: shaping-minidump
+          mountPath: /run/shaping/crashreport
+        - name: shaping-log
+          mountPath: /opt/tsg/shaping/log
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true
+        - name: hotfix-shaping
+          mountPath: /etc/traffic-engine/hotfix/shaping
+
       - name: telegraf-shaping
         image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
@@ -264,7 +321,7 @@ spec:
         - name: certstore-minidump
           mountPath: /run/certstore/crashreport
 
-{{- if and (eq .Values.sce.enable .Values.define_enable_val_yes) (.Values.sce_config.endpoint_nic) }}
+{{- if and (eq .Values.service_chaining.enable .Values.define_enable_val_yes) (.Values.sce_config.endpoint_nic) }}
       - name: telegraf-sce
         image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
@@ -439,6 +496,9 @@ spec:
       - name: sce
         configMap:
           name: sce-{{ .Release.Name }}
+      - name: shaping
+        configMap:
+          name: shaping-{{ .Release.Name }}
       - name: config-volume
         emptyDir: {}
       - name: firewall-minidump
@@ -456,6 +516,9 @@ spec:
       - name: certstore-minidump
         hostPath:
           path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-certstore:{{ .Chart.AppVersion }}/
+      - name: shaping-minidump
+        hostPath:
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-shaping:{{ .Chart.AppVersion }}/
       - name: firewall-log
         hostPath: 
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sapp/
@@ -471,6 +534,9 @@ spec:
       - name: certstore-log
         hostPath:
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/certstore/
+      - name: shaping-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/shaping/
       - name: localtime-node
         hostPath:
           path: /etc/localtime
@@ -489,5 +555,8 @@ spec:
       - name: hotfix-bfdd
         hostPath:
           path: /etc/traffic-engine/hotfix/bfdd
+      - name: hotfix-shaping
+        hostPath:
+          path: /etc/traffic-engine/hotfix/shaping
       - name: bfdd-unix-socket
         emptyDir: {}

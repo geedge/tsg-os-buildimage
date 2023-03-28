@@ -60,6 +60,8 @@ DEVICE_SEQ_IN_DATA_CENTER={{ session_id_generator.snowflake_worker_id_offset }}
 {% endif %}
 {% endraw %}
 FEATURE_TAMPER=1
+{% raw %}SHAPING_SID={{ sid.shaping }}
+{% endraw %}
 
 [TSG_CONN_SKETCH]
 tcp_min_pkts=3
