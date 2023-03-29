@@ -6,7 +6,7 @@
 ###################################################################################################
 
 [SYSTEM]
-instance_name = "sapp4-{{ .Release.Name }}"
+instance_name = "sapp4-{{ .Values.app_symbol_index }}"
 
 [CPU]
 ### note, bind_mask, if you do not want to bind thread to special CPU core, keep it empty as []

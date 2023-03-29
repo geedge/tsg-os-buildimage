@@ -182,3 +182,5 @@ sid:
 
 shaping_config:
   shaping_nic: nf_1_shaping_engine
+
+app_symbol_index: 1
