@@ -236,6 +236,14 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
         livenessProbe:
           tcpSocket:
             port: 8551

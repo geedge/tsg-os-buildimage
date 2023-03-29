@@ -5,3 +5,4 @@ metadata:
   namespace: default
 data:
   shaping.conf: {{ tpl (.Files.Get "conf/shaping.conf") . | quote }}
+  tsg_device_tag.json: {{ tpl (.Files.Get "conf/tsg_device_tag.json") . | quote }}

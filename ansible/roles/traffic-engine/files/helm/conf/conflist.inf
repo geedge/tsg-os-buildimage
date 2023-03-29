@@ -14,9 +14,6 @@
 {{- if eq .Values.ddos_event.enable .Values.define_enable_val_yes }}
 ./plug/platform/tsg_ddos_sketch/tsg_ddos_sketch.inf
 {{- end }}
-{{- if eq .Values.shaping.enable .Values.define_enable_val_yes }}
-./plug/platform/shaping_master/shaping_master.inf
-{{- end }}
 
 [protocol]
 {{- if eq .Values.decoders.SOCKS .Values.define_enable_val_yes }}
