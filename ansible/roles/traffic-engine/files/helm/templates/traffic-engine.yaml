@@ -40,8 +40,8 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{ template "traffic-engine.firewall.copy-config-to-dest" }}
-            {{ template "traffic-engine.firewall.prestart" }}
+            {{ template "traffic-engine.firewall.copy-config-to-dest" . }}
+            {{ template "traffic-engine.firewall.prestart" . }}
             exec /opt/tsg/sapp/sapp
         ports:
           - containerPort: 9273
@@ -107,8 +107,8 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{ template "traffic-engine.proxy.copy-config-to-dest" }}
-            {{ template "traffic-engine.proxy.prestart" }}
+            {{ template "traffic-engine.proxy.copy-config-to-dest" . }}
+            {{ template "traffic-engine.proxy.prestart" . }}
             exec /opt/tsg/tfe/bin/tfe
         ports:
           - containerPort: 9001
@@ -158,8 +158,8 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{ template "traffic-engine.certstore.copy-config-to-dest" }}
-            {{ template "traffic-engine.certstore.prestart" }}
+            {{ template "traffic-engine.certstore.copy-config-to-dest" . }}
+            {{ template "traffic-engine.certstore.prestart" . }}
             exec /opt/tsg/certstore/bin/certstore
         securityContext:
           privileged: true
@@ -221,10 +221,10 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{ template "traffic-engine.shaping.copy-config-to-dest" }}
-            {{ template "traffic-engine.shaping.get-service-node-port" }}
-            {{ template "traffic-engine.shaping.set-shaping-config" }}
-            {{ template "traffic-engine.shaping.prestart" }}
+            {{ template "traffic-engine.shaping.copy-config-to-dest" . }}
+            {{ template "traffic-engine.shaping.get-service-node-port" . }}
+            {{ template "traffic-engine.shaping.set-shaping-config" . }}
+            {{ template "traffic-engine.shaping.prestart" . }}
             exec /opt/tsg/shaping_engine/bin/shaping_engine
         ports:
           - containerPort: 8551
@@ -358,8 +358,8 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{ template "traffic-engine.sce.copy-config-to-dest" }}
-            {{ template "traffic-engine.sce.prestart" }}
+            {{ template "traffic-engine.sce.copy-config-to-dest" . }}
+            {{ template "traffic-engine.sce.prestart" . }}
             exec /opt/tsg/sce/bin/sce
         ports:
           - containerPort: 9006
@@ -422,7 +422,7 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{ template "traffic-engine.bfdd.prestart" }}
+            {{ template "traffic-engine.bfdd.prestart" . }}
             exec /opt/tsg/bfdd/bfdd -u root -g root
         env:
         - name: MRZCPD_CTRLMSG_LISTEN_ADDR
@@ -461,7 +461,7 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{ template "traffic-engine.init" }}
+            {{ template "traffic-engine.init" . }}
         securityContext:
           privileged: true
         env:
