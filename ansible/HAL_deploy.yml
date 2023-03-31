@@ -260,6 +260,7 @@
   roles:
     - {role: container-tools-install, tags: container-tools-install}
     - {role: framework, tags: framework}
+    - {role: mrzcpd, tags: mrzcpd}
     - {role: shaping_engine, tags: shaping_engine}
 
 - hosts: server
