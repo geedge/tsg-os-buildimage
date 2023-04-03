@@ -229,6 +229,7 @@ spec:
         ports:
           - containerPort: 8551
           - containerPort: 8552
+          - containerPort: 9007
         env:
         - name: SERVICENAME
           value: shaping-announce-port-{{ .Release.Name }}
@@ -246,12 +247,12 @@ spec:
               fieldPath: status.hostIP
         livenessProbe:
           tcpSocket:
-            port: 8551
+            port: 9007
           failureThreshold: 1
           timeoutSeconds: 10
         startupProbe:
           tcpSocket:
-            port: 8551
+            port: 9007
           failureThreshold: 30
           periodSeconds: 10
         securityContext:
