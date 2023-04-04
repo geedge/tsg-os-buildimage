@@ -50,11 +50,11 @@
 #    dest: /etc/consul.d/server.hcl
 #  when: runtime_env != 'TSG-X-P0906'
 
-- name: "start consul"
-  systemd:
-    name: consul.service
-    enabled: yes
-  when: runtime_env != 'TSG-X-P0906'
+# - name: "start consul"
+#   systemd:
+#     name: consul.service
+#     enabled: yes
+#   when: runtime_env != 'TSG-X-P0906'
 
 - name: "get consul chart images to dest"
   get_url:
