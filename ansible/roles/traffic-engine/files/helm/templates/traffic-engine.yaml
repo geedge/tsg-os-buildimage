@@ -453,6 +453,25 @@ spec:
           mountPath: /run/frr
 {{- end }}
 
+      - name: telegraf-security
+        image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_security.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: telegraf
+          mountPath: "/etc/telegraf/telegraf_security.conf"
+          subPath: "telegraf_security.conf"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: config-volume
+          mountPath: "/etc/default/telegraf"
+          subPath: "etc/default/telegraf"
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true
 
       initContainers:
       - name: tsg-init
