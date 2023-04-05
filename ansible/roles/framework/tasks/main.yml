@@ -30,7 +30,6 @@
 - name: "Install maat-redis-tool"
   shell: rpm -i /tmp/rpm_download/{{ item }}* --prefix {{ prefix_path.framework }} --nodeps
   with_items:
-    - libmaatframe-tools
     - libswarmkv-tools
 
 - name: "mkdir /etc/ld.so.conf.d/"
