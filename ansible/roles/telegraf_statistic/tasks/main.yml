@@ -24,6 +24,13 @@
 #   tags: template
 #   when: runtime_env != 'TSG-X-P0906'
 
+- name: "Templates telegraf_security.conf"
+  template:
+    src: "{{role_path}}/templates/telegraf_security.conf.j2.j2"
+    dest: /opt/tsg/tsg-os-provision/templates/telegraf_security.conf.j2
+  tags: template
+  when: runtime_env != 'TSG-X-P0906'
+
 - name: "copy telegraf_statistic.service to destination server"
   copy:
     src: "{{ role_path }}/files/telegraf_statistic.service"
@@ -36,6 +43,12 @@
 #     dest: /usr/lib/systemd/system
 #     mode: 0644
 
+- name: "copy telegraf_security.service to destination server"
+  copy:
+    src: "{{ role_path }}/files/telegraf_security.service"
+    dest: /usr/lib/systemd/system
+    mode: 0644
+
 - name: "Create /usr/lib/systemd/system/telegraf_statistic.service.d/  and /usr/lib/systemd/system/telegraf_shaping.service.d directory if it does not exist"
   file:
     path: "{{ item }}"
@@ -43,6 +56,7 @@
     mode: '0755'
   with_items:
     - /usr/lib/systemd/system/telegraf_statistic.service.d
+    - /usr/lib/systemd/system/telegraf_security.service.d
 #    - /usr/lib/systemd/system/telegraf_shaping.service.d
 
 - name: "copy slice file to telegraf_statistic.service.d"
@@ -52,6 +66,7 @@
     mode: 0644
   with_items:
     - /usr/lib/systemd/system/telegraf_statistic.service.d/service_override_slice.conf
+    - /usr/lib/systemd/system/telegraf_security.service.d/service_override_slice.conf
 #    - /usr/lib/systemd/system/telegraf_shaping.service.d/service_override_slice.conf
   when: runtime_env != 'TSG-X-P0906'
 
@@ -62,6 +77,7 @@
     replace: 'WantedBy=workload.target'
   with_items:
     - /usr/lib/systemd/system/telegraf_statistic.service
+    - /usr/lib/systemd/system/telegraf_security.service
 #    - /usr/lib/systemd/system/telegraf_shaping.service
   when: runtime_env != 'TSG-X-P0906'
 
@@ -81,3 +97,7 @@
 #   systemd:
 #     name: telegraf_shaping.service
 #     enabled: yes
+- name: "Start telegraf_security"
+  systemd:
+    name: telegraf_security.service
+    enabled: yes

@@ -96,11 +96,17 @@
         dest: /etc/telegraf/telegraf_statistic.conf
       tags: telegraf_statistic
 
-    - name: "tsg-os-provision: Templates telegraf.conf"
+    # - name: "tsg-os-provision: Templates telegraf.conf"
+    #   template:
+    #     src: "../templates/telegraf_shaping.conf.j2"
+    #     dest: /etc/telegraf/telegraf_shaping.conf
+    #   tags: telegraf_shaping
+
+    - name: "tsg-os-provision: Templates telegraf_security.conf"
       template:
-        src: "../templates/telegraf_shaping.conf.j2"
-        dest: /etc/telegraf/telegraf_shaping.conf
-      tags: telegraf_shaping
+        src: "../templates/telegraf_security.conf.j2"
+        dest: /etc/telegraf/telegraf_security.conf
+      tags: telegraf_security
 
     - name: "tsg-os-provision: template consul"
       template:
