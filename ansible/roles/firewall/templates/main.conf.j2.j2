@@ -13,7 +13,7 @@ NAMESPACE_ID=1
 NIC_NAME="{{ control_and_policy.nic_name }}"
 MAX_SERVICE=1
 LOG_LEVEL=30
-LOG_PATH="./tsglog/tsglog"
+LOG_PATH="log/master.kafka"
 SASL_USERNAME="admin"
 SASL_PASSWD="galaxy2019"
 {% raw %}BROKER_LIST="{{ olap.kafka_broker.address_list | join(",") }}"
@@ -53,7 +53,7 @@ DATACENTER_ID={{ session_id_generator.snowflake_worker_id_base }}
 {% endif %}
 {% endraw %}
 LOG_LEVEL=30
-LOG_PATH="./tsglog/tsg_master"
+LOG_PATH="log/master.log"
 POLICY_PRIORITY_LABEL="POLICY_PRIORITY"
 L7_PROTOCOL_FILE="./tsgconf/tsg_l7_protocol.conf"
 DEVICE_ID_COMMAND="hostname | awk -F'-' '{print $3}'| awk -F'adc' '{print $2}'"
@@ -113,7 +113,7 @@ hos_fd_request_cache_count=10
 
 [APP_SKETCH_LOCAL]
 LOG_LEVEL=30
-LOG_PATH="./tsglog/app_sketch_local/app_sketch_local"
+LOG_PATH="log/app_sketch.log"
 SENDBACK_SWITCH=0
 SCAN_UDP_PAYLOAD_NUM=8
 SCAN_TCP_PAYLOAD_NUM=8
