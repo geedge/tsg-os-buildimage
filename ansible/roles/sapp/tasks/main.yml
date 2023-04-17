@@ -121,7 +121,16 @@
     dest: /opt/tsg/sapp/etc/vlan_flipping_map.conf
   tags: template
   when:
-    - runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804'
+    - runtime_env == 'TSG-X-P1403'
+
+- name: Template the vlan_flipping_map.conf - tsg-x-p0804
+  template:
+    src: "{{ role_path }}/templates/vlan_flipping_map.conf.j2.j2.TSGXNXR620G40R01P0804"
+    dest: /opt/tsg/tsg-os-provision/templates/vlan_flipping_map.conf.j2
+  tags: template
+  when:
+    - runtime_env == 'TSG-X-P0804'
+
 - name: Template the sapp_log.conf
   template:
     src: "{{ role_path }}/templates/sapp_log.conf.j2"

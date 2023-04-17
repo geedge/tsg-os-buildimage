@@ -1,15 +1,38 @@
 [device]
-device={{ dp_steering_firewall.nic_internal }},{{ dp_traffic_mirror.nic_name }}
+{% raw %}{% if connectivity == 'etherfabric' %}
+device={{ network_setting.nic_raw.name }},{{ network_setting.nic_mirror.name }}
+{% endif %}
+{% if connectivity == 'virtual_wire' %}
+device={{ network_setting.nic_raw.name }},{{ network_setting.nic_mirror.name }},{{ network_setting.nic_external.name }}
+{% endif %}
+{% endraw %}
 virtio_user={{ diagnose.virtual_client_nic }},{{ diagnose.virtual_server_nic }},{{ dp_steering_proxy.node_list[0].nic_name }}
 sz_tunnel=8192
 sz_buffer=0
 
 [vlan_base_fwd]
-device={{ dp_steering_firewall.nic_internal }},{{ diagnose.virtual_client_nic }},{{ diagnose.virtual_server_nic }}
+{% raw %}{% if connectivity == 'etherfabric' %}
+device={{ network_setting.nic_raw.name }},virtio_dign_c,virtio_dign_s
+{% endif %}
+{% if connectivity == 'virtual_wire' %}
+device={{ network_setting.nic_raw.name }},{{ network_setting.nic_external.name }},virtio_dign_c,virtio_dign_s
+{% endif %}
 
-[vlan_base_fwd:{{ dp_steering_firewall.nic_internal }}]
+{% if connectivity == 'etherfabric' %}
+[vlan_base_fwd:{{ network_setting.nic_raw.name }}]
 vdev_vlan=0,4000,4001
 phydev_vlan=0
+{% endif %}
+
+{% if connectivity == 'virtual_wire' %}
+[vlan_base_fwd:{{ network_setting.nic_raw.name }}]
+vdev_vlan=1000,1001,4000,4001
+phydev_vlan=1000
+
+[vlan_base_fwd:{{ network_setting.nic_external.name }}]
+phydev_vlan=1001
+{% endif %}
+{% endraw %}
 
 [vlan_base_fwd:{{ diagnose.virtual_client_nic }}]
 phydev_vlan=4000
@@ -17,11 +40,11 @@ phydev_vlan=4000
 [vlan_base_fwd:{{ diagnose.virtual_server_nic }}]
 phydev_vlan=4001
 
-
-[device:{{ dp_steering_firewall.nic_internal }}]
-{% raw %}in_addr={{etherfabric_settings.keepalive.ip}}
+{% raw %}
+{% if connectivity == 'etherfabric' %}
+[device:={{ network_setting.nic_raw.name }}]
+in_addr={{etherfabric_settings.keepalive.ip}}
 in_mask={{etherfabric_settings.keepalive.mask}}
-{% endraw %}
 vlan-filter=1
 vlan-pvid=0
 vlan-pvid-mode=2
@@ -30,11 +53,27 @@ allmulticast=1
 rssmode=3
 mtu=2048
 
-[device:{{ dp_traffic_mirror.nic_name }}]
+[device:{{ network_setting.nic_mirror.name }}]
 mtu=2048
 hw_strip_crc=1
 rssmode=2
 vlan-strip=1
+{% endif %}
+
+{% if connectivity == 'virtual_wire' %}
+[device:{{ network_setting.nic_raw.name }}]
+rssmode=3
+mtu=1500
+
+[device:{{ network_setting.nic_external.name }}]
+rssmode=3
+mtu=1500
+
+[device:{{ network_setting.nic_mirror.name }}]
+rssmode=3
+mtu=1500
+{% endif %}
+{% endraw %}
 
 [service]
 # lcore id for i/o service, use comma to split

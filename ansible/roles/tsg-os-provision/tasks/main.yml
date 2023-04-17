@@ -274,6 +274,7 @@
   with_items:
     - obtain_rps_mask.py 
     - obtain_isolate_cpu_range.py
+    - set_mbuf_and_hugepage.sh
   when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
 
 ######TSG-X-P1403 end######

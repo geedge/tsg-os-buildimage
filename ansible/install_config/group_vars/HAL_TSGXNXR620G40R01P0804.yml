@@ -23,7 +23,7 @@ dp_steering_firewall:
   #deloyment value: mirror,inline, transparent. mirror = one arm + mirror, inline = one arm + series, transparent = two arm + series 
   deployment: inline
   #encapsulation value: vlan, vxlan, raw, provision
-  encapsulation: vxlan 
+  encapsulation: provision 
   # capture_packet value: pcap, driver
   capture_packet: driver
   nic_internal: "{% raw %}{{ network_setting.nic_raw.name }}{% endraw %}"

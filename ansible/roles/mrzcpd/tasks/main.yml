@@ -17,7 +17,7 @@
     src: "{{ role_path }}/templates/mrzcpd.conf.j2"
     dest: /etc/ld.so.conf.d/mrzcpd.conf
 
-- name: "update sysconfig/mrzcpd"
+- name: "update sysconfig/mrzcpd NOT P0804"
   template:
     src: "{{ role_path }}/templates/mrzcpd.j2"
     dest: /etc/sysconfig/mrzcpd

@@ -70,6 +70,16 @@
 
 ######setting nic cpu affinity mask end######
 
+    - name: "set sapp_overlay_mode var when connectivity = virtual_wire"
+      set_fact:
+        sapp_overlay_mode: "none"
+      when: connectivity == 'virtual_wire'
+
+    - name: "set sapp_overlay_mode var when connectivity = etherfabric"
+      set_fact:
+        sapp_overlay_mode: "vxlan"
+      when: npb_device == 'etherfabric'
+
 ######get isolate cpu core start######
     - name: redirect proxy config to config .proxy.json
       copy:
@@ -105,6 +115,9 @@
         - result_exec_cat_cmdline is not search(grub_cpu_isolate)
         - enable_config_apply != '2'
 
+    - name: set hugepages and mrzcpd mbuf
+      shell: /opt/tsg/tsg-os-provision/scripts/set_mbuf_and_hugepage.sh
+
     - name: "set keep_alive_ip"
       set_fact:
         gdev_conf_keep_alive_ip: "{{ etherfabric_settings.keepalive.ip }}"
@@ -133,6 +146,12 @@
       template:
         src: "../templates/gdev.conf.j2"
         dest: /opt/tsg/sapp/etc/gdev.conf
+      tags: sapp
+
+    - name: "tsg-os-provision: vlan_flipping_map.conf"
+      template:
+        src: ../templates/vlan_flipping_map.conf.j2
+        dest: /opt/tsg/sapp/etc/vlan_flipping_map.conf
       tags: sapp
 
     - name: "tsg-os-provision: template mrglobal.conf file"
@@ -267,6 +286,15 @@
         src: /dev/sda4
         fstype: ext4
         state: mounted
+      when: connectivity == "etherfabric"
+
+    - name: "tsg-os-provision: disable enable service step 1:mount partition to mnt_tmp"
+      mount:
+        path: /tmp/mnt_tmp
+        src: /dev/vda4
+        fstype: ext4
+        state: mounted
+      when: connectivity == "virtual_wire"
 
     - name: "tsg-os-provision: disable service step 2:disable tfe service"
       shell: "{{ item }}"

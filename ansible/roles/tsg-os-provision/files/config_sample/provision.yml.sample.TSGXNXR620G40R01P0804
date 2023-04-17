@@ -73,6 +73,8 @@ network_setting:
     name: eth0
   nic_raw:
     name: eth0
+  nic_external:
+    name: eth0
   nic_mirror:
     name: eth0
 
