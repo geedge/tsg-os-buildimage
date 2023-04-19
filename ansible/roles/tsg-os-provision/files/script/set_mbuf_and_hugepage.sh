@@ -23,9 +23,9 @@ sed -i "s/^sz_direct_pktmbuf=.*$/sz_direct_pktmbuf=$mrzcpd_direct_pktmbuf/g" /op
 
 if grep -q "hugepages=$n_hugepages_1G" /proc/cmdline
 then
-	echo "Not set hugepages!"
+	echo "Nothing to do!"
 else
 	sed  -i "s/hugepages=[0-9]*/hugepages=$n_hugepages_1G/g" /boot/grub/grub.cfg
 	sed  -i "s/hugepages=[0-9]*/hugepages=$n_hugepages_1G/g" /etc/grub.d/40_onie_grub
-	echo "Detected that the configuration of hugepages has changed, please run command \"provision-config-apply --reboot\" to reboot the machine that make the configuration take effect!"
+	echo "Need to reboot!"
 fi

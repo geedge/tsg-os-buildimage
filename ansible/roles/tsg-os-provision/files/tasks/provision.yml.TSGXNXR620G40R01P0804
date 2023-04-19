@@ -78,7 +78,7 @@
     - name: "set sapp_overlay_mode var when connectivity = etherfabric"
       set_fact:
         sapp_overlay_mode: "vxlan"
-      when: npb_device == 'etherfabric'
+      when: connectivity == 'etherfabric'
 
 ######get isolate cpu core start######
     - name: redirect proxy config to config .proxy.json
@@ -114,9 +114,6 @@
       when:
         - result_exec_cat_cmdline is not search(grub_cpu_isolate)
         - enable_config_apply != '2'
-
-    - name: set hugepages and mrzcpd mbuf
-      shell: /opt/tsg/tsg-os-provision/scripts/set_mbuf_and_hugepage.sh
 
     - name: "set keep_alive_ip"
       set_fact:
@@ -159,6 +156,18 @@
         src: "../templates/mrglobal.conf.j2"
         dest: /opt/tsg/mrzcpd/etc/mrglobal.conf
       tags: mrzcpd
+
+    - name: set hugepages and mrzcpd mbuf
+      shell: /opt/tsg/tsg-os-provision/scripts/set_mbuf_and_hugepage.sh
+      tags: mrzcpd
+      register: result_set_mbuf_and_hugepages
+
+    - name: need to reboot
+      fail:
+        msg: "Detected that the configuration of hugepages has changed, please run command \"provision-config-apply --reboot\" to reboot the machine that make the configuration take effect!"
+      when:
+        - result_set_mbuf_and_hugepages is search("reboot")
+        - enable_config_apply != '2'
 
     - name: "tsg-os-provision: template certstore configure file"
       template:
