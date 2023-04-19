@@ -14,7 +14,7 @@ firewall_rpm_version:
   tsg_ddos_sketch: tsg_ddos_sketch-1.3.5.447bcc2
   dns: dns-2.1.5.7b90896
   ftp: ftp-1.0.15.1fc64fe
-  http: http-2.0.11.cb4adbb
+  http: http-2.0.12.0fc69f4
   mail: mail-1.0.17.eb41cef
   quic: quic-2.0.5.96f9ce3
   ssl: ssl-2.0.12.d55819b
@@ -64,9 +64,9 @@ mrzcpd_rpm_version:
 
 
 sapp_rpm_version:
-  sapp: sapp-4.2.97.31207a1
+  sapp: sapp-4.2.98.fc4a37f
   tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
-  sapp-pr: sapp-pr-4.2.97.31207a1
+  sapp-pr: sapp-pr-4.2.98.fc4a37f
 
 tfe_rpm_version:
   tfe: tfe-4.8.6.f81209b
@@ -76,7 +76,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-4.5.5.7a60af1
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-6.0.2.bb264ca
+  tsg_master: tsg_master-6.0.4.8c355a3
 
 shaping_master_rpm_version:
   shaping_master: shaping_master-1.1.4.b434f47
