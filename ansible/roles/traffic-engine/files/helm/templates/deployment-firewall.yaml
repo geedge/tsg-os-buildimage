@@ -1,0 +1,171 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-firewall
+  labels:
+    app: {{ .Release.Name }}
+    component: firewall
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-firewall
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-firewall
+        vsysId: "{{ .Values.vsys_id }}"
+        serviceFunction: {{ .Release.Name }}
+      annotations:
+        prometheus.io/port: "9004"
+        prometheus.io/scrape: "true"
+
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: firewall
+        image: "docker.io/library/tsg-firewall:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/sapp
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.firewall.copy-config-to-dest" . }}
+            {{ template "traffic-engine.firewall.prestart" . }}
+            {{ template "traffic-engine.firewall.start" . }}
+        ports:
+          - containerPort: 9273
+        env:
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        securityContext:
+          privileged: true
+{{- if eq .Values.debug.firewall.enable_liveness_probe .Values.define_enable_val_yes }}
+        livenessProbe:
+          tcpSocket:
+            port: 9273
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9273
+          failureThreshold: 90
+          periodSeconds: 10
+{{- end }}
+        volumeMounts:
+        - name: sapp
+          mountPath: "/opt/tsg/config"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: firewall-minidump
+          mountPath: /run/sapp/crashreport
+        - name: firewall-log
+          mountPath: /opt/tsg/sapp/log
+        {{ template "traffic-engine.mount.mrzcpd" . }}
+        {{ template "traffic-engine.mount.localtime" . }}
+        {{ template "traffic-engine.firewall.mount.prestart" . }}
+        {{ template "traffic-engine.firewall.mount.hostpath" . }}
+
+      - name: telegraf
+        image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_statistic.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: telegraf
+          mountPath: "/etc/telegraf/telegraf_statistic.conf"
+          subPath: "telegraf_statistic.conf"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: config-volume
+          mountPath: "/etc/default/telegraf"
+          subPath: "etc/default/telegraf"
+        {{ template "traffic-engine.mount.localtime" . }}
+
+      - name: telegraf-security
+        image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_security.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: telegraf
+          mountPath: "/etc/telegraf/telegraf_security.conf"
+          subPath: "telegraf_security.conf"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: config-volume
+          mountPath: "/etc/default/telegraf"
+          subPath: "etc/default/telegraf"
+        {{ template "traffic-engine.mount.localtime" . }}
+
+      initContainers:
+      - name: firewall-init
+        image: "docker.io/library/tsg-init:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.init" . }}
+        securityContext:
+          privileged: true
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        volumeMounts:
+        - name: config-volume
+          mountPath: /target_config 
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true
+
+      volumes:
+      - name: telegraf
+        configMap:
+          name: telegraf-{{ .Release.Name }}
+      - name: sapp
+        configMap:
+          name: sapp-{{ .Release.Name }}
+      - name: config-volume
+        emptyDir: {}
+      - name: firewall-minidump
+        hostPath:
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-firewall:{{ .Chart.AppVersion }}/
+      - name: firewall-log
+        hostPath: 
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sapp/
+      - name: prestart-dir
+        hostPath: 
+          path: /etc/tsg-os/{{ .Release.Name }}/
+          type: DirectoryOrCreate
+      {{ template "traffic-engine.volume.mrzcpd" . }}
+      {{ template "traffic-engine.volume.localtime" . }}
+      {{ template "traffic-engine.firewall.volume.prestart" . }}
+      {{ template "traffic-engine.volume.hostpath" . }}

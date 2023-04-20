@@ -1,0 +1,198 @@
+{{- if and (eq .Values.service_chaining.enable .Values.define_enable_val_yes) (.Values.sce_config.endpoint_nic) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-service-chaining
+  labels:
+    app: {{ .Release.Name }}
+    component: service-chaining
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-service-chaining
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-service-chaining
+        vsysId: "{{ .Values.vsys_id }}"
+        serviceFunction: {{ .Release.Name }}
+      annotations:
+        prometheus.io/port: "9004"
+        prometheus.io/scrape: "true"
+
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: telegraf-sce
+        image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_sce.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: telegraf
+          mountPath: "/etc/telegraf/telegraf_sce.conf"
+          subPath: "telegraf_sce.conf"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: config-volume
+          mountPath: "/etc/default/telegraf"
+          subPath: "etc/default/telegraf"
+        {{ template "traffic-engine.mount.localtime" . }}
+
+      - name: sce
+        image: "docker.io/library/tsg-sce:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/sce
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.sce.copy-config-to-dest" . }}
+            {{ template "traffic-engine.service-chaining.prestart" . }}
+            {{ template "traffic-engine.service-chaining.start" . }}
+        ports:
+          - containerPort: 9006
+        env:
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        securityContext:
+          privileged: true
+{{- if eq .Values.debug.service_chaining.enable_liveness_probe .Values.define_enable_val_yes }}
+        livenessProbe:
+          tcpSocket:
+            port: 9006
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9006
+          failureThreshold: 30
+          periodSeconds: 10
+{{- end }}
+        volumeMounts:
+        - name: sce
+          mountPath: "/opt/tsg/config"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: sce-minidump
+          mountPath: /run/sce/crashreport
+        - name: sce-log
+          mountPath: /opt/tsg/sce/log
+        - name: bfdd-unix-socket
+          mountPath: /run/frr
+        {{ template "traffic-engine.mount.mrzcpd" . }}
+        {{ template "traffic-engine.mount.localtime" . }}
+        {{ template "traffic-engine.service-chaining.mount.prestart" . }}
+        {{ template "traffic-engine.service-chaining.mount.hostpath" . }}
+
+      - name: bfdd
+        image: "docker.io/library/tsg-bfdd:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/bfdd
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.bfdd.prestart" . }}
+            exec /opt/tsg/bfdd/bfdd -u root -g root
+        env:
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: bfdd-minidump
+          mountPath: /run/bfdd/crashreport
+        - name: bfdd-log
+          mountPath: /opt/tsg/bfdd/log
+        - name: hotfix-bfdd
+          mountPath: /etc/traffic-engine/hotfix/bfdd
+        - name: bfdd-unix-socket
+          mountPath: /run/frr
+        {{ template "traffic-engine.mount.localtime" . }}
+
+      initContainers:
+      - name: service-chaining-init
+        image: "docker.io/library/tsg-init:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.init" . }}
+            {{ template "traffic-engine.init.sce" . }}
+        securityContext:
+          privileged: true
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        volumeMounts:
+        - name: config-volume
+          mountPath: /target_config 
+        {{ template "traffic-engine.mount.localtime" . }}
+
+      volumes:
+      - name: telegraf
+        configMap:
+          name: telegraf-{{ .Release.Name }}
+      - name: sce
+        configMap:
+          name: sce-{{ .Release.Name }}
+      - name: config-volume
+        emptyDir: {}
+      - name: sce-minidump
+        hostPath:
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-sce:{{ .Chart.AppVersion }}/
+      - name: bfdd-minidump
+        hostPath:
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-bfdd:{{ .Chart.AppVersion }}/
+      - name: sce-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sce/
+      - name: bfdd-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/bfdd/
+      - name: hotfix-bfdd
+        hostPath:
+          path: /etc/traffic-engine/hotfix/bfdd
+      - name: bfdd-unix-socket
+        emptyDir: {}
+      - name: prestart-dir
+        hostPath: 
+          path: /etc/tsg-os/{{ .Release.Name }}/
+          type: DirectoryOrCreate
+      {{ template "traffic-engine.volume.mrzcpd" . }}
+      {{ template "traffic-engine.volume.localtime" . }}
+      {{ template "traffic-engine.service-chaining.volume.prestart" . }}
+      {{ template "traffic-engine.volume.hostpath" . }}
+{{- end }}

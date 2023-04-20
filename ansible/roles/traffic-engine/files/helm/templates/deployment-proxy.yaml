@@ -1,0 +1,198 @@
+{{- if and (eq .Values.proxy.enable .Values.define_enable_val_yes) (ge (len .Values.tfe_affinity) 1) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-proxy
+  labels:
+    app: {{ .Release.Name }}
+    component: firewall
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-proxy
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-proxy
+        vsysId: "{{ .Values.vsys_id }}"
+        serviceFunction: {{ .Release.Name }}
+      annotations:
+        prometheus.io/port: "9004"
+        prometheus.io/scrape: "true"
+
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: proxy
+        image: "docker.io/library/tsg-proxy:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/tfe
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.proxy.copy-config-to-dest" . }}
+            {{ template "traffic-engine.proxy.prestart" . }}
+            {{ template "traffic-engine.proxy.start" . }}
+        ports:
+          - containerPort: 9001
+        env:
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        securityContext:
+          privileged: true
+{{- if eq .Values.debug.proxy.enable_liveness_probe .Values.define_enable_val_yes }}
+        livenessProbe:
+          tcpSocket:
+            port: 9001
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9001
+          failureThreshold: 30
+          periodSeconds: 10
+{{- end }}
+        volumeMounts:
+        - name: tfe
+          mountPath: "/opt/tsg/config"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: proxy-minidump
+          mountPath: /run/tfe/crashreport
+        - name: proxy-log
+          mountPath: /opt/tsg/tfe/log
+        {{ template "traffic-engine.mount.mrzcpd" . }}
+        {{ template "traffic-engine.mount.localtime" . }}
+        {{ template "traffic-engine.proxy.mount.prestart" . }}
+        {{ template "traffic-engine.proxy.mount.hostpath" . }}
+
+      - name: certstore
+        image: "docker.io/library/tsg-certstore:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/certstore
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.certstore.copy-config-to-dest" . }}
+            {{ template "traffic-engine.certstore.prestart" . }}
+            exec /opt/tsg/certstore/bin/certstore
+        securityContext:
+          privileged: true
+        ports:
+          - containerPort: 9002
+        volumeMounts:
+        {{ template "traffic-engine.mount.localtime" . }}
+        - name: certstore
+          mountPath: "/opt/tsg/config"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: certstore-minidump
+          mountPath: /run/certstore/crashreport
+        - name: certstore-log
+          mountPath: /opt/tsg/certstore/logs
+        - name: hotfix-certstore
+          mountPath: /etc/traffic-engine/hotfix/certstore
+
+      - name: cert-redis
+        image: "docker.io/library/tsg-certstore:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command: ["/usr/bin/redis-server", "/etc/cert-redis.conf"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        {{ template "traffic-engine.mount.localtime" . }}  
+
+      initContainers:
+      - name: proxy-init
+        image: "docker.io/library/tsg-init:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.init" . }}
+            ip tuntap add dev tap0 mode tap multi_queue
+            /usr/sbin/ip link set tap0 address fe:65:b7:03:50:bd
+            /usr/sbin/ip link set tap0 up
+            /usr/sbin/ip addr flush dev tap0
+            /usr/sbin/ip addr add 172.16.241.2/30 dev tap0
+            /usr/sbin/ip neigh flush dev tap0
+            /usr/sbin/ip neigh add 172.16.241.1 lladdr 00:0e:c6:d6:72:c1 dev tap0 nud permanent
+            /usr/sbin/ip6tables -A INPUT -i tap0 -m bpf --bytecode '17,48 0 0 0,84 0 0 240,21 0 13 96,48 0 0 6,21 0 11 6,40 0 0 4,37 0 9 24,48 0 0 52,84 0 0 240,116 0 0 2,53 0 5 24,48 0 0 60,21 0 3 88,48 0 0 61,21 0 1 4,6 0 0 65535,6 0 0 0' -j NFQUEUE --queue-num 1
+            /usr/sbin/iptables -A INPUT -i tap0 -m bpf --bytecode '18,48 0 0 0,84 0 0 240,21 0 14 64,48 0 0 9,21 0 12 6,40 0 0 6,69 10 0 8191,177 0 0 0,80 0 0 12,84 0 0 240,116 0 0 2,53 0 5 24,80 0 0 20,21 0 3 88,80 0 0 21,21 0 1 4,6 0 0 65535,6 0 0 0' -j NFQUEUE --queue-num 1
+            /usr/sbin/ip rule add iif tap0 tab 100
+            /usr/sbin/ip route add local default dev lo table 100
+            /usr/sbin/ip rule add fwmark 0x65 lookup 101
+            /usr/sbin/ip route add default dev tap0 via 172.16.241.1 table 101
+            /usr/sbin/ip addr add fd00::02/64 dev tap0
+            /usr/sbin/ip -6 route add default via fd00::01
+            /usr/sbin/ip -6 rule add iif tap0 tab 102
+            /usr/sbin/ip -6 route add local default dev lo table 102
+            /usr/sbin/ip -6 neigh add fd00::01 lladdr 00:0e:c6:d6:72:c1 dev tap0 nud permanent
+            mount -o remount,rw /sys
+        securityContext:
+          privileged: true
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        volumeMounts:
+        - name: config-volume
+          mountPath: /target_config 
+        {{ template "traffic-engine.mount.localtime" . }}
+
+      volumes:
+      - name: certstore
+        configMap:
+          name: certstore-{{ .Release.Name }}
+      - name: tfe
+        configMap:
+          name: tfe-{{ .Release.Name }}
+      - name: config-volume
+        emptyDir: {}
+      - name: proxy-minidump
+        hostPath:
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-proxy:{{ .Chart.AppVersion }}/
+      - name: certstore-minidump
+        hostPath:
+          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-certstore:{{ .Chart.AppVersion }}/
+      - name: proxy-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/tfe/
+      - name: certstore-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/certstore/
+      - name: hotfix-certstore
+        hostPath:
+          path: /etc/traffic-engine/hotfix/certstore
+      - name: prestart-dir
+        hostPath: 
+          path: /etc/tsg-os/{{ .Release.Name }}/
+          type: DirectoryOrCreate
+      {{ template "traffic-engine.volume.mrzcpd" . }}
+      {{ template "traffic-engine.volume.localtime" . }}
+      {{ template "traffic-engine.proxy.volume.prestart" . }}
+      {{ template "traffic-engine.volume.hostpath" . }}
+
+{{- end }}

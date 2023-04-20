@@ -167,27 +167,9 @@ enable_breakpad_upload=0
             mkdir -p /target_config/etc/default
             chmod 0755 /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
             /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
-{{ if eq .Values.proxy.enable .Values.define_enable_val_yes }}
-            ip tuntap add dev tap0 mode tap multi_queue
-            /usr/sbin/ip link set tap0 address fe:65:b7:03:50:bd
-            /usr/sbin/ip link set tap0 up
-            /usr/sbin/ip addr flush dev tap0
-            /usr/sbin/ip addr add 172.16.241.2/30 dev tap0
-            /usr/sbin/ip neigh flush dev tap0
-            /usr/sbin/ip neigh add 172.16.241.1 lladdr 00:0e:c6:d6:72:c1 dev tap0 nud permanent
-            /usr/sbin/ip6tables -A INPUT -i tap0 -m bpf --bytecode '17,48 0 0 0,84 0 0 240,21 0 13 96,48 0 0 6,21 0 11 6,40 0 0 4,37 0 9 24,48 0 0 52,84 0 0 240,116 0 0 2,53 0 5 24,48 0 0 60,21 0 3 88,48 0 0 61,21 0 1 4,6 0 0 65535,6 0 0 0' -j NFQUEUE --queue-num 1
-            /usr/sbin/iptables -A INPUT -i tap0 -m bpf --bytecode '18,48 0 0 0,84 0 0 240,21 0 14 64,48 0 0 9,21 0 12 6,40 0 0 6,69 10 0 8191,177 0 0 0,80 0 0 12,84 0 0 240,116 0 0 2,53 0 5 24,80 0 0 20,21 0 3 88,80 0 0 21,21 0 1 4,6 0 0 65535,6 0 0 0' -j NFQUEUE --queue-num 1
-            /usr/sbin/ip rule add iif tap0 tab 100
-            /usr/sbin/ip route add local default dev lo table 100
-            /usr/sbin/ip rule add fwmark 0x65 lookup 101
-            /usr/sbin/ip route add default dev tap0 via 172.16.241.1 table 101
-            /usr/sbin/ip addr add fd00::02/64 dev tap0
-            /usr/sbin/ip -6 route add default via fd00::01
-            /usr/sbin/ip -6 rule add iif tap0 tab 102
-            /usr/sbin/ip -6 route add local default dev lo table 102
-            /usr/sbin/ip -6 neigh add fd00::01 lladdr 00:0e:c6:d6:72:c1 dev tap0 nud permanent
-{{- end }}
-            mount -o remount,rw /sys
+{{- end -}}
+
+{{- define "traffic-engine.init.sce" -}}
 {{ if .Values.sce_config.endpoint_nic }}
             ip tuntap add dev {{ .Values.sce_config.endpoint_nic }} mode tap
             ip link set dev {{ .Values.sce_config.endpoint_nic }} up
@@ -263,21 +245,6 @@ enable_breakpad_upload=0
 {{- end }}
 {{- end -}}
 
-{{- define "traffic-engine.firewall.liveness-probe" -}}
-{{- if eq .Values.debug.firewall.enable_liveness_probe .Values.define_enable_val_yes }}
-        livenessProbe:
-          tcpSocket:
-            port: 9273
-          failureThreshold: 1
-          timeoutSeconds: 10
-        startupProbe:
-          tcpSocket:
-            port: 9273
-          failureThreshold: 90
-          periodSeconds: 10
-{{- end }}
-{{- end -}}
-
 {{- define "traffic-engine.firewall.volume.prestart" -}}
 {{- if eq .Values.debug.firewall.enable_prestart_script .Values.define_enable_val_yes }}
       - name: firewall-prestart
@@ -304,22 +271,6 @@ enable_breakpad_upload=0
 {{- if eq .Values.debug.firewall.enable_prestart_script .Values.define_enable_val_yes }}
             chmod 0755 /opt/tsg/scripts/prestart.sh
             /opt/tsg/scripts/prestart.sh
-{{- end }}
-{{- end -}}
-
-
-{{- define "traffic-engine.proxy.liveness-probe" -}}
-{{- if eq .Values.debug.proxy.enable_liveness_probe .Values.define_enable_val_yes }}
-        livenessProbe:
-          tcpSocket:
-            port: 9001
-          failureThreshold: 1
-          timeoutSeconds: 10
-        startupProbe:
-          tcpSocket:
-            port: 9001
-          failureThreshold: 30
-          periodSeconds: 10
 {{- end }}
 {{- end -}}
 
@@ -369,21 +320,6 @@ enable_breakpad_upload=0
 {{- end -}}
 
 
-{{- define "traffic-engine.service-chaining.liveness-probe" -}}
-{{- if eq .Values.debug.service_chaining.enable_liveness_probe .Values.define_enable_val_yes }}
-        livenessProbe:
-          tcpSocket:
-            port: 9006
-          failureThreshold: 1
-          timeoutSeconds: 10
-        startupProbe:
-          tcpSocket:
-            port: 9006
-          failureThreshold: 30
-          periodSeconds: 10
-{{- end }}
-{{- end -}}
-
 {{- define "traffic-engine.service-chaining.start" -}}
 {{- if eq .Values.debug.service_chaining.enable_interactive_startup .Values.define_enable_val_yes -}}
             while true; do sleep 10;done
@@ -430,21 +366,6 @@ enable_breakpad_upload=0
 {{- end -}}
 
 
-{{- define "traffic-engine.shaping.liveness-probe" -}}
-{{- if eq .Values.debug.shaping.enable_liveness_probe .Values.define_enable_val_yes }}
-        livenessProbe:
-          tcpSocket:
-            port: 9007
-          failureThreshold: 1
-          timeoutSeconds: 10
-        startupProbe:
-          tcpSocket:
-            port: 9007
-          failureThreshold: 30
-          periodSeconds: 10
-{{- end }}
-{{- end -}}
-
 {{- define "traffic-engine.shaping.start" -}}
 {{- if eq .Values.debug.shaping.enable_interactive_startup .Values.define_enable_val_yes -}}
             while true; do sleep 10;done
@@ -490,4 +411,44 @@ enable_breakpad_upload=0
 {{- end }}
 {{- end -}}
 
+{{- define "traffic-engine.volume.mrzcpd" -}}
+      - name: opt-tsg-mrzcpd
+        hostPath:
+          path: /opt/tsg/mrzcpd
+      - name: var-run-mrzcpd
+        hostPath:
+          path: /var/run/mrzcpd
+      - name: var-run-dpdk
+        hostPath:
+          path: /var/run/dpdk
+      - name: root-sys
+        hostPath:
+          path: /root/sys
+{{- end -}}
 
+{{- define "traffic-engine.mount.mrzcpd" -}}
+        - name: opt-tsg-mrzcpd
+          mountPath: /opt/tsg/mrzcpd
+          readOnly: false
+        - name: var-run-mrzcpd
+          mountPath: /var/run/mrzcpd
+          readOnly: false
+        - name: var-run-dpdk
+          mountPath: /var/run/dpdk
+          readOnly: false
+        - name: root-sys
+          mountPath: /root/sys
+          readOnly: false
+{{- end -}}
+
+{{- define "traffic-engine.volume.localtime" -}}
+      - name: localtime-node
+        hostPath:
+          path: /etc/localtime
+{{- end -}}
+
+{{- define "traffic-engine.mount.localtime" -}}
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true
+{{- end -}}
