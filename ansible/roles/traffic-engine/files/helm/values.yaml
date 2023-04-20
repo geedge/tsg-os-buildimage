@@ -184,3 +184,33 @@ shaping_config:
   shaping_nic: nf_1_shaping_engine
 
 app_symbol_index: 1
+
+debug:
+  firewall:
+    enable_liveness_probe: yes
+    enable_interactive_startup: no
+    enable_prestart_script: no
+    enable_mount_host_filesystem: no
+    #default: /etc/tsg-os/${service_function_name}/firewall_prestart_script.sh
+    prestart_script: ""
+  proxy:
+    enable_liveness_probe: yes
+    enable_interactive_startup: no
+    enable_prestart_script: no
+    enable_mount_host_filesystem: no
+    #default: /etc/tsg-os/${service_function_name}/proxy_prestart_script.sh
+    prestart_script: ""
+  service_chaining:
+    enable_liveness_probe: yes
+    enable_interactive_startup: no
+    enable_prestart_script: no
+    enable_mount_host_filesystem: no
+    #default: /etc/tsg-os/${service_function_name}/service_chaining_prestart_script.sh
+    prestart_script: ""
+  shaping:
+    enable_liveness_probe: yes
+    enable_interactive_startup: no
+    enable_prestart_script: no
+    enable_mount_host_filesystem: no
+    #default: /etc/tsg-os/${service_function_name}/shaping_prestart_script.sh
+    prestart_script: ""

@@ -42,7 +42,7 @@ spec:
           - |
             {{ template "traffic-engine.firewall.copy-config-to-dest" . }}
             {{ template "traffic-engine.firewall.prestart" . }}
-            exec /opt/tsg/sapp/sapp
+            {{ template "traffic-engine.firewall.start" . }}
         ports:
           - containerPort: 9273
         env:
@@ -60,16 +60,7 @@ spec:
               fieldPath: status.hostIP
         securityContext:
           privileged: true
-        livenessProbe:
-          tcpSocket:
-            port: 9273
-          failureThreshold: 1
-          timeoutSeconds: 10
-        startupProbe:
-          tcpSocket:
-            port: 9273
-          failureThreshold: 90
-          periodSeconds: 10
+        {{ template "traffic-engine.firewall.liveness-probe" . }}
         volumeMounts:
         - name: opt-tsg-mrzcpd
           mountPath: /opt/tsg/mrzcpd
@@ -95,8 +86,8 @@ spec:
         - name: localtime-node
           mountPath: /etc/localtime
           readOnly: true
-        - name: hotfix-firewall
-          mountPath: /etc/traffic-engine/hotfix/firewall
+        {{ template "traffic-engine.firewall.mount.prestart" . }}
+        {{ template "traffic-engine.firewall.mount.hostpath" . }}
 
 {{- if and (eq .Values.proxy.enable .Values.define_enable_val_yes) (ge (len .Values.tfe_affinity) 1) }}
       - name: proxy
@@ -109,7 +100,7 @@ spec:
           - |
             {{ template "traffic-engine.proxy.copy-config-to-dest" . }}
             {{ template "traffic-engine.proxy.prestart" . }}
-            exec /opt/tsg/tfe/bin/tfe
+            {{ template "traffic-engine.proxy.start" . }}
         ports:
           - containerPort: 9001
         env:
@@ -123,16 +114,7 @@ spec:
               fieldPath: status.hostIP
         securityContext:
           privileged: true
-        livenessProbe:
-          tcpSocket:
-            port: 9001
-          failureThreshold: 1
-          timeoutSeconds: 10
-        startupProbe:
-          tcpSocket:
-            port: 9001
-          failureThreshold: 30
-          periodSeconds: 10
+        {{ template "traffic-engine.proxy.liveness-probe" . }}
         volumeMounts:
         - name: tfe
           mountPath: "/opt/tsg/config"
@@ -146,8 +128,8 @@ spec:
         - name: localtime-node
           mountPath: /etc/localtime
           readOnly: true
-        - name: hotfix-proxy
-          mountPath: /etc/traffic-engine/hotfix/proxy
+        {{ template "traffic-engine.proxy.mount.prestart" . }}
+        {{ template "traffic-engine.proxy.mount.hostpath" . }}
 {{- end }}
 
       - name: certstore
@@ -225,7 +207,7 @@ spec:
             {{ template "traffic-engine.shaping.get-service-node-port" . }}
             {{ template "traffic-engine.shaping.set-shaping-config" . }}
             {{ template "traffic-engine.shaping.prestart" . }}
-            exec /opt/tsg/shaping_engine/bin/shaping_engine
+            {{ template "traffic-engine.shaping.start" . }}
         ports:
           - containerPort: 8551
           - containerPort: 8552
@@ -245,16 +227,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        livenessProbe:
-          tcpSocket:
-            port: 9007
-          failureThreshold: 1
-          timeoutSeconds: 10
-        startupProbe:
-          tcpSocket:
-            port: 9007
-          failureThreshold: 30
-          periodSeconds: 10
+        {{ template "traffic-engine.shaping.liveness-probe" . }}
         securityContext:
           privileged: true
         volumeMounts:
@@ -282,8 +255,8 @@ spec:
         - name: localtime-node
           mountPath: /etc/localtime
           readOnly: true
-        - name: hotfix-shaping
-          mountPath: /etc/traffic-engine/hotfix/shaping
+        {{ template "traffic-engine.shaping.mount.prestart" . }}
+        {{ template "traffic-engine.shaping.mount.hostpath" . }}        
 
       - name: telegraf-shaping
         image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
@@ -360,8 +333,8 @@ spec:
           - "-ec"
           - |
             {{ template "traffic-engine.sce.copy-config-to-dest" . }}
-            {{ template "traffic-engine.sce.prestart" . }}
-            exec /opt/tsg/sce/bin/sce
+            {{ template "traffic-engine.service-chaining.prestart" . }}
+            {{ template "traffic-engine.service-chaining.start" . }}
         ports:
           - containerPort: 9006
         env:
@@ -375,16 +348,7 @@ spec:
               fieldPath: status.hostIP
         securityContext:
           privileged: true
-        livenessProbe:
-          tcpSocket:
-            port: 9006
-          failureThreshold: 1
-          timeoutSeconds: 10
-        startupProbe:
-          tcpSocket:
-            port: 9006
-          failureThreshold: 30
-          periodSeconds: 10
+        {{ template "traffic-engine.service-chaining.liveness-probe" . }}
         volumeMounts:
         - name: opt-tsg-mrzcpd
           mountPath: /opt/tsg/mrzcpd
@@ -410,10 +374,10 @@ spec:
         - name: localtime-node
           mountPath: /etc/localtime
           readOnly: true
-        - name: hotfix-sce
-          mountPath: /etc/traffic-engine/hotfix/sce
         - name: bfdd-unix-socket
           mountPath: /run/frr
+        {{ template "traffic-engine.service-chaining.mount.prestart" . }}
+        {{ template "traffic-engine.service-chaining.mount.hostpath" . }}
 
       - name: bfdd
         image: "docker.io/library/tsg-bfdd:{{ .Chart.AppVersion }}"
@@ -568,23 +532,20 @@ spec:
       - name: localtime-node
         hostPath:
           path: /etc/localtime
-      - name: hotfix-firewall
-        hostPath:
-          path: /etc/traffic-engine/hotfix/firewall
-      - name: hotfix-proxy
-        hostPath:
-          path: /etc/traffic-engine/hotfix/proxy
       - name: hotfix-certstore
         hostPath:
           path: /etc/traffic-engine/hotfix/certstore
-      - name: hotfix-sce
-        hostPath:
-          path: /etc/traffic-engine/hotfix/sce
       - name: hotfix-bfdd
         hostPath:
           path: /etc/traffic-engine/hotfix/bfdd
-      - name: hotfix-shaping
-        hostPath:
-          path: /etc/traffic-engine/hotfix/shaping
       - name: bfdd-unix-socket
         emptyDir: {}
+      - name: prestart-dir
+        hostPath: 
+          path: /etc/tsg-os/{{ .Release.Name }}/
+          type: DirectoryOrCreate
+      {{ template "traffic-engine.firewall.volume.prestart" . }}
+      {{ template "traffic-engine.proxy.volume.prestart" . }}
+      {{ template "traffic-engine.service-chaining.volume.prestart" . }}
+      {{ template "traffic-engine.shaping.volume.prestart" . }}
+      {{ template "traffic-engine.volume.hostpath" . }}

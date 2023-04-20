@@ -122,11 +122,6 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/tsg_device_tag.json  /opt/tsg/etc/tsg_device_tag.json
 {{- end -}}
 
-{{- define "traffic-engine.sce.prestart" -}}
-            if [ -f "/etc/traffic-engine/hotfix/sce/scripts/prestart.sh" ]; then chmod 0755 /etc/traffic-engine/hotfix/sce/scripts/prestart.sh; /etc/traffic-engine/hotfix/sce/scripts/prestart.sh;fi
-{{- end -}}
-
-
 {{- define "traffic-engine.bfdd.prestart" -}}
             if [ -f "/etc/traffic-engine/hotfix/bfdd/scripts/prestart.sh" ]; then chmod 0755 /etc/traffic-engine/hotfix/bfdd/scripts/prestart.sh; /etc/traffic-engine/hotfix/bfdd/scripts/prestart.sh;fi
 {{- end -}}
@@ -137,7 +132,7 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/main.conf               /opt/tsg/sapp/tsgconf/main.conf
             cp /opt/tsg/config/maat.conf               /opt/tsg/sapp/tsgconf/maat.conf
             cp /opt/tsg/config/sapp.toml               /opt/tsg/sapp/etc/sapp.toml
-{{ if eq .Values.proxy.enable .Values.define_enable_val_yes }}
+{{- if eq .Values.proxy.enable .Values.define_enable_val_yes }}
             cp /opt/tsg/config/kni.conf                /opt/tsg/sapp/etc/kni/kni.conf
 {{- end }}
             cp /opt/tsg/config/wangw.conf              /opt/tsg/sapp/etc/wannat/wangw.conf
@@ -151,23 +146,11 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/necessary_plug_list.conf  /opt/tsg/sapp/etc/necessary_plug_list.conf
 {{- end -}}
 
-{{- define "traffic-engine.firewall.prestart" -}}
-            if [ -f "/etc/traffic-engine/hotfix/firewall/scripts/prestart.sh" ]; then chmod 0755 /etc/traffic-engine/hotfix/firewall/scripts/prestart.sh; /etc/traffic-engine/hotfix/firewall/scripts/prestart.sh;fi
-{{- end -}}
-
-
 {{- define "traffic-engine.proxy.copy-config-to-dest" -}}
             cp /opt/tsg/config/tfe.conf             /opt/tsg/tfe/conf/tfe/tfe.conf
             cp /opt/tsg/config/pangu_pxy.conf       /opt/tsg/tfe/conf/pangu/pangu_pxy.conf
             cp /opt/tsg/config/tsg_device_tag.json  /opt/tsg/etc/tsg_device_tag.json
 {{- end -}}
-
-
-{{- define "traffic-engine.proxy.prestart" -}}
-            if [ -f "/etc/traffic-engine/hotfix/proxy/scripts/prestart.sh" ]; then chmod 0755 /etc/traffic-engine/hotfix/proxy/scripts/prestart.sh; /etc/traffic-engine/hotfix/proxy/scripts/prestart.sh;fi
-{{- end -}}
-
-
 
 {{- define "traffic-engine.certstore.copy-config-to-dest" -}}
             cp /opt/tsg/config/cert_store.ini       /opt/tsg/certstore/conf/cert_store.ini
@@ -239,10 +222,6 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/tsg_device_tag.json  /opt/tsg/etc/tsg_device_tag.json
 {{- end -}}
 
-{{- define "traffic-engine.shaping.prestart" -}}
-            if [ -f "/etc/traffic-engine/hotfix/shaping/scripts/prestart.sh" ]; then chmod 0755 /etc/traffic-engine/hotfix/shaping/scripts/prestart.sh; /etc/traffic-engine/hotfix/shaping/scripts/prestart.sh;fi
-{{- end -}}
-
 {{- define "traffic-engine.shaping.get-service-node-port" -}}
             export APISERVER=https://kubernetes.default.svc
             export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
@@ -262,3 +241,253 @@ enable_breakpad_upload=0
             sed -Ei "s|CLUSTER_ANNOUNCE_PORT_LOCATION|${CLUSTER_ANNOUNCE_PORT?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
             sed -Ei "s|HEALTH_CHECK_ANNOUNCE_PORT_LOCATION|${HEALTH_CHECK_ANNOUNCE_PORT?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
 {{- end -}}
+
+{{- define "traffic-engine.volume.hostpath" -}}
+      - name: host-root
+        hostPath:
+          path: /
+{{- end -}}
+
+{{- define "traffic-engine.firewall.mount.hostpath" -}}
+{{- if eq .Values.debug.firewall.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+        - name: host-root
+          mountPath: /host
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.firewall.start" -}}
+{{- if eq .Values.debug.firewall.enable_interactive_startup .Values.define_enable_val_yes -}}
+            while true; do sleep 10;done
+{{- else -}}
+            exec /opt/tsg/sapp/sapp
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.firewall.liveness-probe" -}}
+{{- if eq .Values.debug.firewall.enable_liveness_probe .Values.define_enable_val_yes }}
+        livenessProbe:
+          tcpSocket:
+            port: 9273
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9273
+          failureThreshold: 90
+          periodSeconds: 10
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.firewall.volume.prestart" -}}
+{{- if eq .Values.debug.firewall.enable_prestart_script .Values.define_enable_val_yes }}
+      - name: firewall-prestart
+        hostPath:
+{{- if .Values.debug.firewall.prestart_script }}
+          path: {{ .Values.debug.firewall.prestart_script }}
+{{- else }}
+          path: /etc/tsg-os/{{ .Release.Name }}/firewall_prestart_script.sh
+{{- end }}
+          type: FileOrCreate
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.firewall.mount.prestart" -}}
+{{- if eq .Values.debug.firewall.enable_prestart_script .Values.define_enable_val_yes }}
+        - name: prestart-dir
+          mountPath: /tmp/prestart
+        - name: firewall-prestart
+          mountPath: /opt/tsg/scripts/prestart.sh
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.firewall.prestart" -}}
+{{- if eq .Values.debug.firewall.enable_prestart_script .Values.define_enable_val_yes }}
+            chmod 0755 /opt/tsg/scripts/prestart.sh
+            /opt/tsg/scripts/prestart.sh
+{{- end }}
+{{- end -}}
+
+
+{{- define "traffic-engine.proxy.liveness-probe" -}}
+{{- if eq .Values.debug.proxy.enable_liveness_probe .Values.define_enable_val_yes }}
+        livenessProbe:
+          tcpSocket:
+            port: 9001
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9001
+          failureThreshold: 30
+          periodSeconds: 10
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.proxy.start" -}}
+{{- if eq .Values.debug.proxy.enable_interactive_startup .Values.define_enable_val_yes -}}
+            while true; do sleep 10;done
+{{- else -}}
+            exec /opt/tsg/tfe/bin/tfe
+{{- end }}
+{{- end -}}
+
+
+{{- define "traffic-engine.proxy.volume.prestart" -}}
+{{- if eq .Values.debug.proxy.enable_prestart_script .Values.define_enable_val_yes }}
+      - name: proxy-prestart
+        hostPath:
+{{- if .Values.debug.proxy.prestart_script }}
+          path: {{ .Values.debug.proxy.prestart_script }}
+{{- else }}
+          path: /etc/tsg-os/{{ .Release.Name }}/proxy_prestart_script.sh
+{{- end }}
+          type: FileOrCreate
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.proxy.mount.prestart" -}}
+{{- if eq .Values.debug.proxy.enable_prestart_script .Values.define_enable_val_yes }}
+        - name: prestart-dir
+          mountPath: /tmp/prestart
+        - name: proxy-prestart
+          mountPath: /opt/tsg/scripts/prestart.sh
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.proxy.prestart" -}}
+{{- if eq .Values.debug.proxy.enable_prestart_script .Values.define_enable_val_yes }}
+            chmod 0755 /opt/tsg/scripts/prestart.sh
+            /opt/tsg/scripts/prestart.sh
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.proxy.mount.hostpath" -}}
+{{- if eq .Values.debug.proxy.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+        - name: host-root
+          mountPath: /host
+{{- end }}
+{{- end -}}
+
+
+{{- define "traffic-engine.service-chaining.liveness-probe" -}}
+{{- if eq .Values.debug.service_chaining.enable_liveness_probe .Values.define_enable_val_yes }}
+        livenessProbe:
+          tcpSocket:
+            port: 9006
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9006
+          failureThreshold: 30
+          periodSeconds: 10
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.service-chaining.start" -}}
+{{- if eq .Values.debug.service_chaining.enable_interactive_startup .Values.define_enable_val_yes -}}
+            while true; do sleep 10;done
+{{- else -}}
+            exec /opt/tsg/sce/bin/sce
+{{- end }}
+{{- end -}}
+
+
+{{- define "traffic-engine.service-chaining.volume.prestart" -}}
+{{- if eq .Values.debug.service_chaining.enable_prestart_script .Values.define_enable_val_yes }}
+      - name: service-chaining-prestart
+        hostPath:
+{{- if .Values.debug.service_chaining.prestart_script }}
+          path: {{ .Values.debug.service_chaining.prestart_script }}
+{{- else }}
+          path: /etc/tsg-os/{{ .Release.Name }}/service_chaining_prestart_script.sh
+{{- end }}
+          type: FileOrCreate
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.service-chaining.mount.prestart" -}}
+{{- if eq .Values.debug.service_chaining.enable_prestart_script .Values.define_enable_val_yes }}
+        - name: prestart-dir
+          mountPath: /tmp/prestart
+        - name: service-chaining-prestart
+          mountPath: /opt/tsg/scripts/prestart.sh
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.service-chaining.prestart" -}}
+{{- if eq .Values.debug.service_chaining.enable_prestart_script .Values.define_enable_val_yes }}
+            chmod 0755 /opt/tsg/scripts/prestart.sh
+            /opt/tsg/scripts/prestart.sh
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.service-chaining.mount.hostpath" -}}
+{{- if eq .Values.debug.service_chaining.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+        - name: host-root
+          mountPath: /host
+{{- end }}
+{{- end -}}
+
+
+{{- define "traffic-engine.shaping.liveness-probe" -}}
+{{- if eq .Values.debug.shaping.enable_liveness_probe .Values.define_enable_val_yes }}
+        livenessProbe:
+          tcpSocket:
+            port: 9007
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9007
+          failureThreshold: 30
+          periodSeconds: 10
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.shaping.start" -}}
+{{- if eq .Values.debug.shaping.enable_interactive_startup .Values.define_enable_val_yes -}}
+            while true; do sleep 10;done
+{{- else -}}
+            exec /opt/tsg/shaping_engine/bin/shaping_engine
+{{- end }}
+{{- end -}}
+
+
+{{- define "traffic-engine.shaping.volume.prestart" -}}
+{{- if eq .Values.debug.shaping.enable_prestart_script .Values.define_enable_val_yes }}
+      - name: shaping-prestart
+        hostPath:
+{{- if .Values.debug.shaping.prestart_script }}
+          path: {{ .Values.debug.shaping.prestart_script }}
+{{- else }}
+          path: /etc/tsg-os/{{ .Release.Name }}/shaping_prestart_script.sh
+{{- end }}
+          type: FileOrCreate
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.shaping.mount.prestart" -}}
+{{- if eq .Values.debug.shaping.enable_prestart_script .Values.define_enable_val_yes }}
+        - name: prestart-dir
+          mountPath: /tmp/prestart
+        - name: shaping-prestart
+          mountPath: /opt/tsg/scripts/prestart.sh
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.shaping.prestart" -}}
+{{- if eq .Values.debug.shaping.enable_prestart_script .Values.define_enable_val_yes }}
+            chmod 0755 /opt/tsg/scripts/prestart.sh
+            /opt/tsg/scripts/prestart.sh
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.shaping.mount.hostpath" -}}
+{{- if eq .Values.debug.shaping.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+        - name: host-root
+          mountPath: /host
+{{- end }}
+{{- end -}}
+
+
