@@ -36,7 +36,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: telegraf-sce
-        image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_sce.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
         securityContext:
@@ -54,7 +54,7 @@ spec:
         {{ template "traffic-engine.mount.localtime" . }}
 
       - name: sce
-        image: "docker.io/library/tsg-sce:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-sce:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         workingDir: /opt/tsg/sce
         command:
@@ -107,7 +107,7 @@ spec:
         {{ template "traffic-engine.service-chaining.mount.hostpath" . }}
 
       - name: bfdd
-        image: "docker.io/library/tsg-bfdd:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-bfdd:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         workingDir: /opt/tsg/bfdd
         command:
@@ -143,7 +143,7 @@ spec:
 
       initContainers:
       - name: service-chaining-init
-        image: "docker.io/library/tsg-init:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         command:
           - "bash"

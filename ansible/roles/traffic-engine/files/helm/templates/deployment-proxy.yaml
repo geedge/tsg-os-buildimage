@@ -36,7 +36,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: proxy
-        image: "docker.io/library/tsg-proxy:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-proxy:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         workingDir: /opt/tsg/tfe
         command:
@@ -87,7 +87,7 @@ spec:
         {{ template "traffic-engine.proxy.mount.hostpath" . }}
 
       - name: certstore
-        image: "docker.io/library/tsg-certstore:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-certstore:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         workingDir: /opt/tsg/certstore
         command:
@@ -116,7 +116,7 @@ spec:
           mountPath: /etc/traffic-engine/hotfix/certstore
 
       - name: cert-redis
-        image: "docker.io/library/tsg-certstore:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-certstore:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         command: ["/usr/bin/redis-server", "/etc/cert-redis.conf"]
         securityContext:
@@ -126,7 +126,7 @@ spec:
 
       initContainers:
       - name: proxy-init
-        image: "docker.io/library/tsg-init:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         command:
           - "bash"

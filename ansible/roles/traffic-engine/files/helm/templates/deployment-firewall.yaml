@@ -35,7 +35,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: firewall
-        image: "docker.io/library/tsg-firewall:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-firewall:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         workingDir: /opt/tsg/sapp
         command:
@@ -90,7 +90,7 @@ spec:
         {{ template "traffic-engine.firewall.mount.hostpath" . }}
 
       - name: telegraf
-        image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_statistic.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
         securityContext:
@@ -108,7 +108,7 @@ spec:
         {{ template "traffic-engine.mount.localtime" . }}
 
       - name: telegraf-security
-        image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_security.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
         securityContext:
@@ -127,7 +127,7 @@ spec:
 
       initContainers:
       - name: firewall-init
-        image: "docker.io/library/tsg-init:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         command:
           - "bash"

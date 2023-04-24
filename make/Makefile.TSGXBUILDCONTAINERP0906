@@ -1,0 +1,163 @@
+
+PROFILE_ID 				:= TSG-X-NXR620G40-R01-P0906
+
+PROFILE_ID_IN_SHORT		:= $(subst -,$e,$(PROFILE_ID))
+CONTAINER_IMAGES_PKG	:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-container-images.tar.bz2
+
+TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
+
+
+TARGET_CONTAINER_IMAGE_TAR_DIR		:= $(TARGET_BUILD_DIR)/container_images/tar
+TOOLS_INSTALL_IMAGE_NAME_TAG		:= 8-base-tools-installed-${OS_RELEASE_VER}
+TOOLS_INSTALL_CONTAINER_NAME		:= rockylinux-8-base-tools-install-${OS_RELEASE_VER}
+TOOLS_COMPONENT_NAME				:= tools
+
+FIREWALL_COMPONENT_NAME				:= firewall
+FIREWALL_INSTALL_CONTAINER_NAME		:= tsg-$(FIREWALL_COMPONENT_NAME)-install-${OS_RELEASE_VER}
+
+PROXY_COMPONENT_NAME				:= proxy
+PROXY_INSTALL_CONTAINER_NAME		:= tsg-$(PROXY_COMPONENT_NAME)-install-${OS_RELEASE_VER}
+
+CERTSTORE_COMPONENT_NAME			:= certstore
+CERTSTORE_INSTALL_CONTAINER_NAME	:= tsg-$(CERTSTORE_COMPONENT_NAME)-install-${OS_RELEASE_VER}
+
+TELEGRAF_COMPONENT_NAME				:= telegraf
+TELEGRAF_INSTALL_CONTAINER_NAME		:= tsg-$(TELEGRAF_COMPONENT_NAME)-install-${OS_RELEASE_VER}
+
+INIT_COMPONENT_NAME					:= init
+INIT_INSTALL_CONTAINER_NAME			:= tsg-$(INIT_COMPONENT_NAME)-install-${OS_RELEASE_VER}
+
+SCE_COMPONENT_NAME					:= sce
+SCE_INSTALL_CONTAINER_NAME			:= tsg-$(SCE_COMPONENT_NAME)-install-${OS_RELEASE_VER}
+
+BFDD_COMPONENT_NAME					:= bfdd
+BFDD_INSTALL_CONTAINER_NAME			:= tsg-$(BFDD_COMPONENT_NAME)-install-${OS_RELEASE_VER}
+
+
+SHAPING_COMPONENT_NAME				:= shaping
+SHAPING_INSTALL_CONTAINER_NAME		:= tsg-$(SHAPING_COMPONENT_NAME)-install-${OS_RELEASE_VER}
+
+
+TRAFFIC_ENGINE_IMAGES_TAR			:= tsg-traffic-engine-${OS_RELEASE_VER}-docker.tar
+
+CONTAINER_IMAGE_REPO_PREFIX			:= registry.gdnt-cloud.website
+
+.PHONY: all builddir installer container-tar container-images-generate clean
+
+all: container-tar
+
+builddir:
+	mkdir -p $(TARGET_CONTAINER_IMAGE_TAR_DIR)
+
+installer: builddir
+	sed -i '/sapp-pr:/d;/tfe-pr:/d;/mrzcpd:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
+
+container-images-generate: builddir
+	buildah pull rockylinux:8
+	buildah from --name $(TOOLS_INSTALL_CONTAINER_NAME) rockylinux:8
+	buildah copy $(TOOLS_INSTALL_CONTAINER_NAME) $(CONFDIR)/yum-RockyLinux-8.conf /tmp/
+	buildah copy $(TOOLS_INSTALL_CONTAINER_NAME) /etc/hosts /tmp/
+	buildah run  $(TOOLS_INSTALL_CONTAINER_NAME) -- bash -c "cp /etc/hosts /tmp/hosts.bak;cp /tmp/hosts /etc/hosts"
+	$(TOOLSDIR)/ansible-HAL-CONTAINER $(PROFILE_ID)-$(TOOLS_COMPONENT_NAME)     $(PROJECTDIR) /tmp/empty/container /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER) $(TOOLS_INSTALL_CONTAINER_NAME)
+	buildah run  $(TOOLS_INSTALL_CONTAINER_NAME) -- bash -c "yum clean all -y; yum -c /tmp/yum-RockyLinux-8.conf clean all -y" 
+	buildah run  $(TOOLS_INSTALL_CONTAINER_NAME) -- bash -c "cp /tmp/ks-script-* /; cp /tmp/hosts.bak /etc/hosts; rm -rf /tmp/*; mv /ks-script-* /tmp"
+	buildah commit $(TOOLS_INSTALL_CONTAINER_NAME) rockylinux:$(TOOLS_INSTALL_IMAGE_NAME_TAG)
+	buildah rm $(TOOLS_INSTALL_CONTAINER_NAME)
+
+	buildah from --name $(FIREWALL_INSTALL_CONTAINER_NAME) rockylinux:$(TOOLS_INSTALL_IMAGE_NAME_TAG)
+	buildah copy $(FIREWALL_INSTALL_CONTAINER_NAME) $(CONFDIR)/yum-RockyLinux-8.conf /tmp/
+	buildah copy $(FIREWALL_INSTALL_CONTAINER_NAME) /etc/hosts /tmp/
+	buildah run  $(FIREWALL_INSTALL_CONTAINER_NAME) -- bash -c "cp /etc/hosts /tmp/hosts.bak;cp /tmp/hosts /etc/hosts"
+	$(TOOLSDIR)/ansible-HAL-CONTAINER $(PROFILE_ID)-$(FIREWALL_COMPONENT_NAME)  $(PROJECTDIR) /tmp/empty/container /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER) $(FIREWALL_INSTALL_CONTAINER_NAME)
+	buildah run  $(FIREWALL_INSTALL_CONTAINER_NAME) -- bash -c "yum clean all -y; yum -c /tmp/yum-RockyLinux-8.conf clean all -y" 
+	buildah run  $(FIREWALL_INSTALL_CONTAINER_NAME) -- bash -c "cp /tmp/ks-script-* /; cp /tmp/hosts.bak /etc/hosts; rm -rf /tmp/*; mv /ks-script-* /tmp"
+	buildah commit $(FIREWALL_INSTALL_CONTAINER_NAME) $(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(FIREWALL_COMPONENT_NAME):$(OS_RELEASE_VER)
+	buildah rm $(FIREWALL_INSTALL_CONTAINER_NAME)
+	
+	buildah from --name $(PROXY_INSTALL_CONTAINER_NAME) rockylinux:$(TOOLS_INSTALL_IMAGE_NAME_TAG)
+	buildah copy $(PROXY_INSTALL_CONTAINER_NAME) $(CONFDIR)/yum-RockyLinux-8.conf /tmp/
+	buildah copy $(PROXY_INSTALL_CONTAINER_NAME) /etc/hosts /tmp/
+	buildah run  $(PROXY_INSTALL_CONTAINER_NAME) -- bash -c "cp /etc/hosts /tmp/hosts.bak;cp /tmp/hosts /etc/hosts"
+	$(TOOLSDIR)/ansible-HAL-CONTAINER $(PROFILE_ID)-$(PROXY_COMPONENT_NAME)     $(PROJECTDIR) /tmp/empty/container /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER) $(PROXY_INSTALL_CONTAINER_NAME)
+	buildah run $(PROXY_INSTALL_CONTAINER_NAME) -- bash -c "cat /etc/sysctl.d/80-tfe.conf" > $(IMAGEDIR_BASE)/80-tfe.conf
+	buildah run $(PROXY_INSTALL_CONTAINER_NAME) -- bash -c "yum clean all -y; yum -c /tmp/yum-RockyLinux-8.conf clean all -y" 
+	buildah run $(PROXY_INSTALL_CONTAINER_NAME) -- bash -c "cp /tmp/ks-script-* /; cp /tmp/hosts.bak /etc/hosts; rm -rf /tmp/*; mv /ks-script-* /tmp"
+	buildah commit $(PROXY_INSTALL_CONTAINER_NAME) $(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(PROXY_COMPONENT_NAME):$(OS_RELEASE_VER)
+	buildah rm $(PROXY_INSTALL_CONTAINER_NAME)
+
+	buildah from --name $(CERTSTORE_INSTALL_CONTAINER_NAME) rockylinux:$(TOOLS_INSTALL_IMAGE_NAME_TAG)
+	buildah copy $(CERTSTORE_INSTALL_CONTAINER_NAME) $(CONFDIR)/yum-RockyLinux-8.conf /tmp/
+	buildah copy $(CERTSTORE_INSTALL_CONTAINER_NAME) /etc/hosts /tmp/
+	buildah run  $(CERTSTORE_INSTALL_CONTAINER_NAME) -- bash -c "cp /etc/hosts /tmp/hosts.bak;cp /tmp/hosts /etc/hosts"
+	$(TOOLSDIR)/ansible-HAL-CONTAINER $(PROFILE_ID)-$(CERTSTORE_COMPONENT_NAME) $(PROJECTDIR) /tmp/empty/container /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER) $(CERTSTORE_INSTALL_CONTAINER_NAME)
+	buildah run $(CERTSTORE_INSTALL_CONTAINER_NAME) -- bash -c "yum clean all -y; yum -c /tmp/yum-RockyLinux-8.conf clean all -y" 
+	buildah run $(CERTSTORE_INSTALL_CONTAINER_NAME) -- bash -c "cp /tmp/ks-script-* /; cp /tmp/hosts.bak /etc/hosts; rm -rf /tmp/*; mv /ks-script-* /tmp"
+	buildah commit $(CERTSTORE_INSTALL_CONTAINER_NAME) $(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(CERTSTORE_COMPONENT_NAME):$(OS_RELEASE_VER)
+	buildah rm $(CERTSTORE_INSTALL_CONTAINER_NAME)
+
+	buildah from --name $(TELEGRAF_INSTALL_CONTAINER_NAME) rockylinux:$(TOOLS_INSTALL_IMAGE_NAME_TAG)
+	buildah copy $(TELEGRAF_INSTALL_CONTAINER_NAME) $(CONFDIR)/yum-RockyLinux-8.conf /tmp/
+	buildah copy $(TELEGRAF_INSTALL_CONTAINER_NAME) /etc/hosts /tmp/
+	buildah run  $(TELEGRAF_INSTALL_CONTAINER_NAME) -- bash -c "cp /etc/hosts /tmp/hosts.bak;cp /tmp/hosts /etc/hosts"
+	$(TOOLSDIR)/ansible-HAL-CONTAINER $(PROFILE_ID)-$(TELEGRAF_COMPONENT_NAME)  $(PROJECTDIR) /tmp/empty/container /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER) $(TELEGRAF_INSTALL_CONTAINER_NAME)
+	buildah run $(TELEGRAF_INSTALL_CONTAINER_NAME) -- bash -c "yum clean all -y; yum -c /tmp/yum-RockyLinux-8.conf clean all -y" 
+	buildah run $(TELEGRAF_INSTALL_CONTAINER_NAME) -- bash -c "cp /tmp/ks-script-* /; cp /tmp/hosts.bak /etc/hosts; rm -rf /tmp/*; mv /ks-script-* /tmp"
+	buildah commit $(TELEGRAF_INSTALL_CONTAINER_NAME) $(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(TELEGRAF_COMPONENT_NAME):$(OS_RELEASE_VER)
+	buildah rm $(TELEGRAF_INSTALL_CONTAINER_NAME)
+
+	buildah from --name $(INIT_INSTALL_CONTAINER_NAME) rockylinux:$(TOOLS_INSTALL_IMAGE_NAME_TAG)
+	buildah copy $(INIT_INSTALL_CONTAINER_NAME) $(CONFDIR)/yum-RockyLinux-8.conf /tmp/
+	buildah copy $(INIT_INSTALL_CONTAINER_NAME) /etc/hosts /tmp/
+	buildah run  $(INIT_INSTALL_CONTAINER_NAME) -- bash -c "cp /etc/hosts /tmp/hosts.bak;cp /tmp/hosts /etc/hosts"
+	$(TOOLSDIR)/ansible-HAL-CONTAINER $(PROFILE_ID)-$(INIT_COMPONENT_NAME)      $(PROJECTDIR) /tmp/empty/container /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER) $(INIT_INSTALL_CONTAINER_NAME)
+	buildah run $(INIT_INSTALL_CONTAINER_NAME) -- bash -c "yum clean all -y; yum -c /tmp/yum-RockyLinux-8.conf clean all -y" 
+	buildah run $(INIT_INSTALL_CONTAINER_NAME) -- bash -c "cp /tmp/ks-script-* /; cp /tmp/hosts.bak /etc/hosts; rm -rf /tmp/*; mv /ks-script-* /tmp"
+	buildah commit $(INIT_INSTALL_CONTAINER_NAME) $(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(INIT_COMPONENT_NAME):$(OS_RELEASE_VER)
+	buildah rm $(INIT_INSTALL_CONTAINER_NAME)
+
+	buildah from --name $(SCE_INSTALL_CONTAINER_NAME) rockylinux:$(TOOLS_INSTALL_IMAGE_NAME_TAG)
+	buildah copy $(SCE_INSTALL_CONTAINER_NAME) $(CONFDIR)/yum-RockyLinux-8.conf /tmp/
+	buildah copy $(SCE_INSTALL_CONTAINER_NAME) /etc/hosts /tmp/
+	buildah run  $(SCE_INSTALL_CONTAINER_NAME) -- bash -c "cp /etc/hosts /tmp/hosts.bak;cp /tmp/hosts /etc/hosts"
+	$(TOOLSDIR)/ansible-HAL-CONTAINER $(PROFILE_ID)-$(SCE_COMPONENT_NAME)      $(PROJECTDIR) /tmp/empty/container /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER) $(SCE_INSTALL_CONTAINER_NAME)
+	buildah run $(SCE_INSTALL_CONTAINER_NAME) -- bash -c "yum clean all -y; yum -c /tmp/yum-RockyLinux-8.conf clean all -y" 
+	buildah run $(SCE_INSTALL_CONTAINER_NAME) -- bash -c "cp /tmp/ks-script-* /; cp /tmp/hosts.bak /etc/hosts; rm -rf /tmp/*; mv /ks-script-* /tmp"
+	buildah commit $(SCE_INSTALL_CONTAINER_NAME) $(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(SCE_COMPONENT_NAME):$(OS_RELEASE_VER)
+	buildah rm $(SCE_INSTALL_CONTAINER_NAME)
+
+	buildah from --name $(BFDD_INSTALL_CONTAINER_NAME) rockylinux:$(TOOLS_INSTALL_IMAGE_NAME_TAG)
+	buildah copy $(BFDD_INSTALL_CONTAINER_NAME) $(CONFDIR)/yum-RockyLinux-8.conf /tmp/
+	buildah copy $(BFDD_INSTALL_CONTAINER_NAME) /etc/hosts /tmp/
+	buildah run  $(BFDD_INSTALL_CONTAINER_NAME) -- bash -c "cp /etc/hosts /tmp/hosts.bak;cp /tmp/hosts /etc/hosts"
+	$(TOOLSDIR)/ansible-HAL-CONTAINER $(PROFILE_ID)-$(BFDD_COMPONENT_NAME)      $(PROJECTDIR) /tmp/empty/container /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER) $(BFDD_INSTALL_CONTAINER_NAME)
+	buildah run $(BFDD_INSTALL_CONTAINER_NAME) -- bash -c "yum clean all -y; yum -c /tmp/yum-RockyLinux-8.conf clean all -y" 
+	buildah run $(BFDD_INSTALL_CONTAINER_NAME) -- bash -c "cp /tmp/ks-script-* /; cp /tmp/hosts.bak /etc/hosts; rm -rf /tmp/*; mv /ks-script-* /tmp"
+	buildah commit $(BFDD_INSTALL_CONTAINER_NAME) $(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(BFDD_COMPONENT_NAME):$(OS_RELEASE_VER)
+	buildah rm $(BFDD_INSTALL_CONTAINER_NAME)
+
+	buildah from --name $(SHAPING_INSTALL_CONTAINER_NAME) rockylinux:$(TOOLS_INSTALL_IMAGE_NAME_TAG)
+	buildah copy $(SHAPING_INSTALL_CONTAINER_NAME) $(CONFDIR)/yum-RockyLinux-8.conf /tmp/
+	buildah copy $(SHAPING_INSTALL_CONTAINER_NAME) /etc/hosts /tmp/
+	buildah run  $(SHAPING_INSTALL_CONTAINER_NAME) -- bash -c "cp /etc/hosts /tmp/hosts.bak;cp /tmp/hosts /etc/hosts"
+	$(TOOLSDIR)/ansible-HAL-CONTAINER $(PROFILE_ID)-$(SHAPING_COMPONENT_NAME)      $(PROJECTDIR) /tmp/empty/container /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER) $(SHAPING_INSTALL_CONTAINER_NAME)
+	buildah run $(SHAPING_INSTALL_CONTAINER_NAME) -- bash -c "yum clean all -y; yum -c /tmp/yum-RockyLinux-8.conf clean all -y" 
+	buildah run $(SHAPING_INSTALL_CONTAINER_NAME) -- bash -c "cp /tmp/ks-script-* /; cp /tmp/hosts.bak /etc/hosts; rm -rf /tmp/*; mv /ks-script-* /tmp"
+	buildah commit $(SHAPING_INSTALL_CONTAINER_NAME) $(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(SHAPING_COMPONENT_NAME):$(OS_RELEASE_VER)
+	buildah rm $(SHAPING_INSTALL_CONTAINER_NAME)
+
+container-tar: installer container-images-generate
+	podman save -o $(TARGET_CONTAINER_IMAGE_TAR_DIR)/$(TRAFFIC_ENGINE_IMAGES_TAR)  -m \
+					$(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(FIREWALL_COMPONENT_NAME):$(OS_RELEASE_VER) \
+					$(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(PROXY_COMPONENT_NAME):$(OS_RELEASE_VER) \
+					$(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(CERTSTORE_COMPONENT_NAME):$(OS_RELEASE_VER) \
+					$(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(TELEGRAF_COMPONENT_NAME):$(OS_RELEASE_VER) \
+					$(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(INIT_COMPONENT_NAME):$(OS_RELEASE_VER) \
+					$(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(SCE_COMPONENT_NAME):$(OS_RELEASE_VER) \
+					$(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(BFDD_COMPONENT_NAME):$(OS_RELEASE_VER) \
+					$(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(SHAPING_COMPONENT_NAME):$(OS_RELEASE_VER)
+	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_CONTAINER_IMAGE_TAR_DIR) . | pbzip2 -p9 > $(IMAGEDIR_BASE)/$(CONTAINER_IMAGES_PKG)
+	sha256sum $(IMAGEDIR_BASE)/$(CONTAINER_IMAGES_PKG) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(CONTAINER_IMAGES_PKG).sha256sum.txt
+
+clean:
+	rm -rf $(TARGET_BUILD_DIR)
+

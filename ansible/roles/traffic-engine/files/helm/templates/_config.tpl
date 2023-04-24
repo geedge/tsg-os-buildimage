@@ -424,6 +424,18 @@ enable_breakpad_upload=0
       - name: root-sys
         hostPath:
           path: /root/sys
+      - name: profile-mrzcpd
+        hostPath:
+          path: /etc/profile.d/mrzcpd.sh
+          type: File
+      - name: ldconfig-mrzcpd
+        hostPath:
+          path: /etc/ld.so.conf.d/mrzcpd.conf
+          type: File
+      - name: sysconfig-mrzcpd
+        hostPath:
+          path: /etc/sysconfig/mrzcpd
+          type: File
 {{- end -}}
 
 {{- define "traffic-engine.mount.mrzcpd" -}}
@@ -439,6 +451,16 @@ enable_breakpad_upload=0
         - name: root-sys
           mountPath: /root/sys
           readOnly: false
+        - name: profile-mrzcpd
+          mountPath: /etc/profile.d/mrzcpd.sh
+          readOnly: true
+        - name: ldconfig-mrzcpd
+          mountPath: /etc/ld.so.conf.d/mrzcpd.conf
+          readOnly: true
+        - name: sysconfig-mrzcpd
+          mountPath: /etc/sysconfig/mrzcpd
+          readOnly: true
+
 {{- end -}}
 
 {{- define "traffic-engine.volume.localtime" -}}

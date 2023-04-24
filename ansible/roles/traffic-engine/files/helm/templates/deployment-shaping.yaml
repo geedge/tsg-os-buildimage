@@ -36,7 +36,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: shaping
-        image: "docker.io/library/tsg-shaping:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-shaping:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         workingDir: /opt/tsg/shaping_engine
         command:
@@ -97,7 +97,7 @@ spec:
         {{ template "traffic-engine.shaping.mount.hostpath" . }}        
 
       - name: telegraf-shaping
-        image: "docker.io/library/tsg-telegraf:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_shaping.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
         securityContext:
@@ -116,7 +116,7 @@ spec:
 
       initContainers:
       - name: shaping-init
-        image: "docker.io/library/tsg-init:{{ .Chart.AppVersion }}"
+        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         command:
           - "bash"

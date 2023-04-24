@@ -5,7 +5,7 @@
 #  SPDX-License-Identifier:     GPL-2.0
 set -xe
 
-MEM=24576
+MEM=12288
 DISK=$1
 
 # Path to ONIE installer .iso image

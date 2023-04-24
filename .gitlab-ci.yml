@@ -4,6 +4,11 @@ variables:
   BUILD_BASED_IMAGE_CENTOS7: "git.mesalab.cn:7443/mesa_platform/build-env:master"
   BUILD_BASED_IMAGE_ROCKYLINUX8: "git.mesalab.cn:7443/mesa_platform/build-env:rockylinux-dindind"
 
+stages:
+  - build
+  - merge_build
+  - deploy
+
 .build_tsg-buildimage:
   script:
     - env | sort
@@ -13,6 +18,27 @@ variables:
     - ./tools/upload.sh 
   tags:
     - tsg-os-installer
+
+.build_tsg-buildimage-p0906:
+  script:
+    - env | sort
+    - yum -y install pbzip2 ansible
+    - make DALIY_BUILD_VERSION=$DALIY_BUILD_VERSION
+    - chmod +x ./tools/upload.sh
+    - ./tools/upload.sh 
+  tags:
+    - tsg-os-builder-el8
+
+.build_tsg-build-container-images:
+  script:
+    - env | sort
+    - yum -y remove docker-ce
+    - yum -y install pbzip2 ansible buildah podman
+    - make DALIY_BUILD_VERSION=$DALIY_BUILD_VERSION
+    - chmod +x ./tools/upload.sh
+    - ./tools/upload.sh 
+  tags:
+    - tsg-os-builder-el8
 
 .build_tsg_vm_image:
   cache:
@@ -41,7 +67,7 @@ variables:
     - ./tools/upload.sh
     - rm -rf images/*
   tags:
-    - tsg-os-installer
+    - tsg-os-builder-el8
 
 feature_branch_build_7400_mcn0:
   image: $BUILD_BASED_IMAGE_CENTOS7
@@ -108,10 +134,29 @@ feature_branch_build_9000:
 #     - /^rel-.*$/i
 #     - /^update-.*$/i
 
-feature_branch_build_TSGXP0906:
+feature_branch_build_container_images_TSGXP0906:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
-  extends: .build_tsg-buildimage
+  extends: .build_tsg-build-container-images
+  variables:
+    PROFILE_LIST: TSGXBUILDCONTAINERP0906
+    DALIY_BUILD_VERSION: 1
+  cache:
+    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    paths:
+      - images/
+    policy: push
+  except:
+    - tags
+    - /^dev-.*$/i
+    - /^rel-.*$/i
+    - /^update-.*$/i
+
+feature_branch_build_TSGXP0906:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: merge_build
+  extends: .build_tsg-buildimage-p0906
+  needs: ["feature_branch_build_container_images_TSGXP0906"]
   variables:
     PROFILE_LIST: TSGXNXR620G40R01P0906
     DALIY_BUILD_VERSION: 1
@@ -119,7 +164,6 @@ feature_branch_build_TSGXP0906:
     key: $CI_COMMIT_REF_SLUG-TSGXP0906
     paths:
       - images/
-    policy: push
   except:
     - tags
     - /^dev-.*$/i
@@ -237,10 +281,30 @@ develop_build_9000:
 #   only:
 #     - /^dev-.*$/i
 
-develop_build_TSGXP0906:
+develop_build_container_images_TSGXP0906:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
-  extends: .build_tsg-buildimage
+  extends: .build_tsg-build-container-images
+  variables:
+    PROFILE_LIST: TSGXBUILDCONTAINERP0906
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-develop
+    PULP3_FILE_DIST_NAME: tsg-os-images-develop
+    DALIY_BUILD_VERSION: 1
+    FILE_REPO_PATH: install/develop/tsg-os-images
+  cache:
+    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    paths:
+      - images/
+    policy: push
+  only:
+    - /^dev-.*$/i
+
+develop_build_TSGXP0906:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: merge_build
+  extends: .build_tsg-buildimage-p0906
+  needs: ["develop_build_container_images_TSGXP0906"]
   variables:
     PROFILE_LIST: TSGXNXR620G40R01P0906
     UPLOAD_TO_FILE_REPO: 1
@@ -252,7 +316,6 @@ develop_build_TSGXP0906:
     key: $CI_COMMIT_REF_SLUG-TSGXP0906
     paths:
       - images/
-    policy: push
   only:
     - /^dev-.*$/i
 
@@ -371,10 +434,30 @@ testing_build_9000:
 #   only:
 #     - /^rel-.*$/i
 
-testing_build_TSGXP0906:
+testing_build_container_images_TSGXP0906:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
-  extends: .build_tsg-buildimage
+  extends: .build_tsg-build-container-images
+  variables:
+    PROFILE_LIST: TSGXBUILDCONTAINERP0906
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-testing
+    PULP3_FILE_DIST_NAME: tsg-os-images-testing
+    FILE_REPO_PATH: install/testing/tsg-os-images
+    DALIY_BUILD_VERSION: 1
+  cache:
+    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    paths:
+      - images/
+    policy: push
+  only:
+    - /^rel-.*$/i
+
+testing_build_TSGXP0906:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: merge_build
+  needs: ["testing_build_container_images_TSGXP0906"]
+  extends: .build_tsg-buildimage-p0906
   variables:
     PROFILE_LIST: TSGXNXR620G40R01P0906
     UPLOAD_TO_FILE_REPO: 1
@@ -386,7 +469,6 @@ testing_build_TSGXP0906:
     key: $CI_COMMIT_REF_SLUG-TSGXP0906
     paths:
       - images/
-    policy: push
   only:
     - /^rel-.*$/i
 
@@ -505,10 +587,30 @@ rc_build_9000:
 #   only:
 #     - /^.*-rc.*$/i
 
-rc_build_TSGXP0906:
+rc_build_container_images_TSGXP0906:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
-  extends: .build_tsg-buildimage
+  extends: .build_tsg-build-container-images
+  variables:
+    PROFILE_LIST: TSGXBUILDCONTAINERP0906
+    UPLOAD_TO_FILE_REPO: 1
+    DALIY_BUILD_VERSION: 0
+    PULP3_FILE_REPO_NAME: tsg-os-images-rc
+    PULP3_FILE_DIST_NAME: tsg-os-images-rc
+    FILE_REPO_PATH: install/rc/tsg-os-images
+  cache:
+    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    paths:
+      - images/
+    policy: push
+  only:
+    - /^.*-rc.*$/i
+
+rc_build_TSGXP0906:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: merge_build
+  extends: .build_tsg-buildimage-p0906
+  needs: ["rc_build_container_images_TSGXP0906"]
   variables:
     PROFILE_LIST: TSGXNXR620G40R01P0906
     UPLOAD_TO_FILE_REPO: 1
@@ -520,7 +622,6 @@ rc_build_TSGXP0906:
     key: $CI_COMMIT_REF_SLUG-TSGXP0906
     paths:
       - images/
-    policy: push
   only:
     - /^.*-rc.*$/i
 
@@ -649,10 +750,32 @@ release_build_9000:
 #   except:
 #     - /^.*-rc.*$/i
 
-release_build_TSGXP0906:
+release_build_container_images_TSGXP0906:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
-  extends: .build_tsg-buildimage
+  extends: .build_tsg-build-container-images
+  variables:
+    PROFILE_LIST: TSGXBUILDCONTAINERP0906
+    UPLOAD_TO_FILE_REPO: 1
+    DALIY_BUILD_VERSION: 0
+    PULP3_FILE_REPO_NAME: tsg-os-images-release
+    PULP3_FILE_DIST_NAME: tsg-os-images-release
+    FILE_REPO_PATH: install/release/tsg-os-images
+  cache:
+    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    paths:
+      - images/
+    policy: push
+  only:
+    - tags
+  except:
+    - /^.*-rc.*$/i
+
+release_build_TSGXP0906:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: merge_build
+  extends: .build_tsg-buildimage-p0906
+  needs: ["release_build_container_images_TSGXP0906"]
   variables:
     PROFILE_LIST: TSGXNXR620G40R01P0906
     UPLOAD_TO_FILE_REPO: 1
@@ -664,7 +787,6 @@ release_build_TSGXP0906:
     key: $CI_COMMIT_REF_SLUG-TSGXP0906
     paths:
       - images/
-    policy: push
   only:
     - tags
   except:

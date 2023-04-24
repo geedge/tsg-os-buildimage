@@ -185,9 +185,7 @@
     - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
     - install_config/group_vars/rpm_version.yml
   roles:
-    - {role: container-tools-install, tags: container-tools-install}
     - {role: framework, tags: framework}
-    - {role: mrzcpd, tags: mrzcpd}
     - {role: sapp, tags: sapp}
     - {role: tsg_master, tags: tsg_master}
     - {role: kni, tags: kni}
@@ -204,7 +202,6 @@
     - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
     - install_config/group_vars/rpm_version.yml
   roles:
-    - {role: container-tools-install, tags: container-tools-install}
     - {role: framework, tags: framework}
     - {role: mrzcpd, tags: mrzcpd}
     - {role: tfe, tags: tfe}
@@ -216,7 +213,6 @@
     - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
     - install_config/group_vars/rpm_version.yml
   roles:
-    - {role: container-tools-install, tags: container-tools-install}
     - {role: framework, tags: framework}
     - {role: redis, tags: redis}
     - {role: certstore, tags: certstore}
@@ -227,7 +223,6 @@
     - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
     - install_config/group_vars/rpm_version.yml
   roles:
-    - {role: container-tools-install, tags: container-tools-install}
     - {role: telegraf_statistic, tags: telegraf_statistic}
 
 - hosts: TSG-X-NXR620G40-R01-P0906-sce
@@ -236,9 +231,7 @@
     - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
     - install_config/group_vars/rpm_version.yml
   roles:
-    - {role: container-tools-install, tags: container-tools-install}
     - {role: framework, tags: framework}
-    - {role: mrzcpd, tags: mrzcpd}
     - {role: sce, tags: sce}
     - {role: hasp, tags: hasp}
 
@@ -248,7 +241,6 @@
     - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
     - install_config/group_vars/rpm_version.yml
   roles:
-    - {role: container-tools-install, tags: container-tools-install}
     - {role: framework, tags: framework}
     - {role: bfdd, tags: bfdd}
 
@@ -258,9 +250,7 @@
     - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
     - install_config/group_vars/rpm_version.yml
   roles:
-    - {role: container-tools-install, tags: container-tools-install}
     - {role: framework, tags: framework}
-    - {role: mrzcpd, tags: mrzcpd}
     - {role: shaping_engine, tags: shaping_engine}
 
 - hosts: server
@@ -269,3 +259,11 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: rpm_download, tags: rpm_download}
+
+- hosts: TSG-X-NXR620G40-R01-P0906-tools
+  remote_user: root
+  vars_files:
+    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/rpm_version.yml
+  roles:
+    - {role: container-tools-install, tags: container-tools-install}
