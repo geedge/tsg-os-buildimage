@@ -6,6 +6,8 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     component: firewall
+  annotations:
+    reloader.stakater.com/auto: "true"
 
 spec:
   replicas: 1

@@ -72,3 +72,19 @@
     dest: /var/lib/rancher/k3s/server/manifests/
   when: runtime_env == 'TSG-X-P0906'
 
+- name: "copy reloader crd file to dest"
+  copy:
+    src: "{{ role_path }}/files/reloader/reloader-crd.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/
+
+- name: "copy reloader chart to dest"
+  copy:
+    src: "{{ role_path }}/files/reloader/reloader-v1.0.22.tgz"
+    dest: /var/lib/rancher/k3s/server/static/charts/
+
+- name: "Get reloader chart images to dest"
+  get_url:
+    url: https://repo.geedge.net/filerepo/install/release/tsg-container-images/reloader.tar
+    dest: /var/lib/rancher/k3s/agent/images/reloader.tar
+    url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
+    url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"

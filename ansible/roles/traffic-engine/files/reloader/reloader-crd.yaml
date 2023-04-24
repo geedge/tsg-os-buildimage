@@ -1,0 +1,13 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: tsg-reloader
+  namespace: kube-system
+spec:
+  chart: https://%{KUBERNETES_API}%/static/charts/reloader-v1.0.22.tgz
+  targetNamespace: tsg-os-system
+  valuesContent: |-
+    reloader:
+      image:
+        pullPolicy: Never
+    fullnameOverride: tsg-reloader
