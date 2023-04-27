@@ -42,7 +42,7 @@ phydev_vlan=4001
 
 {% raw %}
 {% if connectivity == 'etherfabric' %}
-[device:={{ network_setting.nic_raw.name }}]
+[device:{{ network_setting.nic_raw.name }}]
 in_addr={{etherfabric_settings.keepalive.ip}}
 in_mask={{etherfabric_settings.keepalive.mask}}
 vlan-filter=1
