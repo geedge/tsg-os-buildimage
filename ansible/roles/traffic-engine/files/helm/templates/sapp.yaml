@@ -11,9 +11,6 @@ data:
   tsg_conn_sketch.inf: {{ tpl (.Files.Get "conf/tsg_conn_sketch.inf") . | quote }}
   sapp.toml: {{ tpl (.Files.Get "conf/sapp.toml") . | quote }}
   send_raw_pkt.conf: {{ tpl (.Files.Get "conf/send_raw_pkt.conf") . | quote }}
-{{- if and (eq .Values.proxy.enable .Values.define_enable_val_yes) (ge (len .Values.tfe_affinity) 1) }}
-  kni.conf: {{ tpl (.Files.Get "conf/kni.conf") . | quote }}
-{{- end }}
   wangw.conf: {{ tpl (.Files.Get "conf/wangw.conf") . | quote }}
   wire_graft.conf: {{ tpl (.Files.Get "conf/wire_graft.conf") . | quote }}
   vlan_flipping_map.conf: {{ tpl (.Files.Get "conf/vlan_flipping_map.conf") . | quote }}

@@ -188,7 +188,6 @@
     - {role: framework, tags: framework}
     - {role: sapp, tags: sapp}
     - {role: tsg_master, tags: tsg_master}
-    - {role: kni, tags: kni}
     - {role: firewall, tags: firewall}
     - {role: tsg_app, tags: tsg_app}
     - {role: wannat_wangw, tags: wannat_wangw}
