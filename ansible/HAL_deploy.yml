@@ -202,7 +202,6 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: framework, tags: framework}
-    - {role: mrzcpd, tags: mrzcpd}
     - {role: tfe, tags: tfe}
     - {role: hasp, tags: hasp}
 
