@@ -151,6 +151,51 @@ spec:
             /usr/sbin/ip -6 rule add iif tap0 tab 102
             /usr/sbin/ip -6 route add local default dev lo table 102
             /usr/sbin/ip -6 neigh add fd00::01 lladdr 00:0e:c6:d6:72:c1 dev tap0 nud permanent
+
+            #decrypted traffic steering
+            /usr/sbin/ip tuntap add dev tap_c mode tap multi_queue
+            /usr/sbin/ip tuntap add dev tap_s mode tap multi_queue
+
+            /usr/sbin/ip link set tap_c address 80:61:5f:0f:97:e5
+            /usr/sbin/ip link set tap_s address 80:61:5f:0f:97:e6
+
+            /usr/sbin/ip link set tap_c up
+            /usr/sbin/ip link set tap_s up
+
+            /usr/sbin/ethtool --offload tap_c rx off tx off
+            /usr/sbin/ethtool --offload tap_s rx off tx off
+
+            /usr/sbin/ip link set tap_c up
+            /usr/sbin/ip link set tap_s up
+            /usr/sbin/ip addr flush dev tap_c
+            /usr/sbin/ip addr flush dev tap_s
+
+            /usr/sbin/ip addr add 2.2.2.2/24 dev tap_c
+            /usr/sbin/ip addr add 3.3.3.3/24 dev tap_s
+            /usr/sbin/ip -4 neigh flush dev tap_c
+            /usr/sbin/ip -4 neigh flush dev tap_s
+            /usr/sbin/ip -4 neigh add 2.2.2.1 lladdr 80:61:5f:0f:97:e6 dev tap_c nud permanent
+            /usr/sbin/ip -4 neigh add 3.3.3.1 lladdr 80:61:5f:0f:97:e5 dev tap_s nud permanent
+            /usr/sbin/ip -4 rule add fwmark 0x11 lookup 111
+            /usr/sbin/ip -4 rule add fwmark 0x22 lookup 222
+            /usr/sbin/ip -4 route add default dev tap_c via 2.2.2.1 table 111
+            /usr/sbin/ip -4 route add default dev tap_s via 3.3.3.1 table 222
+            /usr/sbin/ip -4 rule add iif tap_c tab 100
+            /usr/sbin/ip -4 rule add iif tap_s tab 100
+
+            /usr/sbin/ip addr add fd02::02/64 dev tap_c
+            /usr/sbin/ip addr add fd03::03/64 dev tap_s
+            /usr/sbin/ip -6 neigh flush dev tap_c
+            /usr/sbin/ip -6 neigh flush dev tap_s
+            /usr/sbin/ip -6 neigh add fd02::01 lladdr 80:61:5f:0f:97:e6 dev tap_c nud permanent
+            /usr/sbin/ip -6 neigh add fd03::01 lladdr 80:61:5f:0f:97:e5 dev tap_s nud permanent
+            /usr/sbin/ip -6 rule add fwmark 0x11 lookup 333
+            /usr/sbin/ip -6 rule add fwmark 0x22 lookup 444
+            /usr/sbin/ip -6 route add default dev tap_c via fd02::01 table 333
+            /usr/sbin/ip -6 route add default dev tap_s via fd03::01 table 444
+            /usr/sbin/ip -6 rule add iif tap_c tab 102
+            /usr/sbin/ip -6 rule add iif tap_s tab 102
+
             mount -o remount,rw /sys
         securityContext:
           privileged: true
