@@ -1,7 +1,6 @@
 # Telegraf Configuration
 [global_tags]
    device_id = "${device_id}"
-   vsys_id = "{% raw %}{{ vsys_id }}{% endraw %}"
 {% raw %}{% if data_center.name is defined %}
    data_center = "{{ data_center.name }}"
 {% endif %}
