@@ -124,6 +124,24 @@ spec:
         volumeMounts:
         {{ template "traffic-engine.mount.localtime" . }}  
 
+      - name: telegraf-proxy
+        image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_proxy.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: telegraf
+          mountPath: "/etc/telegraf/telegraf_proxy.conf"
+          subPath: "telegraf_proxy.conf"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: config-volume
+          mountPath: "/etc/default/telegraf"
+          subPath: "etc/default/telegraf"
+        {{ template "traffic-engine.mount.localtime" . }}
+
       initContainers:
       - name: proxy-init
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
@@ -216,6 +234,9 @@ spec:
       - name: tfe
         configMap:
           name: tfe-{{ .Release.Name }}
+      - name: telegraf
+        configMap:
+          name: telegraf-{{ .Release.Name }}
       - name: config-volume
         emptyDir: {}
       - name: proxy-minidump

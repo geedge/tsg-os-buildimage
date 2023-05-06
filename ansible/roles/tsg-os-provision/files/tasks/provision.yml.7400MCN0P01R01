@@ -183,6 +183,12 @@
         dest: /etc/telegraf/telegraf_security.conf
       tags: telegraf_security
 
+    - name: "tsg-os-provision: Templates telegraf_proxy.conf"
+      template:
+        src: "../templates/telegraf_proxy.conf.j2"
+        dest: /etc/telegraf/telegraf_proxy.conf
+      tags: telegraf_security
+
     - name: "tsg-os-provision: template wannat wangw.conf file"
       template:
         src: "../templates/wangw.conf.j2"

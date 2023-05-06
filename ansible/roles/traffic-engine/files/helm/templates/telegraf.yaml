@@ -8,3 +8,4 @@ data:
   telegraf_shaping.conf: {{ tpl (.Files.Get "conf/telegraf_shaping.conf") . | quote }}
   telegraf_sce.conf: {{ tpl (.Files.Get "conf/telegraf_sce.conf") . | quote }}
   telegraf_security.conf: {{ tpl (.Files.Get "conf/telegraf_security.conf") . | quote }}
+  telegraf_proxy.conf: {{ tpl (.Files.Get "conf/telegraf_proxy.conf") . | quote }}
