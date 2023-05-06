@@ -243,3 +243,18 @@ maat_redis_port_range={% raw %}{{ cm_policy_server_port }}
 full_cfg_dir=pangu_policy/full/index/
 inc_cfg_dir=pangu_policy/inc/index/
 accept_tag_key=data_center
+
+[traffic_steering]
+enable_steering_http=0
+enable_steering_ssl=0
+# 17: 0x11
+so_mask_client=17
+# 34: 0x22
+so_mask_server=34
+device_client=tap_c
+device_server=tap_s
+
+http_keepalive_enable=0
+http_keepalive_path="/metrics"
+http_keepalive_addr=192.168.41.60
+http_keepalive_port=9273
