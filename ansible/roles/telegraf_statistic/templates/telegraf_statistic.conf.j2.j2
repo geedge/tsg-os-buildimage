@@ -33,7 +33,7 @@
    sasl_password = "galaxy2019"
 {% raw %}   brokers = [ "{{ olap.kafka_broker.address_list | join("\",\"") }}" ]
 {% endraw %}
-   topic = "TRAFFIC-METRICS"
+   topic = "NETWORK-TRAFFIC-METRICS"
    data_format = "json"
 [[inputs.socket_listener]]
    service_address = "udp://:8100"

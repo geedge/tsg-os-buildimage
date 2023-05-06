@@ -42,20 +42,31 @@
   data_format = "json"
   json_timestamp_units = "1ms"
 
+# add rename
+[[processors.rename]]
+   [[processors.rename.replace]]
+     field = "hit_count_sum"
+     dest = "hit_count"
+
+   [[processors.rename.replace]]
+     field = "in_bytes_sum"
+     dest = "in_bytes"
+
+   [[processors.rename.replace]]
+     field = "out_bytes_sum"
+     dest = "out_bytes"
+
+    [[processors.rename.replace]]
+     field = "in_pkts_sum"
+     dest = "in_pkts"
+
+    [[processors.rename.replace]]
+     field = "out_pkts_sum"
+     dest = "out_pkts"
+
 [[aggregators.basicstats]]
   period = "1s"
   drop_original = true
   stats = ["sum"]
   fieldpass = ["hit_count", "in_bytes", "out_bytes", "in_pkts", "out_pkts"]
-  #fieldpass = ["new_conn_num", "established_conn_num", "close_conn_num", "total_in_bytes", "total_out_bytes", "total_in_packets", "total_out_packets",
-	#											  "default_conn_num", "default_in_bytes", "default_out_bytes", "default_in_packets", "default_out_packets",
-	#											  "allow_conn_num", "allow_in_bytes", "allow_out_bytes", "allow_in_packets", "allow_out_packets",
-	#											  "deny_conn_num", "deny_in_bytes", "deny_out_bytes", "deny_in_packets", "deny_out_packets",
-	#											  "monitor_conn_num", "monitor_in_bytes", "monitor_out_bytes", "monitor_in_packets", "monitor_out_packets",
-	#											  "intercept_conn_num", "intercept_in_bytes", "intercept_out_bytes", "intercept_in_packets", "intercept_out_packets",
-	#											  "ipv4_in_packets", "ipv4_in_bytes", "ipv4_out_packets", "ipv4_out_bytes",
-	#											  "ipv6_in_packets", "ipv6_in_bytes", "ipv6_out_packets", "ipv6_out_bytes",
-	#											  "tcp_conn_num", "tcp_in_packets", "tcp_in_bytes", "tcp_out_packets", "tcp_out_bytes",
-	#											  "udp_conn_num", "udp_in_packets", "udp_in_bytes", "udp_out_packets", "udp_out_bytes",
-	#											  "alert_bytes", "block_bytes", "pinning_num", "maybe_pinning_num", "not_pinning_num"]
-  namepass = ["security_policy_hits"]   # only "pass" swap metrics through the aggregator.
+  namepass = ["security_rule_hits"]   # only "pass" swap metrics through the aggregator.
