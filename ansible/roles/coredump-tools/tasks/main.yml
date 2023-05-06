@@ -1,0 +1,7 @@
+---
+- name: "install coredump_tools"
+  yum:
+    name:
+      - "{{ coredump_tools_rpm_version.coredump_tools }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present

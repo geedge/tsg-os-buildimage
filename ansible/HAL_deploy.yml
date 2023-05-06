@@ -157,6 +157,7 @@
   roles:
     - {role: k3s-install, tags: k3s-install}
     - {role: coredump, tags: coredump}
+    - {role: coredump-tools, tags: coredump-tools}
     - {role: mrzcpd, tags: mrzcpd}
     - {role: clixon, tags: clixon}
     - {role: tsg-os-HAL, tags: tsg-os-HAL}
