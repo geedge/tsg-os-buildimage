@@ -69,7 +69,7 @@ sapp_rpm_version:
   sapp-pr: sapp-pr-4.3.0.6e7c576
 
 tfe_rpm_version:
-  tfe: tfe-4.8.6.f81209b
+  tfe: tfe-4.8.7.5dcc85c  
   tfe-pr: tfe-pr-4.8.6.f81209b
 
 tsg_app_rpm_version:
@@ -101,7 +101,7 @@ hasp_update_rpm_version:
 tsg_os_clixon_rpm_version:
   cligen: cligen-5.8.0-release
   clixon: clixon-5.8.0-release
-  tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.0.35.36d8bc9
+  tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.0.36.34524eb
 
 sce_rpm_version:
   sce: sce-1.0.9.0aa8f70
