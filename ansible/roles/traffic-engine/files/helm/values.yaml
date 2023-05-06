@@ -175,10 +175,14 @@ sce_config:
   endpoint_mask: 24
   affinity: [1]
 
+proxy_config:
+  proxy_nic: nf_1_proxy
+
 sid:
-  firewall: 1
-  sce: 2
-  shaping: 1005
+  firewall: 1000
+  proxy: 1001
+  sce: 1002
+  shaping: 1003
 
 shaping_config:
   shaping_nic: nf_1_shaping_engine
