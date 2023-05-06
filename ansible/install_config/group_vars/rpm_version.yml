@@ -2,26 +2,26 @@ certstore_rpm_version:
   certstore: certstore-3.0.1.20230413.f7cae1a
 
 firewall_rpm_version:
-  capture_packet_plug: capture_packet_plug-5.0.2.9aac518
+  capture_packet_plug: capture_packet_plug-5.0.3.5b7d21e
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-2.0.1.9af21cd
-  tsg_conn_sketch:  tsg_conn_sketch-4.0.0.ce33d21
+  firewall: firewall-2.0.4.b221dde
+  tsg_conn_sketch:  tsg_conn_sketch-4.0.1.b2ff088
   gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
-  radius_collect_plug: radius_collect_plug-2.0.8.0575ab1
-  app_proto_identify: app_proto_identify-2.1.7.2ab882e
+  radius_collect_plug: radius_collect_plug-2.0.9.f1e08ad
+  app_proto_identify: app_proto_identify-2.1.8.fcbd3cb
   app_proto_engine: app_proto_engine-3.0.0.fab67ab
   tsg_ddos_sketch: tsg_ddos_sketch-1.3.5.447bcc2
   dns: dns-2.1.5.7b90896
   ftp: ftp-1.0.15.1fc64fe
-  http: http-2.0.12.0fc69f4
-  mail: mail-1.0.17.eb41cef
+  http: http-2.0.12.0747ada
+  mail: mail-1.0.18.98773fe
   quic: quic-2.0.5.96f9ce3
   ssl: ssl-2.0.12.d55819b
   rtp: rtp-1.0.7.530ac76
   gtp: gtp-1.0.7.e1041b2
   ssh: ssh-2.1.7.b053e65
-  dtls: dtls-1.0.9.37f642a
+  dtls: dtls-1.0.10.ab7166e
   radius: radius-1.0.7.54b70b2
   mesa_sip: mesa_sip-1.2.3.ccf9b90
   deal_socks: deal_socks-1.0.4.329bba3
@@ -64,19 +64,19 @@ mrzcpd_rpm_version:
 
 
 sapp_rpm_version:
-  sapp: sapp-4.2.98.fc4a37f
+  sapp: sapp-4.3.0.6e7c576
   tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
-  sapp-pr: sapp-pr-4.2.98.fc4a37f
+  sapp-pr: sapp-pr-4.3.0.6e7c576
 
 tfe_rpm_version:
   tfe: tfe-4.8.6.f81209b
   tfe-pr: tfe-pr-4.8.6.f81209b
 
 tsg_app_rpm_version:
-  app_sketch_local: app_sketch_local-4.5.5.7a60af1
+  app_sketch_local: app_sketch_local-5.0.3.cd40103
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-6.0.4.8c355a3
+  tsg_master: tsg_master-6.0.7.e62cfb0
 
 shaping_master_rpm_version:
   shaping_master: shaping_master-1.1.4.b434f47
