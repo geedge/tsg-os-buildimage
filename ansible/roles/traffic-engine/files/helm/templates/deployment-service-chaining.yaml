@@ -61,6 +61,7 @@ spec:
           - "bash"
           - "-ec"
           - |
+            ldconfig
             {{ template "traffic-engine.sce.copy-config-to-dest" . }}
             {{ template "traffic-engine.service-chaining.prestart" . }}
             {{ template "traffic-engine.service-chaining.start" . }}

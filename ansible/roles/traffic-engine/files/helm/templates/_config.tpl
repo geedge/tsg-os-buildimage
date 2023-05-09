@@ -132,9 +132,6 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/main.conf               /opt/tsg/sapp/tsgconf/main.conf
             cp /opt/tsg/config/maat.conf               /opt/tsg/sapp/tsgconf/maat.conf
             cp /opt/tsg/config/sapp.toml               /opt/tsg/sapp/etc/sapp.toml
-{{- if eq .Values.proxy.enable .Values.define_enable_val_yes }}
-            cp /opt/tsg/config/kni.conf                /opt/tsg/sapp/etc/kni/kni.conf
-{{- end }}
             cp /opt/tsg/config/wangw.conf              /opt/tsg/sapp/etc/wannat/wangw.conf
             cp /opt/tsg/config/wire_graft.conf         /opt/tsg/sapp/etc/wire_graft/wire_graft.conf
             cp /opt/tsg/config/tsg_conn_sketch.inf     /opt/tsg/sapp/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf

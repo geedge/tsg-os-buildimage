@@ -42,6 +42,7 @@ spec:
           - "bash"
           - "-ec"
           - |
+            ldconfig
             {{ template "traffic-engine.firewall.copy-config-to-dest" . }}
             {{ template "traffic-engine.firewall.prestart" . }}
             {{ template "traffic-engine.firewall.start" . }}

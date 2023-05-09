@@ -43,6 +43,7 @@ spec:
           - "bash"
           - "-ec"
           - |
+            ldconfig
             {{ template "traffic-engine.shaping.copy-config-to-dest" . }}
             {{ template "traffic-engine.shaping.get-service-node-port" . }}
             {{ template "traffic-engine.shaping.set-shaping-config" . }}
