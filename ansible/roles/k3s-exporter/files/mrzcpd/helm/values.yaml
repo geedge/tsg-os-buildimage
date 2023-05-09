@@ -1,7 +1,7 @@
 mrzcpdExporter:
 
   image:
-    repository: docker.io/library/tsg-init
+    repository: registry.gdnt-cloud.website/tsg-init
     pullPolicy: Never
 #    tag: ""
   replicaCount: 1
