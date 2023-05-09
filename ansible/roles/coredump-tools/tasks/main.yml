@@ -5,3 +5,10 @@
       - "{{ coredump_tools_rpm_version.coredump_tools }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+
+- name: "add sudo secure_path"
+  lineinfile:
+    path: /etc/sudoers
+    backrefs: yes
+    regexp: "^(.*Defaults    secure_path =.*)$"
+    line: '\1:/opt/tsg/coredump/bin'
