@@ -148,7 +148,9 @@ case $profile_id in
 esac
 # ansible-playbook -i tsg-9140-scripts/install_config/tsg_9140_host tsg-9140-scripts/tsg_9140_deploy.yml
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
-
+mkdir -p /etc/NetworkManager/conf.d
+echo "[ifupdown]"    > /etc/NetworkManager/conf.d/01-update-ifupdown.conf
+echo "managed=true" >> /etc/NetworkManager/conf.d/01-update-ifupdown.conf
 rm -rf $target/tmp/*
 rm -rf $target/core.*
 #rm -rf $target/etc/machine-id
