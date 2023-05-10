@@ -55,7 +55,7 @@ framework_rpm_version:
   21_libmaat4: libmaat4-4.0.16.e97adb8
 
 kni_rpm_version:
-  kni: kni-5.1.2.19d0a2b
+  kni: kni-5.1.3.7f9cd6f
 
 mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.5.6.fa28206
