@@ -117,6 +117,7 @@
    topic = "TRAFFIC-SHAPING-METRICS"
    fielddrop = ["*pkts*max", "*bytes*max", "*session*max", "*queue*max", "*latency*sum"]
    data_format = "json"
+   json_timestamp_units = "1ms" 
    json_transformation = '''
 	$merge([{"timestamp": timestamp}, tags, fields])
 	'''

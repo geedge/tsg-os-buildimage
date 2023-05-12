@@ -34,6 +34,7 @@
 {% endraw %}
    topic = "NETWORK-TRAFFIC-METRICS"
    data_format = "json"
+   json_timestamp_units = "1ms"
 [[inputs.socket_listener]]
    service_address = "udp://:8100"
    data_format = "influx"
