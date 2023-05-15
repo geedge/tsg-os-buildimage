@@ -15,5 +15,5 @@ spec:
     port: 8552
     targetPort: 8552
   selector:
-    app: traffic-engine-{{ .Release.Name }}
+    app: {{ .Release.Name }}-shaping
   type: NodePort
