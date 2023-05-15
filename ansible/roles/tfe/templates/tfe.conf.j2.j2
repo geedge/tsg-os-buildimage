@@ -244,6 +244,12 @@ full_cfg_dir=pangu_policy/full/index/
 inc_cfg_dir=pangu_policy/inc/index/
 accept_tag_key=data_center
 
+[proxy_hits]
+cycle=1000
+telegraf_port=8400
+telegraf_ip=127.0.0.1
+app_name="proxy_rule_hits"
+
 [traffic_steering]
 enable_steering_http=0
 enable_steering_ssl=0
