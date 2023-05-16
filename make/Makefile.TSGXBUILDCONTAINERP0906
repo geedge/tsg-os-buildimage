@@ -3,9 +3,9 @@ PROFILE_ID 				:= TSG-X-NXR620G40-R01-P0906
 
 PROFILE_ID_IN_SHORT		:= $(subst -,$e,$(PROFILE_ID))
 CONTAINER_IMAGES_PKG	:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-container-images.tar.bz2
+TRAFFIC_ENGINE_TAR		:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-traffic-engine.tar.gz
 
 TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
-
 
 TARGET_CONTAINER_IMAGE_TAR_DIR		:= $(TARGET_BUILD_DIR)/container_images/tar
 TOOLS_INSTALL_IMAGE_NAME_TAG		:= 8-base-tools-installed-${OS_RELEASE_VER}
@@ -48,6 +48,8 @@ all: container-tar
 
 builddir:
 	mkdir -p $(TARGET_CONTAINER_IMAGE_TAR_DIR)
+	mkdir -p /tmp/helm
+	tar -zxvf $(PROJECTDIR)/ansible/roles/traffic-engine/files/helm-linux-amd64.tar.gz  -C /tmp/helm
 
 installer: builddir
 	sed -i '/sapp-pr:/d;/tfe-pr:/d;/mrzcpd:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
@@ -156,7 +158,12 @@ container-tar: installer container-images-generate
 					$(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(BFDD_COMPONENT_NAME):$(OS_RELEASE_VER) \
 					$(CONTAINER_IMAGE_REPO_PREFIX)/tsg-$(SHAPING_COMPONENT_NAME):$(OS_RELEASE_VER)
 	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_CONTAINER_IMAGE_TAR_DIR) . | pbzip2 -p9 > $(IMAGEDIR_BASE)/$(CONTAINER_IMAGES_PKG)
-	sha256sum $(IMAGEDIR_BASE)/$(CONTAINER_IMAGES_PKG) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(CONTAINER_IMAGES_PKG).sha256sum.txt
+	/tmp/helm/linux-amd64/helm package --app-version $(OS_RELEASE_VER) --version $(HELM_CHART_VER) -d $(IMAGEDIR_BASE) $(PROJECTDIR)/ansible/roles/traffic-engine/files/helm
+	/tmp/helm/linux-amd64/helm package --app-version $(OS_RELEASE_VER) --version $(HELM_CHART_VER) -d $(IMAGEDIR_BASE) $(PROJECTDIR)/ansible/roles/k3s-exporter/files/mrzcpd/helm
+	cd $(IMAGEDIR_BASE)
+	tar -zcvf /tmp/$(TRAFFIC_ENGINE_TAR) .
+	mv /tmp/$(TRAFFIC_ENGINE_TAR) $(IMAGEDIR_BASE)
+	sha256sum $(IMAGEDIR_BASE)/$(TRAFFIC_ENGINE_TAR) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(TRAFFIC_ENGINE_TAR).sha256sum.txt
 
 clean:
 	rm -rf $(TARGET_BUILD_DIR)

@@ -12,7 +12,7 @@ if [ -n "${UPLOAD_TO_FILE_REPO}" ]; then
 		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.img
 		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.gns3a
 	elif [ "${PROFILE_LIST}" == "TSGXBUILDCONTAINERP0906" ]; then
-		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.tar.bz2
+		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.tar.gz
 	else
 		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.bin
 	fi
