@@ -17,10 +17,10 @@
 - name: "execute k3s install"
   shell: curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_SKIP_ENABLE=true INSTALL_K3S_BIN_DIR=/usr/bin sh -s - --flannel-backend=none
 
-- name: "enable k3s"
-  systemd:
-    name: k3s
-    enabled: yes
+# - name: "enable k3s"
+#   systemd:
+#     name: k3s
+#     enabled: yes
 
 - name: "kubectl bash auto-completion"
   shell: kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null

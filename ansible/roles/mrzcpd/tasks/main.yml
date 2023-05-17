@@ -188,13 +188,16 @@
   systemd:
     name: mrzcpd
     enabled: yes
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "enable prometheus output - monit_device"
   systemd:
     name: mrapm_device
     enabled: yes
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "enable prometheus output - monit_stream"
   systemd:
     name: mrapm_stream
     enabled: yes
+  when: runtime_env != 'TSG-X-P0906'

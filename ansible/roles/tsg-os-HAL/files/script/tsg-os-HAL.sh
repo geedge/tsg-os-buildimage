@@ -97,8 +97,17 @@ set_os_hugepages()
     return 0
 }
 
+set_bridge()
+{
+    ip link add br_dign_c type bridge
+    ip link add br_dign_s type bridge
+    ip link set br_dign_c up
+    ip link set br_dign_s up
+}
+
 load_tsg_os_HAL_config || set_resouce_by_HAL ${mem_num} ${cpu_core_num}
 
 set_k3s_config ${mem_num}
 set_tsg_clixon_conf
 set_os_hugepages
+set_bridge
