@@ -2,6 +2,7 @@
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
+  namespace: tsg-os-system
   name: br-dign-client
 spec:
   config: '{
@@ -24,6 +25,7 @@ spec:
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
+  namespace: tsg-os-system
   name: dign-client
   labels:
     app: dign-client

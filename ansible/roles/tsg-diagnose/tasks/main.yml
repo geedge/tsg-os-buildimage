@@ -79,3 +79,10 @@
     dest: /etc/NetworkManager/dispatcher.d/
     mode: 0755
   when: runtime_env == 'TSG-X-P0906'
+
+- name: "modify k3s command"
+  shell: sed -i 's/kubectl exec -it daemonset\/dign-client/kubectl exec -n tsg-os-system -it daemonset\/dign-client/g' {{ item }}
+  with_items:
+    - /opt/tsg/tsg-diagnose/scripts/tsg-diagnose-oneshot
+    - /opt/tsg/tsg-diagnose/scripts/tsg-diagnose-periodical
+  when: runtime_env == 'TSG-X-P0906'

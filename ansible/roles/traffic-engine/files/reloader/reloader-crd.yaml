@@ -10,4 +10,4 @@ spec:
     reloader:
       image:
         pullPolicy: Never
-    fullnameOverride: tsg-reloader
+    fullnameOverride: configmap-reloader
