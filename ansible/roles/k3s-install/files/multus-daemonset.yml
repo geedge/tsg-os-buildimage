@@ -184,6 +184,7 @@ spec:
         args:
         - "--multus-conf-file=auto"
         - "--cni-version=0.3.1"
+        - "--multus-kubeconfig-file-host=/etc/rancher/k3s/k3s.yaml"
         resources:
           requests:
             cpu: "100m"
