@@ -22,7 +22,8 @@ stages:
 .build_tsg-buildimage-p0906:
   script:
     - env | sort
-    - yum -y install pbzip2 ansible
+    - yum -y install pbzip2 python39
+    - python3.9 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple ansible
     - make DALIY_BUILD_VERSION=$DALIY_BUILD_VERSION
     - chmod +x ./tools/upload.sh
     - ./tools/upload.sh 
@@ -33,7 +34,8 @@ stages:
   script:
     - env | sort
     - yum -y remove docker-ce
-    - yum -y install pbzip2 ansible buildah podman
+    - yum -y install pbzip2 buildah podman python39
+    - python3.9 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple ansible
     - make DALIY_BUILD_VERSION=$DALIY_BUILD_VERSION
     - chmod +x ./tools/upload.sh
     - ./tools/upload.sh 
