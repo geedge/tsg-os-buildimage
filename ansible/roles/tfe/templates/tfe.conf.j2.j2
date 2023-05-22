@@ -247,11 +247,11 @@ accept_tag_key=data_center
 [proxy_hits]
 cycle=1000
 telegraf_port=8900
-{% if dp_certstore.location == 'local' %}
-cert_store_host=127.0.0.1
+{% if dp_steering_proxy.location == 'local' %}
+telegraf_ip=127.0.0.1
 {% endif %}
-{% if dp_certstore.location == 'foreign'%}
-cert_store_host=192.168.100.1
+{% if dp_steering_proxy.location == 'foreign'%}
+telegraf_ip=192.168.100.1
 {% endif %}
 app_name="proxy_rule_hits"
 
