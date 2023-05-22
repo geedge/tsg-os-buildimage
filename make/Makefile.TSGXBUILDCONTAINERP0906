@@ -160,8 +160,7 @@ container-tar: installer container-images-generate
 	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_CONTAINER_IMAGE_TAR_DIR) . | pbzip2 -p9 > $(IMAGEDIR_BASE)/$(CONTAINER_IMAGES_PKG)
 	/tmp/helm/linux-amd64/helm package --app-version $(OS_RELEASE_VER) --version $(HELM_CHART_VER) -d $(IMAGEDIR_BASE) $(PROJECTDIR)/ansible/roles/traffic-engine/files/helm
 	/tmp/helm/linux-amd64/helm package --app-version $(OS_RELEASE_VER) --version $(HELM_CHART_VER) -d $(IMAGEDIR_BASE) $(PROJECTDIR)/ansible/roles/k3s-exporter/files/mrzcpd/helm
-	cd $(IMAGEDIR_BASE)
-	tar -zcvf /tmp/$(TRAFFIC_ENGINE_TAR) .
+	tar -zcvf /tmp/$(TRAFFIC_ENGINE_TAR) -C $(IMAGEDIR_BASE) traffic-engine-$(HELM_CHART_VER).tgz exporter-mrzcpd-$(HELM_CHART_VER).tgz $(CONTAINER_IMAGES_PKG)
 	mv /tmp/$(TRAFFIC_ENGINE_TAR) $(IMAGEDIR_BASE)
 	sha256sum $(IMAGEDIR_BASE)/$(TRAFFIC_ENGINE_TAR) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(TRAFFIC_ENGINE_TAR).sha256sum.txt
 
