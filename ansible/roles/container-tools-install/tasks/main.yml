@@ -99,4 +99,15 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 
+- name: "install perl"
+  yum:
+    name: perl
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install perl-open"
+  yum:
+    name: perl-open
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
 
