@@ -69,8 +69,8 @@ sapp_rpm_version:
   sapp-pr: sapp-pr-4.3.4.00e08fa
 
 tfe_rpm_version:
-  tfe: tfe-4.8.13.fc2625c
-  tfe-pr: tfe-pr-4.8.13.fc2625c
+  tfe: tfe-4.8.16.685e4ad
+  tfe-pr: tfe-pr-4.8.16.685e4ad
 
 tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-5.0.3.cd40103
@@ -104,7 +104,7 @@ tsg_os_clixon_rpm_version:
   tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.0.38.74d6997
 
 sce_rpm_version:
-  sce: sce-1.0.11.79e71c4
+  sce: sce-1.0.12.dbfde6c
   
 bfdd_rpm_version:
   bfdd: bfdd-1.0.2-release
