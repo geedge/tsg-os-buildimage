@@ -23,6 +23,22 @@ SASL_PASSWD="galaxy2019"
 COMMON_FIELD_FILE="tsgconf/tsg_log_field.conf"
 SEND_APP_ID_SWITCH=0
 SEND_NAT_LINKINFO_SWITCH=0
+{% raw %}
+{% if sessionrecord.enable_interim_record == 1 %}
+SEND_INTERIM_RECORD=1
+{% else %}
+SEND_INTERIM_RECORD=0
+{% endif %}
+{% if sessionrecord.enable_transcation_record == 1 %}
+SEND_TRANSCATION_RECORD=1
+{% else %}
+SEND_TRANSCATION_RECORD=0
+{% endif %}
+{% endraw %}
+TCP_MIN_PKTS=3
+TCP_MIN_BYTES=5
+UDP_MIN_PKTS=3
+UDP_MIN_BYTES=5
 
 [SECURITY_HITS]
 CYCLE=1000
@@ -70,25 +86,6 @@ DEVICE_SEQ_IN_DATA_CENTER={{ session_id_generator.snowflake_worker_id_offset }}
 FEATURE_TAMPER=1
 
 [TSG_CONN_SKETCH]
-tcp_min_pkts=3
-tcp_min_bytes=5
-udp_min_pkts=3
-udp_min_bytes=5
-log_service=2
-interim_service=6
-transaction_service=7
-{% raw %}
-{% if sessionrecord.enable_interim_record == 1 %}
-interim_service_switch=1
-{% else %}
-interim_service_switch=0
-{% endif %}
-{% if sessionrecord.enable_transcation_record == 1 %}
-transaction_service_switch=1
-{% else %}
-transaction_service_switch=0
-{% endif %}
-{% endraw %}
 interim_intervals_time = 120
 sendlog_in_tcp_close=1
 send_dns_rr_switch=0

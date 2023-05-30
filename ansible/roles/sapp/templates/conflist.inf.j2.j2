@@ -42,6 +42,10 @@
 ./plug/protocol/dtls/dtls.inf
 
 [business]
+{% if firewall.enable == 1 %}
+./plug/business/firewall/firewall.inf
+./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
+{% endif %}
 {% raw %}{% if app_behavior.enable == 1 %}
 ./plug/business/tsg_vulpes/tsg_vulpes.inf
 {% endif %}
@@ -59,10 +63,6 @@
 {% endif %}
 {% if proxy.enable == 1 %}
 ./plug/business/kni/kni.inf
-{% endif %}
-{% if firewall.enable == 1 %}
-./plug/business/firewall/firewall.inf
-./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
 {% endif %}
 ./plug/business/conn_telemetry/conn_telemetry.inf
 {% if app.identify_by.user_defined_signature == 1 %}
