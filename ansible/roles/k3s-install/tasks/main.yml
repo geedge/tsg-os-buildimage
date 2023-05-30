@@ -61,12 +61,22 @@
     dest: /opt/tsg/k3s/scripts/
     mode: 0755
 
-- name: "copy crontab file to dest"
-  copy:
-    src: "{{ role_path }}/files/crontab_clean_orphaned_pods_dir"
-    dest: /var/spool/cron/root
-
 - name: "copy override service file to dest"
   copy:
     src: "{{ role_path }}/files/service_set_RuntimeMaxSec.conf"
     dest: /usr/lib/systemd/system/k3s.service.d/
+
+- name: "copy k3s-orphaned-pods-dir-clean.service to destination"
+  copy:
+    src: "{{ role_path }}/files/k3s-orphaned-pods-dir-clean.service"
+    dest: /usr/lib/systemd/system/
+
+- name: "copy k3s-orphaned-pods-dir-clean.timer to destination"
+  copy:
+    src: "{{ role_path }}/files/k3s-orphaned-pods-dir-clean.timer"
+    dest: /usr/lib/systemd/system/
+
+- name: "enable k3s-orphaned-pods-dir-clean.timer"
+  systemd:
+    name: k3s-orphaned-pods-dir-clean.timer
+    enabled: yes

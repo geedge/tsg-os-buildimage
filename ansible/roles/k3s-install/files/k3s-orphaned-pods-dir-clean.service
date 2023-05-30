@@ -1,0 +1,11 @@
+[Unit]
+Description=Cleanup K3S Orphaned Pods Dir
+DefaultDependencies=no
+Conflicts=shutdown.target
+After=local-fs.target time-sync.target
+Before=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/tsg/k3s/scripts/clean_orphaned_pods_dir.sh
+IOSchedulingClass=idle
