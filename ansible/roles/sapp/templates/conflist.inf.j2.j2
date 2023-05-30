@@ -42,11 +42,11 @@
 ./plug/protocol/dtls/dtls.inf
 
 [business]
-{% if firewall.enable == 1 %}
+{% raw %}{% if firewall.enable == 1 %}
 ./plug/business/firewall/firewall.inf
 ./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
 {% endif %}
-{% raw %}{% if app_behavior.enable == 1 %}
+{% if app_behavior.enable == 1 %}
 ./plug/business/tsg_vulpes/tsg_vulpes.inf
 {% endif %}
 {% if connsketch.enable is defined %}
