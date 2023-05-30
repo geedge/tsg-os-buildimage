@@ -111,3 +111,8 @@
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 
+- name: "install valgrind"
+  yum:
+    name: valgrind
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
