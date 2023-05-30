@@ -49,8 +49,8 @@ framework_rpm_version:
   15_libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
   16_libmaatframe: libmaatframe-3.6.20.ce715b4
 #  17_libmaatframe_tools: libmaatframe-tools-3.6.19.9c4741d
-  18_libswarmkv: libswarmkv-3.0.3.7614cf8
-  19_libswarmkv-tools: libswarmkv-tools-3.0.3.7614cf8
+  18_libswarmkv: libswarmkv-3.0.4.54252f9
+  19_libswarmkv-tools: libswarmkv-tools-3.0.4.54252f9
   20_libfieldstat3: libfieldstat3-3.0.4.d5389fb
   21_libmaat4: libmaat4-4.0.19.d70e56e
 
