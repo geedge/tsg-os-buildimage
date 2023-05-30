@@ -54,7 +54,7 @@ case $profile_id in
         base_package_to_install="@base @core @debugging @directory-client @guest-agents
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management
                     grub2 epel-release efibootmgr ansible yum-utils ipmitool docker-ce docker-ce-cli
-                    containerd.io lrzsz python3 vconfig watchdog pcm git tmux fish"
+                    containerd.io lrzsz python3 vconfig watchdog pcm git tmux fish rpm-build"
         ;;
     *)
         base_package_to_install="error_profile_id"

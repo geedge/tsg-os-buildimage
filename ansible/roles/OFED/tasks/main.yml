@@ -1,12 +1,12 @@
 ---
-- name: "copy OFED installer package to to destination server"
+- name: "copy MFT installer package to to destination server"
   copy:
     src: "{{ role_path }}/files/"
-    dest: "/tmp/OFED/"
+    dest: "/tmp/mft/"
 
 - name: "create unarchive directory"
   file:
-    path: "/tmp/OFED/unarchived"
+    path: "/tmp/mft/unarchived"
     state: directory
 
 - name: "Backup and Replace the uname tools"
@@ -16,53 +16,55 @@
     mode: "{{ item.mode }}"
     remote_src: yes
   with_items:
-    - { src: "/usr/bin/uname" , dest: "/usr/bin/uname-bak" , mode: "0755" }
-    - { src: "/tmp/OFED/uname" , dest: "/usr/bin/uname" , mode: "0755" }
+    - { src: "/usr/bin/uname" , dest: "/usr/bin/uname-backup" , mode: "0755" }
+    - { src: "/tmp/mft/uname" , dest: "/usr/bin/uname" , mode: "0755" }
 
-######TSG-X-P0804 install start######
-- name: "unarchive OFED installer"
+- name: "change kernel version for uname"
+  shell: sed -i -e 's/KERNEL_VERSION/5.17.15-1.el8/' /usr/bin/uname
+  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+
+- name: "change kernel version for uname"
+  shell: sed -i -e 's/KERNEL_VERSION/3.10.0-1160.59.1.el7/' /usr/bin/uname
+  when: runtime_env == 'TSG-X-P1403'
+
+- name: "create kernel directory"
+  file:
+    path: "/lib/modules/3.10.0-1160.59.1.el7.x86_64"
+    state: directory
+  when: runtime_env == 'TSG-X-P1403'
+
+- name: "ln kernel for el7"
+  shell: ln -vfs --relative  /usr/src/kernels/3.10.0-1160.59.1.el7.x86_64/ /lib/modules/3.10.0-1160.59.1.el7.x86_64/build
+  when: runtime_env == 'TSG-X-P1403'
+
+###### TSG-X-P0804 TSG-X-P0906 ofed install start ######
+- name: "install rpm packages: ofed"
+  yum:
+    name: "mlnx-ofed-all-5.17.15-1.el8-v1.0.0-20221206.noarch"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+############ end ############
+
+###### TSG-X-P1403 ofed install start ######
+- name: "install rpm packages: ofed"
+  yum:
+    name: "mlnx-ofed-all-3.10.0-1160.59.1.el7-v1.0.0-20221206.noarch"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+  when: runtime_env == 'TSG-X-P1403'
+############ end ############
+
+###### MFT install start ######
+- name: "unarchive mft RPM"
   unarchive:
-    src: /tmp/OFED/MLNX_OFED_SRC-5.8-1.0.1.1.tgz
-    dest: /tmp/OFED/unarchived/
+    src: /tmp/mft/mft-4.20.0-34-x86_64-rpm.tgz
+    dest: /tmp/mft/unarchived/
     remote_src: yes
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
-
-- name: "Get linux kernel file path"
-  shell: uname -r
-  register: obtain_kernel_version
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
-
-- name: "execute OFED installer"
-  shell: /tmp/OFED/unarchived/MLNX_OFED_SRC-5.8-1.0.1.1/install.pl -k {{obtain_kernel_version.stdout}}  --all --force
-  environment:
-    MAKEFLAGS :
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
-
-- name: "unarchive MFT RPM"
-  unarchive:
-    src: /tmp/OFED/mft-4.20.0-34-x86_64-rpm.tgz
-    dest: /tmp/OFED/unarchived/
-    remote_src: yes
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
 
 - name: "execute MFT installer"
-  shell: /tmp/OFED/unarchived/mft-4.20.0-34-x86_64-rpm/install.sh
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
-
-######TSG-X-P0804 install end ######
-
-######TSG-X-P1403 install start######
-- name: "unarchive OFED installer"
-  unarchive:
-    src: /tmp/OFED/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel7.9-x86_64-ext.tgz
-    dest: /tmp/OFED/unarchived/
-    remote_src: yes
-  when: runtime_env == 'TSG-X-P1403'
-
-- name: "execute OFED installer"
-  shell: /tmp/OFED/unarchived/MLNX_OFED_LINUX-5.5-1.0.3.2-rhel7.9-x86_64-ext/mlnxofedinstall --add-kernel-support --kernel 3.10.0-1160.59.1.el7.x86_64 --force --without-depcheck
-  when: runtime_env == 'TSG-X-P1403'
-######TSG-X-P1403 install end ######
+  shell: /tmp/mft/unarchived/mft-4.20.0-34-x86_64-rpm/install.sh
+############ end ############
 
 - name: "enable auto update firmware on boot"
   replace:
@@ -72,7 +74,7 @@
 
 - name: "Restore the uname tools"
   copy:
-    src: "/usr/bin/uname-bak"
+    src: "/usr/bin/uname-backup"
     dest: "/usr/bin/uname"
     mode: "0755"
     remote_src: yes
