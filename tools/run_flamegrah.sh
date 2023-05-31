@@ -57,13 +57,6 @@ rm -rf perf.svg
 
 printf "\e[32m Convert data to flame graph\e[0m\n"
 
-# 用 perf script 工具对 perf.data 进行解析
-perf script -i perf.data &> perf.unfold
-
-# 将 perf.unfold 中的符号进行折叠
-./FlameGraph/stackcollapse-perf.pl perf.unfold &> perf.folded
-
-# 生成 svg 图
-./FlameGraph/flamegraph.pl perf.folded > perf.svg
+perf script | /opt/tsg/tools/FlameGraph/stackcollapse-perf.pl | /opt/tsg/tools/FlameGraph/flamegraph.pl >perf.svg
 
 # 使用浏览器查看 perf.svg, 在浏览器中使用 Ctrl + F 进行关键字搜索

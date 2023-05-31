@@ -75,10 +75,10 @@ yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $append
 #fi
 #git clone --depth 1 https://github.com/brendangregg/FlameGraph.git /opt/tools/FlameGraph/
 #git clone --depth 1 https://github.com/brendangregg/perf-tools.git /opt/tools/perf-tools/
-test -d "$target"/opt/tools/ || mkdir -p "$target"/opt/tools/
-tar -zxf $projectdir/tools/FlameGraph.tar.gz -C "$target"/opt/tools/
-tar -zxf $projectdir/tools/perf-tools.tar.gz -C "$target"/opt/tools/
-cp $projectdir/tools/run_flamegrah.sh "$target"/opt/tools/
+test -d "$target"/opt/tsg/tools/ || mkdir -p "$target"/opt/tsg/tools/
+tar -zxf $projectdir/tools/FlameGraph.tar.gz -C "$target"/opt/tsg/tools/
+tar -zxf $projectdir/tools/perf-tools.tar.gz -C "$target"/opt/tsg/tools/
+cp $projectdir/tools/run_flamegrah.sh "$target"/opt/tsg/tools/
 
 cat > "$target"/etc/sysconfig/network <<EOF
 NETWORKING=yes
