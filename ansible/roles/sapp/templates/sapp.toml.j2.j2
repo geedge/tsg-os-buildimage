@@ -193,7 +193,7 @@ dictator_enable=0
         enabled=1
 ### note, if "file_truncate_open_enabled=1", file will be truncated, otherwise open the file for appending.	 
         file_truncate_enabled = 1
-        #log_file_name = "fs2_sysinfo.log"
+        #log_file_name = "log/fs2_sysinfo.log"
         #log_conf_name = "etc/sapp_log.conf"
         [profiling.log.remote]
         enabled=0
@@ -282,9 +282,9 @@ dictator_enable=0
 	cfg_file_well_known_port="etc/well_known_port.conf"
 	
 [SECONDARY_DATA_LINK]
-    data_file_sysinfo_log="sysinfo.log"
-    data_file_field_stat_log="fs2_sysinfo.log"
-    data_file_inline_keepalive_log="gdev_keeplive_status.log"
+    data_file_sysinfo_log="log/sysinfo.log"
+    data_file_field_stat_log="log/fs2_sysinfo.log"
+    data_file_inline_keepalive_log="log/gdev_keeplive_status.log"
 
 [LIBRARY_LINK]	 
     marsio_library_path="{{ prefix_path.mrzcpd }}/lib/libmarsio.so"	

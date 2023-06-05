@@ -4,7 +4,7 @@ MAAT_MODE=redis
 STAT_SWITCH=1
 PERF_SWITCH=1
 TABLE_INFO=tsgconf/tsg_static_tableinfo.json
-STAT_FILE=tsg_static_maat.status
+STAT_FILE=log/master.maat.status
 EFFECT_INTERVAL_S=1
 REDIS_IP={% raw %}{{ cm_policy_server_ip }}
 {% endraw %}
@@ -24,7 +24,7 @@ MAAT_MODE=redis
 STAT_SWITCH=1
 PERF_SWITCH=1
 TABLE_INFO=tsgconf/app_sketch_tableinfo.json
-STAT_FILE=app_sketch_maat.status
+STAT_FILE=log/app_sketch.maat.status
 EFFECT_INTERVAL_S=1
 REDIS_IP={% raw %}{{ cm_policy_server_ip }}
 {% endraw %}
@@ -43,7 +43,7 @@ MAAT_MODE=2
 STAT_SWITCH=1
 PERF_SWITCH=1
 TABLE_INFO=tsgconf/capture_packet_tableinfo.json
-STAT_FILE=capture_packet.status
+STAT_FILE=log/capture_packet.maat.status
 EFFECT_INTERVAL_S=1
 REDIS_IP={% raw %}{{ cm_policy_server_ip }}
 {% endraw %}

@@ -50,7 +50,7 @@ APP_NAME="security_rule_hits"
 CYCLE=5
 TELEGRAF_PORT=8100
 TELEGRAF_IP="127.0.0.1"
-OUTPUT_PATH="./tsg_statistic.log"
+OUTPUT_PATH="log/master.metrics"
 APP_NAME="statistic"
 
 [APP_METRIC]
@@ -63,7 +63,7 @@ APP_NAME="app_metric"
 CYCLE=5
 TELEGRAF_PORT=8100
 TELEGRAF_IP="127.0.0.1"
-OUTPUT_PATH="./tsg_stat.log"
+OUTPUT_PATH="log/master.status"
 APP_NAME="tsg_master"
 
 [SYSTEM]
@@ -176,7 +176,7 @@ DEVICE_TAGS={"tags":[{{ tags_list | join(",") }}]}
 PACKET_TYPE_FLAG=16
 COLLECT_TOPIC="RADIUS-RECORD"
 SERVICE_ID=162
-LOG_PATH="./log/radius_collect_plug/radius_collect_plug"
+LOG_PATH="log/radius_collect_plug/radius_collect_plug"
 LOG_LEVEL=30
 
 [GTP_SIGNALING]
