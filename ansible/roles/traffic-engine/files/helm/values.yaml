@@ -126,7 +126,9 @@ tfe_rps_mask: "00000000"
 
 nic_policy_log_name: eth0
 nic_raw_name: eth0
-nic_mirror_name: eth0
+nic_mirror_name: 
+  firewall: eth0
+  proxy: eth0
 
 define_enable_val_yes: yes
 define_enable_val_no: no
@@ -188,6 +190,7 @@ shaping_config:
   shaping_nic: nf_1_shaping_engine
 
 app_symbol_index: 1
+distmode: 2
 
 debug:
   firewall:
