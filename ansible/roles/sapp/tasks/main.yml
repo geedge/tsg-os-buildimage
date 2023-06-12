@@ -17,6 +17,12 @@
     - /opt/tsg/sapp
     - /opt/tsg/framework
 
+- name: "install rpm packages: jemalloc"
+  yum:
+    name: "jemalloc"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
 - name: "Install sapp rpm package"
   shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ prefix_path.sapp }}
   when: item.key is search("sapp")
