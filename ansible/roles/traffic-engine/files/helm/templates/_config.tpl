@@ -50,6 +50,10 @@ enable_breakpad_upload=0
 {{- len .Values.shaping_affinity }}
 {{- end -}}
 
+{{- define "traffic-engine.pktio.workerthread" -}}
+{{- len .Values.pktio_affinity }}
+{{- end -}}
+
 {{- define "traffic-engine.tfe.cpu-affinity" -}}
 {{- if eq (len .Values.tfe_affinity) 1 }}
 {{- print (index .Values.tfe_affinity 0) "," (index .Values.tfe_affinity 0) }}
@@ -64,6 +68,10 @@ enable_breakpad_upload=0
 
 {{- define "traffic-engine.shaping.cpu-affinity" -}}
 {{- join "," .Values.shaping_affinity }}
+{{- end -}}
+
+{{- define "traffic-engine.pktio.cpu-affinity" -}}
+{{- join "," .Values.pktio_affinity }}
 {{- end -}}
 
 {{- define "traffic-engine.device-tag-list" -}}
