@@ -471,3 +471,15 @@ enable_breakpad_upload=0
           mountPath: /etc/localtime
           readOnly: true
 {{- end -}}
+
+{{- define "traffic-engine.volume.dev-bus-usb" -}}
+      - name: dev-bus-usb-node
+        hostPath:
+          path: /dev/bus/usb
+{{- end -}}
+
+{{- define "traffic-engine.mount.dev-bus-usb" -}}
+        - name: dev-bus-usb-node
+          mountPath: /dev/bus/usb
+          readOnly: true
+{{- end -}}

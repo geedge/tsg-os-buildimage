@@ -86,6 +86,7 @@ spec:
         {{ template "traffic-engine.mount.localtime" . }}
         {{ template "traffic-engine.proxy.mount.prestart" . }}
         {{ template "traffic-engine.proxy.mount.hostpath" . }}
+        {{ template "traffic-engine.mount.dev-bus-usb" . }}
 
       - name: certstore
         image: "registry.gdnt-cloud.website/tsg-certstore:{{ .Chart.AppVersion }}"
@@ -263,5 +264,6 @@ spec:
       {{ template "traffic-engine.volume.localtime" . }}
       {{ template "traffic-engine.proxy.volume.prestart" . }}
       {{ template "traffic-engine.volume.hostpath" . }}
+      {{ template "traffic-engine.volume.dev-bus-usb" . }}
 
 {{- end }}
