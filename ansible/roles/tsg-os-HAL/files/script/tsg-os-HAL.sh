@@ -33,16 +33,16 @@ set_k3s_config()
     local mem_num="$1"
 
     if [ $mem_num -le "32768" ]; then
-        kube_reserved="512Mi"
-        system_reserved="512Mi"
+        kube_reserved="2Gi"
+        system_reserved="12Gi"
         eviction_hard="64Mi"
     elif [ $mem_num -le "65536" ]; then
-        kube_reserved="1Gi"
-        system_reserved="1Gi"
+        kube_reserved="2Gi"
+        system_reserved="16Gi"
         eviction_hard="1Gi"
     else
         kube_reserved="2Gi"
-        system_reserved="2Gi"
+        system_reserved="32Gi"
         eviction_hard="2Gi"
     fi
 
