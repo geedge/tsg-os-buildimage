@@ -3,10 +3,10 @@
     src: '{{ role_path }}/files/aksusbd-8.23-1.x86_64.rpm'
     dest: /tmp/ansible_deploy/
 
-- name: "download rpm packages: hasp_update"
+- name: "download rpm packages: hasp_tools"
   yum:
     name:
-      - "{{ hasp_update_rpm_version.hasp_update }}"
+      - "{{ hasp_tools_rpm_version.hasp_tools }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
     download_only: yes
@@ -19,15 +19,15 @@
     state: present
     disable_gpg_check: yes
 
-- name: "Get hasp_update rpm path"
+- name: "Get hasp_tools rpm path"
   find:
     path: /tmp/rpm_download/
-    pattern: "{{ hasp_update_rpm_version.hasp_update }}*"
-  register: hasp_update_rpm_fullname
+    pattern: "{{ hasp_tools_rpm_version.hasp_tools }}*"
+  register: hasp_tools_rpm_fullname
 
-- name: "Install hasp_update from local path" 
+- name: "Install hasp_tools from local path" 
   yum:
-    name: "{{ hasp_update_rpm_fullname.files[0].path }}" 
+    name: "{{ hasp_tools_rpm_fullname.files[0].path }}" 
     state: present
     disable_gpg_check: yes
 

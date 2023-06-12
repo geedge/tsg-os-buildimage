@@ -77,8 +77,8 @@
     state: absent
   with_dict: "{{ wire_graft_rpm_version }}"
 
-- name: "uninstall hasp_update"
+- name: "uninstall hasp_tools"
   yum:
     name: "{{ item.key }}"
     state: absent
-  with_dict: "{{ hasp_update_rpm_version }}"
+  with_dict: "{{ hasp_tools_rpm_version }}"
