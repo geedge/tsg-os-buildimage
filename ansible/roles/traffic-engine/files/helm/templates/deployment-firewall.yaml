@@ -22,7 +22,7 @@ spec:
         vsysId: "{{ .Values.vsys_id }}"
         serviceFunction: {{ .Release.Name }}
       annotations:
-        prometheus.io/port: "9004"
+        prometheus.io/port: "9273"
         prometheus.io/scrape: "true"
 
     spec:
