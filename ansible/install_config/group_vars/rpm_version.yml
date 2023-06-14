@@ -52,7 +52,7 @@ framework_rpm_version:
   18_libswarmkv: libswarmkv-3.0.6.4165cac
   19_libswarmkv-tools: libswarmkv-tools-3.0.6.4165cac
   20_libfieldstat3: libfieldstat3-3.0.7.910c161
-  21_libmaat4: libmaat4-4.0.24.d48a6e2
+  21_libmaat4: libmaat4-4.0.25.5a18084
 
 kni_rpm_version:
   kni: kni-5.1.6.50fcd56
