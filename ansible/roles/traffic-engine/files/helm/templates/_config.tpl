@@ -483,3 +483,62 @@ enable_breakpad_upload=0
           mountPath: /dev/bus/usb
           readOnly: true
 {{- end -}}
+
+{{- define "traffic-engine.global.cm.server-ip" -}}
+{{- if eq .Values.external_resources.cm.connectivity "direct" }}
+{{- print .Values.external_resources.cm.direct.address }}
+{{- else }}
+{{- print "CM_POLICY_LOCAL_CACHE_IP_LOCATION" }}
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.global.cm.server-port" -}}
+{{- if eq .Values.external_resources.cm.connectivity "direct" }}
+{{- print .Values.external_resources.cm.direct.port }}
+{{- else }}
+{{- print "6379" }}
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.global.cm.read-server-ip" -}}
+{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
+            export APISERVER=https://kubernetes.default.svc
+            export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+            export TOKEN=$(cat ${SERVICEACCOUNT}/token)
+            export CACERT=${SERVICEACCOUNT}/ca.crt
+            curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/${CM_CACHE_SERVICE_NAME} -o /tmp/cm-cache.txt
+            export CM_POLICY_LOCAL_CACHE_IP=$(cat /tmp/cm-cache.txt  | jq -r '.spec.clusterIP')
+            echo "export CM_POLICY_LOCAL_CACHE_IP=${CM_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/announceinfo.sh
+            chmod 0755 /etc/profile.d/announceinfo.sh
+{{- end }}
+{{- end -}}
+
+
+{{- define "traffic-engine.global.cm.env-service-name" -}}
+{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
+        - name: CM_CACHE_SERVICE_NAME
+          value: {{ .Values.external_resources.cm.local_cache.cache_name }}-redis-master
+{{- end }}
+{{- end -}}
+
+
+{{- define "traffic-engine.firewall.set-redis-ip" -}}
+            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
+            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/etc/wannat/wangw.conf
+{{- end -}}
+
+{{- define "traffic-engine.proxy.certstore.set-redis-ip" -}}
+            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/certstore/conf/cert_store.ini
+{{- end -}}
+
+{{- define "traffic-engine.proxy.tfe.set-redis-ip" -}}
+            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/tfe/conf/tfe/tfe.conf
+{{- end -}}
+
+{{- define "traffic-engine.sce.set-redis-ip" -}}
+            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sce/conf/sce.conf
+{{- end -}}
+
+{{- define "traffic-engine.shaping.set-redis-ip" -}}
+            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
+{{- end -}}

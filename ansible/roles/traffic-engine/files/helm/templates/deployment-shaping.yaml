@@ -45,6 +45,8 @@ spec:
           - |
             ldconfig
             {{ template "traffic-engine.shaping.copy-config-to-dest" . }}
+            {{ template "traffic-engine.global.cm.read-server-ip" . }}
+            {{ template "traffic-engine.shaping.set-redis-ip" . }}
             {{ template "traffic-engine.shaping.get-service-node-port" . }}
             {{ template "traffic-engine.shaping.set-shaping-config" . }}
             {{ template "traffic-engine.shaping.prestart" . }}
@@ -68,6 +70,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        {{ template "traffic-engine.global.cm.env-service-name" . }}
 {{- if eq .Values.debug.shaping.enable_liveness_probe .Values.define_enable_val_yes }}
         livenessProbe:
           tcpSocket:

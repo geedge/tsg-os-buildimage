@@ -45,6 +45,8 @@ spec:
           - |
             ldconfig
             {{ template "traffic-engine.proxy.copy-config-to-dest" . }}
+            {{ template "traffic-engine.global.cm.read-server-ip" . }}
+            {{ template "traffic-engine.proxy.tfe.set-redis-ip" . }}
             {{ template "traffic-engine.proxy.prestart" . }}
             {{ template "traffic-engine.proxy.start" . }}
         ports:
@@ -58,6 +60,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        {{ template "traffic-engine.global.cm.env-service-name" . }}
         securityContext:
           privileged: true
 {{- if eq .Values.debug.proxy.enable_liveness_probe .Values.define_enable_val_yes }}
@@ -97,12 +100,20 @@ spec:
           - "-ec"
           - |
             {{ template "traffic-engine.certstore.copy-config-to-dest" . }}
+            {{ template "traffic-engine.global.cm.read-server-ip" . }}
+            {{ template "traffic-engine.proxy.certstore.set-redis-ip" . }}
             {{ template "traffic-engine.certstore.prestart" . }}
             exec /opt/tsg/certstore/bin/certstore
         securityContext:
           privileged: true
         ports:
           - containerPort: 9002
+        env:
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        {{ template "traffic-engine.global.cm.env-service-name" . }}
         volumeMounts:
         {{ template "traffic-engine.mount.localtime" . }}
         - name: certstore

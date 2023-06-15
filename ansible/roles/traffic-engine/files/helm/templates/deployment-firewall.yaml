@@ -44,6 +44,8 @@ spec:
           - |
             ldconfig
             {{ template "traffic-engine.firewall.copy-config-to-dest" . }}
+            {{ template "traffic-engine.global.cm.read-server-ip" . }}
+            {{ template "traffic-engine.firewall.set-redis-ip" . }}
             {{ template "traffic-engine.firewall.prestart" . }}
             {{ template "traffic-engine.firewall.start" . }}
         ports:
@@ -61,6 +63,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        {{ template "traffic-engine.global.cm.env-service-name" . }}
         securityContext:
           privileged: true
 {{- if eq .Values.debug.firewall.enable_liveness_probe .Values.define_enable_val_yes }}

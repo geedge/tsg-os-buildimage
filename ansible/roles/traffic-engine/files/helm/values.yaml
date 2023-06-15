@@ -1,7 +1,13 @@
 external_resources:
   cm:
-    address: 10.X.X.X
-    port: 7002
+    ## @param external_resources.cm.connection value in [direct, local_cache], default: direct
+    ##
+    connectivity: direct
+    direct:
+      address: 10.X.X.X
+      port: 7002
+    local_cache:
+      cache_name: tsg_traffic_cm_local_cache_1
     port_num: 1
 
   olap:
