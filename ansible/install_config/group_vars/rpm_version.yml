@@ -59,7 +59,10 @@ kni_rpm_version:
 
 mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.5.6.fa28206
-  mrzcpd-0906: mrzcpd-4.6.26.12d7aa1
+  mrzcpd-icelake-server: mrzcpd-icelake-server-4.6.25.60eddce
+  mrzcpd-znver1: mrzcpd-znver1-4.6.25.60eddce
+  mrzcpd-corei7: mrzcpd-corei7-4.6.25.60eddce
+
 
 
 sapp_rpm_version:

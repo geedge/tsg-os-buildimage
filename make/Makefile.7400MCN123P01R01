@@ -37,7 +37,7 @@ installer: builddir
 	sed -i -e "s/%%SIZE_PART_SYSROOT%%/$(SIZE_PART_SYSROOT)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%SIZE_PART_UPDATE%%/$(SIZE_PART_UPDATE)/" $(TARGET_INSTALLER_DIR)/install.sh
 
-	sed -i '/tfe-pr:/d;/mrzcpd-0906:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
+	sed -i '/tfe-pr:/d;/mrzcpd-icelake-server:/d;/mrzcpd-znver1:/d;/mrzcpd-corei7:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
 
 sysroot-base: builddir
 	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum-CentOS-7.conf $(TARGET_SYSROOT_DIR) $(PROJECTDIR) $(PROFILE_ID)

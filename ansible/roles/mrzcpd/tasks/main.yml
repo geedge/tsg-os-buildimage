@@ -8,6 +8,10 @@
     download_dir: "{{ path_download }}"
   with_dict: "{{ mrzcpd_rpm_version }}"
 
+- name: "Install python module"
+  shell: pip2 install PrettyTable==0.7.2
+  when: runtime_env == 'TSG-X-P0906'
+
 - name: "Install mrzcpd rpm package"
   shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ prefix_path.mrzcpd }}
   with_dict: "{{ mrzcpd_rpm_version }}"
@@ -50,8 +54,8 @@
     regexp: '/opt/mrzcpd'
     replace: '{{ prefix_path.mrzcpd }}'
   with_items:
-    - /usr/lib/systemd/system/mrzcpd-hugepages-setup.service
-    - /usr/lib/systemd/system/mrzcpd-hwdb-setup.service
+    - /usr/lib/systemd/system/mrzcpd_hugepages_setup.service
+    - /usr/lib/systemd/system/mrzcpd_hwdb_setup.service
   when: runtime_env == 'TSG-X-P0906'
 
 - name: "replace action: replace Requires to Wants"
@@ -171,16 +175,16 @@
     enabled: yes
   when: runtime_env != 'TSG-X-P0906'
 
-- name: "enable mrzcpd-hugepages-setup"
+- name: "enable mrzcpd_hugepages_setup"
   systemd:
-    name: mrzcpd-hugepages-setup
+    name: mrzcpd_hugepages_setup
     enabled: yes
   when: runtime_env == 'TSG-X-P0906'
 
 
-- name: "enable mrzcpd-hwdb-setup"
+- name: "enable mrzcpd_hwdb_setup"
   systemd:
-    name: mrzcpd-hwdb-setup
+    name: mrzcpd_hwdb_setup
     enabled: yes
   when: runtime_env == 'TSG-X-P0906'
 
