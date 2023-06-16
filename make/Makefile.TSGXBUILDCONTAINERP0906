@@ -55,7 +55,7 @@ installer: builddir
 	sed -i '/sapp-pr:/d;/tfe-pr:/d;/mrzcpd:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
 
 container-images-generate: builddir
-	buildah pull rockylinux:8
+	podman load < $(PROJECTDIR)/package/rockylinux8.tar
 	buildah from --name $(TOOLS_INSTALL_CONTAINER_NAME) rockylinux:8
 	buildah copy $(TOOLS_INSTALL_CONTAINER_NAME) $(CONFDIR)/yum-RockyLinux-8.conf /tmp/
 	buildah copy $(TOOLS_INSTALL_CONTAINER_NAME) /etc/hosts /tmp/
