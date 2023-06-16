@@ -1,0 +1,4 @@
+- name: "copy sosreport tty script file to dest"
+  copy:
+    src: '{{ role_path }}/files/tty.py'
+    dest: /usr/lib/python3.6/site-packages/sos/report/plugins/tty.py
