@@ -170,6 +170,7 @@
     - {role: consul, tags: consul}
     - {role: hasp, tags: hasp}
     - {role: OFED, tags: OFED}
+    - {role: sosreport, tags: sosreport}
 
 - hosts: TSG-X-NXR620G40-R01-P0906-init
   remote_user: root
