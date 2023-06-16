@@ -42,6 +42,7 @@
     - prometheus-node-exporter.tar
     - prometheus-pushgateway.tar
     - prometheus.tar
+    - kube-state-metrics.tar
 
 - name: "copy chart directory to dest"
   copy:

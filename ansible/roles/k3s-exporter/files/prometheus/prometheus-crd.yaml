@@ -7,6 +7,9 @@ spec:
   chart: https://%{KUBERNETES_API}%/static/charts/prometheus-15.16.1.tgz
   targetNamespace: tsg-os-system
   valuesContent: |-
+    kube-state-metrics:
+      image:
+        pullPolicy: Never
     server:
       image:
         pullPolicy: Never
