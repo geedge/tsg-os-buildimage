@@ -531,22 +531,32 @@ enable_breakpad_upload=0
 
 
 {{- define "traffic-engine.firewall.set-redis-ip" -}}
+{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/etc/wannat/wangw.conf
+{{- end }}
 {{- end -}}
 
 {{- define "traffic-engine.proxy.certstore.set-redis-ip" -}}
+{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/certstore/conf/cert_store.ini
+{{- end }}
 {{- end -}}
 
 {{- define "traffic-engine.proxy.tfe.set-redis-ip" -}}
+{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/tfe/conf/tfe/tfe.conf
+{{- end }}
 {{- end -}}
 
 {{- define "traffic-engine.sce.set-redis-ip" -}}
+{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sce/conf/sce.conf
+{{- end }}
 {{- end -}}
 
 {{- define "traffic-engine.shaping.set-redis-ip" -}}
+{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
+{{- end }}
 {{- end -}}

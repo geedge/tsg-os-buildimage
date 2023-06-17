@@ -2,6 +2,51 @@
 
 set -x
 
+write_devices_conf()
+{
+(cat <<EOF1
+[device]
+rxcore_enable=1
+device=$1
+
+EOF1
+) >> $2
+}
+
+write_device_rxcore_conf()
+{
+(cat <<EOF1
+[device:$1]
+rx_cores=$2
+
+EOF1
+) >> $3
+}
+
+del_device_rxcore_conf()
+{
+    sed -i '/^\[device.*\]/,/^$/d' ${tsg_clixon_cfg_file}
+}
+
+set_mrzcpd_rx_core()
+{
+    local devices
+    local str_device
+
+    del_device_rxcore_conf
+
+    devices=$(lshw -c network -businfo | grep network | awk '{print $2}')
+    for device in $devices
+    do
+        businfo=$(ethtool -i $device | grep "bus-info:"| awk '{print $2}')
+        numa_node=$(lspci -s $businfo -vv | grep "NUMA node:" | awk '{print $3}')
+        write_device_rxcore_conf $device ${mrzcpd_rx_core[$numa_node]} ${tsg_clixon_cfg_file}
+        str_device=$str_device","$device
+    done
+    str_device=${str_device#*,}
+    write_devices_conf $str_device ${tsg_clixon_cfg_file}
+}
+
 allocate_cpu()
 {
     local numa_node_min=0
@@ -51,9 +96,12 @@ allocate_cpu()
         numa_list=$(numactl --hardware | grep "node $i cpus: " | sed -r "s/node $i cpus: //g")
         mrzcpd_core=$(echo $numa_list | cut -d ' ' -f $mrzcpd_start-$mrzcpd_end | tr ' ' ',')
         MRZCPD_IOCORE=$MRZCPD_IOCORE","$mrzcpd_core
+        mrzcpd_rx_core+=($mrzcpd_core)
         clixon_core=$(echo $numa_list | cut -d ' ' -f $clixon_start- | tr ' ' ',')
         CLIXON_IOCORE=$CLIXON_IOCORE","$clixon_core
     done
     MRZCPD_IOCORE=${MRZCPD_IOCORE#*,}
     CLIXON_IOCORE=${CLIXON_IOCORE#*,}
+
+    set_mrzcpd_rx_core
 }
