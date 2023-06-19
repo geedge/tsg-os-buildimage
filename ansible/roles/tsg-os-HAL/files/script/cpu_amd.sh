@@ -85,6 +85,10 @@ allocate_cpu()
         mrzcpd_start=3
         mrzcpd_end=4
         clixon_start=5
+    elif [ $numa_cpu_cnt_min -le 32 ]; then
+        mrzcpd_start=5
+        mrzcpd_end=8
+        clixon_start=9
     else
         mrzcpd_start=5
         mrzcpd_end=12

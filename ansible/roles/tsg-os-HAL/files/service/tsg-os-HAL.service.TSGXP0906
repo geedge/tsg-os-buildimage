@@ -1,6 +1,6 @@
 [Unit]
 Description=Tsg os HAL
-Before=mrenv.service
+Before=tsg-clixon-backend.service
 
 [Service]
 ExecStart=/bin/sh -c "/opt/tsg/tsg-os-HAL/scripts/tsg-os-HAL.sh"
