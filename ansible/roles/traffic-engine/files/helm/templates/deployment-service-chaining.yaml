@@ -35,24 +35,6 @@ spec:
         operator: Exists
         effect: NoSchedule
       containers:
-      - name: telegraf-sce
-        image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
-        imagePullPolicy: Never
-        command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_sce.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - name: telegraf
-          mountPath: "/etc/telegraf/telegraf_sce.conf"
-          subPath: "telegraf_sce.conf"
-        - name: config-volume
-          mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "opt/tsg/etc/tsg_sn.json"
-        - name: config-volume
-          mountPath: "/etc/default/telegraf"
-          subPath: "etc/default/telegraf"
-        {{ template "traffic-engine.mount.localtime" . }}
-
       - name: sce
         image: "registry.gdnt-cloud.website/tsg-sce:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
@@ -143,6 +125,24 @@ spec:
           mountPath: /etc/traffic-engine/hotfix/bfdd
         - name: bfdd-unix-socket
           mountPath: /run/frr
+        {{ template "traffic-engine.mount.localtime" . }}
+
+      - name: telegraf-sce
+        image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_sce.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: telegraf
+          mountPath: "/etc/telegraf/telegraf_sce.conf"
+          subPath: "telegraf_sce.conf"
+        - name: config-volume
+          mountPath: "/opt/tsg/etc/tsg_sn.json"
+          subPath: "opt/tsg/etc/tsg_sn.json"
+        - name: config-volume
+          mountPath: "/etc/default/telegraf"
+          subPath: "etc/default/telegraf"
         {{ template "traffic-engine.mount.localtime" . }}
 
       initContainers:
