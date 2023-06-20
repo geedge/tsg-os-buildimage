@@ -121,6 +121,17 @@ else
     echo "$k3s_manifests_dir is not exist"
 fi
 
+# copy mrzcpd alternatives file to dest
+mrzcpd_alternatives_dir="/var/lib/alternatives"
+
+if [ -d "$mrzcpd_alternatives_dir" ]; then
+    echo "$mrzcpd_alternatives_dir is exist"
+    rm -rf /data$mrzcpd_alternatives_dir
+    mkdir -p /data$mrzcpd_alternatives_dir
+    cp -a $mrzcpd_alternatives_dir/* /data$mrzcpd_alternatives_dir
+else
+    echo "$mrzcpd_alternatives_dir is not exist"
+fi
 
 # Setup o/s mount points
 (cat <<EOF2
