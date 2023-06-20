@@ -179,7 +179,6 @@
     - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
     - install_config/group_vars/rpm_version.yml
   roles:
-    - {role: container-tools-install, tags: container-tools-install}
     - {role: tsg_sn, tags: tsg_sn}
 
 - hosts: TSG-X-NXR620G40-R01-P0906-firewall

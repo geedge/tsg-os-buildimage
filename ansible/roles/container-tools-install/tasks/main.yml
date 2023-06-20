@@ -116,3 +116,12 @@
     name: valgrind
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+
+- name: "install python2"
+  yum:
+    name: python2
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "Install python module"
+  shell: pip2 install PrettyTable==0.7.2
