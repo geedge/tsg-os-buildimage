@@ -1,0 +1,4 @@
+- name: "nm-config: copy file to target"
+  copy:
+    src: '{{ role_path }}/files/01-add-no-auto-default.conf'
+    dest: /usr/lib/NetworkManager/conf.d
