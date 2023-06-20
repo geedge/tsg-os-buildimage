@@ -5,7 +5,7 @@ metadata:
   name: {{ .Release.Name }}-proxy
   labels:
     app: {{ .Release.Name }}
-    component: firewall
+    component: proxy
   annotations:
     reloader.stakater.com/auto: "true"
 
@@ -22,6 +22,7 @@ spec:
         app: {{ .Release.Name }}-proxy
         vsysId: "{{ .Values.vsys_id }}"
         serviceFunction: {{ .Release.Name }}
+        component: proxy
       annotations:
         prometheus.io/port: "9001"
         prometheus.io/scrape: "true"

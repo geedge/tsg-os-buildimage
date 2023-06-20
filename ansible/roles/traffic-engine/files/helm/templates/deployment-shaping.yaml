@@ -22,6 +22,7 @@ spec:
         app: {{ .Release.Name }}-shaping
         vsysId: "{{ .Values.vsys_id }}"
         serviceFunction: {{ .Release.Name }}
+        component: shaping
       annotations:
         prometheus.io/port: "9007"
         prometheus.io/scrape: "true"

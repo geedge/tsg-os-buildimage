@@ -158,6 +158,10 @@ spec:
                 action: replace
                 target_label: serviceFunction
                 regex: (.+)
+              - source_labels: [__meta_kubernetes_pod_label_component]
+                action: replace
+                target_label: component
+                regex: (.+)
 
               - source_labels: [__meta_kubernetes_pod_phase]
                 regex: Pending|Succeeded|Failed|Completed

@@ -22,6 +22,7 @@ spec:
         app: {{ .Release.Name }}-service-chaining
         vsysId: "{{ .Values.vsys_id }}"
         serviceFunction: {{ .Release.Name }}
+        component: service-chaining
       annotations:
         prometheus.io/port: "9006"
         prometheus.io/scrape: "true"

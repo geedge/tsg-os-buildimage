@@ -21,6 +21,7 @@ spec:
         app: {{ .Release.Name }}-firewall
         vsysId: "{{ .Values.vsys_id }}"
         serviceFunction: {{ .Release.Name }}
+        component: firewall
       annotations:
         prometheus.io/port: "9273"
         prometheus.io/scrape: "true"
