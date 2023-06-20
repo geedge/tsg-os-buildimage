@@ -40,7 +40,7 @@
 ###### TSG-X-P0804 TSG-X-P0906 ofed install start ######
 - name: "install rpm packages: ofed"
   yum:
-    name: "mlnx-ofed-all-5.17.15-1.el8-v1.0.0-20221206.noarch"
+    name: "mlnx-ofed-all-5.17.15-1.el8-v1.0.1-20230619.noarch"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
   when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
@@ -61,20 +61,60 @@
     src: /tmp/mft/mft-4.20.0-34-x86_64-rpm.tgz
     dest: /tmp/mft/unarchived/
     remote_src: yes
+  when: runtime_env == 'TSG-X-P1403'
 
 - name: "execute MFT installer"
   shell: /tmp/mft/unarchived/mft-4.20.0-34-x86_64-rpm/install.sh
+  when: runtime_env == 'TSG-X-P1403'
+
+- name: "unarchive mft RPM"
+  unarchive:
+    src: /tmp/mft/mft-4.22.1-11-x86_64-rpm.tgz
+    dest: /tmp/mft/unarchived/
+    remote_src: yes
+  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+
+- name: "execute MFT installer"
+  shell: /tmp/mft/unarchived/mft-4.22.1-11-x86_64-rpm/install.sh
+  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
 ############ end ############
 
-- name: "enable auto update firmware on boot"
-  replace:
-    path: "/etc/infiniband/openib.conf"
-    regexp: 'RUN_FW_UPDATER_ONBOOT=no'
-    replace: 'RUN_FW_UPDATER_ONBOOT=yes'
+###### MLNX FW UPDATER install start ######
+# el8 only
+- name: "Install mlnx-fw-updater rpm package"
+  shell: rpm -i /tmp/mft/mlnx-fw-updater-5.8-2.0.3.0.x86_64.rpm
+  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+############ end ############
 
+###### Set RUN_FW_UPDATER_ONBOOT=yes ######
+- name: Update RUN_FW_UPDATER_ONBOOT setting
+  tasks:
+    - name: Check if RUN_FW_UPDATER_ONBOOT is present in the file
+      shell: grep -q "^RUN_FW_UPDATER_ONBOOT=no$" /etc/infiniband/openib.conf
+      register: grep_result
+      changed_when: false
+      ignore_errors: true
+
+    - name: Replace RUN_FW_UPDATER_ONBOOT if found
+      lineinfile:
+        path: /etc/infiniband/openib.conf
+        regexp: "^RUN_FW_UPDATER_ONBOOT=no$"
+        line: "RUN_FW_UPDATER_ONBOOT=yes"
+      when: grep_result.rc == 0
+
+    - name: Append RUN_FW_UPDATER_ONBOOT if not found
+      lineinfile:
+        path: /etc/infiniband/openib.conf
+        line: "RUN_FW_UPDATER_ONBOOT=yes"
+      when: grep_result.rc != 0
+  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+###### end ######
+
+###### Restore the uname tools ######
 - name: "Restore the uname tools"
   copy:
     src: "/usr/bin/uname-backup"
     dest: "/usr/bin/uname"
     mode: "0755"
     remote_src: yes
+###### end ######
