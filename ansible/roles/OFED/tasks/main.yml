@@ -86,27 +86,12 @@
   when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
 ############ end ############
 
-###### Set RUN_FW_UPDATER_ONBOOT=yes ######
-- name: Update RUN_FW_UPDATER_ONBOOT setting
-  tasks:
-    - name: Check if RUN_FW_UPDATER_ONBOOT is present in the file
-      shell: grep -q "^RUN_FW_UPDATER_ONBOOT=no$" /etc/infiniband/openib.conf
-      register: grep_result
-      changed_when: false
-      ignore_errors: true
-
-    - name: Replace RUN_FW_UPDATER_ONBOOT if found
-      lineinfile:
-        path: /etc/infiniband/openib.conf
-        regexp: "^RUN_FW_UPDATER_ONBOOT=no$"
-        line: "RUN_FW_UPDATER_ONBOOT=yes"
-      when: grep_result.rc == 0
-
-    - name: Append RUN_FW_UPDATER_ONBOOT if not found
-      lineinfile:
-        path: /etc/infiniband/openib.conf
-        line: "RUN_FW_UPDATER_ONBOOT=yes"
-      when: grep_result.rc != 0
+###### Set RUN_FW_UPDATER_ONBOOT ######
+- name: "enable auto update firmware on boot"
+  lineinfile:
+    path: /etc/infiniband/openib.conf
+    regexp: '^RUN_FW_UPDATER_ONBOOT'
+    line: "RUN_FW_UPDATER_ONBOOT=yes"
   when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
 ###### end ######
 
