@@ -560,3 +560,14 @@ enable_breakpad_upload=0
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
 {{- end }}
 {{- end -}}
+
+{{- define "traffic-engine.volume.dev-shm" -}}
+      - name: dev-shm
+        hostPath:
+          path: /dev/shm
+{{- end -}}
+
+{{- define "traffic-engine.mount.dev-shm" -}}
+        - name: dev-shm
+          mountPath: /dev/shm
+{{- end -}}

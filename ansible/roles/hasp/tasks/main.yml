@@ -44,3 +44,8 @@
     src: "{{ role_path }}/files/hasp.sh"
     dest: /etc/profile.d/
     mode: 0755
+
+- name: "start hasp_monitor.service"
+  systemd:
+    name: hasp_monitor.service
+    enabled: yes

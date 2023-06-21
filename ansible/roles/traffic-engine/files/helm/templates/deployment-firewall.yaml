@@ -94,6 +94,7 @@ spec:
         {{ template "traffic-engine.firewall.mount.prestart" . }}
         {{ template "traffic-engine.firewall.mount.hostpath" . }}
         {{ template "traffic-engine.mount.dev-bus-usb" . }}
+        {{ template "traffic-engine.mount.dev-shm" . }}
 
       - name: telegraf
         image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
@@ -178,3 +179,4 @@ spec:
       {{ template "traffic-engine.firewall.volume.prestart" . }}
       {{ template "traffic-engine.volume.hostpath" . }}
       {{ template "traffic-engine.volume.dev-bus-usb" . }}
+      {{ template "traffic-engine.volume.dev-shm" . }}

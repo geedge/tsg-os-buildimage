@@ -52,7 +52,7 @@ builddir:
 	tar -zxvf $(PROJECTDIR)/ansible/roles/traffic-engine/files/helm-linux-amd64.tar.gz  -C /tmp/helm
 
 installer: builddir
-	sed -i '/sapp-pr:/d;/tfe-pr:/d;/mrzcpd:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
+	sed -i '/sapp:/d;/tfe-pr:/d;/mrzcpd:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
 
 container-images-generate: builddir
 	podman load < $(PROJECTDIR)/package/rockylinux8.tar
