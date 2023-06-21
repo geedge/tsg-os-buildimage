@@ -123,8 +123,13 @@ bypass_trigger_cpu_usage={{ .Values.overload_protection.detect_threshold_cpu_usa
 ### note, can't distinguish between duplicate traffic and application retransmit traffic for IPv6 packets,
 ###       so not support IPv6 original duplicate traffic check.
 
+
 [dup_pkt.traffic.inject]
+{{- if  eq .Values.session_manager.inject_duplicated_packet_filter  .Values.define_enable_val_yes }}
 	inject_all_enabled=1
+{{- else }}
+    inject_all_enabled=0
+{{- end }}
 
 [dup_pkt.parameters]
 	bloom_capacity=1000000

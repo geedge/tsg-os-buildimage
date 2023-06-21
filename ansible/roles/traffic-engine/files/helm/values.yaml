@@ -73,6 +73,7 @@ session_manager:
   udp_session_max: 5021
   tcp_duplicated_packet_filter: yes
   udp_duplicated_packet_filter: yes
+  inject_duplicated_packet_filter: yes
 
 traffic_mirror:
   enable_raw_traffic: yes
