@@ -34,22 +34,18 @@ set_k3s_config()
     if [ $mem_num -le "32768" ]; then
         kube_reserved="2Gi"
         system_reserved="12Gi"
-        eviction_hard="64Mi"
     elif [ $mem_num -le "65536" ]; then
         kube_reserved="2Gi"
         system_reserved="16Gi"
-        eviction_hard="1Gi"
     else
         kube_reserved="2Gi"
         system_reserved="32Gi"
-        eviction_hard="2Gi"
     fi
 
 cat <<EOF > ${k3s_cfg_file}
 kubelet-arg:
   - "kube-reserved=memory=${kube_reserved}"
   - "system-reserved=memory=${system_reserved}"
-  - "eviction-hard=memory.available<${eviction_hard}"
 EOF
 }
 
