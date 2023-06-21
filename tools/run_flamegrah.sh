@@ -57,6 +57,6 @@ rm -rf perf.svg
 
 printf "\e[32m Convert data to flame graph\e[0m\n"
 
-perf script | /opt/tsg/tools/FlameGraph/stackcollapse-perf.pl | /opt/tsg/tools/FlameGraph/flamegraph.pl >perf.svg
+perf script | ./FlameGraph/stackcollapse-perf.pl | ./FlameGraph/flamegraph.pl >perf.svg
 
 # 使用浏览器查看 perf.svg, 在浏览器中使用 Ctrl + F 进行关键字搜索
