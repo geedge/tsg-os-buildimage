@@ -228,3 +228,6 @@ debug:
     enable_mount_host_filesystem: no
     #default: /etc/tsg-os/${service_function_name}/shaping_prestart_script.sh
     prestart_script: ""
+
+session_marker:
+  enable: yes
