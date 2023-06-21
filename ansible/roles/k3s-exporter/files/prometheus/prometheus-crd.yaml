@@ -66,8 +66,8 @@ spec:
             metric_relabel_configs:
               - source_labels: [pod]
                 action: replace
-                target_label: function
-                regex: traffic-engine-(.*)-([a-z0-9]+)-([a-z0-9]+)
+                target_label: serviceFunction
+                regex: (.*)-(firewall|proxy|shaping|service-chaining)-([a-z0-9]+)-([a-z0-9]+)
                 replacement: $1
               - regex:  instance
                 action: labeldrop
@@ -117,9 +117,9 @@ spec:
             metric_relabel_configs:
               - source_labels: [app]
                 action: replace
-                target_label: function
-                regex: sapp4-(.*)
-                replacement: $1
+                target_label: serviceFunctionIndex
+                regex: (sapp4|tfe|shaping|sce)(-|_)(.*)
+                replacement: $3
               - regex:  instance
                 action: labeldrop
 
@@ -147,20 +147,12 @@ spec:
                 target_label: __address__
               - source_labels: [__meta_kubernetes_pod_name]
                 action: replace
-                target_label: function
-                regex: traffic-engine-(.*)-([a-z0-9]+)-([a-z0-9]+)
+                target_label: serviceFunction
+                regex: (.*)-(firewall|proxy|shaping|service-chaining)-([a-z0-9]+)-([a-z0-9]+)
                 replacement: $1
               - source_labels: [__meta_kubernetes_pod_label_vsysId]
                 action: replace
                 target_label: vsysId
-                regex: (.+)
-              - source_labels: [__meta_kubernetes_pod_label_serviceFunction]
-                action: replace
-                target_label: serviceFunction
-                regex: (.+)
-              - source_labels: [__meta_kubernetes_pod_label_component]
-                action: replace
-                target_label: component
                 regex: (.+)
 
               - source_labels: [__meta_kubernetes_pod_phase]
