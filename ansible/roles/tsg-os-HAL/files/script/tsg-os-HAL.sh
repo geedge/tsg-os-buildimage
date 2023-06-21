@@ -37,9 +37,12 @@ set_k3s_config()
     elif [ $mem_num -le "65536" ]; then
         kube_reserved="2Gi"
         system_reserved="16Gi"
+    elif [ $mem_num -le "131072" ]; then
+        kube_reserved="2Gi"
+        system_reserved="24Gi"
     else
         kube_reserved="2Gi"
-        system_reserved="32Gi"
+        system_reserved="40Gi"
     fi
 
 cat <<EOF > ${k3s_cfg_file}
@@ -74,8 +77,10 @@ set_hugepages()
             HUGEPAGES=4
         elif [ $mem_num -le "65536" ]; then
             HUGEPAGES=8
-        else
+        elif [ $mem_num -le "131072" ]; then
             HUGEPAGES=16
+        else
+            HUGEPAGES=32
         fi
     fi
 }
@@ -94,8 +99,10 @@ set_mrzcpd_direct_pktmbuf()
             MRZCPD_DIRECT_PKTMBUF=`expr 262144 / $NUMA_NODE_CNT`
         elif [ $mem_num -le "65536" ]; then
             MRZCPD_DIRECT_PKTMBUF=`expr 1048576 / $NUMA_NODE_CNT`
-        else
+        elif [ $mem_num -le "131072" ]; then
             MRZCPD_DIRECT_PKTMBUF=`expr 2097152 / $NUMA_NODE_CNT`
+        else
+            MRZCPD_DIRECT_PKTMBUF=`expr 4194304 / $NUMA_NODE_CNT`
         fi
     fi
 }
