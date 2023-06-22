@@ -31,6 +31,15 @@
     state: present
     disable_gpg_check: yes
 
+- name: "replace action: replace service WantedBy from multi-user.target to workload.target"
+  replace:
+    path: "{{ item }}"
+    regexp: 'WantedBy=multi-user.target'
+    replace: 'WantedBy=workload.target'
+  with_items:
+    - /usr/lib/systemd/system/hasp_monitor.service
+    when: runtime_env != 'TSG-X-P0906'
+
 - name: "Create /etc/tsg/licence/ directory if it does not exist"
   file:
     path: "{{ item }}"
