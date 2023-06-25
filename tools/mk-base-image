@@ -67,7 +67,7 @@ set -ex
 
 yum -c "$yum_config" --installroot="$target" -y makecache
 
-yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $base_package_to_install
+yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $base_package_to_install --disablerepo='ofed'
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $append_package_to_install
 
 
