@@ -4,15 +4,11 @@
     path: /var/lib/rancher/k3s/server/static/charts/
     state: directory
 
+#install helm binary start
 - name: "create unarchive directory"
   file:
     path: "/tmp/helm/"
     state: directory
-
-- name: "copy chart directory to dest"
-  copy:
-    src: "{{ role_path }}/files/helm"
-    dest: /tmp/traffic-engine/
 
 - name: "install helm: unarchive helm tar package"
   unarchive:
@@ -25,9 +21,7 @@
     dest: /usr/bin/helm
     mode: 0755
     remote_src: yes
-
-- name: "create charts packages"
-  shell: helm package --app-version {{os_release_ver}}  --version {{helm_chart_ver}} -d /var/lib/rancher/k3s/server/static/charts/  /tmp/traffic-engine/helm
+#install helm binary end
 
 - name: "copy kubeconfig.sh to destination"
   copy:
@@ -44,27 +38,6 @@
   copy:
     src: "{{ role_path }}/files/sudoers.d/00-kubconfig"
     dest: /etc/sudoers.d/
-
-- name:  "mkdir hotfix directory"
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - /etc/traffic-engine/hotfix/firewall/scripts
-    - /etc/traffic-engine/hotfix/firewall/files
-    - /etc/traffic-engine/hotfix/proxy/scripts
-    - /etc/traffic-engine/hotfix/proxy/files
-    - /etc/traffic-engine/hotfix/certstore/scripts
-    - /etc/traffic-engine/hotfix/certstore/files
-
-- name: "copy prestart.sh"
-  copy:
-    src: '{{ role_path }}/files/hotfix/prestart.sh'
-    dest: '{{ item }}'
-  with_items:
-    - /etc/traffic-engine/hotfix/firewall/scripts/
-    - /etc/traffic-engine/hotfix/proxy/scripts/
-    - /etc/traffic-engine/hotfix/certstore/scripts/
 
 - name: "copy clusterrole file to dest"
   copy:

@@ -1,9 +1,9 @@
 mrzcpdExporter:
 
   image:
-    repository: registry.gdnt-cloud.website/tsg-init
+    repository: registry.gdnt-cloud.website/mrzcpd-exporter
     pullPolicy: Never
-#    tag: ""
+    tag: "1.0.1"
   replicaCount: 1
 
 mergeExporter:

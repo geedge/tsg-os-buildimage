@@ -12,8 +12,8 @@ function upload_kvm_glob_file()
 
 function upload_app_bundle_glob_file()
 {
-	python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.tar.gz.sha256sum.txt
-	python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.tar.gz
+	python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*-APP-BUNDLE.bin
+	python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*-APP-BUNDLE.bin.sha256sum.txt
 }
 
 function upload_onie_glob_file()

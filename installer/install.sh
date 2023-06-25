@@ -31,7 +31,9 @@ grub_serial_command="%%GRUB_SERIAL_COMMAND%%"
 DISTR0_VER="%%DISTR0_VER%%"
 MACHINE_ID="%%MACHINE_ID%%"
 CHROOT_PKG="%%CHROOT_PKG%%"
-CONTAINER_IMAGES_PKG="%%CONTAINER_IMAGES_PKG%%"
+APP_BUNDLE_BIN="%%APP_BUNDLE_BIN%%"
+HELM_CHART_TAR_GLOB="%%HELM_CHART_TAR_GLOB%%"
+CONTAINER_IMAGES_TAR_GLOB="%%CONTAINER_IMAGES_TAR_GLOB%%"
 
 size_part_tsg_os_update="%%SIZE_PART_UPDATE%%"
 size_part_tsg_os_sysroot="%%SIZE_PART_SYSROOT%%"
@@ -283,10 +285,17 @@ chroot ${distro_mnt} /distro-setup.sh ${blk_dev}
    umount ${distro_mnt}/dev/pts
 }
 
-if [ -f ${CONTAINER_IMAGES_PKG} ]; then
+if [ -f ${APP_BUNDLE_BIN} ]; then
     mkdir -p ${distro_mnt}/data/var/lib/rancher/k3s/agent/images
-    rm -rf ${distro_mnt}/data/var/lib/rancher/k3s/agent/images/tsg-*-docker.tar
-    tar -xf ${CONTAINER_IMAGES_PKG} -C ${distro_mnt}/data/var/lib/rancher/k3s/agent/images
+    mkdir -p ${distro_mnt}/data/var/lib/rancher/k3s/server/static/charts
+    rm -rf ${distro_mnt}/data/var/lib/rancher/k3s/agent/images/${CONTAINER_IMAGES_TAR_GLOB}
+    rm -rf ${distro_mnt}/data/var/lib/rancher/k3s/server/static/charts/${HELM_CHART_TAR_GLOB}
+    chmod 0755 ${APP_BUNDLE_BIN}
+    export APP_BUNDLE_CHARTS_DEST_DIR="${distro_mnt}/data/var/lib/rancher/k3s/server/static/charts"
+    export APP_BUNDLE_IMAGES_DEST_DIR="${distro_mnt}/data/var/lib/rancher/k3s/agent/images"
+    export APP_BUNDLE_CLIXON_CONF_PATH="${distro_mnt}/opt/tsg/clixon/etc/mgnt-srv.conf"
+    export APP_BUNDLE_LOAD_IMAGES_SWITCH="off"
+    ./${APP_BUNDLE_BIN} -i ${distro_mnt}/data/var/lib/rancher/k3s/agent/images -c ${distro_mnt}/data/var/lib/rancher/k3s/server/static/charts
 fi
 
 umount ${distro_mnt}/proc

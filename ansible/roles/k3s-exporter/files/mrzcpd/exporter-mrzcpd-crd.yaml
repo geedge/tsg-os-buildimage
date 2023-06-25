@@ -4,7 +4,7 @@ metadata:
   name: exporter-mrzcpd
   namespace: kube-system
 spec:
-  chart: https://%{KUBERNETES_API}%/static/charts/exporter-mrzcpd-{{helm_chart_ver}}.tgz
+  chart: https://%{KUBERNETES_API}%/static/charts/exporter-mrzcpd-1.0.1.tgz
   targetNamespace: tsg-os-system
   valuesContent: |-
     service:

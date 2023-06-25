@@ -9,7 +9,7 @@ SIZE_PART_UPDATE		:= 16384M
 PROFILE_ID_IN_SHORT		:= $(subst -,$e,$(PROFILE_ID))
 CHROOT_PKG 				:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-chroot.tar.bz2
 CHROOT_BIN 				:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-ONIE.bin
-CONTAINER_IMAGES_PKG	:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-container-images.tar.bz2
+APP_BUNDLE_BIN			:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-APP-BUNDLE.bin
 
 TARGET_BUILD_DIR 		:= $(BUILDDIR_BASE)/$(PROFILE_ID)
 TARGET_INSTALLER_DIR 	:= $(TARGET_BUILD_DIR)/installer
@@ -38,7 +38,7 @@ installer: builddir
 	sed -i -e "s/%%GRUB_SERIAL_COMMAND%%/$(GRUB_SERIAL_COMMAND)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%SIZE_PART_SYSROOT%%/$(SIZE_PART_SYSROOT)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%SIZE_PART_UPDATE%%/$(SIZE_PART_UPDATE)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%CONTAINER_IMAGES_PKG%%/$(CONTAINER_IMAGES_PKG)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%APP_BUNDLE_BIN%%/$(APP_BUNDLE_BIN)/" $(TARGET_INSTALLER_DIR)/install.sh
 
 	sed -i '/sapp-pr:/d;/tfe-pr:/d;/mrzcpd:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
 ifeq ($(ENABLE_ALIYUN_INTERNAL_DOMAIN),1)
