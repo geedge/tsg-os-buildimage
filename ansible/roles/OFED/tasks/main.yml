@@ -40,7 +40,7 @@
 ###### TSG-X-P0804 TSG-X-P0906 ofed install start ######
 - name: "install rpm packages: ofed"
   yum:
-    name: "mlnx-ofed-all-5.17.15-1.el8-v1.0.0-20221206.noarch"
+    name: "mlnx-ofed-all-5.17.15-1.el8-v1.0.1-20230619.noarch"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
   when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
