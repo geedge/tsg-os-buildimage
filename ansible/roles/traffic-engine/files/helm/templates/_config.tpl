@@ -571,3 +571,9 @@ enable_breakpad_upload=0
         - name: dev-shm
           mountPath: /dev/shm
 {{- end -}}
+
+{{- define "traffic-engine.telegraf.read.device-id" -}}
+            export device_id=`ipmitool fru list |grep 'Product Serial' | awk '{ print $4}'`
+            if [ -z "$device_id" ]; then export device_id="unknown"; fi
+            echo "export device_id=${device_id}" > /etc/profile.d/device_id.sh
+{{- end -}}

@@ -131,7 +131,12 @@ spec:
       - name: telegraf-sce
         image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
-        command: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf_sce.conf", "-config-directory", "/etc/telegraf/telegraf_statistic.d"]
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            {{ template "traffic-engine.telegraf.read.device-id" . }}
+            /usr/bin/telegraf -config /etc/telegraf/telegraf_sce.conf -config-directory /etc/telegraf/telegraf_statistic.d
         securityContext:
           privileged: true
         volumeMounts:
