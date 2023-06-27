@@ -169,40 +169,36 @@ bypass_trigger_cpu_usage={{ .Values.overload_protection.detect_threshold_cpu_usa
 
 
 [PROFILING]
-    [profiling.pkt_latency]
-    enabled=0
-### note, threshold unit is microseconds (us)
-    threshold=1000000
-
-    [profiling.sanity_check]
-    raw_pkt_broken_enabled=0
-    symbol_conflict_enabled=0
-
     [profiling.log]
-    level=20
-    interval=5
+        sapp_log_category="log/sapp_log"
+        sapp_plugin_log_category="log/sapp_plugin_log"
+        #for profiling-related API control, e.g printaddr
+        enabled_log_level=20
 
-        [profiling.log.local]
-        enabled=1
-### note, if "file_truncate_open_enabled=1", file will be truncated, otherwise open the file for appending.
-        file_truncate_enabled = 1
-        #log_file_name = "log/fs2_sysinfo.log"
-        #log_conf_name = "etc/sapp_log.conf"
-        [profiling.log.remote]
+    [profiling.metric]
+        [profiling.metric.fs2]
         enabled=0
-        server_ip=127.0.0.1
-        server_port=8100
-
-        [profiling.log.remote.field_stat2]
-### note, is valid when "remote_send_out_type=field_stat2"
-### note, metric_type option value: [default, json]
-        metric_type = default
-        app_name=sapp
-
-        [profiling.log.prometheus]
-        prometheus_enabled=1
         prometheus_port=9273
         prometheus_url_path="/metrics"
+        local_file="fs2_sysinfo.metrics"
+        refresh_interval_s=1
+
+        [profiling.metric.fs3]
+        enabled=1
+        prometheus_port=9373
+        prometheus_url_path="/metrics"
+        local_file="fs3_sysinfo.metrics"
+        refresh_interval_s=1
+
+    [profiling.process_latency]
+        log_category="log/sapp_process_latency_log"
+        enabled_log_level=10
+        ### note, threshold unit is microseconds (us)
+        threshold_us=100000
+
+    [profiling.sanity_check]
+        raw_pkt_broken_enabled=0
+        symbol_conflict_enabled=0
 
 [TOOLS]
     [tools.pkt_dump]

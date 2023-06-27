@@ -142,7 +142,7 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/sapp.toml               /opt/tsg/sapp/etc/sapp.toml
             cp /opt/tsg/config/wangw.conf              /opt/tsg/sapp/etc/wannat/wangw.conf
             cp /opt/tsg/config/wire_graft.conf         /opt/tsg/sapp/etc/wire_graft/wire_graft.conf
-            cp /opt/tsg/config/tsg_conn_sketch.inf     /opt/tsg/sapp/plug/business/tsg_conn_sketch/tsg_conn_sketch.inf
+            cp /opt/tsg/config/session_record.inf     /opt/tsg/sapp/plug/business/session_record/session_record.inf
             cp /opt/tsg/config/send_raw_pkt.conf       /opt/tsg/sapp/etc/send_raw_pkt.conf
             cp /opt/tsg/config/tsg_device_tag.json     /opt/tsg/etc/tsg_device_tag.json
             cp /opt/tsg/config/app_sketch_local.inf    /opt/tsg/sapp/plug/business/app_sketch_local/app_sketch_local.inf

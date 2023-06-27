@@ -11,7 +11,8 @@ STOP=40
 other = "%d(%c), %V, %F, %U, %m%n"
 plugin = "%d(%c), %m%n"
 [rules]
-__log_runtimelog.fatal    "./log/runtimelog.%d(%F)"
-__log_runtimelog_plugin.fatal    >stdout; plugin
-__log_runtimelog_plugin.info    "./log/plugin.log.%d(%F)"; plugin
+sapp_log.info    "./log/runtimelog.%d(%F)"
+sapp_plugin_log.fatal    >stdout; plugin
+sapp_plugin_log.info    "./log/plugin.log"; plugin
+sapp_process_latency_log.info   "./log/sapp_process_latency.log"
 !.fatal    "./log/%c.%d(%F)"; other
