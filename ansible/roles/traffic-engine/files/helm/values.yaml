@@ -230,5 +230,5 @@ debug:
     #default: /etc/tsg-os/${service_function_name}/shaping_prestart_script.sh
     prestart_script: ""
 
-session_marker:
+session_flags:
   enable: yes

@@ -4,8 +4,8 @@
 ./plug/platform/wire_graft/wire_graft.inf
 {{- end }}
 ./plug/platform/app_proto_identify/app_proto_identify.inf
-{{- if eq .Values.session_marker.enable .Values.define_enable_val_yes }}
-./plug/platform/session_marker_record/session_marker_record.inf
+{{- if eq .Values.session_flags.enable .Values.define_enable_val_yes }}
+./plug/platform/session_flags/session_flags.inf
 {{- end }}
 ./plug/platform/tsg_master/tsg_master.inf
 {{- if eq .Values.appsketch.enable .Values.define_enable_val_yes }}
