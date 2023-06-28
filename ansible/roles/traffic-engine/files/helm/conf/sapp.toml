@@ -185,7 +185,7 @@ bypass_trigger_cpu_usage={{ .Values.overload_protection.detect_threshold_cpu_usa
 
         [profiling.metric.fs3]
         enabled=1
-        prometheus_port=9373
+        prometheus_port=9273
         prometheus_url_path="/metrics"
         local_file="fs3_sysinfo.metrics"
         refresh_interval_s=1
