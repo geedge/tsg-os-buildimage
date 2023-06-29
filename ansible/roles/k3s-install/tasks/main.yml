@@ -89,6 +89,14 @@
     src: "{{ role_path }}/files/service_set_coredns_forwarding.conf"
     dest: /usr/lib/systemd/system/k3s.service.d/
 
+- name: "Create /usr/libexec/k3s directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/libexec/k3s
+
 - name: "copy  update-coredns-forwarding to dest"
   copy:
     src: "{{ role_path }}/files/update-coredns-forwarding.sh"
