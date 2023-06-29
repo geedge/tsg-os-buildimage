@@ -2,19 +2,52 @@
 pwd
 ls -halt $CI_PROJECT_DIR
 ls -halt $CI_PROJECT_DIR/images/
-cat $CI_PROJECT_DIR/images/*.sha256sum.txt
-if [ -n "${UPLOAD_TO_FILE_REPO}" ]; then	
-	#python3 ~/file_upload_tools.py ${PULP3_FILE_REPO_NAME} ${PULP3_FILE_DIST_NAME} ./images/*.bin
-	#python3 ~/file_upload_tools.py ${PULP3_FILE_REPO_NAME} ${PULP3_FILE_DIST_NAME} ./images/*.sha256sum.txt
-	if [ "${PROFILE_LIST}" == "SERVER" ]; then
-		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.tar
-	elif [ "${PROFILE_LIST}" == "KVM" ]; then
-		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.img
-		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.gns3a
-	elif [ "${PROFILE_LIST}" == "TSGXBUILDCONTAINERP0906" ]; then
-		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.tar.gz
-	else
-		python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.bin
+
+#function define start
+function upload_kvm_glob_file()
+{
+	python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.img
+	python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.gns3a
+}
+
+function upload_app_bundle_glob_file()
+{
+	python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.tar.gz.sha256sum.txt
+	python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.tar.gz
+}
+
+function upload_onie_glob_file()
+{
+	python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*-ONIE.bin
+	python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*-ONIE.bin.sha256sum.txt
+}
+
+function is_upload_file()
+{
+	if [ ! -n "${UPLOAD_TO_FILE_REPO}" ]; then
+		echo "Current job not set UPLOAD_TO_FILE_REPO variables"
+		exit 0
 	fi
-	python3 ~/file_upload_tools_to_share_repo.py ${FILE_REPO_PATH} ./images/*.sha256sum.txt
-fi
+}
+
+function upload_file_by_profile_list()
+{
+	case ${PROFILE_LIST} in
+		"KVM")
+			upload_kvm_glob_file
+			break
+			;;
+		"TSGXBUILDCONTAINERP0906")
+			upload_app_bundle_glob_file
+			break
+			;;
+		*)
+			upload_onie_glob_file
+			break
+			;;
+	esac
+}
+#function define end
+
+is_upload_file
+upload_file_by_profile_list
