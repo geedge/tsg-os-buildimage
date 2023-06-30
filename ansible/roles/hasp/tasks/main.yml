@@ -1,6 +1,6 @@
 - name: "aksusbd rpm install: copy file to device"
   copy:
-    src: '{{ role_path }}/files/aksusbd-8.23-1.x86_64.rpm'
+    src: '{{ role_path }}/files/aksusbd-8.31-1.x86_64.rpm'
     dest: /tmp/ansible_deploy/
 
 - name: "download rpm packages: hasp_tools"
@@ -15,9 +15,14 @@
 - name: "aksusbd rpm install: install aksusbd"
   yum:
     name:
-      - "/tmp/ansible_deploy/aksusbd-8.23-1.x86_64.rpm"
+      - "/tmp/ansible_deploy/aksusbd-8.31-1.x86_64.rpm"
     state: present
     disable_gpg_check: yes
+
+- name: "disable aksusbd.service"
+  systemd:
+    name: aksusbd.service
+    enabled: no
 
 - name: "Get hasp_tools rpm path"
   find:
@@ -40,13 +45,33 @@
     - /usr/lib/systemd/system/hasp_monitor.service
   when: runtime_env != 'TSG-X-P0906'
 
-- name: "Create /etc/tsg/licence/ directory if it does not exist"
+- name: "Create /usr/lib/systemd/system/hasp_monitor.service.d/ directory if it does not exist"
   file:
     path: "{{ item }}"
     state: directory
     mode: '0755'
   with_items:
-    - /etc/tsg/licence/
+    - /usr/lib/systemd/system/hasp_monitor.service.d
+
+- name: "copy env file to hasp_monitor.service.d"
+  copy:
+    src: "{{ role_path }}/templates/service_override_env.conf.j2"
+    dest: /usr/lib/systemd/system/hasp_monitor.service.d/service_override_env.conf
+    mode: 0644
+
+- name: "Create /etc/haspuser/ directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /etc/haspuser/
+
+- name: "copy hasp_25743.ini to /etc/haspuser/"
+  copy:
+    src: "{{ role_path }}/files/hasp_25743.ini"
+    dest: /etc/haspuser/
+    mode: 0644
 
 - name: "copy hasp.sh to /etc/profile.d/"
   copy:
@@ -58,3 +83,4 @@
   systemd:
     name: hasp_monitor.service
     enabled: yes
+  when: runtime_env == 'TSG-X-P0906'
