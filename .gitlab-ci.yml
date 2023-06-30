@@ -450,7 +450,7 @@ testing_build_container_images_TSGXP0906:
     PULP3_FILE_DIST_NAME: tsg-os-images-testing
     FILE_REPO_PATH: install/testing/tsg-os-images
     DALIY_BUILD_VERSION: 1
-    ENABLE_LICENSE_PROTECTED: 0
+    ENABLE_LICENSE_PROTECTED: 1
   cache:
     key: $CI_COMMIT_REF_SLUG-TSGXP0906
     paths:
@@ -604,7 +604,7 @@ rc_build_container_images_TSGXP0906:
     PULP3_FILE_REPO_NAME: tsg-os-images-rc
     PULP3_FILE_DIST_NAME: tsg-os-images-rc
     FILE_REPO_PATH: install/rc/tsg-os-images
-    ENABLE_LICENSE_PROTECTED: 0
+    ENABLE_LICENSE_PROTECTED: 1
   cache:
     key: $CI_COMMIT_REF_SLUG-TSGXP0906
     paths:
