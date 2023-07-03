@@ -41,6 +41,9 @@ installer: builddir
 	sed -i -e "s/%%CONTAINER_IMAGES_PKG%%/$(CONTAINER_IMAGES_PKG)/" $(TARGET_INSTALLER_DIR)/install.sh
 
 	sed -i '/sapp-pr:/d;/tfe-pr:/d;/mrzcpd:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
+ifeq ($(ENABLE_ALIYUN_INTERNAL_DOMAIN),1)
+	sed -i -e "s/mirrors.aliyun.com/mirrors.cloud.aliyuncs.com/" $(CONFDIR)/yum-RockyLinux-8.conf
+endif
 
 sysroot-base: builddir
 	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum-RockyLinux-8.conf $(TARGET_SYSROOT_DIR) $(PROJECTDIR) $(PROFILE_ID)
