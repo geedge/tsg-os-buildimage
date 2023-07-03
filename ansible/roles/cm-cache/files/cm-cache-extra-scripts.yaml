@@ -1,0 +1,188 @@
+apiVersion: v1
+data:
+  switch_available_redis.sh: |-
+    #!/bin/bash
+    pwd=`pwd`
+
+    function check_replicaof_alive()
+    {
+      check_redis_ip=$1
+      check_redis_port=$2
+      if [ -n "$TLS_REDIS_FILE" ]; then
+        redis-cli -h $check_redis_ip -p $check_redis_port  --tls --cacert $TLS_REDIS_FILE ping  > /dev/null
+      else
+        redis-cli -h $check_redis_ip -p $check_redis_port ping > /dev/null
+      fi
+      if [[ $? -eq 0 ]]; then
+        return 0
+      else 
+        return 1 
+      fi
+    }
+
+    function start()
+    {
+      current_date=$(date +%Y-%m-%d)
+      #Get the IP of the current redis synchronization
+      redis_info=$(redis-cli -h $REDIS_HOST -p $HOST_PORT CONFIG GET replicaof)
+
+      str=(${redis_info//,/})
+      db_ip=${str[1]}
+      db_port=${str[2]}
+
+      #1.Check whether the current redis connection address is CM master
+      if [ "$db_ip" = "$REDIS_MASTER" -a "$MASTER_PORT" = "$db_port" ];then
+        check_redis 0
+      elif [ "$db_ip" = "$REDIS_SLAVE"  -a "$SLAVE_PORT" = "$db_port" ];then
+        check_redis 1 
+      else 
+        check_redis 2
+      fi
+    }
+
+    function  check_redis()
+    {
+      CHECK_TYPE=$1
+      # Starting time
+      start_time=$(date +%s)
+
+      while true; do
+        # Use redis-cli to detect connections
+        check_replicaof_alive $REDIS_MASTER $MASTER_PORT
+        # check return value
+        if [[ $? -eq 0 ]]; then
+            #If the current redis slaveof is not the master IP, check whether the master IP is alive and change the redis slaveof
+            if [ "$CHECK_TYPE" != "0" ]; then
+                echo "[`date '+%Y-%m-%d %T'`] update redis slaveof: $REDIS_MASTER $MASTER_PORT  " 
+                up_redis $REDIS_MASTER $MASTER_PORT
+                break
+            fi 
+            sleep 1
+            break 
+        else
+            echo "[`date '+%Y-%m-%d %T'`] unable to connect to $REDIS_MASTER $MASTER_PORT redis server" 
+            #If the current redis slaveof is slave IP, jump out of the loop and no longer continue to change redis slaveof
+            if [ "$CHECK_TYPE" = "1" ]; then
+                sleep 1
+                break
+            fi
+
+        fi
+
+        # Check if the duration is exceeded
+        current_time=$(date +%s)
+        elapsed_time=$((current_time - start_time))
+        if [[ $elapsed_time -ge $CHECK_DURATION ]]; then 
+            check_replicaof_alive $REDIS_SLAVE $SLAVE_PORT
+          if [[ $? -eq 0 ]]; then
+              echo "[`date '+%Y-%m-%d %T'`]  update redis slaveof: $REDIS_SLAVE $SLAVE_PORT redis server"
+              up_redis $REDIS_SLAVE $SLAVE_PORT
+              break
+            else 
+            echo "[`date '+%Y-%m-%d %T'`] unable to connect to $REDIS_SLAVE $SLAVE_PORT redis server"
+          fi
+        fi
+      sleep 1
+      done
+    }
+
+    function up_redis()
+    {
+      UP_IP=$1
+      UP_PORT=$2
+
+      check_replicaof_alive $UP_IP $UP_PORT
+      if [[ $? -eq 0 ]]; then
+          redis-cli -h $REDIS_HOST -p $HOST_PORT REPLICAOF $UP_IP $UP_PORT
+          echo "[`date '+%Y-%m-%d %T'`] successfully changed Redis slaveof : $UP_IP $UP_PORT"
+          sleep $INTERVAL_TIME
+      else
+          echo "[`date '+%Y-%m-%d %T'`] Change failed, unable to connect to $UP_IP $UP_PORT redis server"
+      fi
+    }
+
+    REDIS_HOST="127.0.0.1"
+    HOST_PORT=6379
+    #Redis connection timeout (seconds)
+    CHECK_DURATION=120
+    # Redis master-slave switch synchronization interval time
+    INTERVAL_TIME=5m
+    REDIS_MASTER=""
+    MASTER_PORT=""
+    REDIS_SLAVE=""
+    SLAVE_PORT=""
+    TLS_REDIS_FILE=""
+    
+
+    usage()
+    {
+      echo "Usage: $0 [-m <master_ip:port>] [-s <slave_ip:port>] [-T <on/off>] [-t <time>] [-i <time>]"
+      echo "Options:"
+      echo "  -m <master_ip:port>  Specify value for option -m"
+      echo "  -s <slave_ip:port>   Specify value for option -s"
+      echo "  -T <on/off>          TLS file certificate enable"
+      echo "  -t <value>           Connection detection time (seconds) Set option -t"
+      echo "  -i <value>           Redis master-slave switch synchronization interval time Set option -i"
+      exit 1
+    }
+
+    while getopts ":m:s:t:i:T:" opt; do
+      case $opt in
+        m)
+          m_value=$OPTARG
+          ;;
+        s)
+          s_value=$OPTARG
+          ;;
+        t)
+          t_option=$OPTARG
+          ;;
+        i)
+          i_option=$OPTARG
+          ;;
+        T)
+          tls_option=$OPTARG
+          ;;  
+        \?)
+          echo "Invalid option: -$OPTARG"
+          usage
+          ;;
+        :)
+          echo "Option -$OPTARG requires an argument."
+          usage
+          ;;
+      esac
+    done
+
+    if [[ -z $m_value ]] || [[ -z $s_value ]]; then
+      echo "Missing required options."
+      usage
+    else
+      m_str=(${m_value//:/ })
+      REDIS_MASTER=${m_str[0]}
+      MASTER_PORT=${m_str[1]}
+
+      s_str=(${s_value//:/ })
+      REDIS_SLAVE=${s_str[0]}
+      SLAVE_PORT=${s_str[1]}
+
+      if [ "on" = "$tls_option" ]; then
+        TLS_REDIS_FILE="/opt/bitnami/extra/certs/self-sign.crt"
+      fi
+
+      if [ -n "$t_option" ]; then
+        CHECK_DURATION=${t_option}
+      fi
+
+      if [ -n "$i_option" ]; then
+        INTERVAL_TIME=${i_option}
+      fi
+
+      while true; do
+        start
+      done  
+    fi
+kind: ConfigMap
+metadata:
+  name: cm-cache-extra-scripts
+  namespace: tsg-os-system

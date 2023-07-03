@@ -1,0 +1,21 @@
+- name: "Copy cm-cache redis helm chart to dest"
+  copy:
+    src: "{{ role_path }}/files/redis-6.2.5.tgz"
+    dest: /var/lib/rancher/k3s/server/static/charts/
+
+- name: "Download cm-cache redis chart images to dest"
+  get_url:
+    url: https://repo.geedge.net/filerepo/install/release/tsg-container-images/redis-6.2.5.tar
+    dest: /var/lib/rancher/k3s/agent/images/redis-6.2.5.tar
+    url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
+    url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
+
+- name: "Copy cm-cache-extra-scripts.yaml chart to dest"
+  copy:
+    src: "{{ role_path }}/files/cm-cache-extra-scripts.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/
+
+- name: "Copy cm-cache-extra-secrets.yaml chart to dest"
+  copy:
+    src: "{{ role_path }}/files/cm-cache-extra-secrets.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/
