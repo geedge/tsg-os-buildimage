@@ -14,6 +14,7 @@ cpu_core_num=$(lscpu | grep "CPU(s):" | head -n 1 | sed  -r 's/CPU\(s\):\s{1,}//
 mem_num=$(free -m | grep Mem | awk '{print $2}')
 
 HUGEPAGES=
+GRUB_CMDLINE=
 NUMA_NODE_CNT=
 MRZCPD_IOCORE=
 CLIXON_IOCORE=
@@ -66,7 +67,7 @@ set_os_hugepages()
 {
     [ -f ${mrzcpd_cfg_file} ] && sed -i "s/HUGEPAGE_NUM_1G=\w*/HUGEPAGE_NUM_1G=${HUGEPAGES}/g" ${mrzcpd_cfg_file}
 
-    sysctl -w vm.nr_hugepages=${HUGEPAGES}
+    # sysctl -w vm.nr_hugepages=${HUGEPAGES}
     return 0
 }
 
@@ -132,12 +133,49 @@ set_bridge()
     ip link set br_dign_s up
 }
 
+set_grub_cmdline_file()
+{
+    local result=0
+    local grub_cmdline_key="$1"
+    local grub_cmdline_value="$2"
+
+    if ! grep -q " ${grub_cmdline_key}=" "$grub_cfg_file"; then
+        sed -i "/ linux / s/$/ ${grub_cmdline_key}=${grub_cmdline_value}/" $grub_cfg_file
+        result=1
+    elif ! grep -q " ${grub_cmdline_key}=${grub_cmdline_value}" "$grub_cfg_file"; then
+        sed -i "s/ ${grub_cmdline_key}=\w\+/ ${grub_cmdline_key}=${grub_cmdline_value}/g" $grub_cfg_file
+        result=1
+    fi
+    return $result
+}
+
+set_grub_cmdline()
+{
+    local set_grub_flag=0
+
+    grub_cmdline_key=("hugepagesz" "hugepages")
+    grub_cmdline_value=("1G" ${HUGEPAGES})
+
+    for index in "${!grub_cmdline_key[@]}"
+    do
+        set_grub_cmdline_file ${grub_cmdline_key[$index]} ${grub_cmdline_value[$index]}
+        if [ "$?" == "1" ]; then
+            set_grub_flag=1
+        fi
+    done
+
+    if [ "$set_grub_flag" == "1" ]; then
+        reboot
+    fi
+}
+
 load_tsg_os_HAL_config
+set_hugepages
+set_grub_cmdline
 
 /opt/tsg/mrzcpd/bin/mrmarch --auto
 
 set_cpu_list
-set_hugepages
 set_mrzcpd_indirect_pktmbuf
 set_mrzcpd_direct_pktmbuf
 

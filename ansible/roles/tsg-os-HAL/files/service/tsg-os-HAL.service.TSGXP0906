@@ -1,5 +1,5 @@
 [Unit]
-Description=Tsg os HAL
+Description=TSG-OS HAL
 Before=tsg-clixon-backend.service
 
 [Service]
