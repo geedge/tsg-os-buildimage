@@ -14,7 +14,6 @@ cpu_core_num=$(lscpu | grep "CPU(s):" | head -n 1 | sed  -r 's/CPU\(s\):\s{1,}//
 mem_num=$(free -m | grep Mem | awk '{print $2}')
 
 HUGEPAGES=
-GRUB_CMDLINE=
 NUMA_NODE_CNT=
 MRZCPD_IOCORE=
 CLIXON_IOCORE=
