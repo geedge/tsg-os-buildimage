@@ -5,7 +5,7 @@ firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-5.0.5.2bb3788
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   firewall: firewall-2.0.12.994a759
-  session_record: session_record-4.1.2.f0646bb
+  session_record: session_record-4.1.3.8760262
   gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
   radius_collect_plug: radius_collect_plug-2.0.9.f1e08ad
