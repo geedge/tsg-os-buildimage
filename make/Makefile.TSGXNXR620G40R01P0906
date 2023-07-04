@@ -66,7 +66,7 @@ sysroot-cleanup:
 	rm -rf $(TARGET_SYSROOT_DIR)/dev/*
 
 add-images-into-sysroot: builddir sysroot-verfile sysroot-ansible
-	cp $(IMAGEDIR_BASE)/$(CONTAINER_IMAGES_PKG) $(TARGET_INSTALLER_DIR)/$(CONTAINER_IMAGES_PKG)
+	cp $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN) $(TARGET_INSTALLER_DIR)/$(APP_BUNDLE_BIN)
 
 sysroot-archive: installer add-images-into-sysroot sysroot-cleanup
 	cp $(IMAGEDIR_BASE)/80-tfe.conf $(TARGET_SYSROOT_DIR)/etc/sysctl.d/
