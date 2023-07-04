@@ -4,8 +4,8 @@ certstore_rpm_version:
 firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-5.0.5.2bb3788
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-2.0.11.be7b83c
-  session_record:  session_record-4.1.1.b9f3575
+  firewall: firewall-2.0.12.994a759
+  session_record: session_record-4.1.2.f0646bb
   gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
   radius_collect_plug: radius_collect_plug-2.0.9.f1e08ad
@@ -17,7 +17,7 @@ firewall_rpm_version:
   http: http-2.0.12.0747ada
   mail: mail-1.0.18.98773fe
   quic: quic-2.0.6.513732e
-  ssl: ssl-2.0.13.fda2e4a
+  ssl: ssl-3.0.0.a52514a
   rtp: rtp-1.0.7.530ac76
   gtp: gtp-1.0.7.e1041b2
   ssh: ssh-2.1.7.b053e65
@@ -65,9 +65,9 @@ mrzcpd_rpm_version:
 
 
 sapp_rpm_version:
-  sapp: sapp-4.3.12.512bb58
+  sapp: sapp-4.3.13.9ea6b23
   tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
-  sapp-pr: sapp-pr-4.3.12.512bb58
+  sapp-pr: sapp-pr-4.3.13.9ea6b23
 
 tfe_rpm_version:
   tfe: tfe-4.8.31.868da4f
@@ -77,7 +77,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-5.0.6.cc02934
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-6.0.28.060407d
+  tsg_master: tsg_master-6.0.31.3458ef9
 
 shaping_master_rpm_version:
   shaping_master: shaping_master-1.1.4.b434f47
