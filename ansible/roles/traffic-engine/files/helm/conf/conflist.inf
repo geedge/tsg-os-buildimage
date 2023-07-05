@@ -7,6 +7,9 @@
 {{- if eq .Values.session_flags.enable .Values.define_enable_val_yes }}
 ./plug/platform/session_flags/session_flags.inf
 {{- end }}
+{{- if eq .Values.packet_capture.enable .Values.define_enable_val_yes }}
+./plug/platform/capture_packet_plug/capture_packet_plug.inf
+{{- end }}
 ./plug/platform/tsg_master/tsg_master.inf
 {{- if eq .Values.appsketch.enable .Values.define_enable_val_yes }}
 {{- if eq .Values.appsketch.builtin_engine .Values.define_enable_val_yes }}
@@ -77,9 +80,6 @@
 {{- end }}
 {{- if eq .Values.sessionrecord.enable .Values.define_enable_val_yes }}
 ./plug/business/session_record/session_record.inf
-{{- end }}
-{{- if eq .Values.packet_capture.enable .Values.define_enable_val_yes }}
-./plug/business/capture_packet_plug/capture_packet_plug.inf
 {{- end }}
 {{- if eq .Values.decoders.GTPC .Values.define_enable_val_yes }}
 ./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
