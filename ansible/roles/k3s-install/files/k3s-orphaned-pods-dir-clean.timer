@@ -3,7 +3,7 @@ Description=Daily Cleanup K3S Orphaned Pods Dir
 
 [Timer]
 OnBootSec=15min
-OnUnitActiveSec=1d
+OnUnitActiveSec=1h
 
 [Install]
 WantedBy=timers.target
