@@ -52,7 +52,7 @@ stages:
     - yum install -y qemu-img qemu-kvm telnet net-tools procps-ng httpd
     - find / -name images
     - ls -lh
-    - export VM_IMG_NAME=$(basename -s .bin images/*.bin)
+    - export VM_IMG_NAME=$(basename -s .bin images/*-ONIE.bin)
     - echo $VM_IMG_NAME
     - cp images/*.bin /var/www/html/onie-installer-x86_64.bin
     - httpd
