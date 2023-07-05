@@ -149,6 +149,8 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/vlan_flipping_map.conf  /opt/tsg/sapp/etc/vlan_flipping_map.conf
             cp /opt/tsg/config/firewall.inf            /opt/tsg/sapp/plug/business/firewall/firewall.inf
             cp /opt/tsg/config/necessary_plug_list.conf  /opt/tsg/sapp/etc/necessary_plug_list.conf
+            cp /opt/tsg/config/http_main.conf          /opt/tsg/sapp/conf/http/http_main.conf
+            cp /opt/tsg/config/mail.conf               /opt/tsg/sapp/conf/mail/mail.conf
 {{- end -}}
 
 {{- define "traffic-engine.proxy.copy-config-to-dest" -}}

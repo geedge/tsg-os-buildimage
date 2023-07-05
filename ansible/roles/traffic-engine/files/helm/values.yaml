@@ -154,7 +154,9 @@ decoders:
   DNS: yes
   QUIC: yes
   HTTP: yes
+  HTTP_GZIP: yes
   MAIL: yes
+  MAIL_BASE64: yes
   FTP: yes
   SSL: yes
   RTP: yes
