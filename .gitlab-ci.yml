@@ -54,7 +54,7 @@ stages:
     - ls -lh
     - export VM_IMG_NAME=$(basename -s .bin images/*-ONIE.bin)
     - echo $VM_IMG_NAME
-    - cp images/*.bin /var/www/html/onie-installer-x86_64.bin
+    - cp images/$VM_IMG_NAME.bin /var/www/html/onie-installer-x86_64.bin
     - httpd
     - chmod +x ./tools/mk-kvm.sh
     - cp ./tools/onie-base-kvm.img images/$VM_IMG_NAME.img
