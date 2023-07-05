@@ -144,17 +144,6 @@
     - /usr/lib/systemd/system/mrzcpd.service
   when: runtime_env != 'TSG-X-P0906'
 
-- name: "replace action: replace service unit Requires and after option, TSG-X-0906"
-  replace:
-    path: "/usr/lib/systemd/system/mrzcpd.service"
-    regexp: "{{ item.regexp }}"
-    replace: "{{ item.replace }}"
-  with_items:
-    - { regexp: "Requires=mrenv.service",replace: "Requires=mrenv.service k3s.service"}
-    - { regexp: "After=mrenv.service",replace: "After=mrenv.service k3s.service"}
-  when:
-    - runtime_env == 'TSG-X-P0906'
-
 - name: "copy add_dev_to_bridge to mrzcpd.service.d"
   copy:
     src: "{{ role_path }}/templates/service_add_dev_to_bridge.conf"
