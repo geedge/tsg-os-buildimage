@@ -295,7 +295,7 @@ if [ -f ${APP_BUNDLE_BIN} ]; then
     export APP_BUNDLE_IMAGES_DEST_DIR="${distro_mnt}/data/var/lib/rancher/k3s/agent/images"
     export APP_BUNDLE_CLIXON_CONF_PATH="${distro_mnt}/opt/tsg/clixon/etc/mgnt-srv.conf"
     export APP_BUNDLE_LOAD_IMAGES_SWITCH="off"
-    ./${APP_BUNDLE_BIN} -i ${distro_mnt}/data/var/lib/rancher/k3s/agent/images -c ${distro_mnt}/data/var/lib/rancher/k3s/server/static/charts
+    ./${APP_BUNDLE_BIN}
 fi
 
 umount ${distro_mnt}/proc

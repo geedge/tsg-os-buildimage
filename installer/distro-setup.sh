@@ -77,17 +77,30 @@ else
     cat /etc/machine-id > $PATH_PERSISTENT_MACHINE_ID
 fi
 
-#  copy k3s image tar file to air-gap dir
-air_gap_image_dir="/var/lib/rancher/k3s/agent/images"
-if [ -d "$air_gap_image_dir" ]; then
-    echo "$air_gap_image_dir is exist"
-    rm -rf /data$air_gap_image_dir
-    mkdir -p /data$air_gap_image_dir
-    mv $air_gap_image_dir/* /data$air_gap_image_dir
+###clear /etc/rancher
+# k3s_overlay_etc_rancher="/data/overlay/rootfs_etc/rw/rancher"
+# if [ -d "$k3s_overlay_etc_rancher" ]; then
+#     echo "$k3s_overlay_etc_rancher is exist"
+#     rm -rf $k3s_overlay_etc_rancher
+# else
+#     echo "$k3s_overlay_etc_rancher is not exist"
+# fi
+
+###clear /data/var/lib/rancher dir
+# copy k3s image tar file to air-gap dir
+k3s_rancher_dir="/var/lib/rancher"
+if [ -d "$k3s_rancher_dir" ]; then
+    echo "$k3s_rancher_dir is exist"
+    rm -rf /data$k3s_rancher_dir
+    rm -rf /var/lib/kubelet
+    mkdir -p /data$k3s_rancher_dir
+    cp -a $k3s_rancher_dir/* /data$k3s_rancher_dir
+    rm -rf $k3s_rancher_dir/k3s/agent/images
 else
-    echo "$air_gap_image_dir is not exist"
+    echo "$k3s_rancher_dir is not exist"
 fi
 
+air_gap_image_dir="/var/lib/rancher/k3s/agent/images"
 tsg_diagnose_images_dir="/opt/tsg/tsg-diagnose/images"
 if [ -d "$tsg_diagnose_images_dir" ]; then
     echo "$tsg_diagnose_images_dir is exist"
@@ -99,27 +112,6 @@ else
     echo "$tsg_diagnose_images_dir is not exist"
 fi
 
-#  copy helm packages to dest 
-helm_charts_dir="/var/lib/rancher/k3s/server/static/charts"
-if [ -d "$helm_charts_dir" ]; then
-    echo "$helm_charts_dir is exist"
-    rm -rf /data$helm_charts_dir
-    mkdir -p /data$helm_charts_dir
-    cp -a $helm_charts_dir/* /data$helm_charts_dir
-else
-    echo "$helm_charts_dir is not exist"
-fi
-
-#  copy manifests config to dest 
-k3s_manifests_dir="/var/lib/rancher/k3s/server/manifests"
-if [ -d "$k3s_manifests_dir" ]; then
-    echo "$k3s_manifests_dir is exist"
-    rm -rf /data$k3s_manifests_dir
-    mkdir -p /data$k3s_manifests_dir
-    cp -a $k3s_manifests_dir/* /data$k3s_manifests_dir
-else
-    echo "$k3s_manifests_dir is not exist"
-fi
 
 # copy mrzcpd alternatives file to dest
 mrzcpd_alternatives_dir="/var/lib/alternatives"
