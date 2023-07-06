@@ -1,0 +1,13 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: systemd-exporter
+  namespace: kube-system
+spec:
+  chart: https://%{KUBERNETES_API}%/static/charts/systemd-exporter-1.0.1.tgz
+  targetNamespace: tsg-os-system
+  valuesContent: |-
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+

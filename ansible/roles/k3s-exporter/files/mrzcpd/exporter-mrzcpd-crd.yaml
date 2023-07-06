@@ -1,7 +1,7 @@
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
-  name: exporter-mrzcpd
+  name: mrzcpd-exporter
   namespace: kube-system
 spec:
   chart: https://%{KUBERNETES_API}%/static/charts/exporter-mrzcpd-1.0.1.tgz

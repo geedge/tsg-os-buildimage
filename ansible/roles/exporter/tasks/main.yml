@@ -31,6 +31,7 @@
     src: '{{ role_path }}/files/node_exporter'
     dest: /opt/tsg/exporter/node_exporter
     mode: 0755
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "copy systemd_exporter"
   copy:
@@ -43,22 +44,27 @@
     src: '{{ role_path }}/files/redis_exporter'
     dest: /opt/tsg/exporter/redis_exporter
     mode: 0755
-  when: monitor.enable_redis_exporter == 1
+  when:
+    - monitor.enable_redis_exporter == 1
+    - runtime_env != 'TSG-X-P0906'
 
 - name: "copy ipmi_exporter"
   copy:
     src: '{{ role_path }}/files/ipmi_exporter'
     dest: /opt/tsg/exporter/ipmi_exporter
     mode: 0755
-  when: monitor.enable_ipmi_exporter == 1
+  when:
+    - monitor.enable_ipmi_exporter == 1
+    - runtime_env != 'TSG-X-P0906'
 
 - name: "templates atca-exporter-node.service"
   template:
     src: "{{role_path}}/templates/exporter-node.service.j2"
     dest: /usr/lib/systemd/system/exporter-node.service
   tags: template
+  when: runtime_env != 'TSG-X-P0906'
 
-- name: "templates atca-exporter-systemd.service"
+- name: "templates exporter-systemd.service"
   template:
     src: "{{role_path}}/templates/exporter-systemd.service.j2"
     dest: /usr/lib/systemd/system/exporter-systemd.service
@@ -69,7 +75,9 @@
     src: "{{role_path}}/templates/exporter-ipmi.service.j2"
     dest: /usr/lib/systemd/system/exporter-ipmi.service
   tags: template
-  when: monitor.enable_ipmi_exporter == 1
+  when:
+    - monitor.enable_ipmi_exporter == 1
+    - runtime_env != 'TSG-X-P0906'
 
 - name: "Create /usr/lib/systemd/system/exporter-node.service.d directory if it does not exist"
   file:
@@ -78,6 +86,7 @@
     mode: '0755'
   with_items:
     - /usr/lib/systemd/system/exporter-node.service.d
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "Create /usr/lib/systemd/system/exporter-systemd.service.d directory if it does not exist"
   file:
@@ -86,6 +95,7 @@
     mode: '0755'
   with_items:
     - /usr/lib/systemd/system/exporter-systemd.service.d
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "Create /usr/lib/systemd/system/exporter-ipmi.service.d directory if it does not exist"
   file:
@@ -94,7 +104,9 @@
     mode: '0755'
   with_items:
     - /usr/lib/systemd/system/exporter-ipmi.service.d
-  when: monitor.enable_ipmi_exporter == 1
+  when:
+    - monitor.enable_ipmi_exporter == 1
+    - runtime_env != 'TSG-X-P0906'
 
 - name: "copy slice file to exporter-node.service.d"
   copy:
@@ -145,6 +157,8 @@
   systemd:
     name: exporter-node
     enabled: yes
+  when: runtime_env != 'TSG-X-P0906'
+  
 
 - name: 'exporter-systemd service start'
   systemd:
@@ -155,4 +169,6 @@
   systemd:
     name: exporter-ipmi
     enabled: yes
-  when: monitor.enable_ipmi_exporter == 1
+  when:
+    - monitor.enable_ipmi_exporter == 1
+    - runtime_env != 'TSG-X-P0906'
