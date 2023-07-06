@@ -92,7 +92,7 @@ k3s_rancher_dir="/var/lib/rancher"
 if [ -d "$k3s_rancher_dir" ]; then
     echo "$k3s_rancher_dir is exist"
     rm -rf /data$k3s_rancher_dir
-    rm -rf /var/lib/kubelet
+    rm -rf /data/var/lib/kubelet
     mkdir -p /data$k3s_rancher_dir
     cp -a $k3s_rancher_dir/* /data$k3s_rancher_dir
     rm -rf $k3s_rancher_dir/k3s/agent/images
