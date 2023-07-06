@@ -95,7 +95,7 @@ if [ -d "$k3s_rancher_dir" ]; then
     rm -rf /data/var/lib/kubelet
     mkdir -p /data$k3s_rancher_dir
     cp -a $k3s_rancher_dir/* /data$k3s_rancher_dir
-    rm -rf $k3s_rancher_dir/k3s/agent/images
+    rm -rf $k3s_rancher_dir/k3s/agent/images/*
 else
     echo "$k3s_rancher_dir is not exist"
 fi
