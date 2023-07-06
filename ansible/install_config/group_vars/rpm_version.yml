@@ -97,7 +97,7 @@ wire_graft_rpm_version:
   libwire_graft: libwire_graft-1.5.10.60fa715
 
 hasp_tools_rpm_version:
-  hasp_tools: hasp-tools-1.0.7.630b7c4
+  hasp_tools: hasp-tools-1.0.8.05ad1fb
 
 tsg_os_clixon_rpm_version:
   cligen: cligen-5.8.0-release
