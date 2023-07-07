@@ -139,10 +139,10 @@ set_grub_cmdline_file()
     local grub_cmdline_value="$2"
 
     if ! grep -q " ${grub_cmdline_key}=" "$grub_cfg_file"; then
-        sed -i "/ linux / s/$/ ${grub_cmdline_key}=${grub_cmdline_value}/" $grub_cfg_file
+        sed -i "/ linux / s/$/ ${grub_cmdline_key}=${grub_cmdline_value} /" $grub_cfg_file
         result=1
-    elif ! grep -q " ${grub_cmdline_key}=${grub_cmdline_value}" "$grub_cfg_file"; then
-        sed -i "s/ ${grub_cmdline_key}=\w\+/ ${grub_cmdline_key}=${grub_cmdline_value}/g" $grub_cfg_file
+    elif ! grep -qE " ${grub_cmdline_key}=${grub_cmdline_value}\s| ${grub_cmdline_key}=${grub_cmdline_value}$" "$grub_cfg_file"; then
+        sed -i "s/ ${grub_cmdline_key}=\(\w\+,\)*\(\w\+-\w\+,*\)*\w*,*\s*/ ${grub_cmdline_key}=${grub_cmdline_value} /" $grub_cfg_file
         result=1
     fi
     return $result
@@ -152,8 +152,8 @@ set_grub_cmdline()
 {
     local set_grub_flag=0
 
-    grub_cmdline_key=("hugepagesz" "hugepages")
-    grub_cmdline_value=("1G" ${HUGEPAGES})
+    grub_cmdline_key=("hugepagesz" "hugepages" "isolcpus")
+    grub_cmdline_value=("1G" ${HUGEPAGES} ${MRZCPD_IOCORE})
 
     for index in "${!grub_cmdline_key[@]}"
     do
@@ -170,11 +170,11 @@ set_grub_cmdline()
 
 load_tsg_os_HAL_config
 set_hugepages
+set_cpu_list
 set_grub_cmdline
 
 /opt/tsg/mrzcpd/bin/mrmarch --auto
 
-set_cpu_list
 set_mrzcpd_indirect_pktmbuf
 set_mrzcpd_direct_pktmbuf
 
