@@ -4,8 +4,8 @@ certstore_rpm_version:
 firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-5.0.6.1820f69
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-2.0.13.94a9a55
-  session_record: session_record-4.1.4.118c7d7
+  firewall: firewall-2.0.14.e78add7
+  session_record: session_record-4.1.5.291307e
   gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
   radius_collect_plug: radius_collect_plug-2.0.11.47a51f3
@@ -14,7 +14,7 @@ firewall_rpm_version:
   tsg_ddos_sketch: tsg_ddos_sketch-1.3.5.447bcc2
   dns: dns-2.1.6.8cfb357
   ftp: ftp-1.0.15.1fc64fe
-  http: http-2.0.12.0747ada
+  http: http-2.0.13.5efe313
   mail: mail-1.0.19.e982b44
   quic: quic-2.0.6.513732e
   ssl: ssl-3.0.0.a52514a

@@ -61,8 +61,8 @@ APP_NAME="app_metric"
 
 [FIELD_STAT]
 CYCLE=5
-TELEGRAF_PORT=8100
-TELEGRAF_IP="127.0.0.1"
+#TELEGRAF_PORT=8200
+#TELEGRAF_IP="127.0.0.1"
 OUTPUT_PATH="log/master.status"
 APP_NAME="tsg_master"
 
@@ -90,6 +90,12 @@ DEVICE_SEQ_IN_DATA_CENTER={{ session_id_generator.snowflake_worker_id_offset }}
 {% endif %}
 {% endraw %}
 FEATURE_TAMPER=1
+
+[FIREWALL]
+CYCLE=30
+#TELEGRAF_PORT=8500
+#TELEGRAF_IP=127.0.0.1
+OUTPUT_PATH="log/firewall.status"
 
 [SESSION_RECORD]
 interim_intervals_time = 120
