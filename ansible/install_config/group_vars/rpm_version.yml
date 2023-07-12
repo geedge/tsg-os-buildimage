@@ -15,7 +15,7 @@ firewall_rpm_version:
   dns: dns-2.1.6.8cfb357
   ftp: ftp-1.0.15.1fc64fe
   http: http-2.0.12.0747ada
-  mail: mail-1.0.18.98773fe
+  mail: mail-1.0.19.e982b44
   quic: quic-2.0.6.513732e
   ssl: ssl-3.0.0.a52514a
   rtp: rtp-1.0.7.530ac76
