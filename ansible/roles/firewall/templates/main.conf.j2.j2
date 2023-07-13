@@ -16,6 +16,7 @@ NIC_NAME="{{ control_and_policy.nic_name }}"
 MAX_SERVICE=1
 LOG_LEVEL=30
 LOG_PATH="log/master.kafka"
+COMPRESSION_TYPE="snappy"
 SASL_USERNAME="admin"
 SASL_PASSWD="galaxy2019"
 {% raw %}BROKER_LIST="{{ olap.kafka_broker.address_list | join(",") }}"

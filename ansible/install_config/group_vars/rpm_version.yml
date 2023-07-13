@@ -5,7 +5,7 @@ firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-5.0.6.1820f69
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   firewall: firewall-2.0.14.e78add7
-  session_record: session_record-4.1.5.291307e
+  session_record: session_record-4.1.6.cda3434
   gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
   radius_collect_plug: radius_collect_plug-2.0.11.47a51f3
@@ -77,7 +77,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-5.0.6.cc02934
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-6.0.34.dfd450c
+  tsg_master: tsg_master-6.0.35.d4406bb
 
 shaping_master_rpm_version:
   shaping_master: shaping_master-1.1.4.b434f47
