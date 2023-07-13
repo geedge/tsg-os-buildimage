@@ -91,7 +91,7 @@
   lineinfile:
     path: /etc/infiniband/openib.conf
     regexp: '^RUN_FW_UPDATER_ONBOOT'
-    line: "RUN_FW_UPDATER_ONBOOT=yes"
+    line: "RUN_FW_UPDATER_ONBOOT=no"
   when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
 ###### end ######
 
