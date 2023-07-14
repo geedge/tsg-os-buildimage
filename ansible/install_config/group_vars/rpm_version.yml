@@ -9,7 +9,7 @@ firewall_rpm_version:
   gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
   radius_collect_plug: radius_collect_plug-2.0.11.47a51f3
-  app_proto_identify: app_proto_identify-2.1.9.5c39cd1
+  app_proto_identify: app_proto_identify-2.1.10.222e48e
   app_proto_engine: app_proto_engine-3.0.2.585490a
   tsg_ddos_sketch: tsg_ddos_sketch-1.3.5.447bcc2
   dns: dns-2.1.6.8cfb357
