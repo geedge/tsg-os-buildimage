@@ -19,6 +19,7 @@ MRZCPD_IOCORE=
 CLIXON_IOCORE=
 MRZCPD_DIRECT_PKTMBUF=
 MRZCPD_INDIRECT_PKTMBUF=
+MRZCPD_POLL_WAIT_THROTTLE=512
 
 load_tsg_os_HAL_config()
 {
@@ -58,6 +59,8 @@ set_tsg_clixon_conf()
     [ -f ${mrglobal_cfg_template} ] && sed -i "s/^sz_indirect_pktmbuf=.*$/sz_indirect_pktmbuf=${MRZCPD_INDIRECT_PKTMBUF}/g" ${mrglobal_cfg_template}
 
     [ -f ${mrglobal_cfg_template} ] && sed -i "s/^iocore=.*$/iocore=${MRZCPD_IOCORE}/g" ${mrglobal_cfg_template}
+
+    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^poll_wait_throttle=.*$/poll_wait_throttle=${MRZCPD_POLL_WAIT_THROTTLE}/g" ${mrglobal_cfg_template}
 
     [ -f ${tsg_clixon_cfg_file} ] && sed -i "s/^cpu_range=.*$/cpu_range=${CLIXON_IOCORE}/g" ${tsg_clixon_cfg_file}
 }
