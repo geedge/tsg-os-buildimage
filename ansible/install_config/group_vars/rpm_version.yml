@@ -112,7 +112,7 @@ bfdd_rpm_version:
 
 
 shaping_engine_rpm_version:
-  shaping_engine: shaping_engine-1.2.8.6bef4d3
+  shaping_engine: shaping_engine-1.2.9.099951d
 
 coredump_tools_rpm_version:
   coredump_tools: coredump-tools-1.0.10-b1fd56a
