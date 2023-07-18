@@ -14,6 +14,8 @@ cpu_core_num=$(lscpu | grep "CPU(s):" | head -n 1 | sed  -r 's/CPU\(s\):\s{1,}//
 mem_num=$(free -m | grep Mem | awk '{print $2}')
 
 HUGEPAGES=
+KUBE_RESERVED=
+SYSTEM_RESERVED=
 NUMA_NODE_CNT=
 MRZCPD_IOCORE=
 CLIXON_IOCORE=
@@ -31,25 +33,29 @@ load_tsg_os_HAL_config()
 set_k3s_config()
 {
     local mem_num="$1"
+    local system_mem
 
-    if [ $mem_num -le "32768" ]; then
-        kube_reserved="2Gi"
-        system_reserved="12Gi"
-    elif [ $mem_num -le "65536" ]; then
-        kube_reserved="2Gi"
-        system_reserved="16Gi"
-    elif [ $mem_num -le "131072" ]; then
-        kube_reserved="2Gi"
-        system_reserved="24Gi"
-    else
-        kube_reserved="2Gi"
-        system_reserved="40Gi"
+    if [ ! -n "$KUBE_RESERVED" ]; then
+        KUBE_RESERVED=2
     fi
 
+    if [ ! -n "$SYSTEM_RESERVED" ]; then
+        if [ $mem_num -le "32768" ]; then
+            SYSTEM_RESERVED=8
+        elif [ $mem_num -le "65536" ]; then
+            SYSTEM_RESERVED=8
+        elif [ $mem_num -le "131072" ]; then
+            SYSTEM_RESERVED=16
+        else
+            SYSTEM_RESERVED=32
+        fi
+    fi
+
+    system_mem=$(($HUGEPAGES + $SYSTEM_RESERVED))
 cat <<EOF > ${k3s_cfg_file}
 kubelet-arg:
-  - "kube-reserved=memory=${kube_reserved}"
-  - "system-reserved=memory=${system_reserved}"
+  - "kube-reserved=memory=${KUBE_RESERVED}Gi"
+  - "system-reserved=memory=${system_mem}Gi"
 EOF
 }
 
