@@ -20,3 +20,4 @@ data:
   necessary_plug_list.conf: {{ tpl (.Files.Get "conf/necessary_plug_list.conf") . | quote }}
   http_main.conf: {{ tpl (.Files.Get "conf/http_main.conf") . | quote }}
   mail.conf: {{ tpl (.Files.Get "conf/mail.conf") . | quote }}
+  ssl_main.conf: {{ tpl (.Files.Get "conf/ssl_main.conf") . | quote }}

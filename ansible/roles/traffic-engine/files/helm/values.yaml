@@ -159,6 +159,7 @@ decoders:
   MAIL_BASE64: yes
   FTP: yes
   SSL: yes
+  SSL_CERT: yes
   RTP: yes
   SIP: yes
   SSH: yes

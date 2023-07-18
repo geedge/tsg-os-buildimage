@@ -151,6 +151,7 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/necessary_plug_list.conf  /opt/tsg/sapp/etc/necessary_plug_list.conf
             cp /opt/tsg/config/http_main.conf          /opt/tsg/sapp/conf/http/http_main.conf
             cp /opt/tsg/config/mail.conf               /opt/tsg/sapp/conf/mail/mail.conf
+            cp /opt/tsg/config/ssl_main.conf           /opt/tsg/sapp/conf/ssl/ssl_main.conf
 {{- end -}}
 
 {{- define "traffic-engine.proxy.copy-config-to-dest" -}}
