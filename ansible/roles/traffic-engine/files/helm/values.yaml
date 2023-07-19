@@ -46,7 +46,7 @@ session_id_generator:
 
 firewall:
   enable: yes
-  rapidjson_chunk_capacity: 8192
+  rapidjson_chunk_capacity: 2048
   enable_smartoffload: no
 
 appsketch:
@@ -64,6 +64,12 @@ sessionrecord:
     intervals_in_sec: 120
   transaction_record:
     enable: yes
+  contains_app_id:
+    enable: no
+  contains_nat_linkinfo:
+    enable: no
+  contains_dns_resource_record:
+    enable: no
 
 session_manager:
   tcp_session_max: 20021

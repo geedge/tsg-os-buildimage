@@ -22,9 +22,17 @@ SASL_PASSWD="galaxy2019"
 {% raw %}BROKER_LIST="{{ olap.kafka_broker.address_list | join(",") }}"
 {% endraw %}
 COMMON_FIELD_FILE="tsgconf/tsg_log_field.conf"
-SEND_APP_ID_SWITCH=0
-SEND_NAT_LINKINFO_SWITCH=0
 {% raw %}
+{% if sessionrecord.enable_contains_app_id == 1 %}
+SEND_APP_ID_SWITCH=1
+{% else %}
+SEND_APP_ID_SWITCH=0
+{% endif %}
+{% if sessionrecord.enable_contains_nat_linkinfo == 1 %}
+SEND_NAT_LINKINFO_SWITCH=1
+{% else %}
+SEND_NAT_LINKINFO_SWITCH=0
+{% endif %}
 {% if sessionrecord.enable_interim_record == 1 %}
 SEND_INTERIM_RECORD=1
 {% else %}
@@ -35,6 +43,7 @@ SEND_TRANSCATION_RECORD=1
 {% else %}
 SEND_TRANSCATION_RECORD=0
 {% endif %}
+RAPIDJSON_CHUNK_CAPACITY={{ firewall.rapidjson_chunk_capacity }}
 {% endraw %}
 TCP_MIN_PKTS=3
 TCP_MIN_BYTES=5
@@ -101,7 +110,12 @@ OUTPUT_PATH="log/firewall.status"
 [SESSION_RECORD]
 interim_intervals_time = 120
 sendlog_in_tcp_close=1
+{% raw %}{% if sessionrecord.enable_contains_dns_resource_record == 1 %}
+send_dns_rr_switch=1
+{% else %}
 send_dns_rr_switch=0
+{% endif %}
+{% endraw %}
 log_level=30
 log_path="log/session_record"
 

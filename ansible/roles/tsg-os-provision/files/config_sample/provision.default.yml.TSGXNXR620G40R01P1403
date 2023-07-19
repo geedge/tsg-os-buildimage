@@ -5,6 +5,7 @@ feature:
 firewall:
   enable: 1
   enable_hos: 1
+  rapidjson_chunk_capacity: 2048
 
 proxy:
   enable: 0
@@ -16,6 +17,9 @@ sessionrecord:
   enable_rtp_record: 1
   enable_interim_record: 1
   enable_transcation_record: 1
+  enable_contains_app_id: 0
+  enable_contains_nat_linkinfo: 0
+  enable_contains_dns_resource_record: 0
 
 capturepacket:
   enable: 1
