@@ -41,6 +41,8 @@
 
 [[aggregators.basicstats]]
   period = "1s"
+  delay = "1s"
+  grace = "1s"
   drop_original = true
   stats = ["sum"]
   fieldpass = ["sessions", "in_bytes", "out_bytes", "in_pkts", "out_pkts", "c2s_pkts", "s2c_pkts", "c2s_bytes", "s2c_bytes", "c2s_fragments", "s2c_fragments",
