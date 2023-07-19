@@ -115,4 +115,4 @@ shaping_engine_rpm_version:
   shaping_engine: shaping_engine-1.2.9.099951d
 
 coredump_tools_rpm_version:
-  coredump_tools: coredump-tools-1.0.10-b1fd56a
+  coredump_tools: coredump-tools-1.0.12-51c6653
