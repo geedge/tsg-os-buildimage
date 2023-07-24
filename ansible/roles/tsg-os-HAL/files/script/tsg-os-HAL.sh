@@ -22,6 +22,9 @@ CLIXON_IOCORE=
 MRZCPD_DIRECT_PKTMBUF=
 MRZCPD_INDIRECT_PKTMBUF=
 MRZCPD_POLL_WAIT_THROTTLE=512
+MRZCPD_SZ_DATA=4096
+MRZCPD_SZ_TUNNEL=8192
+MRZCPD_CHECK_BUFFER_LEAK=1
 
 load_tsg_os_HAL_config()
 {
@@ -67,6 +70,9 @@ set_tsg_clixon_conf()
     [ -f ${mrglobal_cfg_template} ] && sed -i "s/^iocore=.*$/iocore=${MRZCPD_IOCORE}/g" ${mrglobal_cfg_template}
 
     [ -f ${mrglobal_cfg_template} ] && sed -i "s/^poll_wait_throttle=.*$/poll_wait_throttle=${MRZCPD_POLL_WAIT_THROTTLE}/g" ${mrglobal_cfg_template}
+    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^sz_data=.*$/sz_data=${MRZCPD_SZ_DATA}/g" ${mrglobal_cfg_template}
+    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^sz_tunnel=.*$/sz_tunnel=${MRZCPD_SZ_TUNNEL}/g" ${mrglobal_cfg_template}
+    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^check_buffer_leak=.*$/check_buffer_leak=${MRZCPD_CHECK_BUFFER_LEAK}/g" ${mrglobal_cfg_template}
 
     [ -f ${tsg_clixon_cfg_file} ] && sed -i "s/^cpu_range=.*$/cpu_range=${CLIXON_IOCORE}/g" ${tsg_clixon_cfg_file}
 }
