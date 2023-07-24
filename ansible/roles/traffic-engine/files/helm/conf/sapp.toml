@@ -149,6 +149,8 @@ bypass_trigger_cpu_usage={{ .Values.overload_protection.detect_threshold_cpu_usa
 
     meaningful_statistics_minimum_pkt=3
     meaningful_statistics_minimum_byte=5
+    opening_timeout={{ .Values.session_manager.tcp_session_opening_timeout_in_sec }}
+    closing_timeout={{ .Values.session_manager.tcp_session_closing_timeout_in_sec }}
 
         [stream.tcp.inject]
         link_mss=1460

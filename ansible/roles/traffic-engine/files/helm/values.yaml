@@ -76,6 +76,8 @@ session_manager:
   tcp_session_unordered_pkt_max: 128
   tcp_session_timeout_in_sec: 30
   udp_session_timeout_in_sec: 60
+  tcp_session_opening_timeout_in_sec: 60
+  tcp_session_closing_timeout_in_sec: 30
   udp_session_max: 5021
   tcp_duplicated_packet_filter: yes
   udp_duplicated_packet_filter: yes
