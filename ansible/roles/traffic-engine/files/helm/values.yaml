@@ -166,6 +166,7 @@ decoders:
   FTP: yes
   SSL: yes
   SSL_CERT: yes
+  SSL_JA3: yes
   RTP: yes
   SIP: yes
   SSH: yes
