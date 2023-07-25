@@ -288,6 +288,7 @@ chroot ${distro_mnt} /distro-setup.sh ${blk_dev}
 if [ -f ${APP_BUNDLE_BIN} ]; then
     mkdir -p ${distro_mnt}/data/var/lib/rancher/k3s/agent/images
     mkdir -p ${distro_mnt}/data/var/lib/rancher/k3s/server/static/charts
+    rm -rf ${distro_mnt}/data/var/lib/cni
     rm -rf ${distro_mnt}/data/var/lib/rancher/k3s/agent/images/${CONTAINER_IMAGES_TAR_GLOB}
     rm -rf ${distro_mnt}/data/var/lib/rancher/k3s/server/static/charts/${HELM_CHART_TAR_GLOB}
     chmod 0755 ${APP_BUNDLE_BIN}
