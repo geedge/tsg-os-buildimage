@@ -28,7 +28,7 @@
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
 
 - name: "execute k3s install"
-  shell: curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_SKIP_ENABLE=true INSTALL_K3S_BIN_DIR=/usr/bin sh -s - --flannel-backend=none --node-name=localhost
+  shell: curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_SKIP_ENABLE=true INSTALL_K3S_BIN_DIR=/usr/bin INSTALL_K3S_SYSTEMD_DIR=/usr/lib/systemd/system sh -s - --flannel-backend=none --node-name=localhost
 
 # - name: "enable k3s"
 #   systemd:
