@@ -46,7 +46,7 @@
 - name: "copy k3s.service.env to destination"
   copy:
     src: "{{ role_path }}/files/k3s.service.env"
-    dest: /etc/systemd/system/k3s.service.env
+    dest: /usr/lib/systemd/system/k3s.service.env
 
 - name: "copy multus-cni.tar to destination"
   copy:
