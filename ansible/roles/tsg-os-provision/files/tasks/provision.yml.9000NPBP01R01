@@ -310,3 +310,15 @@
       when: 
         - enable_config_apply == '1'
         - proxy.enable == 1
+
+    - name: "tsg-os-provision: restart telegraf_security"
+      systemd:
+        name: telegraf_security
+        state: restarted
+      when: enable_config_apply == '1'
+
+    - name: "tsg-os-provision: restart telegraf_proxy"
+      systemd:
+        name: telegraf_proxy
+        state: restarted
+      when: enable_config_apply == '1'
