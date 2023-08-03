@@ -9,21 +9,21 @@ mount  --bind  /data/home/    /home/
 # Create default user: user,admin,support
 echo "Setting user user password as user"
 useradd -G systemd-journal -s /bin/bash -m user
-echo user | passwd user --stdin
+echo GDNT2023J8e+76 | passwd user --stdin
 #echo "user    ALL=(ALL)       ALL" >> /etc/sudoers
-echo user | passwd --stdin
+echo GDNT2023J8e+76 | passwd --stdin
 
 echo "Setting user admin password as admin"
 useradd -G systemd-journal -s /bin/bash -m admin
-echo admin | passwd admin --stdin
+echo GDNT202342U9.x | passwd admin --stdin
 echo "%admin    ALL=(ALL)       ALL" >> /etc/sudoers
-echo admin | passwd --stdin
+echo GDNT202342U9.x | passwd --stdin
 
 echo "Setting user support password as support"
 useradd -G systemd-journal -s /bin/bash -m support
-echo support | passwd support --stdin
+echo GDNT2023QV3:vI | passwd support --stdin
 echo "%support    ALL=(ALL)       ALL" >> /etc/sudoers
-echo support | passwd --stdin
+echo GDNT2023QV3:vI | passwd --stdin
 
 # umount  /home/
 
