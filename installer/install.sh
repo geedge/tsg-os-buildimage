@@ -369,21 +369,4 @@ umount ${distro_mnt}
 cd /
 
 echo "TSG-OS install successfully, need to reboot."
-if grep -q "fastreboot=1" /proc/cmdline ; then
-    echo "os need fastboot"
-    mkdir -p /tmp/os
-    mount /dev/sda4 /tmp/os
-
-    if [ -e /tmp/os/boot/vmlinuz ] && [ -e /tmp/os/boot/initrd.img ]; then
-        kexec -l /tmp/os/boot/vmlinuz --initrd=/tmp/os/boot/initrd.img \
-        --append="$(cat /proc/cmdline | sed 's/fastboot=1 //')"
-
-        kexec -e
-    else
-        echo "vmlinuz and initrd.img do not exist in /tmp/os/boot. Exiting."
-        exit 0
-    fi
-else
-    echo "Don't need fastboot"
-    exit 0
-fi
+exit 0
