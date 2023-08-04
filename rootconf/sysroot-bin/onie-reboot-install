@@ -4,36 +4,10 @@
 #
 #  SPDX-License-Identifier:     GPL-2.0
 
+. /lib/onie/common-blkdev
 
-# Check for --no-kexec argument
-if [ "$1" = "--no-kexec" ]
-then
-    . /lib/onie/common-blkdev
+echo "Rebooting into ONIE (re)install mode..."
 
-    echo "Rebooting into ONIE (re)install mode..."
-    set_onie_next_boot
-    /mnt/onie-boot/onie/tools/bin/onie-boot-mode -q -o install
-    echo "Rebooting with reboot command..."
-    reboot
-else
-    echo "Rebooting with kexec command..."
-
-    # Find vmlinuz and initrd files in /mnt/onie-boot
-    vmlinuz_file=$(find /mnt/onie-boot -name 'vmlinuz*' | head -n 1)
-    initrd_file=$(find /mnt/onie-boot -name 'initrd*' | head -n 1)
-
-    if [ -z "$vmlinuz_file" ] || [ -z "$initrd_file" ]
-    then
-        echo "Error: vmlinuz or initrd file not found. Falling back to reboot command."
-        reboot
-    else
-        # Get current kernel command line parameters
-        current_kernel_params=$(cat /proc/cmdline)
-
-        # Load the kernel and initrd using kexec
-        kexec -l "$vmlinuz_file" --initrd="$initrd_file" --append="fastreboot=1 $current_kernel_params"
-
-        # Execute kexec
-        kexec -e
-    fi
-fi
+set_onie_next_boot
+/mnt/onie-boot/onie/tools/bin/onie-boot-mode -q -o install
+reboot
