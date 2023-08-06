@@ -4,7 +4,7 @@ certstore_rpm_version:
 firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-5.0.6.1820f69
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-2.0.15.2c5842b
+  firewall: firewall-2.1.0.9f868a5
   session_record: session_record-4.1.8.962ec30
   gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
@@ -29,6 +29,7 @@ firewall_rpm_version:
   rdp: rdp-1.0.3.f392ffd
   bgp: bgp-1.1.2.356c17d
   session_flags: session_flags-2.1.5.348c692
+  statistics_metrics: statistics_metrics-1.0.2.05cfd7e
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf
@@ -54,6 +55,8 @@ framework_rpm_version:
   20_libfieldstat3: libfieldstat3-3.0.9.fa7cd7e
   21_libmaat4: libmaat4-4.0.31.73887d5
   22_libMESA_sts: libMESA_sts-1.0.1.663f190
+  23_libfieldstat4: libfieldstat4-4.0.1.1851db6
+  24_libstatistics: libstatistics-1.0.2.382c385
 
 kni_rpm_version:
   kni: kni-5.1.8.ce6433e
@@ -66,9 +69,9 @@ mrzcpd_rpm_version:
 
 
 sapp_rpm_version:
-  sapp: sapp-4.3.20.73cf957
+  sapp: sapp-4.3.21.738415d
   tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
-  sapp-pr: sapp-pr-4.3.20.73cf957
+  sapp-pr: sapp-pr-4.3.21.738415d
 
 tfe_rpm_version:
   tfe: tfe-4.8.32.2451bd7
@@ -78,7 +81,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-5.0.6.cc02934
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-6.0.46.e089f98
+  tsg_master: tsg_master-6.1.0.79ca2d2
 
 shaping_master_rpm_version:
   shaping_master: shaping_master-1.1.4.b434f47
