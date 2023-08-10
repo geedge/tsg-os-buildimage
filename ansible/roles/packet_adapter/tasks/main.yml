@@ -1,0 +1,21 @@
+---
+- name: "download rpm packages: packet_adapter"
+  yum:
+    name:
+      - "{{ packet_adapter_rpm_version.packet_adapter }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+    download_only: yes
+    download_dir: "{{ path_download }}"
+
+- name: "Get packet_adapter rpm path"
+  find:
+    path: /tmp/rpm_download/
+    pattern: "{{ packet_adapter_rpm_version.packet_adapter }}*"
+  register: packet_adapter_rpm_fullname
+
+- name: "Install packet_adapter from local path" 
+  yum:
+    name: "{{ packet_adapter_rpm_fullname.files[0].path }}" 
+    state: present
+    disable_gpg_check: yes

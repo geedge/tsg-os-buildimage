@@ -137,6 +137,7 @@ tfe_affinity: [77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92]
 sce_affinity: [92]
 shaping_affinity: [93]
 pktio_affinity: [94]
+inject_adapter_affinity: [95]
 
 tfe_rps_mask: "00000000"
 
@@ -184,6 +185,8 @@ configHash: "defaulthash"
 
 shaping:
   enable: yes
+inject_adapter:
+  enable: yes
 
 service_chaining:
   enable: yes
@@ -208,6 +211,9 @@ sid:
 
 shaping_config:
   shaping_nic: nf_1_shaping_engine
+
+inject_adapter_config:
+  inject_adapter_nic: nf_1_shaping_engine
 
 app_symbol_index: 1
 distmode: 2
@@ -235,6 +241,13 @@ debug:
     #default: /etc/tsg-os/${service_function_name}/service_chaining_prestart_script.sh
     prestart_script: ""
   shaping:
+    enable_liveness_probe: yes
+    enable_interactive_startup: no
+    enable_prestart_script: no
+    enable_mount_host_filesystem: no
+    #default: /etc/tsg-os/${service_function_name}/shaping_prestart_script.sh
+    prestart_script: ""
+  inject_adapter:
     enable_liveness_probe: yes
     enable_interactive_startup: no
     enable_prestart_script: no
