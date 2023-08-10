@@ -39,7 +39,7 @@ spec:
       - name: inject-adapter
         image: "registry.gdnt-cloud.website/tsg-inject:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
-        workingDir: /opt/tsg/packetadapter
+        workingDir: /opt/tsg/packet_adapter
         command:
           - "bash"
           - "-ec"
@@ -83,7 +83,7 @@ spec:
         - name: inject-adapter
           mountPath: "/opt/tsg/config"
         - name: inject-log
-          mountPath: /opt/tsg/packetadapter/log
+          mountPath: /opt/tsg/packet_adapter/log
         {{ template "traffic-engine.mount.mrzcpd" . }}
         {{ template "traffic-engine.mount.localtime" . }}
         {{ template "traffic-engine.inject_adapter.mount.prestart" . }}
