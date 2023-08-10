@@ -382,7 +382,7 @@ enable_breakpad_upload=0
 {{- end -}}
 
 {{- define "traffic-engine.inject_adapter.copy-config-to-dest" -}}
-            cp /opt/tsg/config/packet_adapter.conf  /opt/tsg/packetadapter/conf
+            cp /opt/tsg/config/packet_adapter.conf  /opt/tsg/packet_adapter/conf
 {{- end -}}
 
 {{- define "traffic-engine.inject_adapter.mount.hostpath" -}}
@@ -396,7 +396,7 @@ enable_breakpad_upload=0
 {{- if eq .Values.debug.inject_adapter.enable_interactive_startup .Values.define_enable_val_yes -}}
             while true; do sleep 10;done
 {{- else -}}
-           tail -f
+           exec /opt/tsg/packet_adapter/bin/packet_adapter
 {{- end }}
 {{- end -}}
 
