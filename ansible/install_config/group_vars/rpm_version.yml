@@ -122,4 +122,4 @@ coredump_tools_rpm_version:
   coredump_tools: coredump-tools-1.0.12-51c6653
 
 packet_adapter_rpm_version:
-  packet_adapter: packet_adapter-xxxxx
+  packet_adapter: packet_adapter-2.0.0.e34aa3f
