@@ -29,7 +29,7 @@ firewall_rpm_version:
   rdp: rdp-1.0.3.f392ffd
   bgp: bgp-1.1.2.356c17d
   session_flags: session_flags-2.1.5.348c692
-  statistics_metrics: statistics_metrics-1.0.5.8c34b7f
+  statistics_metrics: statistics_metrics-1.0.6.c68e45c
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf
@@ -56,7 +56,7 @@ framework_rpm_version:
   21_libmaat4: libmaat4-4.0.35.c8690b2
   22_libMESA_sts: libMESA_sts-1.0.1.663f190
   23_libfieldstat4: libfieldstat4-4.0.2.fed58fe
-  24_libstatistics: libstatistics-1.0.4.6d3445f
+  24_libstatistics: libstatistics-1.0.5.46e8a79
 
 kni_rpm_version:
   kni: kni-5.1.8.ce6433e
