@@ -11,6 +11,8 @@ HELM_CHART_TAR_GLOB				:= traffic-engine-*.tgz
 
 TARGET_BUILD_DIR				:= $(BUILDDIR_BASE)/$(PROFILE_ID)/containers
 TARGET_INSTALLER_DIR			:= $(TARGET_BUILD_DIR)/installer
+TRAFFIC_ENGINE_HELM_FILE_PATH   := /ansible/roles/traffic-engine/files/helm
+INJECT_ADAPTER_HELM_FILE_PATH   := /ansible/roles/packet_adapter/files/helm
 
 
 .PHONY: all build_dir installer clean_installer_dir prebuild_container_images build_container_images build_helm_charts build_app_bundle_bin 
@@ -49,7 +51,8 @@ build_container_images: prebuild_container_images
 
 build_helm_charts: build_dir
 	chmod 0755 $(PROJECTDIR)/tools/build_helm_charts.sh
-	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR)
+	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(TRAFFIC_ENGINE_HELM_FILE_PATH)
+	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(INJECT_ADAPTER_HELM_FILE_PATH)
 
 build_app_bundle_bin: clean_installer_dir installer build_helm_charts build_container_images
 	mkdir -p $(TARGET_BUILD_DIR)/app-bundle-cook-bits
