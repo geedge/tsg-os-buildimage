@@ -31,4 +31,4 @@
   shell: sed -i 's/chart_name=.*$/chart_name=traffic-engine-{{helm_chart_ver}}.tgz/g' /opt/tsg/clixon/etc/mgnt-srv.conf
 
 - name: "change inject_adapter chart verison to /opt/tsg/clixon/etc/mgnt-srv.conf"
-  shell: sed -i 's/chart_name=.*$/chart_name=inject-adapter-{{helm_chart_ver}}.tgz/g' /opt/tsg/clixon/etc/mgnt-srv.conf
+  shell: sed -i 's/inject_adapter_chart_name=.*$/inject_adapter_chart_name=inject-adapter-{{helm_chart_ver}}.tgz/g' /opt/tsg/clixon/etc/mgnt-srv.conf
