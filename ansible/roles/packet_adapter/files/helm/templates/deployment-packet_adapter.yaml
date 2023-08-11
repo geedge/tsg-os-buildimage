@@ -20,11 +20,10 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-inject-adapter
-        vsysId: "{{ .Values.vsys_id }}"
         serviceFunction: {{ .Release.Name }}
         component: inject_adapter
       annotations:
-        prometheus.io/port: "9007"
+        prometheus.io/port: "9009"
         prometheus.io/scrape: "true"
 
     spec:
@@ -49,7 +48,7 @@ spec:
             {{ template "traffic-engine.inject_adapter.prestart" . }}
             {{ template "traffic-engine.inject_adapter.start" . }}
         ports:
-          - containerPort: 9007
+          - containerPort: 9009
         env:
         - name: SERVICENAME
           value: inject-adapter-announce-port-{{ .Release.Name }}
@@ -68,12 +67,12 @@ spec:
 {{- if eq .Values.debug.inject_adapter.enable_liveness_probe .Values.define_enable_val_yes }}
         livenessProbe:
           tcpSocket:
-            port: 9007
+            port: 9009
           failureThreshold: 1
           timeoutSeconds: 10
         startupProbe:
           tcpSocket:
-            port: 9007
+            port: 9009
           failureThreshold: 30
           periodSeconds: 10
 {{- end }}
