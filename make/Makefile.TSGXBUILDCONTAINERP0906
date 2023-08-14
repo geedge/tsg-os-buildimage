@@ -3,9 +3,9 @@ PROFILE_ID 						:= TSG-X-NXR620G40-R01-P0906
 PROFILE_ID_IN_SHORT				:= $(subst -,$e,$(PROFILE_ID))
 
 CONTAINER_IMAGES_TAR			:= traffic-engine-${OS_RELEASE_VER}-docker.tar
-HELM_CHART_TAR					:= traffic-engine-$(HELM_CHART_VER).tgz
+TRAFFIC_ENGINE_HELM_CHART_TAR	:= traffic-engine-$(HELM_CHART_VER).tgz
 APP_BUNDLE_BIN					:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-APP-BUNDLE.bin
-
+INJECT_HELM_CHART_TAR           := inject-adapter-$(HELM_CHART_VER).tgz
 CONTAINER_IMAGES_TAR_GLOB		:= traffic-engine-*-docker.tar
 HELM_CHART_TAR_GLOB				:= traffic-engine-*.tgz
 
@@ -31,7 +31,8 @@ installer: build_dir
 	chmod +x $(TARGET_INSTALLER_DIR)/install.sh
 
 	sed -i -e "s/%%CONTAINER_IMAGES_TAR%%/$(CONTAINER_IMAGES_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%HELM_CHART_TAR%%/$(HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%TRAFFIC_ENGINE_HELM_CHART_TAR%%/$(TRAFFIC_ENGINE_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%INJECT_HELM_CHART_TAR%%/$(INJECT_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%CONTAINER_IMAGES_TAR_GLOB%%/$(CONTAINER_IMAGES_TAR_GLOB)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%HELM_CHART_TAR_GLOB%%/$(HELM_CHART_TAR_GLOB)/" $(TARGET_INSTALLER_DIR)/install.sh
 
