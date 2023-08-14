@@ -1,8 +1,8 @@
 #!/bin/sh
 
 CONTAINER_IMAGES_TAR="%%CONTAINER_IMAGES_TAR%%"
-HELM_CHART_TAR="%%HELM_CHART_TAR%%"
-
+TRAFFIC_ENGINE_HELM_CHART_TAR="%%TRAFFIC_ENGINE_HELM_CHART_TAR%%"
+INJECT_HELM_CHART_TAR="%%INJECT_HELM_CHART_TAR%%"
 charts_dest_dir="/var/lib/rancher/k3s/server/static/charts"
 images_dest_dir="/var/lib/rancher/k3s/agent/images"
 clixon_conf_path="/opt/tsg/clixon/etc/mgnt-srv.conf"
@@ -45,7 +45,8 @@ function copy_charts_to_dest()
         mkdir -p "${charts_dest_dir}"
     fi
 
-    cp -r ${src_dir}/${HELM_CHART_TAR} ${charts_dest_dir}
+    cp -r ${src_dir}/${TRAFFIC_ENGINE_HELM_CHART_TAR} ${charts_dest_dir}
+    cp -r ${src_dir}/${INJECT_HELM_CHART_TAR} ${charts_dest_dir}
 }
 
 function copy_images_to_dest()
@@ -65,7 +66,8 @@ function replace_clixon_chart_name()
         exit 1
     fi
 
-    sed -ie "s/chart_name=.*/chart_name=${HELM_CHART_TAR}/g" ${clixon_conf_path}
+    sed -ie "s/chart_name=.*/chart_name=${TRAFFIC_ENGINE_HELM_CHART_TAR}/g" ${clixon_conf_path}
+    sed -ie "s/inject_adapter_chart_name=.*/inject_adapter_chart_name=${INJECT_HELM_CHART_TAR}/g" ${clixon_conf_path}
 }
 
 function load_images()
