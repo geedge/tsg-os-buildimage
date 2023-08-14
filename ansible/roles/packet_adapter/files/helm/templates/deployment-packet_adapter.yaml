@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-inject-adapter
+  name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
     component: inject-adapter
@@ -12,13 +12,13 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-inject-adapter
+      app: {{ .Release.Name }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-inject-adapter
+        app: {{ .Release.Name }}
         serviceFunction: {{ .Release.Name }}
         component: inject_adapter
       annotations:
@@ -40,7 +40,7 @@ spec:
         workingDir: /opt/tsg/packet_adapter
         command:
           - "bash"
-          - "-ec"
+          - "-ec" 
           - |
             ldconfig
             {{ template "traffic-engine.inject_adapter.copy-config-to-dest" . }}
@@ -50,7 +50,7 @@ spec:
           - containerPort: 9009
         env:
         - name: SERVICENAME
-          value: inject-adapter-announce-port-{{ .Release.Name }}
+          value: {{ .Release.Name }}-announce-port
         - name: NODE_IP
           valueFrom:
             fieldRef:
@@ -90,14 +90,14 @@ spec:
       volumes:
       - name: inject-adapter
         configMap:
-          name: inject-adapter-{{ .Release.Name }}
+          name: inject-adapter
       - name: prestart-dir
         hostPath: 
           path: /etc/tsg-os/{{ .Release.Name }}/
           type: DirectoryOrCreate
       - name: inject-log
         hostPath:
-          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/inject/
+          path: /var/log/{{ .Release.Name }}/inject/
       {{ template "traffic-engine.volume.mrzcpd" . }}
       {{ template "traffic-engine.volume.localtime" . }}
       {{ template "traffic-engine.inject_adapter.volume.prestart" . }}

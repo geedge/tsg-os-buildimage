@@ -6,7 +6,7 @@ replicaCount: 1
 
 
 inject_adapter_affinity: [95]
-
+define_enable_val_yes: yes
 inject_adapter:
   enable: yes
 
