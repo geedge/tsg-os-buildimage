@@ -1,4 +1,3 @@
-{{- if eq .Values.inject_adapter.enable .Values.define_enable_val_yes }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -103,4 +102,3 @@ spec:
       {{ template "traffic-engine.volume.localtime" . }}
       {{ template "traffic-engine.inject_adapter.volume.prestart" . }}
       {{ template "traffic-engine.volume.hostpath" . }}
-{{- end }}
