@@ -41,7 +41,10 @@ spec:
         annotations:
           prometheus.io/scrape: "true"
           tsg/monitor: "true"
-
+      extraArgs:
+        collector.ethtool:
+        collector.ethtool.device-include: ".*"
+        collector.ethtool.metrics-include: ".*"
 
     serverFiles:
       prometheus.yml:
