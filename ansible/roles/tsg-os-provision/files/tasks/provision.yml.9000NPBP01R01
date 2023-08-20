@@ -155,7 +155,8 @@
       template:
         src: "../templates/consul.hcl.j2"
         dest: /etc/consul.d/consul.hcl
-      tags: consul      
+      tags: consul
+      when: shaping.enable == 1
 
     - name: "mkdir /opt/tsg/etc/"
       file:
@@ -250,7 +251,9 @@
       systemd:
         name: consul
         state: restarted
-      when: enable_config_apply == '1'
+      when:
+        - enable_config_apply == '1'
+        - shaping.enable == 1
 
     - name: "tsg-os-provision: start mrenv"
       systemd:
