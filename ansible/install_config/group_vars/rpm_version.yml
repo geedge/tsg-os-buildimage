@@ -56,7 +56,7 @@ framework_rpm_version:
   21_libmaat4: libmaat4-4.0.37.8be8f33
   22_libMESA_sts: libMESA_sts-1.0.1.663f190
   23_libfieldstat4: libfieldstat4-4.1.0.07271b2
-  24_libstatistics: libstatistics-1.0.11.fcb1517
+  24_libstatistics: libstatistics-1.0.12.34a6760
 
 kni_rpm_version:
   kni: kni-5.1.8.ce6433e
