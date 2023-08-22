@@ -84,7 +84,7 @@
 {{- if eq .Values.decoders.GTPC .Values.define_enable_val_yes }}
 ./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
 {{- end }}
-./plug/business/stat_policy_enforcer/stat_policy_enforcer.inf
+#./plug/business/stat_policy_enforcer/stat_policy_enforcer.inf
 {{- if eq .Values.appsketch.enable .Values.define_enable_val_yes }}
 {{- if eq .Values.appsketch.user_defined_signature .Values.define_enable_val_yes }}
 ./plug/business/app_sketch_local/app_sketch_local.inf
