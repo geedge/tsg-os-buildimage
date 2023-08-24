@@ -13,7 +13,8 @@ APP_BUNDLE_BIN			:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-APP-BUNDLE.b
 
 TARGET_BUILD_DIR 		:= $(BUILDDIR_BASE)/$(PROFILE_ID)
 TARGET_INSTALLER_DIR 	:= $(TARGET_BUILD_DIR)/installer
-
+MRZCPD_DEVICE_PLUGIN_FILE_PATH  := /ansible/roles/k3s-install/files/daemonset-mrzcpd-deviceplugin.yaml
+MRZCPD_DEVICE_PLUGIN_IMAGE_TAG  := ${OS_RELEASE_VER}
 TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
 
 .PHONY: all builddir installer sysroot-base sysroot-cleanup sysroot-archive sysroot-binary add-images-into-sysroot clean
@@ -39,6 +40,7 @@ installer: builddir
 	sed -i -e "s/%%SIZE_PART_SYSROOT%%/$(SIZE_PART_SYSROOT)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%SIZE_PART_UPDATE%%/$(SIZE_PART_UPDATE)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%APP_BUNDLE_BIN%%/$(APP_BUNDLE_BIN)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%MRZCPD_DEVICE_PLUGIN_IMAGE_TAG%%/$(MRZCPD_DEVICE_PLUGIN_IMAGE_TAG)/" $(PROJECTDIR)/$(MRZCPD_DEVICE_PLUGIN_FILE_PATH)
 
 	sed -i '/sapp-pr:/d;/tfe-pr:/d;/mrzcpd:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
 ifeq ($(ENABLE_ALIYUN_INTERNAL_DOMAIN),1)

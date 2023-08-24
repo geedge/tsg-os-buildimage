@@ -1,0 +1,193 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+    component: mrzcpd
+  annotations:
+    reloader.stakater.com/auto: "true"
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-mrzcpd
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-mrzcpd
+        serviceFunction: {{ .Release.Name }}
+        component: mrzcpd
+      annotations:
+        prometheus.io/port: "9086"
+        prometheus.io/scrape: "true"
+    
+    spec: 
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: mrzcpd
+        image: "registry.gdnt-cloud.website/tsg-mrzcpd:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/mrzcpd
+        command: 
+          - "bash"
+          - "-ec"
+          - |
+            /opt/tsg/mrzcpd/bin/mrmarch --auto
+            mount --rbind /opt/tsg/mrzcpd /root/hostmount/mrzcpd
+            cp -f /etc/ld.so.conf.d/mrzcpd.conf /root/hostmount/ld.so.conf.d/mrzcpd.conf
+            cp -f /etc/profile.d/mrzcpd.sh /root/hostmount/profile.d/mrzcpd.sh
+            cp -f /opt/tsg/config/mrzcpd.conf /opt/tsg/mrzcpd/etc/mrglobal.conf
+            chmod +x /opt/tsg/mrzcpd/bin/replaceconf.sh
+            /opt/tsg/mrzcpd/bin/replaceconf.sh
+            ldconfig -C /etc/ld.so.cache -r /host
+            {{ template "mrzcpd.prestart" . }}
+            {{ template "mrzcpd.start" . }}
+        volumeMounts:
+        - name: mrzcpd-conf
+          mountPath: "/opt/tsg/config/mrzcpd.conf"
+          subPath: mrzcpd.conf
+        - name: run-mrzcpd
+          mountPath: /var/run/mrzcpd
+        - name: hugepages
+          mountPath: /var/run/mrzcpd/hugepages
+        - name: mrzcpd
+          mountPath: /root/hostmount/mrzcpd
+          mountPropagation: Bidirectional
+        - name: ldconfig-mrzcpd
+          mountPath: /root/hostmount/ld.so.conf.d
+        - name: env-sh
+          mountPath: /root/hostmount/profile.d
+        - name: dpdk
+          mountPath: /var/run/dpdk
+        - name: container-mrzcpd
+          mountPath: /var/run/share/container_mrzcpd.conf
+        - name: dev-vfio
+          mountPath: /dev/vfio
+        - name: root-sys
+          mountPath: /root/sys
+        - name: host-root
+          mountPath: /host
+          mountPropagation: HostToContainer
+        {{ template "mrzcpd.mount.localtime" . }}
+        {{ template "mrzcpd.mount.prestart" . }}
+        resources: 
+          limits:
+            mrzcpd/mrzcpd: 1
+        {{ template "mrzcpd.resources" . }}
+            hugepages-1Gi: {{.Values.mrzcpd.hugepages }}
+          requests:
+            memory: 100Mi
+        ports:
+          - containerPort: 9086
+        env:
+        - name: MLX5_GLUE_PATH
+          value: /opt/tsg/mrzcpd/lib
+{{- if eq .Values.mrzcpd.debug.enable_liveness_probe .Values.define_enable_val_yes }}
+        livenessProbe:
+          tcpSocket:
+            port: 9086
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9086
+          failureThreshold: 30
+          periodSeconds: 10
+{{- end }}
+        securityContext:
+          privileged: true
+      
+      - name: mrapm-device
+        image: "registry.gdnt-cloud.website/tsg-mrzcpd:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/mrzcpd
+        command: 
+          - "bash"
+          - "-ec"
+          - |
+            /opt/tsg/mrzcpd/bin/monit_device --prometheus-client
+        volumeMounts:
+        - name: run-mrzcpd
+          mountPath: /var/run/mrzcpd
+        - name: dpdk
+          mountPath: /var/run/dpdk
+        - name: root-sys
+          mountPath: /root/sys
+        {{ template "mrzcpd.mount.localtime" . }}
+        {{ template "mrzcpd.mount.prestart" . }}
+        {{ template "mrzcpd.mount.hostpath" . }}
+
+      - name: mrapm-stream
+        image: "registry.gdnt-cloud.website/tsg-mrzcpd:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/mrzcpd
+        command: 
+          - "bash"
+          - "-ec"
+          - |
+            /opt/tsg/mrzcpd/bin/monit_stream --prometheus-client
+        volumeMounts:
+        - name: run-mrzcpd
+          mountPath: /var/run/mrzcpd
+        - name: dpdk
+          mountPath: /var/run/dpdk
+        {{ template "mrzcpd.mount.localtime" . }}
+        {{ template "mrzcpd.mount.prestart" . }}
+        {{ template "mrzcpd.mount.hostpath" . }}
+
+      volumes:
+      - name: prestart-dir
+        hostPath: 
+          path: /etc/tsg-os/{{ .Release.Name }}/
+          type: DirectoryOrCreate
+      - name: mrzcpd-conf
+        configMap:
+          name: mrzcpd
+      - name: mrzcpd
+        hostPath:
+          path: /opt/tsg/mrzcpd
+          type: DirectoryOrCreate
+      - name: run-mrzcpd
+        hostPath:
+          path: /var/run/mrzcpd
+          type: DirectoryOrCreate
+      - name: hugepages
+        hostPath:
+          path: /var/run/mrzcpd/hugepages
+          type: DirectoryOrCreate
+      - name: env-sh
+        hostPath:
+          path: /etc/profile.d
+          type: Directory
+      - name: dpdk
+        hostPath:
+          path: /var/run/dpdk
+          type: DirectoryOrCreate
+      - name: ldconfig-mrzcpd
+        hostPath:
+          path: /etc/ld.so.conf.d
+          type: Directory
+      - name: container-mrzcpd
+        hostPath:
+          path:  /var/run/share/container_mrzcpd.conf
+          type: File
+      - name: root-sys
+        hostPath:
+          path: /root/sys
+      - name: dev-vfio
+        hostPath:
+          path: /dev/vfio
+      {{ template "mrzcpd.volume.localtime" . }}
+      {{ template "mrzcpd.volume.prestart" . }}
+      {{ template "mrzcpd.volume.hostpath" . }}
+      hostNetwork: true

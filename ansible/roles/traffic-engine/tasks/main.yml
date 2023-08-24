@@ -50,6 +50,7 @@
     src: "{{ role_path }}/files/reloader/reloader-crd.yaml"
     dest: /var/lib/rancher/k3s/server/manifests/
 
+
 - name: "copy reloader chart to dest"
   copy:
     src: "{{ role_path }}/files/reloader/reloader-v1.0.22.tgz"

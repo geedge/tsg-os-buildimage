@@ -504,6 +504,7 @@ enable_breakpad_upload=0
 {{- define "traffic-engine.mount.mrzcpd" -}}
         - name: opt-tsg-mrzcpd
           mountPath: /opt/tsg/mrzcpd
+          mountPropagation: HostToContainer
           readOnly: false
         - name: var-run-mrzcpd
           mountPath: /var/run/mrzcpd

@@ -1,0 +1,24 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: mrzcpd
+  namespace: default
+spec:
+  chart: https://%{KUBERNETES_API}%/static/charts/mrzcpd-0.1.0.tgz
+  targetNamespace: default
+  valuesContent: |-
+    mrzcpd:
+      interfaces: [{'name': 'ens14f3', 'role': '3', 'mtu': '2500', 'promisc': '1'}, {'name': 'ens18f1', 'role': '3', 'mtu': '2500', 'promisc': '1'}, {'name': 'ens6f0np0', 'address': '10.252.100.2', 'mask': '255.255.255.0', 'gateway': '10.252.100.1', 'role': '3', 'mtu': '2500', 'promisc': '1'}]
+      services: [{'name': 'ser1', 'id': '0', 'mode': 'virtual-wire', 'listen_on_device': 'ens6f0np0'}]
+      virtual_wires: []
+      service_lb: {'sid_range_start': '1000', 'sid_range_end': '2000'}
+      service_chaining_vxlan_g: {'interface': 'ens18f1'}
+      traffic_mirror: {'interface': 'ens14f3'}
+      distmode: 2
+      debug:
+        enable_liveness_probe: yes
+        enable_interactive_startup: no
+        enable_prestart_script: no
+        enable_mount_host_filesystem: no
+        #default: /etc/tsg-os/${service_function_name}/shaping_prestart_script.sh
+        prestart_script: ""

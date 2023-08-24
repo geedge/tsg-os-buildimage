@@ -5,10 +5,9 @@ set -x
 tsg_os_HAL_cfg_file="/etc/sysconfig/tsg-os-HAL.conf"
 
 grub_cfg_file="/boot/grub/grub.cfg"
-mrzcpd_cfg_file="/etc/sysconfig/mrzcpd"
 tsg_clixon_cfg_file="/opt/tsg/clixon/etc/mgnt-srv.conf"
 k3s_cfg_file="/etc/rancher/k3s/config.yaml"
-mrglobal_cfg_template="/opt/tsg/clixon/etc/mrglobal.conf.jinja"
+mrzcpd_conf_file="/var/run/share/container_mrzcpd.conf"
 
 cpu_core_num=$(lscpu | grep "CPU(s):" | head -n 1 | sed  -r 's/CPU\(s\):\s{1,}//g')
 mem_num=$(free -m | grep Mem | awk '{print $2}')
@@ -64,25 +63,18 @@ EOF
 
 set_tsg_clixon_conf()
 {
-    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^sz_direct_pktmbuf=.*$/sz_direct_pktmbuf=${MRZCPD_DIRECT_PKTMBUF}/g" ${mrglobal_cfg_template}
-    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^sz_indirect_pktmbuf=.*$/sz_indirect_pktmbuf=${MRZCPD_INDIRECT_PKTMBUF}/g" ${mrglobal_cfg_template}
-
-    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^iocore=.*$/iocore=${MRZCPD_IOCORE}/g" ${mrglobal_cfg_template}
-
-    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^poll_wait_throttle=.*$/poll_wait_throttle=${MRZCPD_POLL_WAIT_THROTTLE}/g" ${mrglobal_cfg_template}
-    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^sz_data=.*$/sz_data=${MRZCPD_SZ_DATA}/g" ${mrglobal_cfg_template}
-    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^sz_tunnel=.*$/sz_tunnel=${MRZCPD_SZ_TUNNEL}/g" ${mrglobal_cfg_template}
-    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^check_buffer_leak=.*$/check_buffer_leak=${MRZCPD_CHECK_BUFFER_LEAK}/g" ${mrglobal_cfg_template}
-
     [ -f ${tsg_clixon_cfg_file} ] && sed -i "s/^cpu_range=.*$/cpu_range=${CLIXON_IOCORE}/g" ${tsg_clixon_cfg_file}
 }
 
-set_os_hugepages()
+set_mrzcpd_conf()
 {
-    [ -f ${mrzcpd_cfg_file} ] && sed -i "s/HUGEPAGE_NUM_1G=\w*/HUGEPAGE_NUM_1G=${HUGEPAGES}/g" ${mrzcpd_cfg_file}
-
-    # sysctl -w vm.nr_hugepages=${HUGEPAGES}
-    return 0
+    echo "sz_indirect_pktmbuf=${MRZCPD_INDIRECT_PKTMBUF}" > ${mrzcpd_conf_file}
+    echo "sz_direct_pktmbuf=${MRZCPD_DIRECT_PKTMBUF}" >> ${mrzcpd_conf_file}
+    echo "iocore=${MRZCPD_IOCORE}" >> ${mrzcpd_conf_file}
+    echo "poll_wait_throttle=${MRZCPD_POLL_WAIT_THROTTLE}" >> ${mrzcpd_conf_file}
+    echo "sz_data=${MRZCPD_SZ_DATA}" >> ${mrzcpd_conf_file}
+    echo "sz_tunnel=${MRZCPD_SZ_TUNNEL}" >> ${mrzcpd_conf_file}
+    echo "check_buffer_leak=${MRZCPD_CHECK_BUFFER_LEAK}" >> ${mrzcpd_conf_file}
 }
 
 set_hugepages()
@@ -139,14 +131,6 @@ set_cpu_list()
     allocate_cpu
 }
 
-set_bridge()
-{
-    ip link add br_dign_c type bridge
-    ip link add br_dign_s type bridge
-    ip link set br_dign_c up
-    ip link set br_dign_s up
-}
-
 set_grub_cmdline_file()
 {
     local result=0
@@ -184,16 +168,21 @@ set_grub_cmdline()
 }
 
 load_tsg_os_HAL_config
+mkdir -p /run/mrzcpd/hugepages
+mkdir -p /var/run/share
+
 set_hugepages
 set_cpu_list
 set_grub_cmdline
 
-/opt/tsg/mrzcpd/bin/mrmarch --auto
+mount -t hugetlbfs -o pagesize=1073741824 nodev /var/run/mrzcpd/hugepages
+modprobe vfio
+echo 1 > /sys/module/vfio/parameters/enable_unsafe_noiommu_mode
+modprobe vfio_pci
 
 set_mrzcpd_indirect_pktmbuf
 set_mrzcpd_direct_pktmbuf
 
 set_k3s_config ${mem_num}
 set_tsg_clixon_conf
-set_os_hugepages
-set_bridge
+set_mrzcpd_conf

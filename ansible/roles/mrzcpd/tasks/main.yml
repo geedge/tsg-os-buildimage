@@ -12,6 +12,10 @@
   shell: pip2 install -i https://pypi.tuna.tsinghua.edu.cn/simple PrettyTable==0.7.2
   when: runtime_env == 'TSG-X-P0906'
 
+- name: "Install python3 module and dependent package"
+  shell: yum install -y lshw python3 which pciutils iproute vim kmod  libnl3-devel perl-generators iptables-devel numactl-libs
+  when: runtime_env == 'TSG-X-P0906'
+
 - name: "Install mrzcpd rpm package"
   shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ prefix_path.mrzcpd }}
   with_dict: "{{ mrzcpd_rpm_version }}"
@@ -56,6 +60,13 @@
   with_items:
     - /usr/lib/systemd/system/mrzcpd_hugepages_setup.service
     - /usr/lib/systemd/system/mrzcpd_hwdb_setup.service
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "copy replace.sh to dest"
+  copy:
+    src: "{{ role_path }}/files/replaceconf.sh"
+    dest: /opt/tsg/mrzcpd/bin/replaceconf.sh
+    mode: 0644
   when: runtime_env == 'TSG-X-P0906'
 
 - name: "replace action: replace Requires to Wants"

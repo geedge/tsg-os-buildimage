@@ -163,7 +163,6 @@
     - {role: k3s-install, tags: k3s-install}
     - {role: coredump, tags: coredump}
     - {role: coredump-tools, tags: coredump-tools}
-    - {role: mrzcpd, tags: mrzcpd}
     - {role: clixon, tags: clixon}
     - {role: tsg-os-HAL, tags: tsg-os-HAL}
     - {role: traffic-engine, tags: traffic-engine}
@@ -271,6 +270,15 @@
     - {role: framework, tags: framework}
     - {role: packet_adapter, tags: packet_adapter}
 
+- hosts: TSG-X-NXR620G40-R01-P0906-mrzcpd
+  remote_user: root
+  vars_files:
+    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/rpm_version.yml
+  roles:
+    - {role: framework, tags: framework}
+    - {role: mrzcpd, tags: mrzcpd}
+
 - hosts: server
   remote_user: root
   vars_files:
@@ -285,3 +293,12 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: container-tools-install, tags: container-tools-install}
+
+- hosts: TSG-X-NXR620G40-R01-P0906-mrzcpd-deviceplugin
+  remote_user: root
+  vars_files:
+    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/rpm_version.yml
+  roles:
+    - {role: framework, tags: framework}
+    - {role: mrzcpd-deviceplugin, tags: mrzcpd-deviceplugin}

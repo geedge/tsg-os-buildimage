@@ -30,10 +30,10 @@
 - name: "execute k3s install"
   shell: curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_SKIP_ENABLE=true INSTALL_K3S_BIN_DIR=/usr/bin INSTALL_K3S_SYSTEMD_DIR=/usr/lib/systemd/system sh -s - --flannel-backend=none --node-name=localhost
 
-# - name: "enable k3s"
-#   systemd:
-#     name: k3s
-#     enabled: yes
+- name: "enable k3s"
+  systemd:
+    name: k3s
+    enabled: yes
 
 - name: "kubectl bash auto-completion"
   shell: kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
@@ -122,3 +122,8 @@
   systemd:
     name: k3s-orphaned-pods-dir-clean.timer
     enabled: yes
+
+- name: "copy mrzcpd-deviceplugin file to dest"
+  copy:
+    src: "{{ role_path }}/files/daemonset-mrzcpd-deviceplugin.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/

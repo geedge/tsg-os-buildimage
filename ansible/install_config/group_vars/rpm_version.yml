@@ -125,3 +125,6 @@ coredump_tools_rpm_version:
 
 packet_adapter_rpm_version:
   packet_adapter: packet_adapter-2.0.2.4f48b59
+
+mrzcpd_deviceplugin_rpm_version:
+  mrzcpd_deviceplugin: mrzcpd-deviceplugin-1.0.2-a415148

@@ -95,3 +95,13 @@
     path: /usr/lib/tmpfiles.d/systemd-nologin.conf
     regexp: '^(F! /run/nologin 0644*)'
     replace: '#\1'
+
+- name: "Install python module"
+  shell: pip2 install -i https://pypi.tuna.tsinghua.edu.cn/simple PrettyTable==0.7.2
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "copy  tsg-dign to dest"
+  copy:
+    src: "{{ role_path }}/files/99-tsg-dign.rules"
+    dest: /usr/lib/udev/rules.d/99-tsg-dign.rules
+    mode: 0644

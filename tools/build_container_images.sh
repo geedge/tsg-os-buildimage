@@ -65,8 +65,10 @@ function export_images()
             ${IMAGE_REPO_PREFIX}/tsg-init:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-sce:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-bfdd:${OS_RELEASE_VER} \
+            ${IMAGE_REPO_PREFIX}/tsg-inject:${OS_RELEASE_VER} \
+            ${IMAGE_REPO_PREFIX}/tsg-mrzcpd:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-shaping:${OS_RELEASE_VER} \
-            ${IMAGE_REPO_PREFIX}/tsg-inject:${OS_RELEASE_VER}
+            ${IMAGE_REPO_PREFIX}/tsg-mrzcpd-deviceplugin:${OS_RELEASE_VER}
 }
 ##function define end
 
@@ -84,6 +86,8 @@ build_image "sce"       "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-sce:${OS_
 build_image "bfdd"      "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-bfdd:${OS_RELEASE_VER}"
 build_image "shaping"   "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-shaping:${OS_RELEASE_VER}"
 build_image "inject"    "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-inject:${OS_RELEASE_VER}"
+build_image "mrzcpd"    "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-mrzcpd:${OS_RELEASE_VER}"
+build_image "mrzcpd-deviceplugin"    "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-mrzcpd-deviceplugin:${OS_RELEASE_VER}"
 
 export_images
 
