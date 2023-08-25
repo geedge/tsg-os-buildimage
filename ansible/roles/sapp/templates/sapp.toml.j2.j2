@@ -26,10 +26,10 @@ dictator_enable=0
 
 ### note, optional value is [none, vxlan]
 {% if dp_steering_firewall.encapsulation == 'vlan' or dp_steering_firewall.encapsulation == 'raw' %}
-        overlay_mode=none
+        overlay_mode="none"
 {% endif %}
 {% if dp_steering_firewall.encapsulation == 'vxlan' %}
-        overlay_mode=vxlan
+        overlay_mode="vxlan"
 {% endif %}
 {% if dp_steering_firewall.encapsulation == 'provision' %}
         overlay_mode={% raw %}{{ sapp_overlay_mode }}
@@ -57,41 +57,41 @@ dictator_enable=0
 ### vxlan_by_inline_device: encapsulation inject packet with vxlan, and then send to inline device by udp socket.
 ### raw_ethernet_single_gateway: send layer2 ethernet packet to specific gateway in same broadcast domain. 
 ### raw_ethernet_multi_gateway: send layer2 ethernet packet to multiple gateway in same broadcast domain. 
-    inject_pkt_mode=sys_route
-
+    inject_pkt_mode="default"
+    inject_pkt_prepend_segment_id=0
 ### note, this config is valid if inject_pkt_mode==vxlan_by_inline_device, means udp socket src port.
-    inject_mode_inline_device_sport=54789
+    #inject_mode_inline_device_sport=54789
 
 ### note, this config is valid if inject_pkt_mode==raw_ethernet_single_gateway.
-    inject_mode_single_gateway_device="eth1"
+    #inject_mode_single_gateway_device="eth1"
 ### inject_mode_single_gateway_src_mac has lower priority than get smac from inject_mode_single_gateway_device
-    inject_mode_single_gateway_src_mac="00:11:22:77:88:99"
-    inject_mode_single_gateway_dst_mac="00:11:22:33:44:55"
-    dumpfile_sleep_time_before_exit=3
+    #inject_mode_single_gateway_src_mac="00:11:22:77:88:99"
+    #inject_mode_single_gateway_dst_mac="00:11:22:33:44:55"
+    #dumpfile_sleep_time_before_exit=3
    
-### note, depolyment.mode options: [mirror, inline, transparent]
-    [packet_io.depolyment]
+### note, deployment.mode options: [mirror, inline, transparent]
+    [packet_io.deployment]
 {% if dp_steering_firewall.deployment == 'inline' %}
-    mode=inline
+    mode="inline"
 {% endif %}
 {% if dp_steering_firewall.deployment == 'mirror' %}
-    mode=mirror
+    mode="mirror"
 {% endif %}
 {% if dp_steering_firewall.deployment == 'transparent' %}
-    mode=transparent
+    mode="transparent"
 {% endif %}
 
 ### note, interface.type options: [pag,pcap,marsio]
     [packet_io.internal.interface]
 {% if dp_steering_firewall.capture_packet == 'driver' %}
-        type=marsio
+        type="marsio"
 {% endif %}
 {% if dp_steering_firewall.capture_packet == 'pcap' %}
-        type=pcap
+        type="pcap"
 {% endif %}
         name={{ dp_steering_firewall.nic_internal }}
     [packet_io.external.interface]
-        type=pcap
+        type="pcap"
     name=lo
 
     [packet_io.polling]
@@ -128,6 +128,7 @@ dictator_enable=0
 
 [DUPLICATE_PKT]
 [dup_pkt.traffic.original]
+    kickout_udp_stream_enabled=0
 	original_ipv4_tcp_enabled=1
 	original_ipv4_udp_enabled=0
 ### note, can't distinguish between duplicate traffic and application retransmit traffic for IPv6 packets,
@@ -177,10 +178,9 @@ dictator_enable=0
 
 [PROFILING]
     [profiling.log]
-        sapp_log_category="log/sapp_log"
-        sapp_plugin_log_category="log/sapp_plugin_log"
+        sapp_log_category="sapp_log"
+        sapp_plugin_log_category="sapp_plugin_log"
         #for profiling-related API control, e.g printaddr
-        enabled_log_level=20
 
     [profiling.metric]
         [profiling.metric.fs2]
@@ -198,10 +198,16 @@ dictator_enable=0
         refresh_interval_s=1
 
     [profiling.process_latency]
-        log_category="log/sapp_process_latency_log"
-        enabled_log_level=10
-        ### note, threshold unit is microseconds (us)
-        threshold_us=100000
+    log_category="sapp_process_latency_log"
+    histogram_enabled=0
+    local_file="fs2_process_latency.metrics"
+    refresh_interval_s=1
+### note, threshold unit is microseconds (us), legal_scope [1,99999999], max value is 99
+    threshold_us=1000
+### define in time.h,use CLOCK_MONOTONIC_COARSE as default
+### 0 means CLOCK_REALTIME, 1 means CLOCK_MONOTONIC, 2 means CLOCK_PROCESS_CPUTIME_ID, 3 means CLOCK_THREAD_CPUTIME_ID
+### 4 means CLOCK_MONOTONIC_RAW, 5 means CLOCK_REALTIME_COARSE, 6 means CLOCK_MONOTONIC_COARSE
+    clock_gettime_id=6
 
     [profiling.sanity_check]
         raw_pkt_broken_enabled=0
@@ -211,7 +217,7 @@ dictator_enable=0
     [tools.pkt_dump]
     enabled=1
 ### note, mode options value:[storage, udp_socket]
-    mode=udp_socket
+    mode="udp_socket"
     BSD_packet_filter=""
    
         [tools.pkt_dump.threads]
@@ -233,7 +239,7 @@ dictator_enable=0
         file_size_max_per_thread=10000 
 
 
-[breakpad]
+[BREAKPAD]
 {% raw %}{% if coredump.format == 'none' %}
     disable_coredump=1
     enable_breakpad=0
