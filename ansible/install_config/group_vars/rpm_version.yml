@@ -69,7 +69,7 @@ mrzcpd_rpm_version:
   mrzcpd-znver1: mrzcpd-znver1-4.6.56.95de63f
   mrzcpd-corei7: mrzcpd-corei7-4.6.56.95de63f
 
- mlnx_ofed_user_space_only_rpm_version:
+mlnx_ofed_user_space_only_rpm_version:
   mlnx_ofed_user_space: mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch
 
 sapp_rpm_version:
