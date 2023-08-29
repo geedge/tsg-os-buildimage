@@ -1,10 +1,10 @@
 ---
-- name: "copy MFT installer package to to destination server"
+- name: "Copy MFT installer package to to destination server"
   copy:
     src: "{{ role_path }}/files/"
     dest: "/tmp/mft/"
 
-- name: "create unarchive directory"
+- name: "Create unarchive directory"
   file:
     path: "/tmp/mft/unarchived"
     state: directory
@@ -19,81 +19,46 @@
     - { src: "/usr/bin/uname" , dest: "/usr/bin/uname-backup" , mode: "0755" }
     - { src: "/tmp/mft/uname" , dest: "/usr/bin/uname" , mode: "0755" }
 
-- name: "change kernel version for uname"
+- name: "Change kernel version for uname"
   shell: sed -i -e 's/KERNEL_VERSION/5.17.15-1.el8/' /usr/bin/uname
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+  when: runtime_env == 'TSG-X-P0906'
 
-- name: "change kernel version for uname"
-  shell: sed -i -e 's/KERNEL_VERSION/3.10.0-1160.59.1.el7/' /usr/bin/uname
-  when: runtime_env == 'TSG-X-P1403'
-
-- name: "create kernel directory"
-  file:
-    path: "/lib/modules/3.10.0-1160.59.1.el7.x86_64"
-    state: directory
-  when: runtime_env == 'TSG-X-P1403'
-
-- name: "ln kernel for el7"
-  shell: ln -vfs --relative  /usr/src/kernels/3.10.0-1160.59.1.el7.x86_64/ /lib/modules/3.10.0-1160.59.1.el7.x86_64/build
-  when: runtime_env == 'TSG-X-P1403'
-
-###### TSG-X-P0804 TSG-X-P0906 ofed install start ######
+############ Ofed user space only install ############
 - name: "install rpm packages: ofed"
   yum:
-    name: "mlnx-ofed-all-5.17.15-1.el8-v1.0.1-20230619.noarch"
+    name: "mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
-############ end ############
+  when: runtime_env == 'TSG-X-P0906'
+######################### end #########################
 
-###### TSG-X-P1403 ofed install start ######
-- name: "install rpm packages: ofed"
-  yum:
-    name: "mlnx-ofed-all-3.10.0-1160.59.1.el7-v1.0.0-20221206.noarch"
-    conf_file: "{{ rpm_repo_config_path }}"
-    state: present
-  when: runtime_env == 'TSG-X-P1403'
-############ end ############
-
-###### MFT install start ######
-- name: "unarchive mft RPM"
-  unarchive:
-    src: /tmp/mft/mft-4.20.0-34-x86_64-rpm.tgz
-    dest: /tmp/mft/unarchived/
-    remote_src: yes
-  when: runtime_env == 'TSG-X-P1403'
-
-- name: "execute MFT installer"
-  shell: /tmp/mft/unarchived/mft-4.20.0-34-x86_64-rpm/install.sh
-  when: runtime_env == 'TSG-X-P1403'
-
-- name: "unarchive mft RPM"
+############ MFT install start ############
+- name: "Unarchive mft RPM"
   unarchive:
     src: /tmp/mft/mft-4.22.1-11-x86_64-rpm.tgz
     dest: /tmp/mft/unarchived/
     remote_src: yes
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+  when: runtime_env == 'TSG-X-P0906'
 
-- name: "execute MFT installer"
+- name: "Execute MFT installer"
   shell: /tmp/mft/unarchived/mft-4.22.1-11-x86_64-rpm/install.sh
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
-############ end ############
+  when: runtime_env == 'TSG-X-P0906'
+######################### end #########################
 
-###### MLNX FW UPDATER install start ######
-# el8 only
+############ MLNX FW UPDATER install start ############
 - name: "Install mlnx-fw-updater rpm package"
   shell: rpm -i /tmp/mft/mlnx-fw-updater-5.8-2.0.3.0.x86_64.rpm
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
-############ end ############
+  when: runtime_env == 'TSG-X-P0906'
+######################### end #########################
 
-###### Set RUN_FW_UPDATER_ONBOOT ######
-- name: "enable auto update firmware on boot"
+############ Set RUN_FW_UPDATER_ONBOOT ############
+- name: "Enable auto update firmware on boot"
   lineinfile:
     path: /etc/infiniband/openib.conf
     regexp: '^RUN_FW_UPDATER_ONBOOT'
     line: "RUN_FW_UPDATER_ONBOOT=no"
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
-###### end ######
+  when: runtime_env == 'TSG-X-P0906'
+######################### end #########################
 
 ###### Restore the uname tools ######
 - name: "Restore the uname tools"
@@ -102,7 +67,7 @@
     dest: "/usr/bin/uname"
     mode: "0755"
     remote_src: yes
-###### end ######
+######################### end #########################
 
 ###### Enable dropless rq ######
 - name: "Set the udev rule"
@@ -118,4 +83,4 @@
     dest: "/usr/local/sbin/enable_dropless_rq.sh"
     mode: "0755"
     remote_src: yes
-###### end ######
+######################### end #########################
