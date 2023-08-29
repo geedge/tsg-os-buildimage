@@ -3,14 +3,16 @@ PROFILE_ID 						:= TSG-X-NXR620G40-R01-P0906
 PROFILE_ID_IN_SHORT				:= $(subst -,$e,$(PROFILE_ID))
 
 CONTAINER_IMAGES_TAR			:= traffic-engine-${OS_RELEASE_VER}-docker.tar
-HELM_CHART_TAR					:= traffic-engine-$(HELM_CHART_VER).tgz
+TRAFFIC_ENGINE_HELM_CHART_TAR	:= traffic-engine-$(HELM_CHART_VER).tgz
 APP_BUNDLE_BIN					:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-APP-BUNDLE.bin
-
+INJECT_HELM_CHART_TAR           := inject-adapter-$(HELM_CHART_VER).tgz
 CONTAINER_IMAGES_TAR_GLOB		:= traffic-engine-*-docker.tar
 HELM_CHART_TAR_GLOB				:= traffic-engine-*.tgz
 
 TARGET_BUILD_DIR				:= $(BUILDDIR_BASE)/$(PROFILE_ID)/containers
 TARGET_INSTALLER_DIR			:= $(TARGET_BUILD_DIR)/installer
+TRAFFIC_ENGINE_HELM_FILE_PATH   := /ansible/roles/traffic-engine/files/helm
+INJECT_ADAPTER_HELM_FILE_PATH   := /ansible/roles/packet_adapter/files/helm
 
 
 .PHONY: all build_dir installer clean_installer_dir prebuild_container_images build_container_images build_helm_charts build_app_bundle_bin 
@@ -29,7 +31,8 @@ installer: build_dir
 	chmod +x $(TARGET_INSTALLER_DIR)/install.sh
 
 	sed -i -e "s/%%CONTAINER_IMAGES_TAR%%/$(CONTAINER_IMAGES_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%HELM_CHART_TAR%%/$(HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%TRAFFIC_ENGINE_HELM_CHART_TAR%%/$(TRAFFIC_ENGINE_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%INJECT_HELM_CHART_TAR%%/$(INJECT_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%CONTAINER_IMAGES_TAR_GLOB%%/$(CONTAINER_IMAGES_TAR_GLOB)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%HELM_CHART_TAR_GLOB%%/$(HELM_CHART_TAR_GLOB)/" $(TARGET_INSTALLER_DIR)/install.sh
 
@@ -49,7 +52,8 @@ build_container_images: prebuild_container_images
 
 build_helm_charts: build_dir
 	chmod 0755 $(PROJECTDIR)/tools/build_helm_charts.sh
-	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR)
+	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(TRAFFIC_ENGINE_HELM_FILE_PATH)
+	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(INJECT_ADAPTER_HELM_FILE_PATH)
 
 build_app_bundle_bin: clean_installer_dir installer build_helm_charts build_container_images
 	mkdir -p $(TARGET_BUILD_DIR)/app-bundle-cook-bits

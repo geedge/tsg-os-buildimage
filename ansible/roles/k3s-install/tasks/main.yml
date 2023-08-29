@@ -43,6 +43,11 @@
     src: "{{ role_path }}/files/multus-daemonset.yml"
     dest: /var/lib/rancher/k3s/server/manifests/
 
+- name: "copy k3s fish completion file to host"
+  copy:
+    src: "{{ role_path }}/files/kubectl.fish"
+    dest: /usr/share/fish/completions/
+
 - name: "copy k3s.service.env to destination"
   copy:
     src: "{{ role_path }}/files/k3s.service.env"

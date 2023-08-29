@@ -101,7 +101,7 @@ consul_agent:
   node_name: ""
 
 shaping:
-  enable: 1
+  enable: 0
 
 sid:
   shaping: 1000

@@ -50,6 +50,10 @@ enable_breakpad_upload=0
 {{- len .Values.shaping_affinity }}
 {{- end -}}
 
+{{- define "traffic-engine.inject_adapter.workerthread" -}}
+{{- len .Values.inject_adapter_affinity }}
+{{- end -}}
+
 {{- define "traffic-engine.pktio.workerthread" -}}
 {{- len .Values.pktio_affinity }}
 {{- end -}}
@@ -68,6 +72,10 @@ enable_breakpad_upload=0
 
 {{- define "traffic-engine.shaping.cpu-affinity" -}}
 {{- join "," .Values.shaping_affinity }}
+{{- end -}}
+
+{{- define "traffic-engine.inject_adapter.cpu-affinity" -}}
+{{- join "," .Values.inject_adapter_affinity }}
 {{- end -}}
 
 {{- define "traffic-engine.pktio.cpu-affinity" -}}
@@ -373,6 +381,53 @@ enable_breakpad_upload=0
 {{- end }}
 {{- end -}}
 
+{{- define "traffic-engine.inject_adapter.copy-config-to-dest" -}}
+            cp /opt/tsg/config/packet_adapter.conf  /opt/tsg/packet_adapter/conf
+{{- end -}}
+
+{{- define "traffic-engine.inject_adapter.mount.hostpath" -}}
+{{- if eq .Values.debug.inject_adapter.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+        - name: host-root
+          mountPath: /host
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.inject_adapter.start" -}}
+{{- if eq .Values.debug.inject_adapter.enable_interactive_startup .Values.define_enable_val_yes -}}
+            while true; do sleep 10;done
+{{- else -}}
+           exec /opt/tsg/packet_adapter/bin/packet_adapter
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.inject_adapter.volume.prestart" -}}
+{{- if eq .Values.debug.inject_adapter.enable_prestart_script .Values.define_enable_val_yes }}
+      - name: inject-adapter-prestart
+        hostPath:
+{{- if .Values.debug.inject_adapter.prestart_script }}
+          path: {{ .Values.debug.inject_adapter.prestart_script }}
+{{- else }}
+          path: /etc/tsg-os/{{ .Release.Name }}/inject_adapter_prestart_script.sh
+{{- end }}
+          type: FileOrCreate
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.inject_adapter.mount.prestart" -}}
+{{- if eq .Values.debug.inject_adapter.enable_prestart_script .Values.define_enable_val_yes }}
+        - name: prestart-dir
+          mountPath: /tmp/prestart
+        - name: inject-adapter-prestart
+          mountPath: /opt/tsg/scripts/prestart.sh
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.inject_adapter.prestart" -}}
+{{- if eq .Values.debug.inject_adapter.enable_prestart_script .Values.define_enable_val_yes }}
+            chmod 0755 /opt/tsg/scripts/prestart.sh
+            /opt/tsg/scripts/prestart.sh
+{{- end }}
+{{- end -}}
 
 {{- define "traffic-engine.shaping.start" -}}
 {{- if eq .Values.debug.shaping.enable_interactive_startup .Values.define_enable_val_yes -}}

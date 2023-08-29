@@ -256,6 +256,15 @@
     - {role: framework, tags: framework}
     - {role: shaping_engine, tags: shaping_engine}
 
+- hosts: TSG-X-NXR620G40-R01-P0906-inject
+  remote_user: root
+  vars_files:
+    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/rpm_version.yml
+  roles:
+    - {role: framework, tags: framework}
+    - {role: packet_adapter, tags: packet_adapter}
+
 - hosts: server
   remote_user: root
   vars_files:
