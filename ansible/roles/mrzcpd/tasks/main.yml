@@ -20,6 +20,10 @@
   shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ prefix_path.mrzcpd }}
   with_dict: "{{ mrzcpd_rpm_version }}"
 
+- name: "Install mlnx-ofed-kernel-only"
+  shell: yum install -y "{{mlnx_ofed_kernel_only_rpm_version.mlnx_ofed_kernel_only}}"
+  when: runtime_env == 'TSG-X-P0906'
+
 - name: "update /etc/ld.so.conf.d/mrzcpd.conf"
   template:
     src: "{{ role_path }}/templates/mrzcpd.conf.j2"
