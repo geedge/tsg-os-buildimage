@@ -23,10 +23,10 @@
   shell: sed -i -e 's/KERNEL_VERSION/5.17.15-1.el8/' /usr/bin/uname
   when: runtime_env == 'TSG-X-P0906'
 
-############ Ofed user space only install ############
-- name: "install rpm packages: ofed"
+############ Ofed kernel only install ############
+- name: Install rpm packages: mlnx-ofed-kernel-only"
   yum:
-    name: "mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch"
+    name: "mlnx-ofed-kernel-only-all-5.17.15-1.el8.x86_64.noarch"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
   when: runtime_env == 'TSG-X-P0906'
