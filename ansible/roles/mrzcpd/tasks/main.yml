@@ -21,7 +21,11 @@
   with_dict: "{{ mrzcpd_rpm_version }}"
 
 - name: "Install  mlnx-ofed-user-space rpm package"
-  shell: yum install -y "{{ mlnx_ofed_user_space_only_rpm_version.mlnx_ofed_user_space}}"
+  yum:
+    name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+  with_dict: "{{ mlnx_ofed_user_space_only_rpm_version }}"
   when: runtime_env == 'TSG-X-P0906'
 
 - name: "update /etc/ld.so.conf.d/mrzcpd.conf"
