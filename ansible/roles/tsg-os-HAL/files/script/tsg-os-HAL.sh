@@ -169,6 +169,7 @@ set_grub_cmdline()
 
 load_tsg_os_HAL_config
 mkdir -p /run/mrzcpd/hugepages
+mkdir -p /var/run/share
 
 set_hugepages
 set_cpu_list
@@ -184,4 +185,4 @@ set_mrzcpd_direct_pktmbuf
 
 set_k3s_config ${mem_num}
 set_tsg_clixon_conf
-set_os_hugepages
+set_mrzcpd_conf
