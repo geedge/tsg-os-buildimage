@@ -57,6 +57,7 @@ framework_rpm_version:
   22_libMESA_sts: libMESA_sts-1.0.1.663f190
   23_libfieldstat4: libfieldstat4-4.1.4.c6e8281
   24_libstatistics: libstatistics-1.0.12.34a6760
+  25_libipfix_exporter: libipfix_exporter-1.0.6.0e73c24
 
 kni_rpm_version:
   kni: kni-5.1.8.ce6433e
@@ -81,7 +82,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-5.0.6.cc02934
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-6.1.4.fc4c493
+  tsg_master: tsg_master-6.1.5.5c1e250
 
 shaping_master_rpm_version:
   shaping_master: shaping_master-1.1.4.b434f47
