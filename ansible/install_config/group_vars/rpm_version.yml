@@ -77,7 +77,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-5.0.6.cc02934
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-6.0.47.d237880
+  tsg_master: tsg_master-6.0.48.dd01df8
 
 shaping_master_rpm_version:
   shaping_master: shaping_master-1.1.4.b434f47
