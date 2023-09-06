@@ -37,7 +37,7 @@
    sasl_password = "galaxy2019"
 {% raw %}   brokers = [ "{{ olap.kafka_broker.address_list | join("\",\"") }}" ]
 {% endraw %}
-  topic = "POLICY-RULE-METRICS"
+  topic = "POLICY-RULE-METRIC"
   data_format = "json"
   json_timestamp_units = "1ms"
 
