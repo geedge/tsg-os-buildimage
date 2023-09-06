@@ -14,7 +14,7 @@ firewall_rpm_version:
   tsg_ddos_sketch: tsg_ddos_sketch-1.3.5.447bcc2
   dns: dns-2.1.6.8cfb357
   ftp: ftp-1.0.15.1fc64fe
-  http: http-2.0.15.e949298
+  http: http-2.0.16.81307df
   mail: mail-1.0.19.e982b44
   quic: quic-2.0.9.a7d76dd
   ssl: ssl-3.0.2.2919874
@@ -82,7 +82,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-5.0.6.cc02934
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-6.1.5.5c1e250
+  tsg_master: tsg_master-6.1.8.8934001
 
 shaping_master_rpm_version:
   shaping_master: shaping_master-1.1.4.b434f47
