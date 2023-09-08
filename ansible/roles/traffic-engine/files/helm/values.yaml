@@ -208,6 +208,7 @@ sid:
   proxy: 1001
   sce: 1002
   shaping: 1003
+  inject_adapter: 1064
 
 shaping_config:
   shaping_nic: nf_1_shaping_engine

@@ -75,8 +75,8 @@ sapp_rpm_version:
   sapp-pr: sapp-pr-4.3.23.7f030e5
 
 tfe_rpm_version:
-  tfe: tfe-4.8.35.420e41c
-  tfe-pr: tfe-pr-4.8.35.420e41c
+  tfe: tfe-4.8.36.2d2c726
+  tfe-pr: tfe-pr-4.8.36.2d2c726
 
 tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-5.0.6.cc02934
@@ -110,7 +110,7 @@ tsg_os_clixon_rpm_version:
   tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.0.64.60d0fcc
 
 sce_rpm_version:
-  sce: sce-1.0.15.bb8c650
+  sce: sce-1.0.16.f6450c7
   
 bfdd_rpm_version:
   bfdd: bfdd-1.0.2-release
@@ -123,4 +123,4 @@ coredump_tools_rpm_version:
   coredump_tools: coredump-tools-1.0.13-464f215
 
 packet_adapter_rpm_version:
-  packet_adapter: packet_adapter-2.0.0.e34aa3f
+  packet_adapter: packet_adapter-2.0.2.4f48b59
