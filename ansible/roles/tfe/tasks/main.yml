@@ -47,6 +47,10 @@
     src: "{{ role_path }}/templates/tfe-env-config.j2"
     dest: /etc/sysconfig/tfe-env-config
 
+- name: "move tfe sysctl.conf"
+  shell: mv /etc/sysctl.d/80-tfe.conf /usr/lib/sysctl.d/80-tfe.conf
+  when: runtime_env != 'TSG-X-P0906'
+
 - name: "template the tfe.conf"
   template:
     src: "{{ role_path }}/templates/tfe.conf.j2.j2"

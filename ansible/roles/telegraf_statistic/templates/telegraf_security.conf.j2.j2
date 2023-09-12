@@ -31,6 +31,7 @@
 [[inputs.socket_listener]]
    service_address = "udp://:8400"
    data_format = "influx"
+   read_buffer_size = "32MiB"
 
 [[outputs.kafka]]
    sasl_username = "admin"

@@ -23,6 +23,7 @@
     - {role: maat-redis, tags: maat-redis}
     - {role: certstore, tags: certstore}
     - {role: telegraf_statistic, tags: telegraf_statistic}
+    - {role: sysctl, tags: sysctl}
     - {role: exporter, tags: exporter}
     - {role: tsg-diagnose, tags: tsg-diagnose}
     - {role: system-init, tags: system-init}
@@ -47,6 +48,7 @@
     - {role: exporter, tags: exporter}
     - {role: tsg_sn, tags: tsg_sn}
     - {role: tfe, tags: tfe}
+    - {role: sysctl, tags: sysctl}
     - {role: system-init, tags: system-init}
     - {role: hasp, tags: hasp}
 
@@ -73,6 +75,7 @@
     - {role: certstore, tags: certstore}
     - {role: tfe, tags: tfe}
     - {role: telegraf_statistic, tags: telegraf_statistic}
+    - {role: sysctl, tags: sysctl}
     - {role: exporter, tags: exporter}
     - {role: docker, tags: docker}
     - {role: tsg-diagnose, tags: tsg-diagnose}
@@ -105,6 +108,7 @@
     - {role: firewall, tags: firewall}
     - {role: tsg_app, tags: tsg_app}
     - {role: telegraf_statistic, tags: telegraf_statistic}
+    - {role: sysctl, tags: sysctl}
     - {role: exporter, tags: exporter}
     - {role: system-init-TSG-X-P1403, tags: system-init-TSG-X-P1403}
     - {role: system-init, tags: system-init}
@@ -135,6 +139,7 @@
     - {role: certstore, tags: certstore}
     - {role: tfe, tags: tfe}
     - {role: telegraf_statistic, tags: telegraf_statistic}
+    - {role: sysctl, tags: sysctl}
     - {role: exporter, tags: exporter}
     - {role: docker, tags: docker}
     - {role: tsg-diagnose, tags: tsg-diagnose}
@@ -165,6 +170,7 @@
     - {role: k8s-dashboard, tags: k8s-dashboard}
     - {role: k3s-exporter, tags: k3s-exporter}
     - {role: tsg-diagnose, tags: tsg-diagnose}
+    - {role: sysctl, tags: sysctl}
     - {role: system-init-TSG-X-P1403, tags: system-init-TSG-X-P1403}
     - {role: system-init, tags: system-init}
     - {role: consul, tags: consul}

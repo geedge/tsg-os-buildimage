@@ -38,6 +38,7 @@
 [[inputs.socket_listener]]
    service_address = "udp://:8100"
    data_format = "influx"
+   read_buffer_size = "32MiB"
 
 [[aggregators.basicstats]]
   period = "1s"

@@ -1,0 +1,4 @@
+- name: "copy telegraf sysctl.d to destination server"
+  copy:
+    src: "{{ role_path }}/files/90-telegraf.conf"
+    dest: /usr/lib/sysctl.d/
