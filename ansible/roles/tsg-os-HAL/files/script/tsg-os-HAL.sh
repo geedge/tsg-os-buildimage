@@ -64,6 +64,7 @@ EOF
 set_tsg_clixon_conf()
 {
     [ -f ${tsg_clixon_cfg_file} ] && sed -i "s/^cpu_range=.*$/cpu_range=${CLIXON_IOCORE}/g" ${tsg_clixon_cfg_file}
+    [ -f ${tsg_clixon_cfg_file} ] && sed -i "s/^hugepages=.*$/hugepages=${HUGEPAGES}/g" ${tsg_clixon_cfg_file}
 }
 
 set_mrzcpd_conf()
