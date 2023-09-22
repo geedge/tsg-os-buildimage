@@ -44,3 +44,10 @@
     src: "{{ role_path }}/templates/quic/main.conf.j2"
     dest:  /opt/tsg/sapp/conf/quic/main.conf
   tags: template
+
+- name: "Template the /opt/tsg/sapp/plug/business/firewall/firewall.inf"
+  template:
+    src: "{{ role_path }}/templates/firewall.inf.j2.j2"
+    dest: /opt/tsg/tsg-os-provision/templates/firewall.inf.j2
+  tags: template
+  when: runtime_env != 'TSG-X-P0906'

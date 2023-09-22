@@ -78,6 +78,12 @@
         dest: /opt/tsg/sapp/plug/business/session_record/session_record.inf
       tags: firewall
 
+    - name: "tsg-os-provision: Template the firewall.inf"
+      template:
+        src: "../templates/firewall.inf.j2"
+        dest: /opt/tsg/sapp/plug/business/firewall/firewall.inf
+      tags: firewall
+
     - name: "tsg-os-provision: Template the sapp.toml"
       template:
         src: "../templates/sapp.toml.j2"
