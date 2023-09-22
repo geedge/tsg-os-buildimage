@@ -43,9 +43,12 @@ FUNC_NAME=session_record_rtp_entry
 {% endif %}
 {% endraw %}
 
+{% raw %}{% if firewall.enable_sip == 1 %}
 [SIP]
 FUNC_FLAG=ALL
 FUNC_NAME=session_record_sip_entry
+{% endif %}
+{% endraw %}
 
 [FTP]
 FUNC_FLAG=ALL
@@ -67,10 +70,16 @@ FUNC_NAME=session_record_stratum_entry
 FUNC_FLAG=ALL
 FUNC_NAME=session_record_rdp_entry
 
+{% raw %}{% if firewall.enable_bgp == 1 %}
 [BGP]
 FUNC_FLAG=ALL
 FUNC_NAME=session_record_bgp_entry
+{% endif %}
+{% endraw %}
 
+{% raw %}{% if firewall.enable_dtls == 1 %}
 [DTLS]
 FUNC_FLAG=DTLS_CLIENT_HELLO,DTLS_SERVER_HELLO,DTLS_HELLO_VERIFY_REQUEST,DTLS_CLIENT_EXTENSION
 FUNC_NAME=session_record_dtls_entry
+{% endif %}
+{% endraw %}
