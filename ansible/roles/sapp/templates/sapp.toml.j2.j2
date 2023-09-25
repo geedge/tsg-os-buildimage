@@ -149,6 +149,8 @@ dictator_enable=0
     {% raw %}max={{ advanced_settings.stream_tcp_max }}
     timeout={{ advanced_settings.stream_tcp_timeout }}
     {% endraw %}
+    opening_timeout=60
+    closing_timeout=10
     syn_mandatory=1
     reorder_pkt_max=128
     analyse_option_enabled=1
