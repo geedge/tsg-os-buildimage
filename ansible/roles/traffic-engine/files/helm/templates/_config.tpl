@@ -574,8 +574,8 @@ enable_breakpad_upload=0
             export CACERT=${SERVICEACCOUNT}/ca.crt
             curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/${CM_CACHE_SERVICE_NAME} -o /tmp/cm-cache.txt
             export CM_POLICY_LOCAL_CACHE_IP=$(cat /tmp/cm-cache.txt  | jq -r '.spec.clusterIP')
-            echo "export CM_POLICY_LOCAL_CACHE_IP=${CM_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/announceinfo.sh
-            chmod 0755 /etc/profile.d/announceinfo.sh
+            echo "export CM_POLICY_LOCAL_CACHE_IP=${CM_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/cm-local-cache.sh
+            chmod 0755 /etc/profile.d/cm-local-cache.sh
 {{- end }}
 {{- end -}}
 
@@ -634,4 +634,58 @@ enable_breakpad_upload=0
             export device_id=`ipmitool fru list |grep 'Product Serial' | awk '{ print $4}'`
             if [ -z "$device_id" ]; then export device_id="unknown"; fi
             echo "export device_id=${device_id}" > /etc/profile.d/device_id.sh
+{{- end -}}
+
+{{- define "traffic-engine.global.sd.server-ip" -}}
+{{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
+{{- if eq .Values.external_resources.sd.connectivity "direct" }}
+{{- print .Values.external_resources.sd.direct.address }}
+{{- else }}
+{{- print "SD_POLICY_LOCAL_CACHE_IP_LOCATION" }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.global.sd.server-port" -}}
+{{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
+{{- if eq .Values.external_resources.sd.connectivity "direct" }}
+{{- print .Values.external_resources.sd.direct.port }}
+{{- else }}
+{{- print "6379" }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{- define "traffic-engine.global.sd.read-server-ip" -}}
+{{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
+{{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
+            export APISERVER=https://kubernetes.default.svc
+            export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+            export TOKEN=$(cat ${SERVICEACCOUNT}/token)
+            export CACERT=${SERVICEACCOUNT}/ca.crt
+            curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/${SD_CACHE_SERVICE_NAME} -o /tmp/sd-cache.txt
+            export SD_POLICY_LOCAL_CACHE_IP=$(cat /tmp/sd-cache.txt  | jq -r '.spec.clusterIP')
+            echo "export SD_POLICY_LOCAL_CACHE_IP=${SD_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/sd-local-cache.sh
+            chmod 0755 /etc/profile.d/sd-local-cache.sh
+{{- end }}
+{{- end }}
+{{- end -}}
+
+
+{{- define "traffic-engine.global.sd.env-service-name" -}}
+{{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
+{{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
+        - name: SD_CACHE_SERVICE_NAME
+          value: {{ .Values.external_resources.sd.local_cache.cache_name }}-redis-master
+{{- end }}
+{{- end }}
+{{- end -}}
+
+
+{{- define "traffic-engine.firewall.sd.set-redis-ip" -}}
+{{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
+{{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
+            sed -Ei "s|SD_POLICY_LOCAL_CACHE_IP_LOCATION|${SD_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
+{{- end }}
+{{- end }}
 {{- end -}}
