@@ -122,5 +122,5 @@
    data_format = "json"
    json_timestamp_units = "1ms" 
    json_transformation = '''
-	$merge([{"timestamp": timestamp}, tags, fields])
-	'''
+      $merge([$, { "timestamp_ms": timestamp}]) ~> |$|{}, ['timestamp']|
+      '''
