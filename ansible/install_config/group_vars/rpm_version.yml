@@ -29,7 +29,7 @@ firewall_rpm_version:
   rdp: rdp-1.0.3.f392ffd
   bgp: bgp-1.1.2.356c17d
   session_flags: session_flags-2.1.9.eca9f17
-  stat_policy_enforcer: stat_policy_enforcer-2.0.9.d04de8c
+  stat_policy_enforcer: stat_policy_enforcer-2.0.10.a525354
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf
