@@ -4,7 +4,7 @@ certstore_rpm_version:
 firewall_rpm_version:
   capture_packet_plug: capture_packet_plug-5.0.6.1820f69
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-2.1.3.3afce71
+  firewall: firewall-2.1.4.52a0ebf
   session_record: session_record-4.1.11.dc559d6
   gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
