@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: packet-io-deviceplugin
+  name: packet-io-engine-deviceplugin
   labels:
-    app: packet-io-deviceplugin
+    app: packet-io-engine-deviceplugin
   namespace: tsg-os-system
 spec:
   selector:
     matchLabels:
-      app: packet-io-deviceplugin
+      app: packet-io-engine-deviceplugin
   template:
     metadata:
       labels:
-        app: packet-io-deviceplugin
+        app: packet-io-engine-deviceplugin
     spec:
       containers:
-      - name: packet-io-deviceplugin
-        image: registry.gdnt-cloud.website/tsg-mrzcpd-deviceplugin:%%MRZCPD_DEVICE_PLUGIN_IMAGE_TAG%%
+      - name: packet-io-engine-deviceplugin
+        image: registry.gdnt-cloud.website/tsg-packet-io-engine-deviceplugin:%%MRZCPD_DEVICE_PLUGIN_IMAGE_TAG%%
         command:
           - "bash"
           - "-ec"
@@ -31,13 +31,11 @@ spec:
           mountPath: /var/lib/kubelet
         - name: modules
           mountPath: /lib/modules
-        - name: mrzcpdtest
-          mountPath: /opt/tsg/mrzcpd
         securityContext:
           privileged: true
       initContainers:
-      - name: init-mrzcpd-deviceplugin
-        image: registry.gdnt-cloud.website/tsg-mrzcpd-deviceplugin:%%MRZCPD_DEVICE_PLUGIN_IMAGE_TAG%%
+      - name: init-packet-io-engine-deviceplugin
+        image: registry.gdnt-cloud.website/tsg-packet-io-engine-deviceplugin:%%MRZCPD_DEVICE_PLUGIN_IMAGE_TAG%%
         command: 
           - "bash"
           - "-ec"
@@ -52,8 +50,6 @@ spec:
           mountPath: /var/lib/kubelet
         - name: modules
           mountPath: /lib/modules
-        - name: mrzcpdtest
-          mountPath: /opt/tsg/mrzcpd
         securityContext:
           privileged: true
       volumes:
@@ -70,7 +66,4 @@ spec:
       - name: modules
         hostPath: 
           path: /lib/modules
-      - name: mrzcpdtest
-        hostPath:
-          path: /root/mrzcpd
       hostNetwork: true

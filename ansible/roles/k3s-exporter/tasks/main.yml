@@ -73,10 +73,10 @@
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
 
-- name: "copy prometheus crd file to dest"
-  copy:
-    src: "{{ role_path }}/files/mrzcpd/exporter-mrzcpd-crd.yaml"
-    dest: /var/lib/rancher/k3s/server/manifests/exporter-mrzcpd-crd.yaml
+# - name: "copy prometheus crd file to dest"
+#   copy:
+#     src: "{{ role_path }}/files/mrzcpd/exporter-mrzcpd-crd.yaml"
+#     dest: /var/lib/rancher/k3s/server/manifests/exporter-mrzcpd-crd.yaml
 
 #### mrzcpd exporter end
 

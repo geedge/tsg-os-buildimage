@@ -270,7 +270,7 @@
     - {role: framework, tags: framework}
     - {role: packet_adapter, tags: packet_adapter}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-mrzcpd
+- hosts: TSG-X-NXR620G40-R01-P0906-packet-io-engine
   remote_user: root
   vars_files:
     - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
@@ -294,7 +294,7 @@
   roles:
     - {role: container-tools-install, tags: container-tools-install}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-mrzcpd-deviceplugin
+- hosts: TSG-X-NXR620G40-R01-P0906-packet-io-engine-deviceplugin
   remote_user: root
   vars_files:
     - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml

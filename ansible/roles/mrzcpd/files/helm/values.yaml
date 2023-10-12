@@ -79,6 +79,20 @@ tolerations: []
 affinity: {}
 
 
+mergeExporter:
+  image:
+    repository: quay.io/rebuy/exporter-merger
+    pullPolicy: Never
+    tag: "v0.2.0"
+  mergePort: "9005"
+  mergeUrls: "http://0.0.0.0:8901/metrics http://0.0.0.0:8902/metrics"
+
+service:
+  type: ClusterIP
+#  nodePort: "30081"
+  port: "9005"
+  annotations: {}
+
 define_enable_val_yes: 'yes'
 
 mrzcpd:

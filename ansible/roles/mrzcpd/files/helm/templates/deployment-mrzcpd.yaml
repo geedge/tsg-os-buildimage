@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: packet-io-engine
   labels:
-    app: {{ .Release.Name }}
-    component: mrzcpd
+    app: packet-io-engine
+    component: packet-io-engine
   annotations:
     reloader.stakater.com/auto: "true"
 
@@ -12,17 +12,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-mrzcpd
+      app: packet-io-engine
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-mrzcpd
+        app: packet-io-engine
         serviceFunction: {{ .Release.Name }}
-        component: mrzcpd
+        component: packet-io-engine
       annotations:
-        prometheus.io/port: "9086"
+        prometheus.io/port: "9005"
         prometheus.io/scrape: "true"
     
     spec: 
@@ -34,8 +34,8 @@ spec:
         operator: Exists
         effect: NoSchedule
       containers:
-      - name: mrzcpd
-        image: "registry.gdnt-cloud.website/tsg-mrzcpd:{{ .Chart.AppVersion }}"
+      - name: packet-io-engine
+        image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         workingDir: /opt/tsg/mrzcpd
         command: 
@@ -43,16 +43,26 @@ spec:
           - "-ec"
           - |
             /opt/tsg/mrzcpd/bin/mrmarch --auto
-            mount --rbind /opt/tsg/mrzcpd /root/hostmount/mrzcpd
-            cp -f /etc/ld.so.conf.d/mrzcpd.conf /root/hostmount/ld.so.conf.d/mrzcpd.conf
-            cp -f /etc/profile.d/mrzcpd.sh /root/hostmount/profile.d/mrzcpd.sh
+            mount --rbind /opt/tsg/mrzcpd /mnt/packet-io-engine/mrzcpd
+
+            cp -f /etc/ld.so.conf.d/mrzcpd.conf /mnt/packet-io-engine/ld.so.conf.d/mrzcpd.conf
+            cp -f /etc/profile.d/mrzcpd.sh /mnt/packet-io-engine/profile.d/mrzcpd.sh
+            ldconfig -C /etc/ld.so.cache -r /host
+
             cp -f /opt/tsg/config/mrzcpd.conf /opt/tsg/mrzcpd/etc/mrglobal.conf
             chmod +x /opt/tsg/mrzcpd/bin/replaceconf.sh
             /opt/tsg/mrzcpd/bin/replaceconf.sh
-            ldconfig -C /etc/ld.so.cache -r /host
+
             {{ template "mrzcpd.prestart" . }}
             {{ template "mrzcpd.start" . }}
         volumeMounts:
+        - name: mrzcpd
+          mountPath: /mnt/packet-io-engine/mrzcpd
+          mountPropagation: Bidirectional
+        - name: ldconfig-mrzcpd
+          mountPath: /mnt/packet-io-engine/ld.so.conf.d
+        - name: env-sh
+          mountPath: /mnt/packet-io-engine/profile.d
         - name: mrzcpd-conf
           mountPath: "/opt/tsg/config/mrzcpd.conf"
           subPath: mrzcpd.conf
@@ -60,13 +70,6 @@ spec:
           mountPath: /var/run/mrzcpd
         - name: hugepages
           mountPath: /var/run/mrzcpd/hugepages
-        - name: mrzcpd
-          mountPath: /root/hostmount/mrzcpd
-          mountPropagation: Bidirectional
-        - name: ldconfig-mrzcpd
-          mountPath: /root/hostmount/ld.so.conf.d
-        - name: env-sh
-          mountPath: /root/hostmount/profile.d
         - name: dpdk
           mountPath: /var/run/dpdk
         - name: container-mrzcpd
@@ -87,8 +90,6 @@ spec:
             hugepages-1Gi: {{.Values.mrzcpd.hugepages }}
           requests:
             memory: 100Mi
-        ports:
-          - containerPort: 9086
         env:
         - name: MLX5_GLUE_PATH
           value: /opt/tsg/mrzcpd/lib
@@ -106,45 +107,57 @@ spec:
 {{- end }}
         securityContext:
           privileged: true
-      
-      - name: mrapm-device
-        image: "registry.gdnt-cloud.website/tsg-mrzcpd:{{ .Chart.AppVersion }}"
-        imagePullPolicy: Never
-        workingDir: /opt/tsg/mrzcpd
-        command: 
-          - "bash"
-          - "-ec"
-          - |
-            /opt/tsg/mrzcpd/bin/monit_device --prometheus-client
-        volumeMounts:
-        - name: run-mrzcpd
-          mountPath: /var/run/mrzcpd
-        - name: dpdk
-          mountPath: /var/run/dpdk
-        - name: root-sys
-          mountPath: /root/sys
-        {{ template "mrzcpd.mount.localtime" . }}
-        {{ template "mrzcpd.mount.prestart" . }}
-        {{ template "mrzcpd.mount.hostpath" . }}
 
-      - name: mrapm-stream
-        image: "registry.gdnt-cloud.website/tsg-mrzcpd:{{ .Chart.AppVersion }}"
+      - command:
+        - /opt/tsg/mrzcpd/bin/monit_device
+        - --prometheus-client
+        image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
-        workingDir: /opt/tsg/mrzcpd
-        command: 
-          - "bash"
-          - "-ec"
-          - |
-            /opt/tsg/mrzcpd/bin/monit_stream --prometheus-client
+        name: mrapm-device
         volumeMounts:
-        - name: run-mrzcpd
-          mountPath: /var/run/mrzcpd
-        - name: dpdk
-          mountPath: /var/run/dpdk
-        {{ template "mrzcpd.mount.localtime" . }}
-        {{ template "mrzcpd.mount.prestart" . }}
-        {{ template "mrzcpd.mount.hostpath" . }}
-
+        - mountPath: /var/run/mrzcpd
+          name: run-mrzcpd
+          readOnly: true
+        - mountPath: /var/run/dpdk
+          name: dpdk
+          readOnly: true
+        - mountPath: /root/sys
+          name: root-sys
+          readOnly: true
+        - mountPath: /etc/localtime
+          name: localtime-node
+          readOnly: true
+      - command:
+        - /opt/tsg/mrzcpd/bin/monit_stream
+        - --prometheus-client
+        image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        name: monit-stream
+        volumeMounts:
+        - mountPath: /var/run/mrzcpd
+          name: run-mrzcpd
+          readOnly: true
+        - mountPath: /var/run/dpdk
+          name: dpdk
+          readOnly: true
+        - mountPath: /root/sys
+          name: root-sys
+          readOnly: true
+        - mountPath: /etc/localtime
+          name: localtime-node
+          readOnly: true
+      - env:
+        - name: MERGER_URLS
+          value: {{ .Values.mergeExporter.mergeUrls }}
+        - name: MERGER_PORT
+          value: "{{ .Values.mergeExporter.mergePort }}"
+        image: "{{ .Values.mergeExporter.image.repository }}:{{ .Values.mergeExporter.image.tag }}"
+        imagePullPolicy: {{ .Values.mergeExporter.image.pullPolicy }}
+        name: exporter-merger
+        ports:
+        - name: ex-mrzcpd-port
+          containerPort: {{ .Values.mergeExporter.mergePort }}
+          protocol: TCP
       volumes:
       - name: prestart-dir
         hostPath: 
