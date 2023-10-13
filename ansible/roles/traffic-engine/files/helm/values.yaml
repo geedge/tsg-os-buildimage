@@ -12,14 +12,14 @@ external_resources:
   sd:
     ## @param external_resources.cm.connection value in [direct, local_cache], default: local_cache
     ##
-    enable: yes
-    connectivity: local_cache
+    enable: no
+    connectivity: direct
     db_index: 0
     policy_effect_interval_ms: 100
     policy_garbage_collection_interval_ms: 30000
     policy_update_check_interval_ms: 100
     direct:
-      address: 10.X.X.X
+      address: 10.1.1.1
       port: 7002
     local_cache:
       cache_name: tsg_traffic_sd_local_cache_1
