@@ -19,3 +19,9 @@
     name: "{{ shaping_engine_rpm_fullname.files[0].path }}" 
     state: present
     disable_gpg_check: yes
+
+- name: "install epel-release"
+  shell: yum install epel-release -y
+
+- name: "install jemalloc"
+  shell: yum install jemalloc -y
