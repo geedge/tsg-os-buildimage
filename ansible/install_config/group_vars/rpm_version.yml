@@ -113,7 +113,7 @@ tsg_os_clixon_rpm_version:
   tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.0.b851991
 
 sce_rpm_version:
-  sce: sce-1.0.18.2d9fecd
+  sce: sce-1.1.0.db51761
   
 bfdd_rpm_version:
   bfdd: bfdd-1.0.2-release
