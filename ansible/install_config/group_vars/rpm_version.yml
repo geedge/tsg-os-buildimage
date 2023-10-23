@@ -58,7 +58,7 @@ framework_rpm_version:
   23_libfieldstat4: libfieldstat4-4.4.0.e5139c4
   #24_libstatistics: libstatistics-2.0.20.895d68e
   25_libipfix_exporter: libipfix_exporter-1.0.6.0e73c24
-  26_libosfp: libosfp-1.3.0.e62ff39
+  26_libosfp: libosfp-1.3.1.1de666a
 
 kni_rpm_version:
   kni: kni-5.1.9.9b96928
@@ -85,7 +85,7 @@ tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-5.0.6.cc02934
 
 tsg_master_rpm_version:
-  tsg_master: tsg_master-6.1.14.dae9c9b
+  tsg_master: tsg_master-6.1.15.da86af0
 
 shaping_master_rpm_version:
   shaping_master: shaping_master-1.1.4.b434f47
