@@ -125,3 +125,9 @@
 
 - name: "Install python module"
   shell: pip2 install -i https://pypi.tuna.tsinghua.edu.cn/simple PrettyTable==0.7.2 
+
+- name: "install flamegraphs for perf"
+  yum:
+    name: js-d3-flame-graph
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
