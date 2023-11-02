@@ -73,9 +73,10 @@
 {{- define "mrzcpd.config" -}}
 {{- $nf_nic_list := "" }}
 {{- $mirr_nic_list := "" }}
-{{- $endpoint_nic_list := "" }}
+{{- $ep_nic_l2_list := "" }}
+{{- $ep_nic_l3_list := "" }}
 {{- $sid_step := 4 }}
-{{- $cycle := 16 }}
+{{- $cycle := int .Values.mrzcpd.nf_count }}
 {{- $enter := "\n"}}
 
 {{- range $index, $_ := until $cycle }}
@@ -84,7 +85,8 @@
 {{- $nf_nic_list = (printf "%s,nf_%d_proxy" $nf_nic_list $index) }}
 {{- $nf_nic_list = (printf "%s,nf_%d_sce" $nf_nic_list $index) }}
 {{- $nf_nic_list = (printf "%s,nf_%d_shaping_engine" $nf_nic_list $index) }}
-{{- $endpoint_nic_list = (printf "endpoint_%d_sce"  $index) }}
+{{- $ep_nic_l2_list = (printf "ep_%d_sce_l2"  $index) }}
+{{- $ep_nic_l3_list = (printf "ep_%d_sce_l3"  $index) }}
 {{- $mirr_nic_list = (printf "mirr_%d_fw"  $index) }}
 {{- $mirr_nic_list = (printf "%s,mirr_%d_proxy" $mirr_nic_list $index) }}
 {{- else }}
@@ -92,7 +94,8 @@
 {{- $nf_nic_list = (printf "%s,nf_%d_proxy" $nf_nic_list $index) }}
 {{- $nf_nic_list = (printf "%s,nf_%d_sce" $nf_nic_list $index) }}
 {{- $nf_nic_list = (printf "%s,nf_%d_shaping_engine" $nf_nic_list $index) }}
-{{- $endpoint_nic_list = (printf "%s,endpoint_%d_sce" $endpoint_nic_list $index) }}
+{{- $ep_nic_l2_list = (printf "%s,ep_%d_sce_l2" $ep_nic_l2_list $index) }}
+{{- $ep_nic_l3_list = (printf "%s,ep_%d_sce_l3" $ep_nic_l3_list $index) }}
 {{- $mirr_nic_list = (printf "%s,mirr_%d_fw" $mirr_nic_list $index) }}
 {{- $mirr_nic_list = (printf "%s,mirr_%d_proxy" $mirr_nic_list $index) }}
 {{- end }}
@@ -101,9 +104,9 @@
 
 [device]
 {{- if .Values.mrzcpd.interfaces }}
-device= {{- range $interface := .Values.mrzcpd.interfaces }}{{ $interface.name }},{{- end }}{{ $nf_nic_list }},{{ $endpoint_nic_list }},{{ $mirr_nic_list }},nf_inject,virtio_dign_c,virtio_dign_s
+device= {{- range $interface := .Values.mrzcpd.interfaces }}{{ $interface.name }},{{- end }}{{ $nf_nic_list }},{{ $ep_nic_l2_list }},{{ $ep_nic_l3_list }},{{ $mirr_nic_list }},nf_inject,virtio_dign_c,virtio_dign_s
 {{- else }}
-device= {{ $nf_nic_list }},{{ $endpoint_nic_list}},{{ $mirr_nic_list}},nf_inject,virtio_dign_c,virtio_dign_s
+device= {{ $nf_nic_list }},{{ $ep_nic_l2_list}},{{ $ep_nic_l3_list }},{{ $mirr_nic_list}},nf_inject,virtio_dign_c,virtio_dign_s
 {{- end }}
 sz_tunnel=8192
 sz_buffer=0
@@ -164,7 +167,11 @@ role=4
 driver=3
 role=4
 
-[device:endpoint_{{ $index }}_sce]
+[device:ep_{{ $index }}_sce_l2]
+driver=3
+role=4
+
+[device:ep_{{ $index }}_sce_l3]
 en_representor=1
 representor_ns=1
 driver=3
@@ -353,11 +360,11 @@ vwire_id=0
 {{- end }}
 # bridge
 [bridge:0]
-{{- if .Values.mrzcpd.service_chaining_vxlan_g.interface  }}
-master_device={{ .Values.mrzcpd.service_chaining_vxlan_g.interface }}
-devices={{ .Values.mrzcpd.service_chaining_vxlan_g.interface }},{{ $endpoint_nic_list}}
+{{- if .Values.mrzcpd.service_chaining.vxlan_interface  }}
+master_device={{ .Values.mrzcpd.service_chaining.vxlan_interface }}
+devices={{ .Values.mrzcpd.service_chaining.vxlan_interface }},{{ $ep_nic_l3_list}}
 {{- else }}
-devices={{ $endpoint_nic_list}}
+devices={{ $ep_nic_l3_list}}
 {{- end }}
 
 # bridge
@@ -367,6 +374,16 @@ master_device={{ .Values.mrzcpd.traffic_mirror.interface }}
 devices={{ .Values.mrzcpd.traffic_mirror.interface }},{{ $mirr_nic_list}}
 {{- else }}
 devices={{ $mirr_nic_list}}
-
 {{- end -}}
+{{$enter}}
+
+# bridge
+[bridge:2]
+{{- if .Values.mrzcpd.service_chaining.vlan_interface  }}
+master_rules={{ .Values.mrzcpd.service_chaining.vlan_interface }}
+devices={{ .Values.mrzcpd.service_chaining.vlan_interface }},{{ $ep_nic_l2_list}}
+{{- else }}
+devices={{ $ep_nic_l2_list}}
+{{- end }}
+
 {{- end -}}

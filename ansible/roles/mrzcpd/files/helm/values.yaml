@@ -97,10 +97,11 @@ define_enable_val_yes: 'yes'
 
 mrzcpd:
   interfaces: []
+  nf_count: 16
   services: []
   virtual_wires: []
   service_lb: {}
-  service_chaining_vxlan_g: {}
+  service_chaining: {}
   traffic_mirror: {}
   distmode: 0
   hugepages: 32Gi
