@@ -380,7 +380,7 @@ devices={{ $mirr_nic_list}}
 # bridge
 [bridge:2]
 {{- if .Values.mrzcpd.service_chaining.vlan_interface  }}
-master_rules={{ .Values.mrzcpd.service_chaining.vlan_interface }}
+master_device={{ .Values.mrzcpd.service_chaining.vlan_interface }}
 devices={{ .Values.mrzcpd.service_chaining.vlan_interface }},{{ $ep_nic_l2_list}}
 {{- else }}
 devices={{ $ep_nic_l2_list}}
