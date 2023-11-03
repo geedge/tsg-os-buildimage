@@ -56,3 +56,9 @@
   with_items:
     - tsg-os-HAL.conf
   when: runtime_env == 'TSG-X-P0906'
+
+- name: "enable fstrim.timer"
+  systemd:
+    name: fstrim.timer
+    enabled: yes
+  when: runtime_env == 'TSG-X-P0906'
