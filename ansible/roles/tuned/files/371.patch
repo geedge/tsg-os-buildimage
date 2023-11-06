@@ -1,0 +1,173 @@
+From 4daf99fc2cb6d873e804d24d56ddd849fc4e514b Mon Sep 17 00:00:00 2001
+From: Adriaan Schmidt <adriaan.schmidt@siemens.com>
+Date: Wed, 10 Aug 2022 05:05:03 +0000
+Subject: [PATCH] feat(scheduler): match thread names in addition to process
+ names
+
+This is a first try at matching thread names (comm) in addition to
+the process cmdline for changing scheduling policies and priorities
+with the `scheduler` plugin.
+
+It adds an optional second regex field to the end of `group.*`
+options (defaults to ".*"). The first regex is to match the
+process cmdline, the second one is used to match the thread's
+comm. If both match, scheduling options are applied.
+
+Note that you can have multiple `group.*` options with the
+same process regex and different thread regexes. You can even have
+one rule to match a specific thread name, and another with no thread
+regex (matching all threads). In this case you need to assign rule
+priorities (higher number -> higher priority).
+
+Signed-off-by: Adriaan Schmidt <adriaan.schmidt@siemens.com>
+---
+ profiles/realtime-virtual-guest/tuned.conf |  2 +-
+ profiles/realtime-virtual-host/tuned.conf  |  2 +-
+ tuned/plugins/plugin_scheduler.py          | 67 ++++++++++++++++------
+ 3 files changed, 50 insertions(+), 21 deletions(-)
+
+diff --git a/profiles/realtime-virtual-guest/tuned.conf b/profiles/realtime-virtual-guest/tuned.conf
+index a381f413..288f9d03 100644
+--- a/profiles/realtime-virtual-guest/tuned.conf
++++ b/profiles/realtime-virtual-guest/tuned.conf
+@@ -22,7 +22,7 @@ non_isolated_cores=${f:cpulist_invert:${isolated_cores}}
+ assert2=${f:assertion:isolated_cores contains online CPU(s):${isolated_cores_expanded}:${isolated_cores_online_expanded}}
+ 
+ [scheduler]
+-# group.group_name=rule_priority:scheduler_policy:scheduler_priority:core_affinity_in_hex:process_name_regex
++# group.group_name=rule_priority:scheduler_policy:scheduler_priority:core_affinity_in_hex:process_name_regex[:thread_name_regex]
+ # for i in `pgrep ksoftirqd` ; do grep Cpus_allowed_list /proc/$i/status ; done
+ group.ksoftirqd=0:f:2:*:^\[ksoftirqd
+ group.ktimers=0:f:2:*:^\[ktimers
+diff --git a/profiles/realtime-virtual-host/tuned.conf b/profiles/realtime-virtual-host/tuned.conf
+index b0e8846c..0f520dfe 100644
+--- a/profiles/realtime-virtual-host/tuned.conf
++++ b/profiles/realtime-virtual-host/tuned.conf
+@@ -27,7 +27,7 @@ non_isolated_cores=${f:cpulist_invert:${isolated_cores}}
+ assert2=${f:assertion:isolated_cores contains online CPU(s):${isolated_cores_expanded}:${isolated_cores_online_expanded}}
+ 
+ [scheduler]
+-# group.group_name=rule_priority:scheduler_policy:scheduler_priority:core_affinity_in_hex:process_name_regex
++# group.group_name=rule_priority:scheduler_policy:scheduler_priority:core_affinity_in_hex:process_name_regex[:thread_name_regex]
+ # for i in `pgrep ksoftirqd` ; do grep Cpus_allowed_list /proc/$i/status ; done
+ group.ksoftirqd=0:f:2:*:^\[ksoftirqd
+ group.ktimers=0:f:2:*:^\[ktimers
+diff --git a/tuned/plugins/plugin_scheduler.py b/tuned/plugins/plugin_scheduler.py
+index 10ff4e7a..74678d99 100644
+--- a/tuned/plugins/plugin_scheduler.py
++++ b/tuned/plugins/plugin_scheduler.py
+@@ -565,10 +565,11 @@ def _get_cmdline(self, process):
+ 		if not isinstance(process, procfs.process):
+ 			pid = process
+ 			process = procfs.process(pid)
+-		cmdline = procfs.process_cmdline(process)
++		cmd = procfs.process_cmdline(process)
++		comm = process['stat']['comm']
+ 		if self._is_kthread(process):
+-			cmdline = "[" + cmdline + "]"
+-		return cmdline
++			return "[" + cmd + "]", "[" + comm + "]"
++		return cmd, comm
+ 
+ 	# Raises OSError, IOError
+ 	def get_processes(self):
+@@ -582,7 +583,7 @@ def get_processes(self):
+ 				processes[pid] = cmd
+ 				if "threads" in proc:
+ 					for pid in proc["threads"].keys():
+-						cmd = self._get_cmdline(proc)
++						cmd = self._get_cmdline(pid)
+ 						processes[pid] = cmd
+ 			except (OSError, IOError) as e:
+ 				if e.errno == errno.ENOENT \
+@@ -817,7 +818,16 @@ def _convert_sched_cfg(self, vals):
+ 		(scheduler, priority) = self._convert_sched_params(
+ 				scheduler, priority)
+ 		affinity = self._convert_affinity(affinity)
+-		return (rule_prio, scheduler, priority, affinity, regex)
++		# split regex into two, one to match the cmdline, and one the comm
++		# if there is only one regex for the cmdline, then the comm is matched by ".*"
++		# allow escaping of colons in regexes (-> '\:' is not a delimiter in the split)
++		regexes = re.split(r'(?<!\\):', regex, 1)
++		r1 = regexes[0].replace(r'\:', ':')
++		try:
++			r2 = regexes[1].replace(r'\:', ':')
++		except IndexError:
++			r2 = ".*"
++		return (rule_prio, scheduler, priority, affinity, r1, r2)
+ 
+ 	def _cgroup_create_group(self, cgroup):
+ 		path = "%s/%s" % (self._cgroup_mount_point, cgroup)
+@@ -934,24 +944,34 @@ def _instance_apply_static(self, instance):
+ 		sched_cfg = sorted(buf, key=lambda option_vals: option_vals[1][0])
+ 		sched_all = dict()
+ 		# for runtime tuning
++		# _sched_lookup is a dict mapping a cmdline regex to a list of scheduling
++		# parameters, each with a secondary regex to match the comm, sorted from lowest
++		# to highest priority
+ 		instance._sched_lookup = {}
+-		for option, (rule_prio, scheduler, priority, affinity, regex) \
++		for option, (rule_prio, scheduler, priority, affinity, regex, regex2) \
+ 				in sched_cfg:
+ 			try:
+-				r = re.compile(regex)
++				r1 = re.compile(regex)
+ 			except re.error as e:
+ 				log.error("error compiling regular expression: '%s'" % str(regex))
+ 				continue
+-			processes = [(pid, cmd) for pid, cmd in ps.items() if re.search(r, cmd) is not None]
++			try:
++				r2 = re.compile(regex2)
++			except re.error as e:
++				log.error("error compiling regular expression: '%s'" % str(regex2))
++				continue
++			processes = [(pid, cmd) for pid, cmd in ps.items() if re.search(r1, cmd[0]) is not None and re.search(r2, cmd[1]) is not None]
+ 			#cmd - process name, option - group name
+-			sched = dict([(pid, (cmd, option, scheduler, priority, affinity, regex))
++			sched = dict([(pid, (cmd, option, scheduler, priority, affinity))
+ 					for pid, cmd in processes])
+ 			sched_all.update(sched)
+ 			# make any contained regexes non-capturing: replace "(" with "(?:",
+ 			# unless the "(" is preceded by "\" or followed by "?"
+ 			regex = re.sub(r"(?<!\\)\((?!\?)", "(?:", str(regex))
+-			instance._sched_lookup[regex] = [scheduler, priority, affinity]
+-		for pid, (cmd, option, scheduler, priority, affinity, regex) \
++			if not regex in instance._sched_lookup:
++				instance._sched_lookup[regex] = []
++			instance._sched_lookup[regex].append([scheduler, priority, affinity, r2])
++		for pid, (cmd, option, scheduler, priority, affinity) \
+ 				in sched_all.items():
+ 			self._tune_process(pid, cmd, scheduler,
+ 					priority, affinity)
+@@ -1060,14 +1080,23 @@ def _add_pid(self, instance, pid, r):
+ 				log.error("Failed to get cmdline of PID %d: %s"
+ 						% (pid, e))
+ 			return
+-		v = self._cmd.re_lookup(instance._sched_lookup, cmd, r)
+-		if v is not None and not pid in self._scheduler_original:
+-			log.debug("tuning new process '%s' with PID '%d' by '%s'" % (cmd, pid, str(v)))
+-			(sched, prio, affinity) = v
+-			self._tune_process(pid, cmd, sched, prio,
+-					affinity)
+-			self._storage.set(self._scheduler_storage_key,
+-					self._scheduler_original)
++		# first match against cmdline, uses the optimized re_lookup
++		vs = self._cmd.re_lookup(instance._sched_lookup, cmd[0], r)
++		if vs is not None and not pid in self._scheduler_original:
++			tune_v = None
++			# second match against comm, reversed to start with the highest priority
++			for v in reversed(vs):
++				if re.search(v[3], cmd[1]) is not None:
++					tune_v = v[:3]
++					break
++
++			if tune_v is not None:
++				log.debug("tuning new process '%s' with PID '%d' by '%s'" % (cmd, pid, str(tune_v)))
++				(sched, prio, affinity) = tune_v
++				self._tune_process(pid, cmd, sched, prio,
++						affinity)
++				self._storage.set(self._scheduler_storage_key,
++						self._scheduler_original)
+ 
+ 	def _remove_pid(self, instance, pid):
+ 		if pid in self._scheduler_original:
