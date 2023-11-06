@@ -1,0 +1,39 @@
+- name: "Tuned: copy patch file to dest"
+  copy:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: /tmp
+    mode: 0755
+  with_items:
+    - 371.patch
+  when: runtime_env == 'TSG-X-P0906'
+
+
+- name: "Create /etc/tuned/tsg-os-cpu-partitioning directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /etc/tuned/tsg-os-cpu-partitioning
+
+- name: "Tuned: copy patch file to dest"
+  copy:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: /etc/tuned/tsg-os-cpu-partitioning/tuned.conf
+    mode: 0755
+  with_items:
+    - tuned.conf
+  when: runtime_env == 'TSG-X-P0906'
+
+
+- name: "patch plugin_scheduler.py"
+  shell: cd /usr/lib/python3.6/site-packages && patch -p1 -t < /tmp/371.patch || true 
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "apply tsg-os-cpu-partitioning profile"
+  shell: echo tsg-os-cpu-partitioning >/etc/tuned/active_profile
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "make tuned server run after HAL"
+  shell: sed -i 's/After=/&tsg-os-HAL.service /' /usr/lib/systemd/system/tuned.service
+  when: runtime_env == 'TSG-X-P0906'

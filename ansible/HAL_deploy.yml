@@ -175,6 +175,7 @@
     - {role: tsg-os-logo, tags: tsg-os-logo}
     - {role: cm-cache, tags: cm-cache}
     - {role: exporter, tags: exporter}
+    - {role: tuned, tags: tuned}
 
 - hosts: TSG-X-NXR620G40-R01-P0906-init
   remote_user: root
