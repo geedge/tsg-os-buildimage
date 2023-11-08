@@ -33,3 +33,7 @@
 - name: "apply tsg-os-cpu-partitioning profile"
   shell: echo tsg-os-cpu-partitioning >/etc/tuned/active_profile
   when: runtime_env == 'TSG-X-P0906'
+
+- name: "make tuned server run after HAL"
+  shell: sed -i 's/After=/&tsg-os-HAL.service /' /usr/lib/systemd/system/tuned.service && systemctl daemon-reload
+  when: runtime_env == 'TSG-X-P0906'
