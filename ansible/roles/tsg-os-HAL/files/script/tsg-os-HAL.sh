@@ -8,6 +8,7 @@ grub_cfg_file="/boot/grub/grub.cfg"
 tsg_clixon_cfg_file="/opt/tsg/clixon/etc/mgnt-srv.conf"
 k3s_cfg_file="/etc/rancher/k3s/config.yaml"
 mrzcpd_conf_file="/var/run/share/container_mrzcpd.conf"
+cpu_partitioning_conf_file='/etc/tuned/cpu-partitioning-variables.conf'
 
 cpu_core_num=$(lscpu | grep "CPU(s):" | head -n 1 | sed  -r 's/CPU\(s\):\s{1,}//g')
 mem_num=$(free -m | grep Mem | awk '{print $2}')
@@ -220,6 +221,13 @@ build_and_mount_traffic_engine_logs_vdisk()
 }
 
 
+set_cpu_partitioning()
+{
+cat <<EOF > ${cpu_partitioning_conf_file}
+isolated_cores=${MRZCPD_IOCORE}
+EOF
+}
+
 load_tsg_os_HAL_config
 mkdir -p /run/mrzcpd/hugepages
 mkdir -p /var/run/share
@@ -228,6 +236,8 @@ build_and_mount_traffic_engine_logs_vdisk
 set_hugepages
 set_cpu_list
 set_grub_cmdline
+
+set_cpu_partitioning
 
 mount -t hugetlbfs -o pagesize=1073741824 nodev /var/run/mrzcpd/hugepages
 modprobe vfio
