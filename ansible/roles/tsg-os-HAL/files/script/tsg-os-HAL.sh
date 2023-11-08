@@ -9,6 +9,7 @@ mrzcpd_cfg_file="/etc/sysconfig/mrzcpd"
 tsg_clixon_cfg_file="/opt/tsg/clixon/etc/mgnt-srv.conf"
 k3s_cfg_file="/etc/rancher/k3s/config.yaml"
 mrglobal_cfg_template="/opt/tsg/clixon/etc/mrglobal.conf.jinja"
+cpu_partitioning_conf_file='/etc/tuned/cpu-partitioning-variables.conf'
 
 cpu_core_num=$(lscpu | grep "CPU(s):" | head -n 1 | sed  -r 's/CPU\(s\):\s{1,}//g')
 mem_num=$(free -m | grep Mem | awk '{print $2}')
@@ -183,12 +184,20 @@ set_grub_cmdline()
     fi
 }
 
+set_cpu_partitioning()
+{
+cat <<EOF > ${cpu_partitioning_conf_file}
+isolated_cores=${MRZCPD_IOCORE}
+EOF
+}
+
 load_tsg_os_HAL_config
 set_hugepages
 set_cpu_list
 set_grub_cmdline
 
 /opt/tsg/mrzcpd/bin/mrmarch --auto
+set_cpu_partitioning
 
 set_mrzcpd_indirect_pktmbuf
 set_mrzcpd_direct_pktmbuf
