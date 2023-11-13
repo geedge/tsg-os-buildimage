@@ -55,7 +55,7 @@ framework_rpm_version:
   20_libfieldstat3: libfieldstat3-3.0.16.475f806
   21_libmaat4: libmaat4-4.1.8.aa65da2
   22_libMESA_sts: libMESA_sts-1.0.3.d515a96
-  23_libfieldstat4: libfieldstat4-4.4.0.e5139c4
+  23_libfieldstat4: libfieldstat4-4.4.1.c36286e
   #24_libstatistics: libstatistics-2.0.20.895d68e
   25_libipfix_exporter: libipfix_exporter-1.0.6.0e73c24
   26_libosfp: libosfp-1.3.1.1de666a
