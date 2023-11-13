@@ -31,7 +31,7 @@
   when: runtime_env == 'TSG-X-P0906'
 
 - name: "apply tsg-os-cpu-partitioning profile"
-  shell: echo tsg-os-cpu-partitioning >/etc/tuned/active_profile
+  shell: tuned-adm profile tsg-os-cpu-partitioning
   when: runtime_env == 'TSG-X-P0906'
 
 - name: "make tuned server run after HAL"
