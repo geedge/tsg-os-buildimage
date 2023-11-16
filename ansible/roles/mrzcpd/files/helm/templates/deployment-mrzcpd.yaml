@@ -95,16 +95,41 @@ spec:
           value: /opt/tsg/mrzcpd/lib
 {{- if eq .Values.mrzcpd.debug.enable_liveness_probe .Values.define_enable_val_yes }}
         livenessProbe:
-          tcpSocket:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
             port: 9086
-          failureThreshold: 1
-          timeoutSeconds: 10
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
         startupProbe:
-          tcpSocket:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
             port: 9086
-          failureThreshold: 30
-          periodSeconds: 10
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
 {{- end }}
+        lifecycle:
+          preStop:
+            exec:
+              command:
+                - "bash"
+                - "ec"
+                - |
+                  rm -f /run/mrzcpd/huge_pages/rtemap_*
+                  rm -f /run/.rte_config
+                  rm -f /run/.rte_hugepage_info
+                  rm -rf /run/.dpdk
         securityContext:
           privileged: true
 
