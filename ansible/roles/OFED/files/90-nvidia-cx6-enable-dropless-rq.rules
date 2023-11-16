@@ -1,1 +1,2 @@
 ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x15b3", ATTR{device}=="0x101d", RUN+="/usr/local/sbin/enable_dropless_rq.sh %k"
+ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x15b3", ATTR{device}=="0x101b", RUN+="/usr/local/sbin/enable_dropless_rq.sh %k"
