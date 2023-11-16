@@ -2,7 +2,7 @@ certstore_rpm_version:
   certstore: certstore-3.0.2.20230608.36614dd
 
 firewall_rpm_version:
-  capture_packet_plug: capture_packet_plug-5.0.6.1820f69
+  capture_packet_plug: capture_packet_plug-5.0.8.1dd8443
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   firewall: firewall-2.0.16.2e30663
   session_record: session_record-4.1.9.1.f503402
@@ -64,9 +64,9 @@ mrzcpd_rpm_version:
   mrzcpd-corei7: mrzcpd-corei7-4.6.59.c49cdd6
 
 sapp_rpm_version:
-  sapp: sapp-4.3.28.ed9565d
+  sapp: sapp-4.3.31.3f42d68
   tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
-  sapp-pr: sapp-pr-4.3.28.ed9565d
+  sapp-pr: sapp-pr-4.3.31.3f42d68
 
 tfe_rpm_version:
   tfe: tfe-4.8.39.cc1a6f7
