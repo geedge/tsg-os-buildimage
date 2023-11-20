@@ -1,0 +1,40 @@
+{{- if eq .Values.session_flags.enable .Values.define_enable_val_yes }}
+[[plugin]]
+path = "./stellar_plugin/session_flags/session_flags.so"
+init = "session_flags_plugin_init"
+exit = "session_flags_plugin_exit"
+{{- end }}
+
+[[plugin]]
+path = "./stellar_plugin/app_proto_identify.so"
+init = "APP_L7_PROTOCOL_INIT"
+exit = "APP_L7_PROTOCOL_DESTROY"
+
+[[plugin]]
+path = "./plug/business/firewall/firewall.so"
+init = "firewall_stellar_runtime_init"
+exit = "firewall_stellar_runtime_exit"
+
+[[plugin]]
+path = "./stellar_plugin/stat_policy_enforcer.so"
+init = "statistics_init"
+exit = "statistics_exit"
+
+[[plugin]]
+path = "./stellar_plugin/sf_classifier.so"
+init = "sf_classifier_init"
+exit = "sf_classifier_exit"
+
+{{- if eq .Values.appsketch.qdpi_detector .Values.define_enable_val_yes }}
+[[plugin]]
+path = "./stellar_plugin/app_proto_engine/app_proto_engine.so"
+init = "app_proto_engine_init"
+exit = "app_proto_engine_destroy"
+{{- end }}
+
+{{- if eq .Values.appsketch.context_based_detector .Values.define_enable_val_yes }}
+[[plugin]]
+path = "./stellar_plugin/app_sketch_local/app_sketch_local.so"
+init = "APP_SKETCH_LOCAL_INIT"
+exit = "APP_SKETCH_LOCAL_DESTROY"
+{{- end }}

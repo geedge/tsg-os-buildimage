@@ -12,7 +12,7 @@
 {{- end }}
 ./plug/platform/tsg_master/tsg_master.inf
 {{- if eq .Values.appsketch.enable .Values.define_enable_val_yes }}
-{{- if eq .Values.appsketch.builtin_engine .Values.define_enable_val_yes }}
+{{- if eq .Values.appsketch.qdpi_detector .Values.define_enable_val_yes }}
 ./plug/platform/app_proto_engine/app_proto_engine.inf
 {{- end }}
 {{- end }}
@@ -75,9 +75,6 @@
 {{- if eq .Values.firewall.enable .Values.define_enable_val_yes }}
 ./plug/business/firewall/firewall.inf
 {{- end }}
-{{- if eq .Values.encrypt_traffic_identify.voice_bahavior_engine .Values.define_enable_val_yes }}
-./plug/business/tsg_vulpes/tsg_vulpes.inf
-{{- end }}
 {{- if eq .Values.sessionrecord.enable .Values.define_enable_val_yes }}
 ./plug/business/session_record/session_record.inf
 {{- end }}
@@ -86,7 +83,7 @@
 {{- end }}
 ./plug/business/stat_policy_enforcer/stat_policy_enforcer.inf
 {{- if eq .Values.appsketch.enable .Values.define_enable_val_yes }}
-{{- if eq .Values.appsketch.user_defined_signature .Values.define_enable_val_yes }}
+{{- if eq .Values.appsketch.context_based_detector .Values.define_enable_val_yes }}
 ./plug/business/app_sketch_local/app_sketch_local.inf
 {{- end }}
 {{- end }}

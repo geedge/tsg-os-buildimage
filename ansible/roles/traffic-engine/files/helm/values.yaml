@@ -63,28 +63,20 @@ firewall:
   enable: yes
   rapidjson_chunk_capacity: 2048
   enable_smartoffload: no
+  logs:
+    contains_app_id: yes
+    contains_nat_linkinfo: yes
+    contains_dns_resource_record: yes
 
 appsketch:
   enable: yes
-  builtin_engine: yes   
-  user_defined_signature: yes
+  qdpi_detector: yes   
+  context_based_detector: yes
 
-encrypt_traffic_identify:
-  voice_bahavior_engine: yes
-
-sessionrecord:
-  enable: yes
-  interim_record:
-    enable: yes
-    intervals_in_sec: 120
-  transaction_record:
-    enable: yes
-  contains_app_id:
-    enable: no
-  contains_nat_linkinfo:
-    enable: no
-  contains_dns_resource_record:
-    enable: no
+transaction_record:
+  enable_http: yes
+  enable_dns: yes
+  enable_mail: yes
 
 session_manager:
   tcp_session_max: 20021

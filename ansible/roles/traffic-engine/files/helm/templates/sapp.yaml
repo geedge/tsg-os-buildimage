@@ -8,7 +8,6 @@ data:
   gdev.conf: {{ tpl (.Files.Get "conf/gdev.conf") . | quote }}
   main.conf: {{ tpl (.Files.Get "conf/main.conf") . | quote }}
   maat.conf: {{ tpl (.Files.Get "conf/maat.conf") . | quote }}
-  session_record.inf: {{ tpl (.Files.Get "conf/session_record.inf") . | quote }}
   sapp.toml: {{ tpl (.Files.Get "conf/sapp.toml") . | quote }}
   send_raw_pkt.conf: {{ tpl (.Files.Get "conf/send_raw_pkt.conf") . | quote }}
   wangw.conf: {{ tpl (.Files.Get "conf/wangw.conf") . | quote }}
@@ -21,3 +20,4 @@ data:
   http_main.conf: {{ tpl (.Files.Get "conf/http_main.conf") . | quote }}
   mail.conf: {{ tpl (.Files.Get "conf/mail.conf") . | quote }}
   ssl_main.conf: {{ tpl (.Files.Get "conf/ssl_main.conf") . | quote }}
+  spec.toml: {{ tpl (.Files.Get "conf/spec.toml") . | quote }}
