@@ -78,16 +78,6 @@
     download_only: yes
     download_dir: "{{ path_download }}"
 
-  
-- name: "download rpm packages: tsg_master"
-  yum:
-    name:
-      - "{{ tsg_master_rpm_version.tsg_master }}"
-    conf_file: "{{ rpm_repo_config_path }}"
-    state: present
-    download_only: yes
-    download_dir: "{{ path_download }}"
-
 - name: "download rpm packages: tsg-diagnose"
   yum:
     name:

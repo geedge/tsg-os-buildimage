@@ -122,27 +122,6 @@
   when:
     - runtime_env == 'TSG-7400-mcn123'
 
-- name: "update mrglobal.conf - TSG server"
-  template:
-    src: "{{ role_path }}/templates/mrglobal.conf.j2.j2.SERVER"
-    dest: /opt/tsg/tsg-os-provision/templates/mrglobal.conf.j2
-  when:
-    - runtime_env == 'TSG-server'
-
-- name: "update mrglobal.conf - TSG-X-P1403"
-  template:
-    src: "{{ role_path }}/templates/mrglobal.conf.j2.j2.TSGXNXR620G40R01P1403"
-    dest: /opt/tsg/tsg-os-provision/templates/mrglobal.conf.j2
-  when:
-    - runtime_env == 'TSG-X-P1403'
-
-- name: "update mrglobal.conf - TSG-X-P0804"
-  template:
-    src: "{{ role_path }}/templates/mrglobal.conf.j2.j2.TSGXNXR620G40R01P0804"
-    dest: /opt/tsg/tsg-os-provision/templates/mrglobal.conf.j2
-  when:
-    - runtime_env == 'TSG-X-P0804'
-
 - name: "update mrglobal.conf - TSG-X-P0906"
   copy:
     src: "{{ role_path }}/templates/mrglobal.conf.TSGXNXR620G40R01P0906"

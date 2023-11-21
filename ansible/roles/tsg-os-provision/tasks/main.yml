@@ -113,20 +113,6 @@
     mode: 0644
   when: runtime_env == 'TSG-9140'
 
-- name: "tsg-os-provision: copy provision.default.yml - tsg server"
-  copy:
-    src: "{{ role_path }}/files/config_sample/provision.default.yml.SERVER"
-    dest: /opt/tsg/tsg-os-provision/provision.default.yml
-    mode: 0644
-  when: runtime_env == 'TSG-server'
-
-- name: "tsg-os-provision: copy provision.default.yml - TSG-X-P1304"
-  copy:
-    src: "{{ role_path }}/files/config_sample/provision.default.yml.TSGXNXR620G40R01P1403"
-    dest: /opt/tsg/tsg-os-provision/provision.default.yml
-    mode: 0644
-  when: runtime_env == 'TSG-X-P1403'
-
 - name: "tsg-os-provision: copy provision.default.yml - TSG-X-P0906"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.default.yml.TSGXNXR620G40R01P0804"
