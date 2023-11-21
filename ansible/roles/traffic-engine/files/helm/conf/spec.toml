@@ -6,9 +6,9 @@ exit = "session_flags_plugin_exit"
 {{- end }}
 
 [[plugin]]
-path = "./stellar_plugin/app_proto_identify.so"
-init = "APP_L7_PROTOCOL_INIT"
-exit = "APP_L7_PROTOCOL_DESTROY"
+path = "./stellar_plugin/glimpse_detector.so"
+init = "APP_GLIMPSE_DETECTOR_INIT"
+exit = "APP_GLIMPSE_DETECTOR_DESTROY"
 
 [[plugin]]
 path = "./plug/business/firewall/firewall.so"
