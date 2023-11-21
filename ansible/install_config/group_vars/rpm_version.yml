@@ -27,7 +27,7 @@ firewall_rpm_version:
   bgp: bgp-1.1.2.356c17d
   session_flags: session_flags-2.2.2.8817a79
   stat_policy_enforcer: stat_policy_enforcer-3.1.2.e0eaa81
-  sf_classifier: sf_classifier-1.0.5.b25bca8
+  sf_classifier: sf_classifier-1.0.6.a4f06b3
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf
