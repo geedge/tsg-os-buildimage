@@ -72,12 +72,6 @@
         dest: /opt/tsg/sapp/tsgconf/maat.conf
       tags: firewall
 
-    - name: "tsg-os-provision: Template the session_record.inf"
-      template:
-        src: "../templates/session_record.inf.j2"
-        dest: /opt/tsg/sapp/plug/business/session_record/session_record.inf
-      tags: firewall
-
     - name: "tsg-os-provision: Template the firewall.inf"
       template:
         src: "../templates/firewall.inf.j2"

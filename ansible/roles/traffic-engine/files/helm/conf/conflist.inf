@@ -1,20 +1,8 @@
 [platform]
+./plug/stellar_on_sapp/start_loader.inf
 {{- if eq .Values.wannat.enable .Values.define_enable_val_yes }}
 ./plug/platform/wannat/wangw.inf
 ./plug/platform/wire_graft/wire_graft.inf
-{{- end }}
-./plug/platform/app_proto_identify/app_proto_identify.inf
-{{- if eq .Values.session_flags.enable .Values.define_enable_val_yes }}
-./plug/platform/session_flags/session_flags.inf
-{{- end }}
-{{- if eq .Values.packet_capture.enable .Values.define_enable_val_yes }}
-./plug/platform/capture_packet_plug/capture_packet_plug.inf
-{{- end }}
-./plug/platform/tsg_master/tsg_master.inf
-{{- if eq .Values.appsketch.enable .Values.define_enable_val_yes }}
-{{- if eq .Values.appsketch.qdpi_detector .Values.define_enable_val_yes }}
-./plug/platform/app_proto_engine/app_proto_engine.inf
-{{- end }}
 {{- end }}
 {{- if eq .Values.ddos_event.enable .Values.define_enable_val_yes }}
 ./plug/platform/tsg_ddos_sketch/tsg_ddos_sketch.inf
@@ -75,18 +63,10 @@
 {{- if eq .Values.firewall.enable .Values.define_enable_val_yes }}
 ./plug/business/firewall/firewall.inf
 {{- end }}
-{{- if eq .Values.sessionrecord.enable .Values.define_enable_val_yes }}
-./plug/business/session_record/session_record.inf
-{{- end }}
 {{- if eq .Values.decoders.GTPC .Values.define_enable_val_yes }}
 ./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
-{{- end }}
-./plug/business/stat_policy_enforcer/stat_policy_enforcer.inf
-{{- if eq .Values.appsketch.enable .Values.define_enable_val_yes }}
-{{- if eq .Values.appsketch.context_based_detector .Values.define_enable_val_yes }}
-./plug/business/app_sketch_local/app_sketch_local.inf
-{{- end }}
 {{- end }}
 {{- if and (eq .Values.radius_record.enable .Values.define_enable_val_yes) (eq .Values.decoders.RADIUS .Values.define_enable_val_yes) }}
 ./plug/business/radius_collect_plug/radius_collect_plug.inf
 {{- end }}
+./plug/stellar_on_sapp/defer_loader.inf

@@ -28,12 +28,12 @@
     mode: 0755
   when: runtime_env == 'TSG-server'
 
-- name: "deploy obtain sn - tsg-x-p1403"
+- name: "deploy obtain sn - tsg-x-P0906"
   copy:
     src: "{{ role_path }}/files/obtain_sn.sh.TSGXP1403"
     dest: /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
     mode: 0755
-  when: runtime_env == 'TSG-X-P1403' or runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+  when: runtime_env == 'TSG-X-P0906'
 
 
 - name: "deploy obtain sn - tsg-x-p0906"

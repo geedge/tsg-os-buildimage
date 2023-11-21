@@ -61,7 +61,7 @@
 
 - name: "update initramfs"
   shell: dracut --force -v /boot/initramfs-5.4.159-1.el7.elrepo.x86_64.img 5.4.159-1.el7.elrepo.x86_64
-  when: runtime_env != 'TSG-X-P1403' and runtime_env != 'TSG-X-P0804' and runtime_env != 'TSG-X-P0906'
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "Export MLX5_GLUE_PATH"
   lineinfile:
@@ -70,7 +70,7 @@
 
 - name: "Generate ansiblg.cfg after ansible upgrade in rockylinux8"
   shell: ansible-config init --disabled > /etc/ansible/ansible.cfg
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+  when: runtime_env == 'TSG-X-P0906'
 
 - name: 'change ansible hash_behaviour value replace to merge'
   lineinfile:
@@ -81,7 +81,7 @@
 
 - name: 'install psutil'
   shell: pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple psutil
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+  when:  runtime_env == 'TSG-X-P0906'
 
 - name: "add sudo secure_path"
   lineinfile:

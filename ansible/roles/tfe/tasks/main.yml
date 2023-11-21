@@ -123,12 +123,12 @@
     dest: /opt/tsg/tsg-os-provision/templates/service_add_StartPostForRps.conf.j2
   when: runtime_env != 'TSG-X-P0906'
 
-- name: "add condition into service depend provision result TSG-X-P0804"
+- name: "add condition into service depend provision result TSG-X-P0906"
   copy:
     src: "{{ role_path }}/files/service_override_Requires.conf"
     dest: "/usr/lib/systemd/system/tfe-env.service.d/"
     mode: 0644
-  when: runtime_env == 'TSG-X-P0804' or runtime_env == 'TSG-X-P0906'
+  when: runtime_env == 'TSG-X-P0906'
 
 - name: "template tfe-env shell to dest"
   template:
