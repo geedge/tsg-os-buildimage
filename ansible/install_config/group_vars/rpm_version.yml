@@ -28,6 +28,7 @@ firewall_rpm_version:
   session_flags: session_flags-2.2.2.8817a79
   stat_policy_enforcer: stat_policy_enforcer-3.1.2.e0eaa81
   sf_classifier: sf_classifier-1.0.6.a4f06b3
+  stellar-c: stellar-c-1.0.3.87626a3
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf

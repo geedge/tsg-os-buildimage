@@ -9,8 +9,17 @@
   with_dict: "{{ firewall_rpm_version }}"
 
 - name: "Install firwall that are sapp plugins"
-  shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ prefix_path.sapp }}
-  with_dict: "{{ firewall_rpm_version }}"
+  shell: rpm -i /tmp/rpm_download/{{ item.1 }}* --prefix {{ prefix_path.sapp }}
+  when:
+    - item.1 is not search("stellar-c")
+    - item.1 is not search("firewall")
+  loop: "{{ firewall_rpm_version }}"
+
+- name: "Install firwall and stellar-c rpm plugins"
+  shell: rpm -i /tmp/rpm_download/{{ item }}* --prefix /opt/tsg/
+  with_items:
+    - "{{ firewall_rpm_version['stellar-c'] }}"
+    - "{{ firewall_rpm_version['firewall'] }}"
 
 - name: "Template the tsgconf/main.conf"
   template:
