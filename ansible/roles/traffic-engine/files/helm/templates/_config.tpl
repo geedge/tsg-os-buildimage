@@ -159,6 +159,7 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/http_main.conf          /opt/tsg/sapp/conf/http/http_main.conf
             cp /opt/tsg/config/mail.conf               /opt/tsg/sapp/conf/mail/mail.conf
             cp /opt/tsg/config/ssl_main.conf           /opt/tsg/sapp/conf/ssl/ssl_main.conf
+            mkdir -p /opt/tsg/sapp/stellar_plugin/
             cp /opt/tsg/config/spec.toml               /opt/tsg/sapp/stellar_plugin/spec.toml
 {{- end -}}
 
