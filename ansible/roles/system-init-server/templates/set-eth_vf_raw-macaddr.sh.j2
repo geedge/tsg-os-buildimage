@@ -1,5 +1,0 @@
-#!/bin/sh
-echo --------------------  set eth_vf_raw macaddr  --------------------
-macaddr='{{ dp_steering_firewall.nic_internal_mac }}'
-echo eth_vf_raw macaddr:$macaddr
-echo $macaddr > /sys/class/net/eth_pf_40G_0/device/sriov/0/mac

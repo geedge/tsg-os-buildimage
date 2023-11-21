@@ -13,15 +13,6 @@
     - "/opt/tsg/tsg-os-provision/templates/"
     - "/opt/tsg/tsg-os-provision/scripts/"
 
-- name: "tsg-os-provision: build data dicretory"
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - "/data/tsg-os-provision/provision.yml.d/"
-    - "/data/tsg-os-provision/"
-  when: runtime_env == 'TSG-server'
-
 - name: "tsg-os-provision: copy hosts file dest"
   copy:
     src: "{{ role_path }}/files/hosts"
@@ -43,13 +34,6 @@
     mode: 0644
   when: runtime_env == 'TSG-9140'
 
-- name: "tsg-os-provision: copy tasks file that excutes provision to dest  - tsg-server"
-  copy:
-    src: "{{ role_path }}/files/tasks/provision.yml.SERVER"
-    dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
-    mode: 0644
-  when: runtime_env == 'TSG-server'
-
 - name: "tsg-os-provision: copy tasks file that excutes provision to dest - tsg7400 mcn0"
   copy:
     src: "{{ role_path }}/files/tasks/provision.yml.7400MCN0P01R01"
@@ -63,27 +47,6 @@
     dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
     mode: 0644
   when: runtime_env == 'TSG-7400-mcn123'
-
-- name: "tsg-os-provision: copy tasks file that excutes provision to dest - tsg-x p0804"
-  copy:
-    src: "{{ role_path }}/files/tasks/provision.yml.TSGXNXR620G40R01P0804"
-    dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
-    mode: 0644
-  when: runtime_env == 'TSG-X-P0906'
-
-- name: "tsg-os-provision: copy tasks file that excutes provision to dest - tsg-x p0906"
-  copy:
-    src: "{{ role_path }}/files/tasks/provision.yml.TSGXNXR620G40R01P0906"
-    dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
-    mode: 0644
-  when: runtime_env == 'TSG-X-P0906' and PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906'
-
-- name: "tsg-os-provision: copy tasks file that excutes provision to dest - tsg-x p0906 init"
-  copy:
-    src: "{{ role_path }}/files/tasks/provision.yml.TSGXNXR620G40R01P0906-init"
-    dest: /opt/tsg/tsg-os-provision/tasks/provision.yml
-    mode: 0644
-  when: runtime_env == 'TSG-X-P0906' and PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init'
 
 - name: "tsg-os-provision: copy provision.yml.sample file to dest - tsg9140"
   copy:
@@ -113,13 +76,6 @@
     mode: 0644
   when: runtime_env == 'TSG-9140'
 
-- name: "tsg-os-provision: copy provision.default.yml - TSG-X-P0906"
-  copy:
-    src: "{{ role_path }}/files/config_sample/provision.default.yml.TSGXNXR620G40R01P0804"
-    dest: /opt/tsg/tsg-os-provision/provision.default.yml
-    mode: 0644
-  when: runtime_env == 'TSG-X-P0906'
-
 - name: "tsg-os-provision: copy provision.yml.sample to dest - tsg7400 mcn0"
   copy:
     src: "{{ role_path }}/files/config_sample/provision.yml.sample.7400MCN0P01R01"
@@ -133,21 +89,6 @@
     dest: /opt/tsg/tsg-os-provision/provision.yml.sample
     mode: 0644
   when: runtime_env == 'TSG-7400-mcn123'
-
-- name: "tsg-os-provision: copy provision.yml.sample to dest - tsg server"
-  copy:
-    src: "{{ role_path }}/files/config_sample/provision.yml.sample.SERVER"
-    dest: /opt/tsg/tsg-os-provision/provision.yml.sample
-    mode: 0644
-  when: runtime_env == 'TSG-server'
-
-
-- name: "tsg-os-provision: copy provision.yml.sample to dest - TSG-X-P0906"
-  copy:
-    src: "{{ role_path }}/files/config_sample/provision.yml.sample.TSGXNXR620G40R01P0804"
-    dest: /opt/tsg/tsg-os-provision/provision.yml.sample
-    mode: 0644
-  when: runtime_env == 'TSG-X-P0906'
 
 - name: "tsg-os-provision: copy provision.sh file to dest"
   copy:
@@ -191,53 +132,20 @@
     mode: 0644
   with_items:
     - { "src": tsg-os-provision.service.TSG9140, "dest": tsg-os-provision.service }
-  when: runtime_env == 'TSG-9140' or runtime_env == 'TSG-server'
+  when: runtime_env == 'TSG-9140'
 
 - name: "replace action: add service into sysinit.target --TSG9140"
   shell: ln -vfs --relative /usr/lib/systemd/system/{{item}} /usr/lib/systemd/system/sysinit.target.wants/{{item}}
   with_items:
     - tsg-os-provision.service
-  when: runtime_env == 'TSG-9140' or runtime_env == 'TSG-server'
-
+  when: runtime_env == 'TSG-9140'
 
 - name: "tsg-os-provision: copy tsg-start.sh to dest - tsg9140"
   copy:
     src: "{{ role_path }}/files/script/provision-config-apply"
     dest: /opt/tsg/tsg-os-provision/
     mode: 0755
-  when: runtime_env == 'TSG-9140' or runtime_env == 'TSG-server'
-
-- name: "install tsg-os-provision.service -- TSG-X-P0906"
-  copy:
-    src: "{{ role_path }}/files/service/{{ item.src }}"
-    dest: /usr/lib/systemd/system/{{ item.dest }}
-    mode: 0644
-  with_items:
-    - { "src": tsg-os-provision.service.TSGXP0906, "dest": tsg-os-provision.service }
-  when: runtime_env == 'TSG-X-P0906'
-
-- name: "replace action: add service into sysinit.target --TSG-X-P0906"
-  shell: ln -vfs --relative /usr/lib/systemd/system/{{item}} /usr/lib/systemd/system/sysinit.target.wants/{{item}}
-  with_items:
-    - tsg-os-provision.service
-  when: runtime_env == 'TSG-X-P0906'
-
-- name: "tsg-os-provision: copy provision-config-apply to dest - TSG-X-P0906"
-  copy:
-    src: "{{ role_path }}/files/script/provision-config-apply"
-    dest: /opt/tsg/tsg-os-provision/
-    mode: 0755
-  when: runtime_env == 'TSG-X-P0906'
-
-- name: "tsg-os-provision: obtain_rps_mask and obtain_cpu_core_range to dest - TSG-X-P0906"
-  copy:
-    src: "{{ role_path }}/files/script/{{ item }}"
-    dest: /opt/tsg/tsg-os-provision/scripts/
-    mode: 0755
-  with_items:
-    - obtain_rps_mask.py 
-    - obtain_isolate_cpu_range.py
-  when: runtime_env == 'TSG-X-P0906'
+  when: runtime_env == 'TSG-9140'
 
 - name: "copy tsg-os-provision.sh to destination"
   copy:

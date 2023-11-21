@@ -104,7 +104,7 @@
     dest: /opt/tsg/sapp/etc/vlan_flipping_map.conf
   tags: template
   when:
-    - runtime_env == 'TSG-9140' or runtime_env == 'TSG-server'
+    - runtime_env == 'TSG-9140'
 
 - name: Template the vlan_flipping_map.conf - tsg-7400
   template:
@@ -225,12 +225,6 @@
 
 
 ##################### sapp #####################
-- name: "systemctl daemon-reload"
-  systemd:
-    daemon_reload: yes
-  when: runtime_env == 'TSG-server'
-
-
 - name: "enable sapp"
   systemd:
     name: sapp

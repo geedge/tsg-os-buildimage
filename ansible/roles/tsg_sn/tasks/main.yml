@@ -21,13 +21,6 @@
     mode: 0755
   when: runtime_env == 'TSG-9140'
 
-- name: "deploy obtain sn - tsg-server"
-  copy:
-    src: "{{ role_path }}/files/obtain_sn.sh.TSGSERVER"
-    dest: /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
-    mode: 0755
-  when: runtime_env == 'TSG-server'
-
 - name: "deploy obtain sn - tsg-x-P0906"
   copy:
     src: "{{ role_path }}/files/obtain_sn.sh.TSGXP1403"

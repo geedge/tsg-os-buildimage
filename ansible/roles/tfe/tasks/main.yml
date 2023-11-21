@@ -141,11 +141,6 @@
     - {src: "tfe-env-stop.sh.j2",  dest: "tfe-env-stop.sh" }
 
 ##################### tfe #####################
-- name: "systemctl daemon-reload"
-  systemd:
-    daemon_reload: yes
-  when: runtime_env == 'TSG-server'
-
 - name: "enable tfe-env"
   systemd:
     name: tfe-env

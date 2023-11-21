@@ -100,11 +100,6 @@
   when: runtime_env == 'TSG-X-P0906' and PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-certstore' 
 
 ##################### certstore #####################
-- name: "systemctl daemon-reload"
-  systemd:
-    daemon_reload: yes
-  when: runtime_env == 'TSG-server'
-
 - name: "start certstore"
   systemd:
     name: certstore.service

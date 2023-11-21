@@ -102,7 +102,7 @@
     - {role: k3s-exporter, tags: k3s-exporter}
     - {role: tsg-diagnose, tags: tsg-diagnose}
     - {role: sysctl, tags: sysctl}
-    - {role: system-init-TSG-X-P1403, tags: system-init-TSG-X-P1403}
+    - {role: system-init-P0906, tags: system-init-P0906}
     - {role: system-init, tags: system-init}
     - {role: consul, tags: consul}
     - {role: hasp, tags: hasp}

@@ -58,5 +58,5 @@ diagnose:
   virtual_server_nic: virtio_dign_s
   virtual_client_nic: virtio_dign_c
 
-### TSG-server, TSG-7400-mcn0 TSG-7400-mcn123 TSG-9140
+### TSG-7400-mcn0 TSG-7400-mcn123 TSG-9140
 runtime_env: TSG-X-P0906
