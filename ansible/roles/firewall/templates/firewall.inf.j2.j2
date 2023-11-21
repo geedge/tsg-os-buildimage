@@ -1,55 +1,45 @@
 [PLUGINFO]
-PLUGNAME=FIREWEALL
+PLUGNAME=FIREWALL
 SO_PATH=./plug/business/firewall/firewall.so
 INIT_FUNC=firewall_init
-DESTROY_FUNC=firewall_destroy
-
-[HTTP]
-FUNC_FLAG=ALL
-FUNC_NAME=fw_http_plug_entry
+DESTROY_FUNC=firewall_destory
 
 [SSL]
 FUNC_FLAG=SSL_CLIENT_HELLO,SSL_SERVER_HELLO,SSL_APPLICATION_DATA,SSL_CERTIFICATE_DETAIL
-FUNC_NAME=fw_ssl_plug_entry
-
-[DNS]
-FUNC_FLAG=ALL
-FUNC_NAME=fw_dns_plug_entry
+FUNC_NAME=firewall_ssl_plug_entry
 
 [MAIL]
 FUNC_FLAG=ALL
-FUNC_NAME=fw_mail_plug_entry
+FUNC_NAME=firewall_mail_plug_entry
 
-[RTP]
+[HTTP]
 FUNC_FLAG=ALL
-FUNC_NAME=fw_rtp_plug_entry
-
-{% raw %}{% if firewall.enable_sip == 1 %}
-[SIP]
-FUNC_FLAG=ALL
-FUNC_NAME=fw_sip_plug_entry
-{% endif %}
-{% endraw %}
-
-[FTP]
-FUNC_FLAG=ALL
-FUNC_NAME=fw_ftp_plug_entry
+FUNC_NAME=firewall_http_plug_entry
 
 [QUIC]
 FUNC_FLAG=QUIC_CLIENT_HELLO,QUIC_SERVER_HELLO,QUIC_CACHED_CERT,QUIC_COMM_CERT,QUIC_CERT_CHAIN,QUIC_VERSION,QUIC_APPLICATION_DATA
-FUNC_NAME=fw_quic_plug_entry
+FUNC_NAME=firewall_quic_plug_entry
 
-{% raw %}{% if firewall.enable_dtls == 1 %}
-[DTLS]
-FUNC_FLAG=DTLS_CLIENT_HELLO,DTLS_SERVER_HELLO,DTLS_HELLO_VERIFY_REQUEST,DTLS_CLIENT_EXTENSION
-FUNC_NAME=fw_dtls_plug_entry
-{% endif %}
-{% endraw %}
+#[FTP]
+#FUNC_FLAG=ALL
+#FUNC_NAME=firewall_ftp_plug_entry
 
-[UDP]
+[RTP]
 FUNC_FLAG=ALL
-FUNC_NAME=fw_udp_plug_entry
+FUNC_NAME=firewall_rtp_plug_entry
 
-[TCP]
+[SIP]
 FUNC_FLAG=ALL
-FUNC_NAME=fw_tcp_plug_entry
+FUNC_NAME=firewall_sip_plug_entry
+
+[SSH]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_ssh_plug_entry
+
+[STRATUM]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_stratum_plug_entry
+
+[RDP]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_rdp_plug_entry

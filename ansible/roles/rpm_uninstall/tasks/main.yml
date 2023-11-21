@@ -47,12 +47,6 @@
     state: absent
   with_dict: "{{ tsg_app_rpm_version }}"
 
-- name: "uninstall tsg_master"
-  yum:
-    name: "{{ item.key }}"
-    state: absent
-  with_dict: "{{ tsg_master_rpm_version }}"
-
 #- name: "uninstall tsg-diagnose"
 #  yum:
 #    name: "{{ item.value }}"

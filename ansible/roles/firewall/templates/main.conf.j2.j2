@@ -1,11 +1,5 @@
 [MAAT]
 PROFILE="./tsgconf/maat.conf"
-SUBSCRIBER_ID_TABLE="TSG_OBJ_SUBSCRIBER_ID"
-CB_SUBSCRIBER_IP_TABLE="TSG_DYN_SUBSCRIBER_IP"
-IP_ADDR_TABLE="TSG_SECURITY_ADDR"
-LOCATION_TABLE_TYPE=19
-LOG_LEVEL=30
-LOG_PATH="log/master.scan"
 
 [TSG_LOG]
 MODE=kafka
@@ -15,7 +9,7 @@ NAMESPACE_ID=1
 NIC_NAME="{{ control_and_policy.nic_name }}"
 MAX_SERVICE=1
 LOG_LEVEL=30
-LOG_PATH="log/master.kafka"
+LOG_PATH="log/firewall.kafka"
 COMPRESSION_TYPE="snappy"
 SASL_USERNAME="admin"
 SASL_PASSWD="galaxy2019"
@@ -75,13 +69,6 @@ TELEGRAF_PORT=8100
 TELEGRAF_IP="127.0.0.1"
 APP_NAME="app_metric"
 
-[MASTER_STATUS]
-CYCLE_INTERVAL_MS=30000
-#TELEGRAF_PORT=8200
-#TELEGRAF_IP="127.0.0.1"
-OUTPUT_PATH="log/master.status"
-APP_NAME="tsg_master"
-
 [SYSTEM]
 NIC_NAME="{{ control_and_policy.nic_name }}"
 {% raw %}{% if data_center.id is defined %}
@@ -93,9 +80,8 @@ DATACENTER_ID={{ session_id_generator.snowflake_worker_id_base }}
 {% endif %}
 {% endraw %}
 LOG_LEVEL=30
-LOG_PATH="log/master.log"
-POLICY_PRIORITY_LABEL="POLICY_PRIORITY"
-L7_PROTOCOL_FILE="./tsgconf/tsg_l7_protocol.conf"
+LOG_PATH="log/firewall.log"
+L7_PROTOCOL_FILE="./tsgconf/firewall_l7_protocol.conf"
 DEVICE_ID_COMMAND="hostname | awk -F'-' '{print $3}'| awk -F'adc' '{print $2}'"
 {% raw %}{% if device.sequence_in_data_center is defined %}
 DEVICE_SEQ_IN_DATA_CENTER={{ device.sequence_in_data_center }}
@@ -105,55 +91,7 @@ DEVICE_SEQ_IN_DATA_CENTER={{ session_id_generator.snowflake_worker_id_offset }}
 DEVICE_SEQ_IN_DATA_CENTER={{ session_id_generator.snowflake_worker_id_offset }}
 {% endif %}
 {% endraw %}
-FEATURE_TAMPER=1
 GENERATE_JA3_FINGERPRINT=1
-
-{% raw %}{% if firewall.enable_dtls == 1 and firewall.enable_sip == 1 %}
-IDENTIFY_PROTO_NAME="DNS;QUIC;HTTP;MAIL;FTP;SSL;RTP;SIP;SSH;RADIUS;SOCKS;STRATUM;RDP;DTLS;GTPC;"
-{% elif firewall.enable_dtls == 1 %}
-IDENTIFY_PROTO_NAME="DNS;QUIC;HTTP;MAIL;FTP;SSL;RTP;SSH;RADIUS;SOCKS;STRATUM;RDP;DTLS;GTPC;"
-{% elif firewall.enable_sip == 1 %}
-IDENTIFY_PROTO_NAME="DNS;QUIC;HTTP;MAIL;FTP;SSL;RTP;SIP;SSH;RADIUS;SOCKS;STRATUM;RDP;GTPC;"
-{% else %}
-IDENTIFY_PROTO_NAME="DNS;QUIC;HTTP;MAIL;FTP;SSL;RTP;SSH;RADIUS;SOCKS;STRATUM;RDP;GTPC;"
-{% endif %}
-{% endraw %}
-
-[FIREWALL]
-CYCLE=30
-#TELEGRAF_PORT=8500
-#TELEGRAF_IP=127.0.0.1
-OUTPUT_PATH="log/firewall.status"
-
-[SESSION_RECORD]
-interim_intervals_time = 120
-sendlog_in_tcp_close=1
-{% raw %}{% if sessionrecord.enable_contains_dns_resource_record == 1 %}
-send_dns_rr_switch=1
-{% else %}
-send_dns_rr_switch=0
-{% endif %}
-{% endraw %}
-log_level=30
-log_path="log/session_record"
-
-[HOS_CONF]
-{% raw %}
-{% if firewall.enable_hos == 1 %}
-hos_serverip="{{ olap.hos_server.address }}"
-hos_serverport={{ olap.hos_server.port }}
-hos_token="{{ olap.hos_server.token }}"
-hos_log_level=30
-hos_timeout=20
-hos_connection_timeout=10
-hos_thread_max_store_request_num=5000
-hos_thread_max_store_size=1073741824
-hos_thread_batch_request_num=20
-hos_thread_max_connection_num=10
-hos_fd_request_cache_size=1500
-hos_fd_request_cache_count=10
-{% endif %}
-{% endraw %}
 
 [APP_SKETCH_LOCAL]
 LOG_LEVEL=30
@@ -231,12 +169,6 @@ SENDLOG_SWITCH=0
 {% endraw %}
 #NO/HASH/REDIS
 SIGNALING_ORIGIN="REDIS"
-
-[CAPTURE]
-{% raw %}
-HOS_IP="{{ olap.hos_server.address }}"
-HOS_PORT={{ olap.hos_server.port }}
-{% endraw %}
 
 {% raw %}
 [SHAPING]

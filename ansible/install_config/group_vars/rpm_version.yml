@@ -2,12 +2,9 @@ certstore_rpm_version:
   certstore: certstore-3.0.2.20230608.36614dd
 
 firewall_rpm_version:
-  capture_packet_plug: capture_packet_plug-5.0.6.1820f69
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-2.1.4.52a0ebf
-  session_record: session_record-4.1.11.dc559d6
+  firewall: firewall-3.0.6.fd8fa04
   gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
-  tsg_vulpes: tsg_vulpes-1.0.9.0d7c615
   radius_collect_plug: radius_collect_plug-2.0.11.47a51f3
   app_proto_identify: app_proto_identify-2.1.10.222e48e
   app_proto_engine: app_proto_engine-3.0.2.585490a
@@ -45,7 +42,6 @@ framework_rpm_version:
   09_libwiredcfg: libwiredcfg-2.0.8.cafaf49
   10_libWiredLB: libWiredLB-2.0.6.54a039d
   11_libbreakpad_mini: libbreakpad_mini-1.0.9.9d98968
-  12_libhos-client-cpp: libhos-client-cpp-3.1.2.2199cdf
   13_libMV_Sketch: libMV_Sketch-2.1.2.20220225.dc6bb95
   14_librdkafka: librdkafka-1.2.2.1218b3c
   15_libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
@@ -84,12 +80,6 @@ tfe_rpm_version:
 
 tsg_app_rpm_version:
   app_sketch_local: app_sketch_local-5.0.6.cc02934
-
-tsg_master_rpm_version:
-  tsg_master: tsg_master-6.1.15.da86af0
-
-shaping_master_rpm_version:
-  shaping_master: shaping_master-1.1.4.b434f47
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.4.b5ca5aa
