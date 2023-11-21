@@ -1,0 +1,7 @@
+[template]
+src = "packet-io.conf.tmpl"
+dest = "/opt/tsg/config/shared/mrglobal.dynamic.conf"
+keys = [
+  "/obp_devices/"
+]
+reload_cmd = "/opt/tsg/mrzcpd/bin/signal.sh"

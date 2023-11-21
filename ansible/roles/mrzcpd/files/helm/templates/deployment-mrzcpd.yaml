@@ -6,7 +6,7 @@ metadata:
     app: packet-io-engine
     component: packet-io-engine
   annotations:
-    reloader.stakater.com/auto: "true"
+    configmap.reloader.stakater.com/reload: mrzcpd-static-conf
 
 spec:
   replicas: 1
@@ -25,7 +25,8 @@ spec:
         prometheus.io/port: "9005"
         prometheus.io/scrape: "true"
     
-    spec: 
+    spec:
+      shareProcessNamespace: true
       tolerations:
       - key: node-role.kubernetes.io/control-plane
         operator: Exists
@@ -49,13 +50,16 @@ spec:
             cp -f /etc/profile.d/mrzcpd.sh /mnt/packet-io-engine/profile.d/mrzcpd.sh
             ldconfig -C /etc/ld.so.cache -r /host
 
-            cp -f /opt/tsg/config/mrzcpd.conf /opt/tsg/mrzcpd/etc/mrglobal.conf
+            cp -f /opt/tsg/config/mrzcpd-static-conf/static.conf /opt/tsg/mrzcpd/etc/mrglobal.conf
             chmod +x /opt/tsg/mrzcpd/bin/replaceconf.sh
             /opt/tsg/mrzcpd/bin/replaceconf.sh
-
+            ln -s /opt/tsg/mrzcpd/shared/mrglobal.dynamic.conf /opt/tsg/mrzcpd/etc/mrglobal.dynamic.conf
+            
             {{ template "mrzcpd.prestart" . }}
             {{ template "mrzcpd.start" . }}
         volumeMounts:
+        - name: shared-dir
+          mountPath: /opt/tsg/mrzcpd/shared
         - name: mrzcpd
           mountPath: /mnt/packet-io-engine/mrzcpd
           mountPropagation: Bidirectional
@@ -63,9 +67,8 @@ spec:
           mountPath: /mnt/packet-io-engine/ld.so.conf.d
         - name: etc-profile
           mountPath: /mnt/packet-io-engine/profile.d
-        - name: mrzcpd-conf
-          mountPath: "/opt/tsg/config/mrzcpd.conf"
-          subPath: mrzcpd.conf
+        - name: mrzcpd-static-conf
+          mountPath: /opt/tsg/config/mrzcpd-static-conf/
         - name: run-mrzcpd
           mountPath: /var/run/mrzcpd
         - name: hugepages
@@ -79,12 +82,18 @@ spec:
         - name: host-root
           mountPath: /host
           mountPropagation: HostToContainer
-        {{ template "mrzcpd.mount.localtime" . }}
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true
         {{ template "mrzcpd.mount.prestart" . }}
         resources: 
           limits:
             mrzcpd/mrzcpd: 1
-        {{ template "mrzcpd.resources" . }}
+{{- if .Values.mrzcpd.interfaces }}
+{{- range $interface := .Values.mrzcpd.interfaces }}
+            mrzcpd/{{ $interface.name }}: 1
+{{- end }}
+{{- end }}
             hugepages-1Gi: {{.Values.mrzcpd.hugepages }}
           requests:
             memory: 100Mi
@@ -131,6 +140,26 @@ spec:
         securityContext:
           privileged: true
 
+
+      - name: confd
+        image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        lifecycle:
+          type: Sidecar
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            chmod +x /opt/tsg/mrzcpd/bin/signal.sh
+            /opt/confd/bin/confd -watch -backend file -file /opt/tsg/config/mrzcpd-reload-conf/reload-conf.yaml -log-level debug
+        volumeMounts:
+        - name: shared-dir
+          mountPath: /opt/tsg/config/shared
+        - name: mrzcpd-reload-conf
+          mountPath: /opt/tsg/config/mrzcpd-reload-conf/
+        securityContext:
+          privileged: true
+
       - command:
         - /opt/tsg/mrzcpd/bin/monit_device
         - --prometheus-client
@@ -163,6 +192,22 @@ spec:
         - mountPath: /etc/localtime
           name: localtime-node
           readOnly: true
+      - command:
+        - /opt/tsg/mrzcpd/bin/monit_obp
+        - --prometheus-client
+        image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        name: monit-obp
+        volumeMounts:
+        - mountPath: /var/run/mrzcpd
+          name: run-mrzcpd
+          readOnly: true
+        - mountPath: /var/run/dpdk
+          name: dpdk
+          readOnly: true
+        - mountPath: /etc/localtime
+          name: localtime-node
+          readOnly: true
       - env:
         - name: MERGER_URLS
           value: {{ .Values.mergeExporter.mergeUrls }}
@@ -176,13 +221,18 @@ spec:
           containerPort: {{ .Values.mergeExporter.mergePort }}
           protocol: TCP
       volumes:
+      - name: shared-dir
+        emptyDir: {}
       - name: prestart-dir
         hostPath: 
           path: /etc/tsg-os/{{ .Release.Name }}/
           type: DirectoryOrCreate
-      - name: mrzcpd-conf
+      - name: mrzcpd-static-conf
         configMap:
-          name: mrzcpd
+          name: mrzcpd-static-conf
+      - name: mrzcpd-reload-conf
+        configMap:
+          name: mrzcpd-reload-conf
       - name: mrzcpd
         hostPath:
           path: /opt/tsg/mrzcpd
@@ -214,7 +264,11 @@ spec:
       - name: dev-vfio
         hostPath:
           path: /dev/vfio
-      {{ template "mrzcpd.volume.localtime" . }}
+      - name: localtime-node
+        hostPath:
+          path: /etc/localtime
+      - name: host-root
+        hostPath:
+          path: /
       {{ template "mrzcpd.volume.prestart" . }}
-      {{ template "mrzcpd.volume.hostpath" . }}
       hostNetwork: true

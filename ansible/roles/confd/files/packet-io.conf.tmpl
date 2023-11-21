@@ -1,0 +1,17 @@
+{{range $key, $dir := lsdir "/obp_devices"}}{{$name_dir := printf "/obp_devices/%s/name" $dir}}{{$type_dir := printf "/obp_devices/%s/type" $dir}}{{$connect_dir := printf "/obp_devices/%s/connect" $dir}}{{$address_dir := printf "/obp_devices/%s/address" $dir}}{{$port_dir := printf "/obp_devices/%s/port" $dir}}{{$segment_dir := printf "/obp_devices/%s/segment" $dir}}[olp_device:{{$key}}]
+name = {{getv $name_dir}}
+type = {{getv $type_dir}}
+connect = {{getv $connect_dir}}
+in_addr = {{getv $address_dir}}
+port = {{getv $port_dir}}
+{{$num := ""}}
+{{range $segkey, $segdir := lsdir $segment_dir}}{{$index:=len $num}}{{$id_dir := printf "/obp_devices/%s/segment/%d/id" $dir $index}}{{$workline_dir := printf "/obp_devices/%s/segment/%d/workline" $dir $index}}{{$heartbeat_modeline_dir := printf "/obp_devices/%s/segment/%d/heartbeat_mode" $dir $index}}{{$hb_send_interval_in_ms_dir := printf "/obp_devices/%s/segment/%d/hb_send_interval_in_ms" $dir $index}}{{$hb_timeout_interval_in_ms_dir := printf "/obp_devices/%s/segment/%d/hb_timeout_interval_in_ms" $dir $index}}{{$hb_lost_threshold_dir := printf "/obp_devices/%s/segment/%d/hb_lost_threshold" $dir $index}}{{$nonrevertive_mode_dir := printf "/obp_devices/%s/segment/%d/nonrevertive_mode" $dir $index}}{{$num = printf "%s1" $num}}
+[{{getv $name_dir}}:{{getv $id_dir}}]
+state = {{getv $workline_dir}}
+heartbeat = {{getv $heartbeat_modeline_dir}}
+heartbeat_send_interval_in_ms= {{getv $hb_send_interval_in_ms_dir}}
+heartbeat_timeout_interval_in_ms= {{getv $hb_timeout_interval_in_ms_dir}} 
+heartbeat_lost_threshold = {{getv $hb_lost_threshold_dir}}
+nonrevertive_mode = {{getv $nonrevertive_mode_dir}}
+{{end}}
+{{end}}

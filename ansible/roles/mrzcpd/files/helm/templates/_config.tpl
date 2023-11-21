@@ -1,27 +1,3 @@
-{{- define "mrzcpd.mount.hostpath" -}}
-{{- if eq .Values.mrzcpd.debug.enable_mount_host_filesystem  .Values.define_enable_val_yes }}
-        - name: host-root
-          mountPath: /host
-{{- end }}
-{{- end -}}
-
-{{- define "mrzcpd.volume.hostpath" -}}
-      - name: host-root
-        hostPath:
-          path: /
-{{- end -}}
-
-{{- define "mrzcpd.mount.localtime" -}}
-        - name: localtime-node
-          mountPath: /etc/localtime
-          readOnly: true
-{{- end -}}
-
-{{- define "mrzcpd.volume.localtime" -}}
-      - name: localtime-node
-        hostPath:
-          path: /etc/localtime
-{{- end -}}
 
 {{- define "mrzcpd.resources" -}}
 {{- if .Values.mrzcpd.interfaces }}
@@ -35,7 +11,7 @@
 {{- if eq .Values.mrzcpd.debug.enable_interactive_startup .Values.define_enable_val_yes -}}
             while true; do sleep 10;done
 {{- else -}}
-           /opt/tsg/mrzcpd/bin/mrzcpd -c /opt/tsg/mrzcpd/etc/mrglobal.conf
+           /opt/tsg/mrzcpd/bin/mrzcpd -c /opt/tsg/mrzcpd/etc/mrglobal.conf -s /opt/tsg/mrzcpd/etc/mrglobal.dynamic.conf
 {{- end }}
 {{- end -}}
 
@@ -329,6 +305,12 @@ interface_ext=virtio_dign_s
 [vwire:{{ $virtual_wire.id }}]
 interface_int={{ $virtual_wire.internal_interface }}
 interface_ext={{ $virtual_wire.external_interface }}
+{{- if $virtual_wire.obp_device }}
+obp_device={{ $virtual_wire.obp_device }}
+{{- end }}
+{{- if $virtual_wire.obp_segment }}
+obp_segment={{ $virtual_wire.obp_segment }}
+{{- end }}
 {{$enter}}
 {{- end }}
 # classifier rule

@@ -1,6 +1,15 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mrzcpd
+  name: mrzcpd-static-conf
 data:
-  mrzcpd.conf: {{ tpl (.Files.Get "conf/mrzcpd.conf") . | quote }}
+  static.conf: {{ tpl (.Files.Get "conf/mrzcpd.conf") . | quote }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mrzcpd-reload-conf
+data:
+  reload-conf.yaml: |
+    obp_devices: {{ .Values.mrzcpd.obp_devices | toJson }}

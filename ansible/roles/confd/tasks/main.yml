@@ -1,0 +1,47 @@
+- name: "Create /opt/confd/bin directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /opt/confd/bin
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "Create /etc/confd/conf.d directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /etc/confd/conf.d
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "Create /etc/confd/templates directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /etc/confd/templates
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "copy confd to dest"
+  copy:
+    src: "{{ role_path }}/files/confd"
+    dest: /opt/confd/bin/confd
+    mode: 0755
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "copy packet-io-conf.toml to dest"
+  copy:
+    src: "{{ role_path }}/files/packet-io-conf.toml"
+    dest: /etc/confd/conf.d/packet-io-conf.toml
+    mode: 0755
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "copy packet-io.conf.tmpl to dest"
+  copy:
+    src: "{{ role_path }}/files/packet-io.conf.tmpl"
+    dest: /etc/confd/templates/packet-io.conf.tmpl
+    mode: 0755
+  when: runtime_env == 'TSG-X-P0906'

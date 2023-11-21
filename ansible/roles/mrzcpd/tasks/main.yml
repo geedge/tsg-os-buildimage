@@ -77,6 +77,14 @@
     mode: 0644
   when: runtime_env == 'TSG-X-P0906'
 
+- name: "copy signal.sh to dest"
+  copy:
+    src: "{{ role_path }}/files/signal.sh"
+    dest: /opt/tsg/mrzcpd/bin/signal.sh
+    mode: 0644
+  when: runtime_env == 'TSG-X-P0906'
+
+
 - name: "replace action: replace Requires to Wants"
   replace:
     path: "{{ item }}"
