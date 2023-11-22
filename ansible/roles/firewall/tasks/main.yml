@@ -13,7 +13,7 @@
   when:
     - item.1 is not search("stellar-c")
     - item.1 is not search("firewall")
-  loop: "{{ firewall_rpm_version }}"
+  loop: "{{ firewall_rpm_version | dictsort }}"
 
 - name: "Install firwall and stellar-c rpm plugins"
   shell: rpm -i /tmp/rpm_download/{{ item }}* --prefix /opt/tsg/
