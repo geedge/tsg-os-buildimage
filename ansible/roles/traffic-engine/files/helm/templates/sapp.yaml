@@ -14,7 +14,6 @@ data:
   wire_graft.conf: {{ tpl (.Files.Get "conf/wire_graft.conf") . | quote }}
   vlan_flipping_map.conf: {{ tpl (.Files.Get "conf/vlan_flipping_map.conf") . | quote }}
   tsg_device_tag.json: {{ tpl (.Files.Get "conf/tsg_device_tag.json") . | quote }}
-  app_sketch_local.inf: {{ tpl (.Files.Get "conf/app_sketch_local.inf") . | quote }}
   firewall.inf: {{ tpl (.Files.Get "conf/firewall.inf") . | quote }}
   necessary_plug_list.conf: {{ tpl (.Files.Get "conf/necessary_plug_list.conf") . | quote }}
   http_main.conf: {{ tpl (.Files.Get "conf/http_main.conf") . | quote }}

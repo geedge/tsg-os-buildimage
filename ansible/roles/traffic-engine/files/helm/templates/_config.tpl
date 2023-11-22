@@ -152,14 +152,12 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/wire_graft.conf         /opt/tsg/sapp/etc/wire_graft/wire_graft.conf
             cp /opt/tsg/config/send_raw_pkt.conf       /opt/tsg/sapp/etc/send_raw_pkt.conf
             cp /opt/tsg/config/tsg_device_tag.json     /opt/tsg/etc/tsg_device_tag.json
-            cp /opt/tsg/config/app_sketch_local.inf    /opt/tsg/sapp/plug/business/app_sketch_local/app_sketch_local.inf
             cp /opt/tsg/config/vlan_flipping_map.conf  /opt/tsg/sapp/etc/vlan_flipping_map.conf
             cp /opt/tsg/config/firewall.inf            /opt/tsg/sapp/plug/business/firewall/firewall.inf
             cp /opt/tsg/config/necessary_plug_list.conf  /opt/tsg/sapp/etc/necessary_plug_list.conf
             cp /opt/tsg/config/http_main.conf          /opt/tsg/sapp/conf/http/http_main.conf
             cp /opt/tsg/config/mail.conf               /opt/tsg/sapp/conf/mail/mail.conf
             cp /opt/tsg/config/ssl_main.conf           /opt/tsg/sapp/conf/ssl/ssl_main.conf
-            mkdir -p /opt/tsg/sapp/stellar_plugin/
             cp /opt/tsg/config/spec.toml               /opt/tsg/sapp/stellar_plugin/spec.toml
 {{- end -}}
 
