@@ -2,7 +2,7 @@
 PLUGNAME=FIREWEALL
 SO_PATH=./plug/business/firewall/firewall.so
 INIT_FUNC=firewall_init
-DESTROY_FUNC=firewall_destroy
+DESTROY_FUNC=firewall_destory
 
 {{- if eq .Values.decoders.HTTP .Values.define_enable_val_yes }}
 [HTTP]
