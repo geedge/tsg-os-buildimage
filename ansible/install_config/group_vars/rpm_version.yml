@@ -25,7 +25,7 @@ firewall_rpm_version:
   stratum: stratum-1.0.6.16c1c35
   rdp: rdp-1.0.3.f392ffd
   bgp: bgp-1.1.2.356c17d
-  session_flags: session_flags-2.2.2.8817a79
+  session_flags: session_flags-2.2.4.0cb563b
   stat_policy_enforcer: stat_policy_enforcer-3.1.2.e0eaa81
   sf_classifier: sf_classifier-1.0.7.c5549be
   stellar-c: stellar-c-1.0.3.87626a3
