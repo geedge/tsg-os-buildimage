@@ -109,13 +109,10 @@ PUBLISH_TOPIC="APP_SIGNATURE_ID"
 #BROKER_IP=
 #BROKER_PORT=
 
-[APP_PROTO_ENGINE]
+[qdpi_detector]
 debug_swtich=30
-nb_flows=10000
 intput_max_packet=20
-classification_cache_enable=0
-basic_dpi_enable=1
-fm_flow_table_alloc_mode=3
+qmdpi_engine_config=injection_mode=stream;nb_workers={{- include "traffic-engine.sapp.workerthread" . }};nb_flows=8000;basic_dpi_enable=1;classification_cache_enable=0;fm_flow_table_alloc_mode=0
 
 [TSG_DDOS_SKETCH]
 debug_swtich=30
