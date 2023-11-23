@@ -18,19 +18,58 @@ HUGEPAGES=
 KUBE_RESERVED=
 SYSTEM_RESERVED=
 NUMA_NODE_CNT=
-MRZCPD_IOCORE=
-CLIXON_IOCORE=
+IOCORE=
+WORKLOAD_CORE=
 MRZCPD_DIRECT_PKTMBUF=
 MRZCPD_INDIRECT_PKTMBUF=
 MRZCPD_POLL_WAIT_THROTTLE=512
 MRZCPD_SZ_DATA=4096
 MRZCPD_SZ_TUNNEL=8192
 MRZCPD_CHECK_BUFFER_LEAK=1
+NF_COUNT=16
+NIC_CPU_Affinity_Switch=
+
+cpu_format_conversion()
+{
+    local core_min
+    local core_max
+    local core_list
+
+    if [[ $1 == *-* ]]; then
+        read core_min core_max <<< $(echo $1 | awk -F- '{print $1" "$2}')
+        for((i=$core_min;i<=$core_max;i++));
+        do
+            core_list=$core_list","$i
+        done
+        core_list=${core_list#*,}
+    else
+        core_list=$1
+    fi
+    echo $core_list
+}
 
 load_tsg_os_HAL_config()
 {
     if [ -f "${tsg_os_HAL_cfg_file}" ]; then
         source ${tsg_os_HAL_cfg_file}
+
+        if [ ! -n "$IOCORE" ] && [ -n "$MRZCPD_IOCORE" ]; then
+            IOCORE=$MRZCPD_IOCORE
+        fi
+
+        if [ ! -n "$WORKLOAD_CORE" ] && [ -n "$CLIXON_IOCORE" ]; then
+            WORKLOAD_CORE=$CLIXON_IOCORE
+        fi
+
+        if [ -n $IOCORE ]; then
+            core_list=$(echo $IOCORE | tr ',' ' ')
+            for core in $core_list;
+            do
+                core_format=$core_format","$(cpu_format_conversion $core)
+            done
+            core_format=${core_format#*,}
+            IOCORE=$core_format
+        fi
     fi
 }
 
@@ -68,14 +107,15 @@ set_tsg_clixon_conf()
     [ -f ${mrglobal_cfg_template} ] && sed -i "s/^sz_direct_pktmbuf=.*$/sz_direct_pktmbuf=${MRZCPD_DIRECT_PKTMBUF}/g" ${mrglobal_cfg_template}
     [ -f ${mrglobal_cfg_template} ] && sed -i "s/^sz_indirect_pktmbuf=.*$/sz_indirect_pktmbuf=${MRZCPD_INDIRECT_PKTMBUF}/g" ${mrglobal_cfg_template}
 
-    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^iocore=.*$/iocore=${MRZCPD_IOCORE}/g" ${mrglobal_cfg_template}
+    [ -f ${mrglobal_cfg_template} ] && sed -i "s/^iocore=.*$/iocore=${IOCORE}/g" ${mrglobal_cfg_template}
 
     [ -f ${mrglobal_cfg_template} ] && sed -i "s/^poll_wait_throttle=.*$/poll_wait_throttle=${MRZCPD_POLL_WAIT_THROTTLE}/g" ${mrglobal_cfg_template}
     [ -f ${mrglobal_cfg_template} ] && sed -i "s/^sz_data=.*$/sz_data=${MRZCPD_SZ_DATA}/g" ${mrglobal_cfg_template}
     [ -f ${mrglobal_cfg_template} ] && sed -i "s/^sz_tunnel=.*$/sz_tunnel=${MRZCPD_SZ_TUNNEL}/g" ${mrglobal_cfg_template}
     [ -f ${mrglobal_cfg_template} ] && sed -i "s/^check_buffer_leak=.*$/check_buffer_leak=${MRZCPD_CHECK_BUFFER_LEAK}/g" ${mrglobal_cfg_template}
 
-    [ -f ${tsg_clixon_cfg_file} ] && sed -i "s/^cpu_range=.*$/cpu_range=${CLIXON_IOCORE}/g" ${tsg_clixon_cfg_file}
+    [ -f ${tsg_clixon_cfg_file} ] && sed -i "s/^cpu_range=.*$/cpu_range=${WORKLOAD_CORE}/g" ${tsg_clixon_cfg_file}
+    [ -f ${tsg_clixon_cfg_file} ] && sed -i "s/^nf_count=.*$/nf_count=${NF_COUNT}/g" ${tsg_clixon_cfg_file}
 }
 
 set_os_hugepages()
@@ -126,12 +166,13 @@ set_mrzcpd_direct_pktmbuf()
 set_cpu_list()
 {
     local vendor
-    if [ -n "$MRZCPD_IOCORE" ] && [ -n "$CLIXON_IOCORE" ] && [ -n "$NUMA_NODE_CNT" ]; then
-        return 0
-    fi
 
     vendor=$(lscpu | grep "^Vendor ID" | awk '{print $3}')
-    if [ $vendor == 'AuthenticAMD' ]; then
+    if [ -n "$NIC_CPU_Affinity_Switch" ] && [ "$NIC_CPU_Affinity_Switch" == "1" ]; then
+        . /opt/tsg/tsg-os-HAL/scripts/cpu_amd.sh
+    elif [ -n "$NIC_CPU_Affinity_Switch" ] && [ "$NIC_CPU_Affinity_Switch" == "0" ]; then
+        . /opt/tsg/tsg-os-HAL/scripts/cpu_default.sh
+    elif [ $vendor == 'AuthenticAMD' ]; then
         . /opt/tsg/tsg-os-HAL/scripts/cpu_amd.sh
     else
         . /opt/tsg/tsg-os-HAL/scripts/cpu_default.sh
@@ -169,7 +210,7 @@ set_grub_cmdline()
     local set_grub_flag=0
 
     grub_cmdline_key=("hugepagesz" "hugepages" "isolcpus")
-    grub_cmdline_value=("1G" ${HUGEPAGES} ${MRZCPD_IOCORE})
+    grub_cmdline_value=("1G" ${HUGEPAGES} ${IOCORE})
 
     for index in "${!grub_cmdline_key[@]}"
     do
@@ -187,7 +228,7 @@ set_grub_cmdline()
 set_cpu_partitioning()
 {
 cat <<EOF > ${cpu_partitioning_conf_file}
-isolated_cores=${MRZCPD_IOCORE}
+isolated_cores=${IOCORE}
 EOF
 }
 
