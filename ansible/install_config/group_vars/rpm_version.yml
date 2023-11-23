@@ -3,7 +3,7 @@ certstore_rpm_version:
 
 firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-3.0.7.bbd3331
+  firewall: firewall-3.0.8.94f228f
   #gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   #radius_collect_plug: radius_collect_plug-2.0.11.47a51f3
   glimpse_detector: glimpse_detector-3.0.0.7240884
@@ -22,7 +22,7 @@ firewall_rpm_version:
   radius: radius-1.0.7.54b70b2
   mesa_sip: mesa_sip-1.2.3.ccf9b90
   deal_socks: deal_socks-1.0.4.329bba3
-  stratum: stratum-1.0.6.16c1c35
+  stratum: stratum-1.1.0.29a2cff
   rdp: rdp-1.0.3.f392ffd
   bgp: bgp-1.1.2.356c17d
   session_flags: session_flags-2.2.4.0cb563b

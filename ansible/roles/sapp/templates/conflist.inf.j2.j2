@@ -41,14 +41,14 @@
 [business]
 {% raw %}{% if firewall.enable == 1 %}
 ./plug/business/firewall/firewall.inf
-./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
+#./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
 {% endif %}
 {% if proxy.enable == 1 %}
 ./plug/business/kni/kni.inf
 {% endif %}
 ./plug/business/conn_telemetry/conn_telemetry.inf
 {% if radius.enable == 1 %}
-./plug/business/radius_collect_plug/radius_collect_plug.inf
+#./plug/business/radius_collect_plug/radius_collect_plug.inf
 {% endif %}
 {% endraw %}
 {% if runtime_env == 'TSG-7400-mcn0' %}
