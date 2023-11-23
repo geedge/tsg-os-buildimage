@@ -93,14 +93,10 @@ DEVICE_SEQ_IN_DATA_CENTER={{ session_id_generator.snowflake_worker_id_offset }}
 {% endraw %}
 GENERATE_JA3_FINGERPRINT=1
 
-[APP_SKETCH_LOCAL]
+[context_based_detector]
 LOG_LEVEL=30
-LOG_PATH="log/app_sketch.log"
+LOG_PATH="log/context_based_detector.log"
 SENDBACK_SWITCH=0
-SCAN_UDP_PAYLOAD_NUM=8
-SCAN_TCP_PAYLOAD_NUM=8
-C2S_PKT_SIZE_NUM=4
-S2C_PKT_SIZE_NUM=4 
 
 [APP_SKETCH_FEEDBACK]
 QOS=0

@@ -34,7 +34,7 @@ exit = "qdpi_detector_destroy"
 
 {{- if eq .Values.appsketch.context_based_detector .Values.define_enable_val_yes }}
 [[plugin]]
-path = "./stellar_plugin/context_based_detector/context_based_detector.so"
+path = "./stellar_plugin/context_based_detector.so"
 init = "context_based_detector_init"
 exit = "context_based_detector_destroy"
 {{- end }}
