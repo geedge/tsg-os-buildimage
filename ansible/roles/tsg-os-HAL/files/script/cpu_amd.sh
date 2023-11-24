@@ -1,8 +1,16 @@
 #!/bin/sh
 
-set -x
+write_devices_disable()
+{
+(cat <<EOF1
+[device]
+rxcore_enable=0
 
-write_devices_conf()
+EOF1
+) >> $1
+}
+
+write_devices_enable()
 {
 (cat <<EOF1
 [device]
@@ -38,74 +46,110 @@ set_mrzcpd_rx_core()
     devices=$(lshw -c network -businfo | grep network | awk '{print $2}')
     for device in $devices
     do
+        if [ $device == "network" ]; then
+            continue
+        fi
         businfo=$(ethtool -i $device | grep "bus-info:"| awk '{print $2}')
         numa_node=$(lspci -s $businfo -vv | grep "NUMA node:" | awk '{print $3}')
+
+        if [ ! -n "$numa_node" ] || [ $numa_node -ge $NUMA_NODE_CNT ]; then
+            continue
+        fi
         write_device_rxcore_conf $device ${mrzcpd_rx_core[$numa_node]} ${tsg_clixon_cfg_file}
         str_device=$str_device","$device
     done
     str_device=${str_device#*,}
-    write_devices_conf $str_device ${tsg_clixon_cfg_file}
+
+    if [ ! -n "$str_device" ]; then
+        write_devices_disable ${tsg_clixon_cfg_file}
+    else
+        write_devices_enable $str_device ${tsg_clixon_cfg_file}
+    fi
+}
+
+output_common_str()
+{
+    local common_list
+
+    list1=$(echo $1 | tr ',' ' ')
+    list2=$(echo $2 | tr ',' ' ')
+
+    for numa_core in $list1;
+    do
+        for iocore in $list2;
+        do
+            if [ $numa_core -eq $iocore ]; then
+                common_list=$common_list","$numa_core
+                break
+            fi
+        done
+    done
+    common_list=${common_list#*,}
+    echo $common_list
 }
 
 allocate_cpu()
 {
-    local numa_node_min=0
-    local numa_node_max=0
     local numa_node_cpu_cnt=0
     local numa_cpu_cnt_min=0
     local numa_list
-    local numa_nodes
     local mrzcpd_start
     local mrzcpd_end
     local clixon_start
 
-    numa_nodes=$(numactl --hardware | grep available | awk -F"[()]" '{print $2}')
-
-    if [[ $numa_nodes == *-* ]]
-    then
-        read numa_node_min numa_node_max <<< $(echo $numa_nodes | awk -F- '{print $1" "$2}')
-    else
-        numa_node_min=$numa_nodes
-        numa_node_max=$numa_nodes
+    if [ ! -n "$NUMA_NODE_CNT" ]; then
+        NUMA_NODE_CNT=`lscpu | grep "NUMA node(s):" | head -n 1 | sed  -r 's/NUMA node\(s\):\s{1,}//g'`
     fi
-    NUMA_NODE_CNT=`expr $numa_node_max - $numa_node_min + 1`
-    for((i=$numa_node_min;i<=$numa_node_max;i++));
-    do
-        numa_node_cpu_cnt=$(numactl --hardware | awk '/^node ['$i']+ cpus:/ {print NF-3}')
-        if [ $numa_cpu_cnt_min -eq 0 ] || [ $numa_node_cpu_cnt -lt $numa_cpu_cnt_min ]; then
-            numa_cpu_cnt_min=$numa_node_cpu_cnt
+
+    if [ -n "$IOCORE" ] && [ -n "$WORKLOAD_CORE" ]; then
+        for((i=0;i<$NUMA_NODE_CNT;i++));
+        do
+            numa_list=$(numactl --hardware | grep "node $i cpus: " | sed -r "s/node $i cpus: //g" | tr ' ' ',')
+            mrzcpd_core=$(output_common_str $numa_list $IOCORE)
+            mrzcpd_rx_core+=($mrzcpd_core)
+        done
+    else
+        unset IOCORE
+        unset WORKLOAD_CORE
+
+        for((i=0;i<$NUMA_NODE_CNT;i++));
+        do
+            numa_node_cpu_cnt=$(numactl --hardware | awk '/^node ['$i']+ cpus:/ {print NF-3}')
+            if [ $numa_cpu_cnt_min -eq 0 ] || [ $numa_node_cpu_cnt -lt $numa_cpu_cnt_min ]; then
+                numa_cpu_cnt_min=$numa_node_cpu_cnt
+            fi
+        done
+
+        if [ $numa_cpu_cnt_min -le 4 ]; then
+            mrzcpd_start=2
+            mrzcpd_end=2
+            clixon_start=3
+        elif [ $numa_cpu_cnt_min -le 16 ]; then
+            mrzcpd_start=3
+            mrzcpd_end=4
+            clixon_start=5
+        elif [ $numa_cpu_cnt_min -le 32 ]; then
+            mrzcpd_start=5
+            mrzcpd_end=8
+            clixon_start=9
+        else
+            mrzcpd_start=5
+            mrzcpd_end=12
+            clixon_start=13
         fi
-    done
 
-    if [ $numa_cpu_cnt_min -le 4 ]; then
-        mrzcpd_start=2
-        mrzcpd_end=2
-        clixon_start=3
-    elif [ $numa_cpu_cnt_min -le 16 ]; then
-        mrzcpd_start=3
-        mrzcpd_end=4
-        clixon_start=5
-    elif [ $numa_cpu_cnt_min -le 32 ]; then
-        mrzcpd_start=5
-        mrzcpd_end=8
-        clixon_start=9
-    else
-        mrzcpd_start=5
-        mrzcpd_end=12
-        clixon_start=13
+        for((i=0;i<$NUMA_NODE_CNT;i++));
+        do
+            numa_list=$(numactl --hardware | grep "node $i cpus: " | sed -r "s/node $i cpus: //g")
+            mrzcpd_core=$(echo $numa_list | cut -d ' ' -f $mrzcpd_start-$mrzcpd_end | tr ' ' ',')
+            IOCORE=$IOCORE","$mrzcpd_core
+            mrzcpd_rx_core+=($mrzcpd_core)
+            clixon_core=$(echo $numa_list | cut -d ' ' -f $clixon_start- | tr ' ' ',')
+            WORKLOAD_CORE=$WORKLOAD_CORE","$clixon_core
+        done
+        IOCORE=${IOCORE#*,}
+        WORKLOAD_CORE=${WORKLOAD_CORE#*,}
     fi
-
-    for((i=$numa_node_min;i<=$numa_node_max;i++));
-    do
-        numa_list=$(numactl --hardware | grep "node $i cpus: " | sed -r "s/node $i cpus: //g")
-        mrzcpd_core=$(echo $numa_list | cut -d ' ' -f $mrzcpd_start-$mrzcpd_end | tr ' ' ',')
-        MRZCPD_IOCORE=$MRZCPD_IOCORE","$mrzcpd_core
-        mrzcpd_rx_core+=($mrzcpd_core)
-        clixon_core=$(echo $numa_list | cut -d ' ' -f $clixon_start- | tr ' ' ',')
-        CLIXON_IOCORE=$CLIXON_IOCORE","$clixon_core
-    done
-    MRZCPD_IOCORE=${MRZCPD_IOCORE#*,}
-    CLIXON_IOCORE=${CLIXON_IOCORE#*,}
 
     set_mrzcpd_rx_core
 }
