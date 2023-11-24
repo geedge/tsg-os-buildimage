@@ -108,7 +108,7 @@ PUBLISH_TOPIC="APP_SIGNATURE_ID"
 [qdpi_detector]
 debug_swtich=30
 intput_max_packet=20
-qmdpi_engine_config=injection_mode=stream;nb_workers={{- include "traffic-engine.sapp.workerthread" . }};nb_flows=8000;basic_dpi_enable=1;classification_cache_enable=0;fm_flow_table_alloc_mode=0
+qmdpi_engine_config=injection_mode=stream;nb_workers={{ workload_firewall.worker_threads }};nb_flows=8000;basic_dpi_enable=1;classification_cache_enable=0;fm_flow_table_alloc_mode=0
 
 [TSG_DDOS_SKETCH]
 debug_swtich=30

@@ -25,14 +25,16 @@ path = "./stellar_plugin/sf_classifier.so"
 init = "sf_classifier_init"
 exit = "sf_classifier_exit"
 
-{{- if eq .Values.appsketch.qdpi_detector .Values.define_enable_val_yes }}
+
+{{- if and (eq .Values.appsketch.qdpi_detector .Values.define_enable_val_yes) (eq .Values.appsketch.enable .Values.define_enable_val_yes) }}
 [[plugin]]
 path = "./stellar_plugin/qdpi_detector/qdpi_detector.so"
 init = "qdpi_detector_init"
 exit = "qdpi_detector_destroy"
 {{- end }}
 
-{{- if eq .Values.appsketch.context_based_detector .Values.define_enable_val_yes }}
+
+{{- if and (eq .Values.appsketch.context_based_detector .Values.define_enable_val_yes) (eq .Values.appsketch.enable .Values.define_enable_val_yes) }}
 [[plugin]]
 path = "./stellar_plugin/context_based_detector.so"
 init = "context_based_detector_init"
