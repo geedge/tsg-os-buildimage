@@ -17,9 +17,6 @@
         - name: ldconfig-mrzcpd
           mountPath: /etc/ld.so.conf.d/mrzcpd.conf
           readOnly: true
-        - name: sysconfig-mrzcpd
-          mountPath: /etc/sysconfig/mrzcpd
-          readOnly: true
 
 {{- end -}}
 
@@ -49,10 +46,6 @@
       - name: ldconfig-mrzcpd
         hostPath:
           path: /etc/ld.so.conf.d/mrzcpd.conf
-          type: File
-      - name: sysconfig-mrzcpd
-        hostPath:
-          path: /etc/sysconfig/mrzcpd
           type: File
 {{- end -}}
 

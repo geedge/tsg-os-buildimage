@@ -494,10 +494,6 @@ enable_breakpad_upload=0
         hostPath:
           path: /etc/ld.so.conf.d/mrzcpd.conf
           type: File
-      - name: sysconfig-mrzcpd
-        hostPath:
-          path: /etc/sysconfig/mrzcpd
-          type: File
 {{- end -}}
 
 {{- define "traffic-engine.mount.mrzcpd" -}}
@@ -519,9 +515,6 @@ enable_breakpad_upload=0
           readOnly: true
         - name: ldconfig-mrzcpd
           mountPath: /etc/ld.so.conf.d/mrzcpd.conf
-          readOnly: true
-        - name: sysconfig-mrzcpd
-          mountPath: /etc/sysconfig/mrzcpd
           readOnly: true
 
 {{- end -}}
