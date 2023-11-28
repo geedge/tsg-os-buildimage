@@ -51,7 +51,7 @@ framework_rpm_version:
   18_libswarmkv: libswarmkv-4.0.2.4008e35
   19_libswarmkv-tools: libswarmkv-tools-4.0.2.4008e35
   20_libfieldstat3: libfieldstat3-3.0.16.475f806
-  21_libmaat4: libmaat4-4.1.9.91937cd
+  21_libmaat4: libmaat4-4.1.10.7568d4e
   22_libMESA_sts: libMESA_sts-1.0.3.d515a96
   23_libfieldstat4: libfieldstat4-4.4.2.c18b253
   #24_libstatistics: libstatistics-2.0.20.895d68e
