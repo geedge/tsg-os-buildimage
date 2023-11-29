@@ -1,0 +1,75 @@
+#!/bin/bash
+
+UNARCHIVE_DIR="/tmp/9000_NPB_patches"
+
+
+function unarchive_patch_tgz()
+{
+    mkdir -p $UNARCHIVE_DIR
+    PAYLOAD_LINE=`awk '/^__PAYLOAD_BELOW__/ {print NR + 1; exit 0; }' $0`
+    tail -n+$PAYLOAD_LINE $0 | tar xzv -C $UNARCHIVE_DIR 
+}
+
+function install_patch_files()
+{
+    cp $UNARCHIVE_DIR/90-9000NPBP01R01.rules /usr/lib/udev/rules.d/90-9000NPBP01R01.rules
+
+    cp $UNARCHIVE_DIR/ifcfg-eth_pf_smbio     /etc/sysconfig/network-scripts/ifcfg-eth_pf_smbio
+    cp $UNARCHIVE_DIR/set-eth_pf_smbio-macaddr.sh  /usr/bin/set-eth_pf_smbio-macaddr.sh
+    chmod 0777 /usr/bin/set-eth_pf_smbio-macaddr.sh
+
+    cp $UNARCHIVE_DIR/ifcfg-eth_pf_smbcx     /etc/sysconfig/network-scripts/ifcfg-eth_pf_smbcx
+    cp $UNARCHIVE_DIR/ifcfg-eth_vf_mirr      /etc/sysconfig/network-scripts/ifcfg-eth_vf_mirr
+    cp $UNARCHIVE_DIR/ifcfg-eth_vf_ctl       /etc/sysconfig/network-scripts/ifcfg-eth_vf_ctl
+
+    #Network Manager dispatcher shell
+    cp $UNARCHIVE_DIR/nm_pre-up_set_mgmt_ipaddr.sh /usr/lib/NetworkManager/dispatcher.d/pre-up.d/00-set_mgmt_ipaddr.sh
+    chmod 0755 /usr/lib/NetworkManager/dispatcher.d/pre-up.d/00-set_mgmt_ipaddr.sh
+
+    cp $UNARCHIVE_DIR/ifcfg-eth_pf_xe0       /etc/sysconfig/network-scripts/ifcfg-eth_pf_xe0
+    cp $UNARCHIVE_DIR/ifcfg-eth_pf_xe1       /etc/sysconfig/network-scripts/ifcfg-eth_pf_xe1
+    cp $UNARCHIVE_DIR/ifcfg-eth_pf_mgmt0     /etc/sysconfig/network-scripts/ifcfg-eth_pf_mgmt0
+    cp $UNARCHIVE_DIR/ifcfg-eth_pf_mgmt1     /etc/sysconfig/network-scripts/ifcfg-eth_pf_mgmt1
+    cp $UNARCHIVE_DIR/ifcfg-eth_pf_ge0       /etc/sysconfig/network-scripts/ifcfg-eth_pf_ge0
+    cp $UNARCHIVE_DIR/ifcfg-eth_pf_ge1       /etc/sysconfig/network-scripts/ifcfg-eth_pf_ge1
+
+    cp $UNARCHIVE_DIR/90-9000-dracut.rules   /usr/lib/dracut/dracut.conf.d/90-9000-dracut.rules
+
+    cp $UNARCHIVE_DIR/poweroff-guard.service /usr/lib/systemd/system/poweroff-guard.service
+    systemctl enable poweroff-guard.service   
+    cp $UNARCHIVE_DIR/start-poweroff-guard.service /usr/lib/systemd/system/start-poweroff-guard.service
+    systemctl enable start-poweroff-guard.service
+
+    mkdir -p /usr/lib/systemd/system/tsg-clixon-backend.service.d
+    cp $UNARCHIVE_DIR/service_add_prestart.conf /usr/lib/systemd/system/tsg-clixon-backend.service.d/service_add_prestart.conf
+
+    mkdir -p /opt/tsg/clixon/bin
+    cp $UNARCHIVE_DIR/set_9000_NPB_running_db.sh /opt/tsg/clixon/bin/set_9000_NPB_running_db.sh
+    chmod 0755 /opt/tsg/clixon/bin/set_9000_NPB_running_db.sh
+}
+
+function set_HAL_config()
+{
+    HAL_config="/etc/sysconfig/tsg-os-HAL.conf"
+
+    # mrzcpd affinity cpu core
+    sed -i 's/.*IOCORE=*/IOCORE=1-4/' $HAL_config
+    # vsys   affinity cpu core
+    sed -i 's/.*WORKLOAD_CORE=*/WORKLOAD_CORE=5-55/' $HAL_config
+    # deafault memory hugepages number.
+    sed -i 's/.*HUGEPAGES=*/HUGEPAGES=16/' $HAL_config
+}
+
+function clean_unarchive_dir()
+{
+    rm -rf $UNARCHIVE_DIR
+}
+
+unarchive_patch_tgz
+install_patch_files
+set_HAL_config
+clean_unarchive_dir
+
+exit 0
+
+__PAYLOAD_BELOW__

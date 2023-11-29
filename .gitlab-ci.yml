@@ -72,44 +72,31 @@ stages:
   tags:
     - tsg-os-builder-el8
 
-feature_branch_build_7400_mcn0:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN0P01R01
-    DALIY_BUILD_VERSION: 1
-  except:
-    - tags
-    - /^dev-.*$/i
-    - /^rel-.*$/i
-    - /^update-.*$/i
+# feature_branch_build_7400_mcn0:
+#   image: $BUILD_BASED_IMAGE_CENTOS7
+#   stage: build
+#   extends: .build_tsg-buildimage
+#   variables:
+#     PROFILE_LIST: 7400MCN0P01R01
+#     DALIY_BUILD_VERSION: 1
+#   except:
+#     - tags
+#     - /^dev-.*$/i
+#     - /^rel-.*$/i
+#     - /^update-.*$/i
 
-feature_branch_build_7400_mcn123:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN123P01R01
-    DALIY_BUILD_VERSION: 1
-  except:
-    - tags
-    - /^dev-.*$/i
-    - /^rel-.*$/i
-    - /^update-.*$/i
-
-feature_branch_build_9000:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 9000NPBP01R01
-    DALIY_BUILD_VERSION: 1
-  except:
-    - tags
-    - /^dev-.*$/i
-    - /^rel-.*$/i
-    - /^update-.*$/i
+# feature_branch_build_7400_mcn123:
+#   image: $BUILD_BASED_IMAGE_CENTOS7
+#   stage: build
+#   extends: .build_tsg-buildimage
+#   variables:
+#     PROFILE_LIST: 7400MCN123P01R01
+#     DALIY_BUILD_VERSION: 1
+#   except:
+#     - tags
+#     - /^dev-.*$/i
+#     - /^rel-.*$/i
+#     - /^update-.*$/i
 
 feature_branch_build_container_images_TSGXP0906:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
@@ -163,75 +150,33 @@ feature_branch_build_kvm_image_TSGXP0906:
     - /^rel-.*$/i
     - /^update-.*$/i
 
-# feature_branch_build_server_unlocked:
+# develop_build_7400_mcn0:
 #   image: $BUILD_BASED_IMAGE_CENTOS7
 #   stage: build
 #   extends: .build_tsg-buildimage
 #   variables:
-#     PROFILE_LIST: SERVER
+#     PROFILE_LIST: 7400MCN0P01R01
+#     UPLOAD_TO_FILE_REPO: 1
+#     PULP3_FILE_REPO_NAME: tsg-os-images-develop
+#     PULP3_FILE_DIST_NAME: tsg-os-images-develop
 #     DALIY_BUILD_VERSION: 1
-#     LOCK_STATE: UNLOCKED
-#   except:
-#     - tags
+#     FILE_REPO_PATH: install/develop/tsg-os-images
+#   only:
 #     - /^dev-.*$/i
-#     - /^rel-.*$/i
-#     - /^update-.*$/i
 
-# feature_branch_build_server_locked:
+# develop_build_7400_mcn123:
 #   image: $BUILD_BASED_IMAGE_CENTOS7
 #   stage: build
 #   extends: .build_tsg-buildimage
 #   variables:
-#     PROFILE_LIST: SERVER
+#     PROFILE_LIST: 7400MCN123P01R01
+#     UPLOAD_TO_FILE_REPO: 1
+#     PULP3_FILE_REPO_NAME: tsg-os-images-develop
+#     PULP3_FILE_DIST_NAME: tsg-os-images-develop
 #     DALIY_BUILD_VERSION: 1
-#     LOCK_STATE: LOCKED
-#   except:
-#     - tags
+#     FILE_REPO_PATH: install/develop/tsg-os-images
+#   only:
 #     - /^dev-.*$/i
-#     - /^rel-.*$/i
-#     - /^update-.*$/i
-
-develop_build_7400_mcn0:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN0P01R01
-    UPLOAD_TO_FILE_REPO: 1
-    PULP3_FILE_REPO_NAME: tsg-os-images-develop
-    PULP3_FILE_DIST_NAME: tsg-os-images-develop
-    DALIY_BUILD_VERSION: 1
-    FILE_REPO_PATH: install/develop/tsg-os-images
-  only:
-    - /^dev-.*$/i
-
-develop_build_7400_mcn123:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN123P01R01
-    UPLOAD_TO_FILE_REPO: 1
-    PULP3_FILE_REPO_NAME: tsg-os-images-develop
-    PULP3_FILE_DIST_NAME: tsg-os-images-develop
-    DALIY_BUILD_VERSION: 1
-    FILE_REPO_PATH: install/develop/tsg-os-images
-  only:
-    - /^dev-.*$/i
-
-develop_build_9000:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 9000NPBP01R01
-    UPLOAD_TO_FILE_REPO: 1
-    PULP3_FILE_REPO_NAME: tsg-os-images-develop
-    PULP3_FILE_DIST_NAME: tsg-os-images-develop
-    DALIY_BUILD_VERSION: 1
-    FILE_REPO_PATH: install/develop/tsg-os-images
-  only:
-    - /^dev-.*$/i
 
 develop_build_container_images_TSGXP0906:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
@@ -289,77 +234,33 @@ develop_build_kvm_image_TSGXP0906:
   only:
     - /^dev-.*$/i
 
-# develop_build_server_unlocked:
+# testing_build_7400_mcn0:
 #   image: $BUILD_BASED_IMAGE_CENTOS7
 #   stage: build
 #   extends: .build_tsg-buildimage
 #   variables:
-#     PROFILE_LIST: SERVER
+#     PROFILE_LIST: 7400MCN0P01R01
 #     UPLOAD_TO_FILE_REPO: 1
-#     PULP3_FILE_REPO_NAME: tsg-os-images-develop
-#     PULP3_FILE_DIST_NAME: tsg-os-images-develop
+#     PULP3_FILE_REPO_NAME: tsg-os-images-testing
+#     PULP3_FILE_DIST_NAME: tsg-os-images-testing
+#     FILE_REPO_PATH: install/testing/tsg-os-images
 #     DALIY_BUILD_VERSION: 1
-#     FILE_REPO_PATH: install/develop/tsg-os-images
-#     LOCK_STATE: UNLOCKED
 #   only:
-#     - /^dev-.*$/i
+#     - /^rel-.*$/i
 
-# develop_build_server_locked:
+# testing_build_7400_mcn123:
 #   image: $BUILD_BASED_IMAGE_CENTOS7
 #   stage: build
 #   extends: .build_tsg-buildimage
 #   variables:
-#     PROFILE_LIST: SERVER
+#     PROFILE_LIST: 7400MCN123P01R01
 #     UPLOAD_TO_FILE_REPO: 1
-#     PULP3_FILE_REPO_NAME: tsg-os-images-develop
-#     PULP3_FILE_DIST_NAME: tsg-os-images-develop
+#     PULP3_FILE_REPO_NAME: tsg-os-images-testing
+#     PULP3_FILE_DIST_NAME: tsg-os-images-testing
+#     FILE_REPO_PATH: install/testing/tsg-os-images
 #     DALIY_BUILD_VERSION: 1
-#     FILE_REPO_PATH: install/develop/tsg-os-images
-#     LOCK_STATE: LOCKED
 #   only:
-#     - /^dev-.*$/i
-
-testing_build_7400_mcn0:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN0P01R01
-    UPLOAD_TO_FILE_REPO: 1
-    PULP3_FILE_REPO_NAME: tsg-os-images-testing
-    PULP3_FILE_DIST_NAME: tsg-os-images-testing
-    FILE_REPO_PATH: install/testing/tsg-os-images
-    DALIY_BUILD_VERSION: 1
-  only:
-    - /^rel-.*$/i
-
-testing_build_7400_mcn123:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN123P01R01
-    UPLOAD_TO_FILE_REPO: 1
-    PULP3_FILE_REPO_NAME: tsg-os-images-testing
-    PULP3_FILE_DIST_NAME: tsg-os-images-testing
-    FILE_REPO_PATH: install/testing/tsg-os-images
-    DALIY_BUILD_VERSION: 1
-  only:
-    - /^rel-.*$/i
-
-testing_build_9000:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 9000NPBP01R01
-    UPLOAD_TO_FILE_REPO: 1
-    PULP3_FILE_REPO_NAME: tsg-os-images-testing
-    PULP3_FILE_DIST_NAME: tsg-os-images-testing
-    FILE_REPO_PATH: install/testing/tsg-os-images
-    DALIY_BUILD_VERSION: 1
-  only:
-    - /^rel-.*$/i
+#     - /^rel-.*$/i
 
 testing_build_container_images_TSGXP0906:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
@@ -417,77 +318,33 @@ testing_build_kvm_image_TSGXP0906:
   only:
     - /^rel-.*$/i
 
-# testing_build_server_unlocked:
+# rc_build_7400_mcn0:
 #   image: $BUILD_BASED_IMAGE_CENTOS7
 #   stage: build
 #   extends: .build_tsg-buildimage
 #   variables:
-#     PROFILE_LIST: SERVER
+#     PROFILE_LIST: 7400MCN0P01R01
 #     UPLOAD_TO_FILE_REPO: 1
-#     PULP3_FILE_REPO_NAME: tsg-os-images-testing
-#     PULP3_FILE_DIST_NAME: tsg-os-images-testing
-#     DALIY_BUILD_VERSION: 1
-#     FILE_REPO_PATH: install/testing/tsg-os-images
-#     LOCK_STATE: UNLOCKED
+#     DALIY_BUILD_VERSION: 0
+#     PULP3_FILE_REPO_NAME: tsg-os-images-rc
+#     PULP3_FILE_DIST_NAME: tsg-os-images-rc
+#     FILE_REPO_PATH: install/rc/tsg-os-images
 #   only:
-#     - /^rel-.*$/i
+#     - /^.*-rc.*$/i
 
-# testing_build_server_locked:
+# rc_build_7400_mcn123:
 #   image: $BUILD_BASED_IMAGE_CENTOS7
 #   stage: build
 #   extends: .build_tsg-buildimage
 #   variables:
-#     PROFILE_LIST: SERVER
+#     PROFILE_LIST: 7400MCN123P01R01
 #     UPLOAD_TO_FILE_REPO: 1
-#     PULP3_FILE_REPO_NAME: tsg-os-images-testing
-#     PULP3_FILE_DIST_NAME: tsg-os-images-testing
-#     DALIY_BUILD_VERSION: 1
-#     FILE_REPO_PATH: install/testing/tsg-os-images
-#     LOCK_STATE: LOCKED
+#     DALIY_BUILD_VERSION: 0
+#     PULP3_FILE_REPO_NAME: tsg-os-images-rc
+#     PULP3_FILE_DIST_NAME: tsg-os-images-rc
+#     FILE_REPO_PATH: install/rc/tsg-os-images
 #   only:
-#     - /^rel-.*$/i
-
-rc_build_7400_mcn0:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN0P01R01
-    UPLOAD_TO_FILE_REPO: 1
-    DALIY_BUILD_VERSION: 0
-    PULP3_FILE_REPO_NAME: tsg-os-images-rc
-    PULP3_FILE_DIST_NAME: tsg-os-images-rc
-    FILE_REPO_PATH: install/rc/tsg-os-images
-  only:
-    - /^.*-rc.*$/i
-
-rc_build_7400_mcn123:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN123P01R01
-    UPLOAD_TO_FILE_REPO: 1
-    DALIY_BUILD_VERSION: 0
-    PULP3_FILE_REPO_NAME: tsg-os-images-rc
-    PULP3_FILE_DIST_NAME: tsg-os-images-rc
-    FILE_REPO_PATH: install/rc/tsg-os-images
-  only:
-    - /^.*-rc.*$/i
-
-rc_build_9000:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 9000NPBP01R01
-    UPLOAD_TO_FILE_REPO: 1
-    DALIY_BUILD_VERSION: 0
-    PULP3_FILE_REPO_NAME: tsg-os-images-rc
-    PULP3_FILE_DIST_NAME: tsg-os-images-rc
-    FILE_REPO_PATH: install/rc/tsg-os-images
-  only:
-    - /^.*-rc.*$/i
+#     - /^.*-rc.*$/i
 
 rc_build_container_images_TSGXP0906:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
@@ -545,83 +402,37 @@ rc_build_kvm_image_TSGXP0906:
   only:
     - /^.*-rc.*$/i
 
-# rc_build_server_unlocked:
+# release_build_7400_mcn0:
 #   image: $BUILD_BASED_IMAGE_CENTOS7
 #   stage: build
 #   extends: .build_tsg-buildimage
 #   variables:
-#     PROFILE_LIST: SERVER
+#     PROFILE_LIST: 7400MCN0P01R01
 #     UPLOAD_TO_FILE_REPO: 1
 #     DALIY_BUILD_VERSION: 0
-#     PULP3_FILE_REPO_NAME: tsg-os-images-rc
-#     PULP3_FILE_DIST_NAME: tsg-os-images-rc
-#     FILE_REPO_PATH: install/rc/tsg-os-images
-#     LOCK_STATE: UNLOCKED
+#     PULP3_FILE_REPO_NAME: tsg-os-images-release
+#     PULP3_FILE_DIST_NAME: tsg-os-images-release
+#     FILE_REPO_PATH: install/release/tsg-os-images
 #   only:
+#     - tags
+#   except:
 #     - /^.*-rc.*$/i
 
-# rc_build_server_locked:
+# release_build_7400_mcn123:
 #   image: $BUILD_BASED_IMAGE_CENTOS7
 #   stage: build
 #   extends: .build_tsg-buildimage
 #   variables:
-#     PROFILE_LIST: SERVER
+#     PROFILE_LIST: 7400MCN123P01R01
 #     UPLOAD_TO_FILE_REPO: 1
 #     DALIY_BUILD_VERSION: 0
-#     PULP3_FILE_REPO_NAME: tsg-os-images-rc
-#     PULP3_FILE_DIST_NAME: tsg-os-images-rc
-#     FILE_REPO_PATH: install/rc/tsg-os-images
-#     LOCK_STATE: LOCKED
+#     PULP3_FILE_REPO_NAME: tsg-os-images-release
+#     PULP3_FILE_DIST_NAME: tsg-os-images-release
+#     FILE_REPO_PATH: install/release/tsg-os-images
 #   only:
+#     - tags
+#   except:
 #     - /^.*-rc.*$/i
-
-release_build_7400_mcn0:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN0P01R01
-    UPLOAD_TO_FILE_REPO: 1
-    DALIY_BUILD_VERSION: 0
-    PULP3_FILE_REPO_NAME: tsg-os-images-release
-    PULP3_FILE_DIST_NAME: tsg-os-images-release
-    FILE_REPO_PATH: install/release/tsg-os-images
-  only:
-    - tags
-  except:
-    - /^.*-rc.*$/i
-
-release_build_7400_mcn123:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 7400MCN123P01R01
-    UPLOAD_TO_FILE_REPO: 1
-    DALIY_BUILD_VERSION: 0
-    PULP3_FILE_REPO_NAME: tsg-os-images-release
-    PULP3_FILE_DIST_NAME: tsg-os-images-release
-    FILE_REPO_PATH: install/release/tsg-os-images
-  only:
-    - tags
-  except:
-    - /^.*-rc.*$/i
-
-release_build_9000:
-  image: $BUILD_BASED_IMAGE_CENTOS7
-  stage: build
-  extends: .build_tsg-buildimage
-  variables:
-    PROFILE_LIST: 9000NPBP01R01
-    UPLOAD_TO_FILE_REPO: 1
-    DALIY_BUILD_VERSION: 0
-    PULP3_FILE_REPO_NAME: tsg-os-images-release
-    PULP3_FILE_DIST_NAME: tsg-os-images-release
-    FILE_REPO_PATH: install/release/tsg-os-images
-  only:
-    - tags
-  except:
-    - /^.*-rc.*$/i
 
 release_build_container_images_TSGXP0906:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
@@ -684,37 +495,3 @@ release_build_kvm_image_TSGXP0906:
     - tags
   except:
     - /^.*-rc.*$/i
-
-# release_build_server_unlocked:
-#   image: $BUILD_BASED_IMAGE_CENTOS7
-#   stage: build
-#   extends: .build_tsg-buildimage
-#   variables:
-#     PROFILE_LIST: SERVER
-#     UPLOAD_TO_FILE_REPO: 1
-#     DALIY_BUILD_VERSION: 0
-#     PULP3_FILE_REPO_NAME: tsg-os-images-release
-#     PULP3_FILE_DIST_NAME: tsg-os-images-release
-#     FILE_REPO_PATH: install/release/tsg-os-images
-#     LOCK_STATE: UNLOCKED
-#   only:
-#     - tags
-#   except:
-#     - /^.*-rc.*$/i
-
-# release_build_server_locked:
-#   image: $BUILD_BASED_IMAGE_CENTOS7
-#   stage: build
-#   extends: .build_tsg-buildimage
-#   variables:
-#     PROFILE_LIST: SERVER
-#     UPLOAD_TO_FILE_REPO: 1
-#     DALIY_BUILD_VERSION: 0
-#     PULP3_FILE_REPO_NAME: tsg-os-images-release
-#     PULP3_FILE_DIST_NAME: tsg-os-images-release
-#     FILE_REPO_PATH: install/release/tsg-os-images
-#     LOCK_STATE: LOCKED
-#   only:
-#     - tags
-#   except:
-#     - /^.*-rc.*$/i

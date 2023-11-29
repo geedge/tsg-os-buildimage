@@ -10,7 +10,7 @@
       - /tmp/nanomsg-1.1.5-6.el7.x86_64.rpm
     state: present
     disable_gpg_check: yes
-  when: runtime_env == 'TSG-7400-mcn0' or runtime_env == 'TSG-7400-mcn123' or runtime_env == 'TSG-9140'
+  when: runtime_env == 'TSG-7400-mcn0' or runtime_env == 'TSG-7400-mcn123'
 
 - name: "install nanomsg library rockylinux8"
   yum:

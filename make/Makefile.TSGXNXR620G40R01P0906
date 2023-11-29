@@ -2,6 +2,7 @@
 PROFILE_ID 				:= TSG-X-NXR620G40-R01-P0906
 SUPPORTED_MACHINE_ID 	:= TSG-X-NXR620G40-R01-P0906
 KERNEL_ARGS 			:= crashkernel=512M default_hugepagesz=1G intel_iommu=on iommu=pt mitigations=off psi=1 selinux=0 quiet splash transparent_hugepage=never processor.max_cstate=0 intel_idle.max_cstate=0 intel_pstate=disable
+KERNEL_ARGS_9000_NPB := console=ttyS0,115200n8 pci=realloc,assign-busses
 GRUB_SERIAL_COMMAND 	:=
 SIZE_PART_SYSROOT		:= 16384M
 SIZE_PART_UPDATE		:= 16384M
@@ -17,7 +18,7 @@ MRZCPD_DEVICE_PLUGIN_FILE_PATH  := /ansible/roles/k3s-install/files/daemonset-mr
 MRZCPD_DEVICE_PLUGIN_IMAGE_TAG  := ${OS_RELEASE_VER}
 TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
 
-.PHONY: all builddir installer sysroot-base sysroot-cleanup sysroot-archive sysroot-binary add-images-into-sysroot clean
+.PHONY: all builddir installer sysroot-base sysroot-cleanup sysroot-archive sysroot-binary add-images-into-installer-dir add-patch-into-installer-dir clean
 
 all: sysroot-binary
 
@@ -36,6 +37,7 @@ installer: builddir
 	sed -i -e "s/%%MACHINE_ID%%/$(SUPPORTED_MACHINE_ID)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%CHROOT_PKG%%/$(CHROOT_PKG)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%KERNAL_ARGS%%/$(KERNEL_ARGS)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%KERNEL_ARGS_9000_NPB%%/$(KERNEL_ARGS_9000_NPB)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%GRUB_SERIAL_COMMAND%%/$(GRUB_SERIAL_COMMAND)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%SIZE_PART_SYSROOT%%/$(SIZE_PART_SYSROOT)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%SIZE_PART_UPDATE%%/$(SIZE_PART_UPDATE)/" $(TARGET_INSTALLER_DIR)/install.sh
@@ -68,10 +70,13 @@ sysroot-cleanup:
 	rm -rf $(TARGET_SYSROOT_DIR)/tmp/*
 	rm -rf $(TARGET_SYSROOT_DIR)/dev/*
 
-add-images-into-sysroot: builddir sysroot-verfile sysroot-ansible
+add-patch-into-installer-dir:
+	cp $(TARGET_SYSROOT_DIR)/tmp/9000_NPB/tsg-os_9000-NPB-P01R01_patch.bin $(TARGET_INSTALLER_DIR)/tsg-os_9000-NPB-P01R01_patch.bin
+
+add-images-into-installer-dir: builddir sysroot-verfile sysroot-ansible
 	cp $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN) $(TARGET_INSTALLER_DIR)/$(APP_BUNDLE_BIN)
 
-sysroot-archive: installer add-images-into-sysroot sysroot-cleanup
+sysroot-archive: installer add-images-into-installer-dir add-patch-into-installer-dir sysroot-cleanup
 	cp $(IMAGEDIR_BASE)/80-tfe.conf $(TARGET_SYSROOT_DIR)/usr/lib/sysctl.d/
 	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_SYSROOT_DIR) . | pbzip2 -p9 > $(TARGET_INSTALLER_DIR)/$(CHROOT_PKG)
 

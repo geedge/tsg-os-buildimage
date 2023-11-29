@@ -50,42 +50,6 @@
     - {role: system-init, tags: system-init}
     - {role: hasp, tags: hasp}
 
-- hosts: 9000-NPB-P01R01
-  remote_user: root
-  vars_files:
-    - install_config/group_vars/HAL_9000NPBP01R01.yml
-    - install_config/group_vars/rpm_version.yml
-  roles:
-    - {role: tsg-os-provision, tags: tsg-os-provision}
-    - {role: coredump, tags: coredump}
-    - {role: tsg_device_tag, tags: tsg_device_tag}
-    - {role: tsg_sn, tags: tsg_sn}
-    - {role: framework, tags: framework}
-    - {role: mrzcpd, tags: mrzcpd}
-    - {role: sapp, tags: sapp}
-    - {role: kni, tags: kni}
-    - {role: firewall, tags: firewall}
-    - {role: tsg_app, tags: tsg_app}
-    - {role: i40e-drive, tags: i40e-drive}
-    - {role: redis, tags: redis}
-    - {role: certstore, tags: certstore}
-    - {role: tfe, tags: tfe}
-    - {role: telegraf_statistic, tags: telegraf_statistic}
-    - {role: sysctl, tags: sysctl}
-    - {role: exporter, tags: exporter}
-    - {role: docker, tags: docker}
-    - {role: tsg-diagnose, tags: tsg-diagnose}
-    - {role: tsg-exporter-proxy-9140, tags: tsg-exporter-proxy-9140}
-    - {role: system-init-9140, tags: system-init-9140}
-    - {role: system-init, tags: system-init}
-    - {role: wannat_wangw, tags: wannat_wangw}
-    - {role: wannat_common, tags: wannat_common}
-    - {role: wire_graft, tags: wire_graft}
-    - {role: nz-talon, tags: nz-talon}
-    - {role: tsg-os-provision-condition, tags: tsg-os-provision-condition}
-    - {role: consul, tags: consul}
-    - {role: hasp, tags: hasp}
-
 - hosts: TSG-X-NXR620G40-R01-P0906
   remote_user: root
   vars_files:
@@ -113,6 +77,7 @@
     - {role: cm-cache, tags: cm-cache}
     - {role: exporter, tags: exporter}
     - {role: tuned, tags: tuned}
+    - {role: patches-9000-NPB, tags: patches-9000-NPB}
 
 - hosts: TSG-X-NXR620G40-R01-P0906-init
   remote_user: root
@@ -211,13 +176,6 @@
     - {role: framework, tags: framework}
     - {role: mrzcpd, tags: mrzcpd}
     - {role: confd, tags: confd}
-
-- hosts: server
-  remote_user: root
-  vars_files:
-    - install_config/group_vars/rpm_version.yml
-  roles:
-    - {role: rpm_download, tags: rpm_download}
 
 - hosts: TSG-X-NXR620G40-R01-P0906-base
   remote_user: root

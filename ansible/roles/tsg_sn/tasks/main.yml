@@ -1,10 +1,11 @@
 ---
-- name: "Create /opt/tsg/tsg-os-provision/scripts/"
+- name: "7400-mcn0 & 7400-mcn123: Create /opt/tsg/tsg-os-provision/scripts/"
   file:
     path: "/opt/tsg/tsg-os-provision/scripts/"
     state: directory
+  when: runtime_env == 'TSG-7400-mcn0' or runtime_env == 'TSG-7400-mcn123'
 
-- name: "deploy obtain sn tsg-7400"
+- name: "7400-mcn0 & 7400-mcn123: Deploy obtain_sn.sh"
   copy:
     src: "{{ role_path }}/files/{{ item.src }}"
     dest: "/opt/tsg/tsg-os-provision/scripts/{{ item.dest }}"
@@ -14,24 +15,15 @@
     - { "src": "cmm_api_tst", "dest": "cmm_api_tst" }
   when: runtime_env == 'TSG-7400-mcn0' or runtime_env == 'TSG-7400-mcn123'
 
-- name: "deploy obtain sn - tsg-9140"
-  copy:
-    src: "{{ role_path }}/files/obtain_sn.sh.TSG9140"
-    dest: /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
-    mode: 0755
-  when: runtime_env == 'TSG-9140'
-
-- name: "deploy obtain sn - tsg-x-P0906"
-  copy:
-    src: "{{ role_path }}/files/obtain_sn.sh.TSGXP1403"
-    dest: /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
-    mode: 0755
+- name: "TSG-X: Create /opt/tsg/scripts/"
+  file:
+    path: "/opt/tsg/scripts/"
+    state: directory
   when: runtime_env == 'TSG-X-P0906'
 
-
-- name: "deploy obtain sn - tsg-x-p0906"
+- name: "TSG-X: Deploy obtain-sn.sh"
   copy:
-    src: "{{ role_path }}/files/obtain_sn.sh.TSGXP0906-init"
-    dest: /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
+    src: "{{ role_path }}/files/read_sn_to_env.sh"
+    dest: /opt/tsg/scripts/read_sn_to_env.sh
     mode: 0755
-  when: runtime_env == 'TSG-X-P0906' and PROFILE_ID == 'TSG-X-NXR620G40-R01-P0906-init'
+  when: runtime_env == 'TSG-X-P0906'

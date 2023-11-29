@@ -3,78 +3,6 @@
 # systemctl set-property system.slice   CPUShares=1000 MemoryLimit=13G
 # systemctl set-property workload.slice CPUShares=7500 MemoryLimit=100G
 
-# workload.slice
-- name: "Create /usr/lib/systemd/system/workload.slice.d/ directory if it does not exist"
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: '0755'
-  with_items:
-    - /usr/lib/systemd/system/workload.slice.d/
-  when: runtime_env != 'TSG-X-P0906'
-
-- name: "copy 50-CPUShares.conf to workload.slice.d"
-  copy:
-    src: "{{ role_path }}/templates/override_workload_slice_cpu.conf.j2"
-    dest: /usr/lib/systemd/system/workload.slice.d/50-CPUShares.conf
-    mode: 0644
-  when: runtime_env != 'TSG-X-P0906'
-
-- name: "copy 50-MemoryLimit.conf to workload.slice.d"
-  copy:
-    src: "{{ role_path }}/templates/override_workload_slice_mem.conf.j2"
-    dest: /usr/lib/systemd/system/workload.slice.d/50-MemoryLimit.conf
-    mode: 0644
-  when: runtime_env != 'TSG-X-P0906'
-
-# user.slice
-- name: "Create /usr/lib/systemd/system/user.slice.d/ directory if it does not exist"
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: '0755'
-  with_items:
-    - /usr/lib/systemd/system/user.slice.d/
-  when: runtime_env != 'TSG-X-P0906'
-
-- name: "copy 50-CPUShares.conf to user.slice.d"
-  copy:
-    src: "{{ role_path }}/templates/override_user_slice_cpu.conf.j2"
-    dest: /usr/lib/systemd/system/user.slice.d/50-CPUShares.conf
-    mode: 0644
-  when: runtime_env != 'TSG-X-P0906'
-
-- name: "copy 50-MemoryLimit.conf to user.slice.d"
-  copy:
-    src: "{{ role_path }}/templates/override_user_slice_mem.conf.j2"
-    dest: /usr/lib/systemd/system/user.slice.d/50-MemoryLimit.conf
-    mode: 0644
-  when: runtime_env != 'TSG-X-P0906'
-
-# system.slice
-- name: "Create /usr/lib/systemd/system/system.slice.d/ directory if it does not exist"
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: '0755'
-  with_items:
-    - /usr/lib/systemd/system/system.slice.d/
-  when: runtime_env != 'TSG-X-P0906'
-
-- name: "copy 50-CPUShares.conf to system.slice.d"
-  copy:
-    src: "{{ role_path }}/templates/override_system_slice_cpu.conf.j2"
-    dest: /usr/lib/systemd/system/system.slice.d/50-CPUShares.conf
-    mode: 0644
-  when: runtime_env != 'TSG-X-P0906'
-
-- name: "copy 50-MemoryLimit.conf to system.slice.d"
-  copy:
-    src: "{{ role_path }}/templates/override_system_slice_mem.conf.j2"
-    dest: /usr/lib/systemd/system/system.slice.d/50-MemoryLimit.conf
-    mode: 0644
-  when: runtime_env != 'TSG-X-P0906'
-
 # 启用 IPMI
 - name: "copy ipmi.conf to /etc/sysconfig/ipmi"
   copy:
@@ -149,17 +77,14 @@
     mode: '0755'
   with_items:
     - /usr/lib/systemd/system/systemd-coredump@.service.d/
-  when: runtime_env == 'TSG-X-P0906'
 
 - name: "copy service_override_RuntimeMaxSec.conf to dest"
   copy:
     src: "{{ role_path }}/templates/service_override_RuntimeMaxSec.conf"
     dest: /usr/lib/systemd/system/systemd-coredump@.service.d/service_override_RuntimeMaxSec.conf
     mode: 0644
-  when: runtime_env == 'TSG-X-P0906'
 
 - name: "disable sssd"
   systemd:
     name: sssd
     enabled: no
-  when: runtime_env == 'TSG-X-P0906'

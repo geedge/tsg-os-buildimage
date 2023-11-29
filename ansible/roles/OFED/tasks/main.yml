@@ -29,7 +29,6 @@
     name: "mlnx-ofed-kernel-only-all-5.17.15-1.el8.x86_64.noarch"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
-  when: runtime_env == 'TSG-X-P0906'
 ######################### end #########################
 
 ############ MFT install start ############
@@ -38,17 +37,14 @@
     src: /tmp/mft/mft-4.22.1-11-x86_64-rpm.tgz
     dest: /tmp/mft/unarchived/
     remote_src: yes
-  when: runtime_env == 'TSG-X-P0906'
 
 - name: "Execute MFT installer"
   shell: /tmp/mft/unarchived/mft-4.22.1-11-x86_64-rpm/install.sh
-  when: runtime_env == 'TSG-X-P0906'
 ######################### end #########################
 
 ############ MLNX FW UPDATER install start ############
 - name: "Install mlnx-fw-updater rpm package"
   shell: rpm -i /tmp/mft/mlnx-fw-updater-5.8-2.0.3.0.x86_64.rpm
-  when: runtime_env == 'TSG-X-P0906'
 ######################### end #########################
 
 ############ Set RUN_FW_UPDATER_ONBOOT ############
@@ -57,7 +53,6 @@
     path: /etc/infiniband/openib.conf
     regexp: '^RUN_FW_UPDATER_ONBOOT'
     line: "RUN_FW_UPDATER_ONBOOT=no"
-  when: runtime_env == 'TSG-X-P0906'
 ######################### end #########################
 
 ###### Restore the uname tools ######

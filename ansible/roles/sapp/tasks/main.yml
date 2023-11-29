@@ -98,14 +98,6 @@
     dest: /opt/tsg/sapp/etc/necessary_plug_list.conf
   tags: template
 
-- name: Template the vlan_flipping_map.conf - tsg-9140
-  template:
-    src: "{{ role_path }}/templates/vlan_flipping_map.conf.j2.9000NPBP01R01"
-    dest: /opt/tsg/sapp/etc/vlan_flipping_map.conf
-  tags: template
-  when:
-    - runtime_env == 'TSG-9140'
-
 - name: Template the vlan_flipping_map.conf - tsg-7400
   template:
     src: "{{ role_path }}/templates/vlan_flipping_map.conf.j2.j2.7400MCN0P01R01"

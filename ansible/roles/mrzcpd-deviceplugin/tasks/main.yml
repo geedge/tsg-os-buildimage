@@ -8,4 +8,3 @@
 
 - name: "Install lspci"
   shell: yum install -y pciutils
-  when: runtime_env == 'TSG-X-P0906'

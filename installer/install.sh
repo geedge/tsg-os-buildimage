@@ -27,6 +27,7 @@ distro_mnt=/mnt/distro
 onie_root_dir=/mnt/onie-boot/onie
 
 kernel_args="%%KERNAL_ARGS%%"
+kernel_args_device_9000="%%KERNEL_ARGS_9000_NPB%%"
 grub_serial_command="%%GRUB_SERIAL_COMMAND%%"
 DISTR0_VER="%%DISTR0_VER%%"
 MACHINE_ID="%%MACHINE_ID%%"
@@ -210,6 +211,32 @@ install_uefi_grub()
 }
 
 
+# patch install.
+DEVICE_TYPE=
+read_device_type()
+{
+    product_name=`ipmitool fru list | grep 'Board Product' | awk '{print $4}'`
+    if [[ "${product_name}" == "ACB300" ]]; then
+        DEVICE_TYPE="9000-NPB"
+    fi
+}
+
+install_patches()
+{
+    if [ ${DEVICE_TYPE} == "9000-NPB" ]; then
+        chmod 0755 ./tsg-os_9000-NPB-P01R01_patch.bin
+        cp ./tsg-os_9000-NPB-P01R01_patch.bin ${distro_mnt}/tmp
+        chroot ${distro_mnt} /tmp/tsg-os_9000-NPB-P01R01_patch.bin
+        rm ${distro_mnt}/tmp/tsg-os_9000-NPB-P01R01_patch.bin
+    fi
+}
+
+append_kernel_args()
+{
+    if [ ${DEVICE_TYPE} == "9000-NPB" ]; then
+        kernel_args="${kernel_args} ${kernel_args_device_9000}"
+    fi
+}
 ############################### START AT HERE #########################################
 lib_dir="/lib/onie"
 . $lib_dir/onie-blkdev-common
@@ -280,6 +307,10 @@ mount -t ext4 ${blk_dev}${exp_part_tsg_os_data} ${distro_mnt}/data
 
 echo "Setting up TSG-OS sysroot .."
 chroot ${distro_mnt} /distro-setup.sh ${blk_dev}
+
+read_device_type
+install_patches
+append_kernel_args
 
 [ -e ${distro_mnt}/dev/pts ] && {
    umount ${distro_mnt}/dev/pts

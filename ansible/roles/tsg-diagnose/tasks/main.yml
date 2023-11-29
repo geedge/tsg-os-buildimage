@@ -27,12 +27,14 @@
     src: "{{role_path}}/templates/docker-compose.yml.j2"
     dest: /opt/tsg/tsg-diagnose/compose/docker-compose.yml
   tags: template
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "copy tsg-diagnose.service file to dest"
   copy:
     src: "{{ role_path }}/files/tsg-diagnose.service"
     dest: /usr/lib/systemd/system/tsg-diagnose.service
     mode: 0644
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "Create /usr/lib/systemd/system/tsg-diagnose.service.d/ directory if it does not exist"
   file:
@@ -41,12 +43,14 @@
     mode: '0755'
   with_items:
     - /usr/lib/systemd/system/tsg-diagnose.service.d
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "copy prestart file to tsg-diagnose.service.d"
   copy:
     src: "{{ role_path }}/files/service_override_prestart.conf"
     dest: /usr/lib/systemd/system/tsg-diagnose.service.d/
     mode: 0644
+  when: runtime_env != 'TSG-X-P0906'
 
 - name: "replace action: replace service WantedBy from multi-user.target to workload.target"
   replace:

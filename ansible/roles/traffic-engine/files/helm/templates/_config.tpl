@@ -180,8 +180,10 @@ enable_breakpad_upload=0
 {{- define "traffic-engine.init" -}}
             mkdir -p /target_config/opt/tsg/etc
             mkdir -p /target_config/etc/default
-            chmod 0755 /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
-            /opt/tsg/tsg-os-provision/scripts/obtain_sn.sh
+            /opt/tsg/scripts/read_sn_to_env.sh
+            source /etc/profile.d/sn.sh
+            echo "{\"sn\": \"$SN\"}" > /target_config/opt/tsg/etc/tsg_sn.json
+            echo "device_id=\"$SN\"" > /target_config/etc/default/telegraf
 {{- end -}}
 
 {{- define "traffic-engine.init.sce" -}}
