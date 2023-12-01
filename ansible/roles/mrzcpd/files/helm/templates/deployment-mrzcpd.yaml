@@ -61,7 +61,7 @@ spec:
           mountPropagation: Bidirectional
         - name: ldconfig-mrzcpd
           mountPath: /mnt/packet-io-engine/ld.so.conf.d
-        - name: env-sh
+        - name: etc-profile
           mountPath: /mnt/packet-io-engine/profile.d
         - name: mrzcpd-conf
           mountPath: "/opt/tsg/config/mrzcpd.conf"
@@ -76,8 +76,6 @@ spec:
           mountPath: /var/run/share/container_mrzcpd.conf
         - name: dev-vfio
           mountPath: /dev/vfio
-        - name: root-sys
-          mountPath: /root/sys
         - name: host-root
           mountPath: /host
           mountPropagation: HostToContainer
@@ -124,7 +122,7 @@ spec:
             exec:
               command:
                 - "bash"
-                - "ec"
+                - "-ec"
                 - |
                   rm -f /run/mrzcpd/huge_pages/rtemap_*
                   rm -f /run/.rte_config
@@ -146,9 +144,6 @@ spec:
         - mountPath: /var/run/dpdk
           name: dpdk
           readOnly: true
-        - mountPath: /root/sys
-          name: root-sys
-          readOnly: true
         - mountPath: /etc/localtime
           name: localtime-node
           readOnly: true
@@ -164,9 +159,6 @@ spec:
           readOnly: true
         - mountPath: /var/run/dpdk
           name: dpdk
-          readOnly: true
-        - mountPath: /root/sys
-          name: root-sys
           readOnly: true
         - mountPath: /etc/localtime
           name: localtime-node
@@ -203,7 +195,7 @@ spec:
         hostPath:
           path: /var/run/mrzcpd/hugepages
           type: DirectoryOrCreate
-      - name: env-sh
+      - name: etc-profile
         hostPath:
           path: /etc/profile.d
           type: Directory
@@ -219,9 +211,6 @@ spec:
         hostPath:
           path:  /var/run/share/container_mrzcpd.conf
           type: File
-      - name: root-sys
-        hostPath:
-          path: /root/sys
       - name: dev-vfio
         hostPath:
           path: /dev/vfio
