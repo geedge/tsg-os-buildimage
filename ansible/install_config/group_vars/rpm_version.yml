@@ -7,7 +7,7 @@ firewall_rpm_version:
   #gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   #radius_collect_plug: radius_collect_plug-2.0.11.47a51f3
   glimpse_detector: glimpse_detector-3.0.0.7240884
-  qdpi_detector: qdpi_detector-4.0.1.a57d60f
+  qdpi_detector: qdpi_detector-4.0.2.ec69955
   tsg_ddos_sketch: tsg_ddos_sketch-2.0.0.83e6c29
   dns: dns-2.1.7.1da8dfa
   ftp: ftp-1.0.15.1fc64fe
