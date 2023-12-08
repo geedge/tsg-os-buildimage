@@ -64,9 +64,9 @@ kni_rpm_version:
 
 mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.5.6.fa28206
-  mrzcpd-icelake-server: mrzcpd-icelake-server-4.6.62.e0db337
-  mrzcpd-znver1: mrzcpd-znver1-4.6.62.e0db337
-  mrzcpd-corei7: mrzcpd-corei7-4.6.62.e0db337
+  mrzcpd-icelake-server: mrzcpd-icelake-server-4.6.63.052fc5b
+  mrzcpd-znver1: mrzcpd-znver1-4.6.63.052fc5b
+  mrzcpd-corei7: mrzcpd-corei7-4.6.63.052fc5b
 
 mlnx_ofed_user_space_only_rpm_version:
   mlnx_ofed_user_space: mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch
@@ -103,7 +103,7 @@ hasp_tools_rpm_version:
 tsg_os_clixon_rpm_version:
   cligen: cligen-5.8.0-release
   clixon: clixon-5.8.0-release
-  tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.6.0c8059a
+  tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.7.8173ed9
 
 sce_rpm_version:
   sce: sce-1.2.5.030c378
