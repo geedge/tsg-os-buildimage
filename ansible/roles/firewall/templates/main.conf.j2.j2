@@ -33,9 +33,9 @@ SEND_INTERIM_RECORD=1
 SEND_INTERIM_RECORD=0
 {% endif %}
 {% if sessionrecord.enable_transcation_record == 1 %}
-SEND_TRANSCATION_RECORD=1
+SEND_TRANSACTION_RECORD=1
 {% else %}
-SEND_TRANSCATION_RECORD=0
+SEND_TRANSACTION_RECORD=0
 {% endif %}
 RAPIDJSON_CHUNK_CAPACITY={{ firewall.rapidjson_chunk_capacity }}
 {% endraw %}

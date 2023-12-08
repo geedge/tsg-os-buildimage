@@ -3,7 +3,7 @@ certstore_rpm_version:
 
 firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-3.0.10.852fd31
+  firewall: firewall-3.0.11.f3473f5
   #gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   #radius_collect_plug: radius_collect_plug-2.0.11.47a51f3
   glimpse_detector: glimpse_detector-3.0.0.7240884
