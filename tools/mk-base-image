@@ -14,14 +14,14 @@ profile_id=$4
 setopt="group_package_types=mandatory,default,optional"
 
 case $profile_id in
-    "TSG-X-NXR620G40-R01-P0906" )
+    "x86_64_COTS" )
         kernel_version="5.17.15-1.el8.x86_64"
         append_package_to_install="$projectdir/package/kernel-ml-core-$kernel_version.rpm
                     $projectdir/package/kernel-ml-modules-$kernel_version.rpm
                     $projectdir/package/kernel-ml-$kernel_version.rpm
                     $projectdir/package/kernel-ml-devel-$kernel_version.rpm"
         ;;
-    "7400-MCN0-P01R01" | "7400-MCN123-P01R01" |"9000-NPB-P01R01")
+    "7400-MCN0-P01R01" | "7400-MCN123-P01R01")
         kernel_version="5.4.159-1.el7.elrepo.x86_64"
         append_package_to_install="$projectdir/package/kernel-lt-$kernel_version.rpm
                     $projectdir/package/kernel-lt-devel-$kernel_version.rpm"
@@ -34,7 +34,7 @@ case $profile_id in
 esac
 
 case $profile_id in
-    "TSG-X-NXR620G40-R01-P0906" )
+    "x86_64_COTS" )
         base_package_to_install="@base @core @debugging @anaconda-tools @additional-devel @guest-agents @system-tools
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management adcli certmonger
                     ipa-client clevis-dracut clevis-udisks2 krb5-pkinit krb5-workstation sssd-polkit-rules krb5-pkinit luksmeta
@@ -42,10 +42,10 @@ case $profile_id in
                     containerd.io lrzsz python3 watchdog pcm git tmux fish kernel kernel-devel kernel-tools-libs kernel-modules
                     kernel-tools kernel-core rpm-build libtool kernel-rpm-macros python36-devel tcsh kernel-modules-extra gcc-gfortran
                     libdb-devel fuse-devel python3-Cython cmake perl-generators libstdc++-devel libmnl-devel bison flex gcc-c++
-                    python3-docutils libnsl liburing hwloc-gui perl-open perl python2 js-d3-flame-graph"
+                    python3-docutils libnsl liburing hwloc-gui perl-open perl python2 js-d3-flame-graph xmlstarlet"
 
         ;;
-    "7400-MCN0-P01R01" | "7400-MCN123-P01R01" |"9000-NPB-P01R01")
+    "7400-MCN0-P01R01" | "7400-MCN123-P01R01")
         base_package_to_install="@base @core @debugging @directory-client @guest-agents
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management
                     grub2 epel-release efibootmgr ansible yum-utils ipmitool docker-ce docker-ce-cli
@@ -130,7 +130,7 @@ if [ ! -f "$target/etc/pam.d/password-auth-local" ]; then
 fi
 
 case $profile_id in
-    "7400-MCN0-P01R01" | "7400-MCN123-P01R01" |"9000-NPB-P01R01")
+    "7400-MCN0-P01R01" | "7400-MCN123-P01R01")
         cp -rf $projectdir/rootconf/sysroot-usr/target/* $target/usr/lib/systemd/system
         mkdir -p $target/usr/lib/systemd/system/workload.target.wants
         ;;

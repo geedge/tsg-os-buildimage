@@ -103,7 +103,7 @@ feature_branch_build_container_images_TSGXP0906:
   stage: build
   extends: .build_tsg-build-container-images
   variables:
-    PROFILE_LIST: TSGXBUILDCONTAINERP0906
+    PROFILE_LIST: x86_64_COTS_APP_BUNDLE
     DALIY_BUILD_VERSION: 1
     ENABLE_LICENSE_PROTECTED: 0
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
@@ -124,7 +124,7 @@ feature_branch_build_TSGXP0906:
   extends: .build_tsg-buildimage-p0906
   needs: ["feature_branch_build_container_images_TSGXP0906"]
   variables:
-    PROFILE_LIST: TSGXNXR620G40R01P0906
+    PROFILE_LIST: x86_64_COTS
     DALIY_BUILD_VERSION: 1
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
@@ -183,7 +183,7 @@ develop_build_container_images_TSGXP0906:
   stage: build
   extends: .build_tsg-build-container-images
   variables:
-    PROFILE_LIST: TSGXBUILDCONTAINERP0906
+    PROFILE_LIST: x86_64_COTS_APP_BUNDLE
     UPLOAD_TO_FILE_REPO: 1
     PULP3_FILE_REPO_NAME: tsg-os-images-develop
     PULP3_FILE_DIST_NAME: tsg-os-images-develop
@@ -205,7 +205,7 @@ develop_build_TSGXP0906:
   extends: .build_tsg-buildimage-p0906
   needs: ["develop_build_container_images_TSGXP0906"]
   variables:
-    PROFILE_LIST: TSGXNXR620G40R01P0906
+    PROFILE_LIST: x86_64_COTS
     UPLOAD_TO_FILE_REPO: 1
     PULP3_FILE_REPO_NAME: tsg-os-images-develop
     PULP3_FILE_DIST_NAME: tsg-os-images-develop
@@ -267,7 +267,7 @@ testing_build_container_images_TSGXP0906:
   stage: build
   extends: .build_tsg-build-container-images
   variables:
-    PROFILE_LIST: TSGXBUILDCONTAINERP0906
+    PROFILE_LIST: x86_64_COTS_APP_BUNDLE
     UPLOAD_TO_FILE_REPO: 1
     PULP3_FILE_REPO_NAME: tsg-os-images-testing
     PULP3_FILE_DIST_NAME: tsg-os-images-testing
@@ -289,7 +289,7 @@ testing_build_TSGXP0906:
   needs: ["testing_build_container_images_TSGXP0906"]
   extends: .build_tsg-buildimage-p0906
   variables:
-    PROFILE_LIST: TSGXNXR620G40R01P0906
+    PROFILE_LIST: x86_64_COTS
     UPLOAD_TO_FILE_REPO: 1
     PULP3_FILE_REPO_NAME: tsg-os-images-testing
     PULP3_FILE_DIST_NAME: tsg-os-images-testing
@@ -351,7 +351,7 @@ rc_build_container_images_TSGXP0906:
   stage: build
   extends: .build_tsg-build-container-images
   variables:
-    PROFILE_LIST: TSGXBUILDCONTAINERP0906
+    PROFILE_LIST: x86_64_COTS_APP_BUNDLE
     UPLOAD_TO_FILE_REPO: 1
     DALIY_BUILD_VERSION: 0
     PULP3_FILE_REPO_NAME: tsg-os-images-rc
@@ -373,7 +373,7 @@ rc_build_TSGXP0906:
   extends: .build_tsg-buildimage-p0906
   needs: ["rc_build_container_images_TSGXP0906"]
   variables:
-    PROFILE_LIST: TSGXNXR620G40R01P0906
+    PROFILE_LIST: x86_64_COTS
     UPLOAD_TO_FILE_REPO: 1
     DALIY_BUILD_VERSION: 0
     PULP3_FILE_REPO_NAME: tsg-os-images-rc
@@ -439,7 +439,7 @@ release_build_container_images_TSGXP0906:
   stage: build
   extends: .build_tsg-build-container-images
   variables:
-    PROFILE_LIST: TSGXBUILDCONTAINERP0906
+    PROFILE_LIST: x86_64_COTS_APP_BUNDLE
     UPLOAD_TO_FILE_REPO: 1
     DALIY_BUILD_VERSION: 0
     PULP3_FILE_REPO_NAME: tsg-os-images-release
@@ -463,7 +463,7 @@ release_build_TSGXP0906:
   extends: .build_tsg-buildimage-p0906
   needs: ["release_build_container_images_TSGXP0906"]
   variables:
-    PROFILE_LIST: TSGXNXR620G40R01P0906
+    PROFILE_LIST: x86_64_COTS
     UPLOAD_TO_FILE_REPO: 1
     DALIY_BUILD_VERSION: 0
     PULP3_FILE_REPO_NAME: tsg-os-images-release

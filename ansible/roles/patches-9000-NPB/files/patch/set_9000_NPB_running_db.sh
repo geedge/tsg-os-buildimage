@@ -35,8 +35,9 @@ add_network_into_running_db()
     </network>"
     #xmlstarlet ed --omit-decl -s "/config" -t text -n '' -v "$(xmlstarlet sel -t -c '/config/*' 2.xml)"   1.xml | xmlstarlet unesc | xmlstarlet fo --omit-decl > 3.xml
     #$network | xmlstarlet sel -t -c '/config/*'
-    xml_content=$(xmlstarlet ed --omit-decl -s "/config" -t text -n '' -v "${network}" ${RUNNING_DB_FILE} | xmlstarlet unesc)
-    echo ${xml_content} | xmlstarlet fo --omit-decl > ${RUNNING_DB_FILE}
+    xml_content=$(xmlstarlet ed -s "/config" -t text -n '' -v "${network}" ${RUNNING_DB_FILE} | xmlstarlet unesc)
+    echo ${xml_content} | xmlstarlet fo > ${RUNNING_DB_FILE}
+    sed -i '/<?xml version="1.0"?>/d' ${RUNNING_DB_FILE}
 }
 
 is_network_in_running_db()

@@ -15,8 +15,8 @@ function install_patch_files()
     cp $UNARCHIVE_DIR/90-9000NPBP01R01.rules /usr/lib/udev/rules.d/90-9000NPBP01R01.rules
 
     cp $UNARCHIVE_DIR/ifcfg-eth_pf_smbio     /etc/sysconfig/network-scripts/ifcfg-eth_pf_smbio
-    cp $UNARCHIVE_DIR/set-eth_pf_smbio-macaddr.sh  /usr/bin/set-eth_pf_smbio-macaddr.sh
-    chmod 0777 /usr/bin/set-eth_pf_smbio-macaddr.sh
+    cp $UNARCHIVE_DIR/nm_pre-up_set_eth_pf_smbio_macaddr.sh /usr/lib/NetworkManager/dispatcher.d/pre-up.d/01-set_eth_pf_smbio_macaddr.sh
+    chmod 0755 /usr/lib/NetworkManager/dispatcher.d/pre-up.d/01-set_eth_pf_smbio_macaddr.sh
 
     cp $UNARCHIVE_DIR/ifcfg-eth_pf_smbcx     /etc/sysconfig/network-scripts/ifcfg-eth_pf_smbcx
     cp $UNARCHIVE_DIR/ifcfg-eth_vf_mirr      /etc/sysconfig/network-scripts/ifcfg-eth_vf_mirr
@@ -46,6 +46,9 @@ function install_patch_files()
     mkdir -p /opt/tsg/clixon/bin
     cp $UNARCHIVE_DIR/set_9000_NPB_running_db.sh /opt/tsg/clixon/bin/set_9000_NPB_running_db.sh
     chmod 0755 /opt/tsg/clixon/bin/set_9000_NPB_running_db.sh
+
+    mkdir -p /opt/tsg/clixon/yang
+    cp /opt/tsg/clixon/deviation/tsg-os-mgnt-augment-9000-NPB.yang /opt/tsg/clixon/yang/tsg-os-mgnt-augment-9000-NPB.yang
 }
 
 function set_HAL_config()
@@ -53,11 +56,11 @@ function set_HAL_config()
     HAL_config="/etc/sysconfig/tsg-os-HAL.conf"
 
     # mrzcpd affinity cpu core
-    sed -i 's/.*IOCORE=*/IOCORE=1-4/' $HAL_config
+    sed -i '/IOCORE=/c\IOCORE=1-4' $HAL_config
     # vsys   affinity cpu core
-    sed -i 's/.*WORKLOAD_CORE=*/WORKLOAD_CORE=5-55/' $HAL_config
+    sed -i '/WORKLOAD_CORE=/c\WORKLOAD_CORE=5-55' $HAL_config
     # deafault memory hugepages number.
-    sed -i 's/.*HUGEPAGES=*/HUGEPAGES=16/' $HAL_config
+    sed -i '/HUGEPAGES=/c\HUGEPAGES=16' $HAL_config
 }
 
 function clean_unarchive_dir()

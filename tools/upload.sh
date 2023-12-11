@@ -37,7 +37,7 @@ function upload_file_by_profile_list()
 			upload_kvm_glob_file
 			break
 			;;
-		"TSGXBUILDCONTAINERP0906")
+		"x86_64_COTS_APP_BUNDLE")
 			upload_app_bundle_glob_file
 			break
 			;;

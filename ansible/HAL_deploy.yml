@@ -50,10 +50,10 @@
     - {role: system-init, tags: system-init}
     - {role: hasp, tags: hasp}
 
-- hosts: TSG-X-NXR620G40-R01-P0906
+- hosts: x86_64_COTS
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: k3s-install, tags: k3s-install}
@@ -79,18 +79,18 @@
     - {role: tuned, tags: tuned}
     - {role: patches-9000-NPB, tags: patches-9000-NPB}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-init
+- hosts: x86_64_COTS-init
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: tsg_sn, tags: tsg_sn}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-firewall
+- hosts: x86_64_COTS-firewall
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: framework, tags: framework}
@@ -102,93 +102,93 @@
     - {role: wire_graft, tags: wire_graft}
     - {role: hasp, tags: hasp}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-proxy
+- hosts: x86_64_COTS-proxy
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: framework, tags: framework}
     - {role: tfe, tags: tfe}
     - {role: hasp, tags: hasp}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-certstore
+- hosts: x86_64_COTS-certstore
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: framework, tags: framework}
     - {role: redis, tags: redis}
     - {role: certstore, tags: certstore}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-telegraf
+- hosts: x86_64_COTS-telegraf
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: telegraf_statistic, tags: telegraf_statistic}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-sce
+- hosts: x86_64_COTS-sce
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: framework, tags: framework}
     - {role: sce, tags: sce}
     - {role: hasp, tags: hasp}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-bfdd
+- hosts: x86_64_COTS-bfdd
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: framework, tags: framework}
     - {role: bfdd, tags: bfdd}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-shaping
+- hosts: x86_64_COTS-shaping
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: framework, tags: framework}
     - {role: shaping_engine, tags: shaping_engine}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-inject
+- hosts: x86_64_COTS-inject
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: framework, tags: framework}
     - {role: packet_adapter, tags: packet_adapter}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-packet-io-engine
+- hosts: x86_64_COTS-packet-io-engine
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: framework, tags: framework}
     - {role: mrzcpd, tags: mrzcpd}
     - {role: confd, tags: confd}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-base
+- hosts: x86_64_COTS-base
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: container-tools-install, tags: container-tools-install}
 
-- hosts: TSG-X-NXR620G40-R01-P0906-packet-io-engine-deviceplugin
+- hosts: x86_64_COTS-packet-io-engine-deviceplugin
   remote_user: root
   vars_files:
-    - install_config/group_vars/HAL_TSGXNXR620G40R01P0906.yml
+    - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: framework, tags: framework}

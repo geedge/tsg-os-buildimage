@@ -4,12 +4,15 @@ SN=
 
 function read_device_type()
 {
-    product_name_9000_NPB=("ACB300")
+    product_name=`ipmitool fru list | grep 'Product Name' | awk '{print $4}'`
 
-    product_name=`ipmitool fru list | grep 'Board Product' | awk '{print $4}'`
-    if [[ "${product_name_9000_NPB[@]}" =~ "${product_name}" ]]; then
-        DEVICE_TYPE="9000-NPB"
-    fi
+    case ${product_name} in
+        "ACB300-040-00" | "9000-NPB-P01R01")
+            DEVICE_TYPE="9000-NPB"
+            ;;
+        *)
+        ;;
+    esac
 }
 
 function read_sn()

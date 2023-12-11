@@ -1,5 +1,5 @@
 
-PROFILE_ID 						:= TSG-X-NXR620G40-R01-P0906
+PROFILE_ID 						:= x86_64_COTS
 PROFILE_ID_IN_SHORT				:= $(subst -,$e,$(PROFILE_ID))
 
 CONTAINER_IMAGES_TAR			:= traffic-engine-${OS_RELEASE_VER}-docker.tar
