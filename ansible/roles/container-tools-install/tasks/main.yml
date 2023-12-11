@@ -131,3 +131,12 @@
     name: js-d3-flame-graph
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+
+- name: "install python3"
+  yum:
+    name: python3
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install python3 prettytable"
+  shell: python3 -m pip install prettytable
