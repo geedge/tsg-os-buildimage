@@ -3,11 +3,15 @@
 
 #- name: "execute k3s install"
 #  shell: curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn INSTALL_K3S_SKIP_ENABLE=true  sh -
-- name: "copy k3s to destination"
-  copy:
-    src: "{{ role_path }}/files/k3s"
-    dest: /usr/bin/
+
+- name: "get k3s to dest"
+  get_url:
+    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.28.4/k3s
+    dest: /usr/bin/k3s
+    url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
+    url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
     mode: 0755
+
 
 - name: "Create /var/lib/rancher/k3s/agent/images directory"
   file:
@@ -22,7 +26,7 @@
 
 - name: "get k3s-airgap-images-amd64.tar to dest"
   get_url:
-    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/k3s-airgap-images-amd64.tar
+    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.28.4/k3s-airgap-images-amd64.tar
     dest: /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"

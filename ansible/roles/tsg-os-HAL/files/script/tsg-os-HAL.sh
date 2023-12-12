@@ -101,6 +101,9 @@ kubelet-arg:
   - "kube-reserved=memory=${KUBE_RESERVED}Gi"
   - "system-reserved=memory=${system_mem}Gi"
   - "sync-frequency=1s"
+  - "feature-gates=SidecarContainers=true"
+kube-apiserver-arg:
+  - "feature-gates=SidecarContainers=true"
 EOF
 }
 

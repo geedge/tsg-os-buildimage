@@ -34,6 +34,24 @@ spec:
       - key: node-role.kubernetes.io/master
         operator: Exists
         effect: NoSchedule
+      initContainers:
+      - name: confd
+        image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
+        restartPolicy: Always
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            chmod +x /opt/tsg/mrzcpd/bin/signal.sh
+            /opt/confd/bin/confd -watch -backend file -file /opt/tsg/config/mrzcpd-reload-conf/reload-conf.yaml -log-level debug
+        volumeMounts:
+        - name: shared-dir
+          mountPath: /opt/tsg/config/shared
+        - name: mrzcpd-reload-conf
+          mountPath: /opt/tsg/config/mrzcpd-reload-conf/
+        securityContext:
+          privileged: true
       containers:
       - name: packet-io-engine
         image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
@@ -137,26 +155,6 @@ spec:
                   rm -f /run/.rte_config
                   rm -f /run/.rte_hugepage_info
                   rm -rf /run/.dpdk
-        securityContext:
-          privileged: true
-
-
-      - name: confd
-        image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
-        imagePullPolicy: Never
-        lifecycle:
-          type: Sidecar
-        command:
-          - "bash"
-          - "-ec"
-          - |
-            chmod +x /opt/tsg/mrzcpd/bin/signal.sh
-            /opt/confd/bin/confd -watch -backend file -file /opt/tsg/config/mrzcpd-reload-conf/reload-conf.yaml -log-level debug
-        volumeMounts:
-        - name: shared-dir
-          mountPath: /opt/tsg/config/shared
-        - name: mrzcpd-reload-conf
-          mountPath: /opt/tsg/config/mrzcpd-reload-conf/
         securityContext:
           privileged: true
 
