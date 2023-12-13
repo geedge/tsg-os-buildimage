@@ -3,7 +3,7 @@ certstore_rpm_version:
 
 firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-3.0.11.f3473f5
+  firewall: firewall-3.0.12.7fb8f4d
   #gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   #radius_collect_plug: radius_collect_plug-2.0.11.47a51f3
   glimpse_detector: glimpse_detector-3.0.0.7240884
@@ -28,7 +28,7 @@ firewall_rpm_version:
   session_flags: session_flags-2.2.5.fb0ff23
   stat_policy_enforcer: stat_policy_enforcer-3.1.4.95250e9
   sf_classifier: sf_classifier-1.0.8.7da11bd
-  stellar-c: stellar-c-1.0.4.44f2c7f
+  stellar-c: stellar-c-1.0.6.37117f9
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf
