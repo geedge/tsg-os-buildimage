@@ -20,7 +20,7 @@ stages:
   tags:
     - tsg-os-installer
 
-.build_tsg-buildimage-p0906:
+.build_onie_bin_x86_64_COTS:
   script:
     - env | sort
     - yum -y install pbzip2 python39
@@ -31,7 +31,7 @@ stages:
   tags:
     - tsg-os-builder-el8
 
-.build_tsg-build-container-images:
+.build_container_images_x86_64_COTS:
   script:
     - env | sort
     - yum -y remove docker-ce
@@ -98,17 +98,17 @@ stages:
 #     - /^rel-.*$/i
 #     - /^update-.*$/i
 
-feature_branch_build_container_images_TSGXP0906:
+feature_branch_build_container_images_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
-  extends: .build_tsg-build-container-images
+  extends: .build_container_images_x86_64_COTS
   variables:
     PROFILE_LIST: x86_64_COTS_APP_BUNDLE
     DALIY_BUILD_VERSION: 1
     ENABLE_LICENSE_PROTECTED: 0
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
-    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-x86_64_COTS
     paths:
       - images/
     policy: push
@@ -118,17 +118,17 @@ feature_branch_build_container_images_TSGXP0906:
     - /^rel-.*$/i
     - /^update-.*$/i
 
-feature_branch_build_TSGXP0906:
+feature_branch_build_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: merge_build
-  extends: .build_tsg-buildimage-p0906
-  needs: ["feature_branch_build_container_images_TSGXP0906"]
+  extends: .build_onie_bin_x86_64_COTS
+  needs: ["feature_branch_build_container_images_x86_64_COTS"]
   variables:
     PROFILE_LIST: x86_64_COTS
     DALIY_BUILD_VERSION: 1
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
-    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-x86_64_COTS
     paths:
       - images/
   except:
@@ -137,13 +137,13 @@ feature_branch_build_TSGXP0906:
     - /^rel-.*$/i
     - /^update-.*$/i
 
-feature_branch_build_kvm_image_TSGXP0906:
+feature_branch_build_kvm_image_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: deploy
   extends: .build_tsg_vm_image
-  needs: ["feature_branch_build_TSGXP0906"]
+  needs: ["feature_branch_build_x86_64_COTS"]
   variables:
-    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-TSGXP0906
+    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-x86_64_COTS
   except:
     - tags
     - /^dev-.*$/i
@@ -178,10 +178,10 @@ feature_branch_build_kvm_image_TSGXP0906:
 #   only:
 #     - /^dev-.*$/i
 
-develop_build_container_images_TSGXP0906:
+develop_build_container_images_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
-  extends: .build_tsg-build-container-images
+  extends: .build_container_images_x86_64_COTS
   variables:
     PROFILE_LIST: x86_64_COTS_APP_BUNDLE
     UPLOAD_TO_FILE_REPO: 1
@@ -192,18 +192,18 @@ develop_build_container_images_TSGXP0906:
     ENABLE_LICENSE_PROTECTED: 0
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
-    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-x86_64_COTS
     paths:
       - images/
     policy: push
   only:
     - /^dev-.*$/i
 
-develop_build_TSGXP0906:
+develop_build_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: merge_build
-  extends: .build_tsg-buildimage-p0906
-  needs: ["develop_build_container_images_TSGXP0906"]
+  extends: .build_onie_bin_x86_64_COTS
+  needs: ["develop_build_container_images_x86_64_COTS"]
   variables:
     PROFILE_LIST: x86_64_COTS
     UPLOAD_TO_FILE_REPO: 1
@@ -213,19 +213,19 @@ develop_build_TSGXP0906:
     FILE_REPO_PATH: install/develop/tsg-os-images
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
-    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-x86_64_COTS
     paths:
       - images/
   only:
     - /^dev-.*$/i
 
-develop_build_kvm_image_TSGXP0906:
+develop_build_kvm_image_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: deploy
   extends: .build_tsg_vm_image
-  needs: ["develop_build_TSGXP0906"]
+  needs: ["develop_build_x86_64_COTS"]
   variables:
-    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-TSGXP0906
+    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-x86_64_COTS
     UPLOAD_TO_FILE_REPO: 1
     PROFILE_LIST: KVM
     PULP3_FILE_REPO_NAME: tsg-os-images-develop
@@ -262,10 +262,10 @@ develop_build_kvm_image_TSGXP0906:
 #   only:
 #     - /^rel-.*$/i
 
-testing_build_container_images_TSGXP0906:
+testing_build_container_images_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
-  extends: .build_tsg-build-container-images
+  extends: .build_container_images_x86_64_COTS
   variables:
     PROFILE_LIST: x86_64_COTS_APP_BUNDLE
     UPLOAD_TO_FILE_REPO: 1
@@ -276,18 +276,18 @@ testing_build_container_images_TSGXP0906:
     ENABLE_LICENSE_PROTECTED: 1
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
-    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-x86_64_COTS
     paths:
       - images/
     policy: push
   only:
     - /^rel-.*$/i
 
-testing_build_TSGXP0906:
+testing_build_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: merge_build
-  needs: ["testing_build_container_images_TSGXP0906"]
-  extends: .build_tsg-buildimage-p0906
+  needs: ["testing_build_container_images_x86_64_COTS"]
+  extends: .build_onie_bin_x86_64_COTS
   variables:
     PROFILE_LIST: x86_64_COTS
     UPLOAD_TO_FILE_REPO: 1
@@ -297,19 +297,19 @@ testing_build_TSGXP0906:
     DALIY_BUILD_VERSION: 1
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
-    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-x86_64_COTS
     paths:
       - images/
   only:
     - /^rel-.*$/i
 
-testing_build_kvm_image_TSGXP0906:
+testing_build_kvm_image_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: deploy
   extends: .build_tsg_vm_image
-  needs: ["testing_build_TSGXP0906"]
+  needs: ["testing_build_x86_64_COTS"]
   variables:
-    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-TSGXP0906
+    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-x86_64_COTS
     UPLOAD_TO_FILE_REPO: 1
     PROFILE_LIST: KVM
     PULP3_FILE_REPO_NAME: tsg-os-images-testing
@@ -346,10 +346,10 @@ testing_build_kvm_image_TSGXP0906:
 #   only:
 #     - /^.*-rc.*$/i
 
-rc_build_container_images_TSGXP0906:
+rc_build_container_images_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
-  extends: .build_tsg-build-container-images
+  extends: .build_container_images_x86_64_COTS
   variables:
     PROFILE_LIST: x86_64_COTS_APP_BUNDLE
     UPLOAD_TO_FILE_REPO: 1
@@ -360,18 +360,18 @@ rc_build_container_images_TSGXP0906:
     ENABLE_LICENSE_PROTECTED: 1
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
-    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-x86_64_COTS
     paths:
       - images/
     policy: push
   only:
     - /^.*-rc.*$/i
 
-rc_build_TSGXP0906:
+rc_build_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: merge_build
-  extends: .build_tsg-buildimage-p0906
-  needs: ["rc_build_container_images_TSGXP0906"]
+  extends: .build_onie_bin_x86_64_COTS
+  needs: ["rc_build_container_images_x86_64_COTS"]
   variables:
     PROFILE_LIST: x86_64_COTS
     UPLOAD_TO_FILE_REPO: 1
@@ -381,19 +381,19 @@ rc_build_TSGXP0906:
     FILE_REPO_PATH: install/rc/tsg-os-images
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
-    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-x86_64_COTS
     paths:
       - images/
   only:
     - /^.*-rc.*$/i
 
-rc_build_kvm_image_TSGXP0906:
+rc_build_kvm_image_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: deploy
   extends: .build_tsg_vm_image
-  needs: ["rc_build_TSGXP0906"]
+  needs: ["rc_build_x86_64_COTS"]
   variables:
-    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-TSGXP0906
+    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-x86_64_COTS
     UPLOAD_TO_FILE_REPO: 1
     PROFILE_LIST: KVM
     PULP3_FILE_REPO_NAME: tsg-os-images-rc
@@ -434,10 +434,10 @@ rc_build_kvm_image_TSGXP0906:
 #   except:
 #     - /^.*-rc.*$/i
 
-release_build_container_images_TSGXP0906:
+release_build_container_images_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
-  extends: .build_tsg-build-container-images
+  extends: .build_container_images_x86_64_COTS
   variables:
     PROFILE_LIST: x86_64_COTS_APP_BUNDLE
     UPLOAD_TO_FILE_REPO: 1
@@ -448,7 +448,7 @@ release_build_container_images_TSGXP0906:
     ENABLE_LICENSE_PROTECTED: 1
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
-    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-x86_64_COTS
     paths:
       - images/
     policy: push
@@ -457,11 +457,11 @@ release_build_container_images_TSGXP0906:
   except:
     - /^.*-rc.*$/i
 
-release_build_TSGXP0906:
+release_build_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: merge_build
-  extends: .build_tsg-buildimage-p0906
-  needs: ["release_build_container_images_TSGXP0906"]
+  extends: .build_onie_bin_x86_64_COTS
+  needs: ["release_build_container_images_x86_64_COTS"]
   variables:
     PROFILE_LIST: x86_64_COTS
     UPLOAD_TO_FILE_REPO: 1
@@ -471,7 +471,7 @@ release_build_TSGXP0906:
     FILE_REPO_PATH: install/release/tsg-os-images
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
-    key: $CI_COMMIT_REF_SLUG-TSGXP0906
+    key: $CI_COMMIT_REF_SLUG-x86_64_COTS
     paths:
       - images/
   only:
@@ -479,13 +479,13 @@ release_build_TSGXP0906:
   except:
     - /^.*-rc.*$/i
 
-release_build_kvm_image_TSGXP0906:
+release_build_kvm_image_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: deploy
   extends: .build_tsg_vm_image
-  needs: ["release_build_TSGXP0906"]
+  needs: ["release_build_x86_64_COTS"]
   variables:
-    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-TSGXP0906
+    BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-x86_64_COTS
     UPLOAD_TO_FILE_REPO: 1
     PROFILE_LIST: KVM
     PULP3_FILE_REPO_NAME: tsg-os-images-release
