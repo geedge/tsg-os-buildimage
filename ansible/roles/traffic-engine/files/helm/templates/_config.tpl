@@ -179,11 +179,11 @@ enable_breakpad_upload=0
 
 {{- define "traffic-engine.init" -}}
             mkdir -p /target_config/opt/tsg/etc
-            mkdir -p /target_config/etc/default
+            mkdir -p /target_config/etc/profile.d
             /opt/tsg/scripts/read_sn_to_env.sh
             source /etc/profile.d/sn.sh
             echo "{\"sn\": \"$SN\"}" > /target_config/opt/tsg/etc/tsg_sn.json
-            echo "device_id=\"$SN\"" > /target_config/etc/default/telegraf
+            echo "export device_id=${SN}" > /target_config/etc/profile.d/device_id.sh
 {{- end -}}
 
 {{- define "traffic-engine.init.sce" -}}
@@ -623,12 +623,6 @@ enable_breakpad_upload=0
 {{- define "traffic-engine.mount.dev-shm" -}}
         - name: dev-shm
           mountPath: /dev/shm
-{{- end -}}
-
-{{- define "traffic-engine.telegraf.read.device-id" -}}
-            export device_id=`ipmitool fru list |grep 'Product Serial' | awk '{ print $4}'`
-            if [ -z "$device_id" ]; then export device_id="unknown"; fi
-            echo "export device_id=${device_id}" > /etc/profile.d/device_id.sh
 {{- end -}}
 
 {{- define "traffic-engine.global.sd.server-ip" -}}

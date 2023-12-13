@@ -215,7 +215,7 @@ install_uefi_grub()
 DEVICE_TYPE=
 read_device_type()
 {
-    product_name=`ipmitool fru list | grep 'Product Name' | awk '{print $4}'`
+    product_name=`ipmitool fru list | grep 'Product Name' | awk '{print $4}' | head -n 1`
 
     case ${product_name} in
         "ACB300-040-00" | "9000-NPB-P01R01")

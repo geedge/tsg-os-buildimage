@@ -106,7 +106,6 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{ template "traffic-engine.telegraf.read.device-id" . }}
             /usr/bin/telegraf -config /etc/telegraf/telegraf_statistic.conf -config-directory /etc/telegraf/telegraf_statistic.d
         securityContext:
           privileged: true
@@ -118,8 +117,8 @@ spec:
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
         - name: config-volume
-          mountPath: "/etc/default/telegraf"
-          subPath: "etc/default/telegraf"
+          mountPath: "/etc/profile.d/device_id.sh"
+          subPath: "etc/profile.d/device_id.sh"
         {{ template "traffic-engine.mount.localtime" . }}
 
       - name: telegraf-security
@@ -129,7 +128,6 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{ template "traffic-engine.telegraf.read.device-id" . }}
             /usr/bin/telegraf -config /etc/telegraf/telegraf_security.conf -config-directory /etc/telegraf/telegraf_statistic.d
         securityContext:
           privileged: true
@@ -141,8 +139,8 @@ spec:
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "opt/tsg/etc/tsg_sn.json"
         - name: config-volume
-          mountPath: "/etc/default/telegraf"
-          subPath: "etc/default/telegraf"
+          mountPath: "/etc/profile.d/device_id.sh"
+          subPath: "etc/profile.d/device_id.sh"
         {{ template "traffic-engine.mount.localtime" . }}
 
       initContainers:
