@@ -166,11 +166,12 @@ set_cpu_list()
 {
     local vendor
 
+    vendor=$(lscpu | grep "^Vendor ID" | awk '{print $3}')
     if [ -n "$NIC_CPU_Affinity_Switch" ] && [ "$NIC_CPU_Affinity_Switch" == "1" ]; then
         . /opt/tsg/tsg-os-HAL/scripts/cpu_amd.sh
     elif [ -n "$NIC_CPU_Affinity_Switch" ] && [ "$NIC_CPU_Affinity_Switch" == "0" ]; then
         . /opt/tsg/tsg-os-HAL/scripts/cpu_default.sh
-    elif [ $vendor == 'AuthenticAMD' ]; then
+    elif [ "$vendor" == 'AuthenticAMD' ]; then
         . /opt/tsg/tsg-os-HAL/scripts/cpu_amd.sh
     else
         . /opt/tsg/tsg-os-HAL/scripts/cpu_default.sh
