@@ -105,6 +105,7 @@ mrzcpd:
   traffic_mirror: {}
   distmode: 0
   hugepages: 32Gi
+  linkdb: []
   obp_devices: [{'name': 'obp1', 'type': '2', 'connect': '3', 'address': '2.2.2.2', 'port': '6800', 'segment': [{'id': '1', 'workline':'0', 'heartbeat_mode': '1', 'hb_send_interval_in_ms': '100', 'hb_timeout_interval_in_ms': '100', 'hb_lost_threshold': '5', 'nonrevertive_mode': '1'}, {'id': '1', 'workline':'0', 'heartbeat_mode': '1', 'hb_send_interval_in_ms': '100', 'hb_timeout_interval_in_ms': '100', 'hb_lost_threshold': '5', 'nonrevertive_mode': '1'}]}]
   debug:
     enable_liveness_probe: yes

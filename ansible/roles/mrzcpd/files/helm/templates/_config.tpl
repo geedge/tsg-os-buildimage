@@ -125,14 +125,29 @@ rx_cores={{ $interface.rxcore }}
 [device:virtio_dign_c]
 driver=1
 role=1
-
+{{$enter}}
 [device:virtio_dign_s]
 driver=1
 role=1
-
+{{$enter}}
 [device:nf_inject]
 driver=3
 role=4
+{{$enter}}
+{{- range $linkdb := .Values.mrzcpd.linkdb }}
+[link_db:{{ $linkdb.id }}]
+type={{ $linkdb.type }}
+traffic_link_id={{ $linkdb.traffic_link_id}}
+{{- if $linkdb.vwire_id }}
+vwire_id={{ $linkdb.vwire_id }}
+{{- end }}
+{{- if and $linkdb.ef_ip_addr $linkdb.ef_link_id  }}
+ef_ip_addr={{ $linkdb.ef_ip_addr }}
+ef_link_id={{ $linkdb.ef_link_id }}
+{{- end }}
+{{$enter}}
+{{- end }}
+
 
 {{- range $index, $_ := until $cycle }}
 [device:nf_{{ $index }}_fw]
@@ -208,22 +223,22 @@ addr=127.0.0.1
 port=56789
 
 # sid
-[etherfabric_adapters]
-sid_range_start=100
-sid_range_end=200
-max_rules=256
+[ef_adapters]
+sid_start=100
+sid_end=200
+max_rules=32
 
 [vwires]
-sid_range_start=300
-sid_range_end=400
-max_rules=256
+sid_start=300
+sid_end=400
+max_rules=32
 
 [service_lb]
-sid_range_start={{ .Values.mrzcpd.service_lb.sid_range_start }}
-sid_range_end={{ .Values.mrzcpd.service_lb.sid_range_end }}
+sid_start={{ .Values.mrzcpd.service_lb.sid_range_start }}
+sid_end={{ .Values.mrzcpd.service_lb.sid_range_end }}
 
 {{- range $service := .Values.mrzcpd.services }}
-[etherfabric_adapter:{{ $service.id }}]
+[ef_adapter:{{ $service.id }}]
 mode={{ $service.mode }}
 listen_device={{ $service.listen_on_device }}
 {{$enter}}
