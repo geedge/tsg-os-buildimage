@@ -210,7 +210,8 @@ enable=1
 NIC_NAME={{ control_and_policy.nic_name }}
 {% raw %}kafka_brokerlist={{ olap.kafka_broker.address_list | join(",") }}
 {% endraw %}
-kafka_topic=PROXY-EVENT
+logger_send_topic=PROXY-EVENT
+file_bucket_topic=TRAFFIC-FILE-STREAM-RECORD
 sasl_username=admin
 sasl_passwd=galaxy2019
 device_id_filepath=/opt/tsg/etc/tsg_sn.json
