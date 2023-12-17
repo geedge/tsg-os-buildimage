@@ -17,7 +17,7 @@
   when: runtime_env == 'TSG-X-P0906'
 
 - name: "Install mrzcpd rpm package"
-  shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ prefix_path.mrzcpd }}
+  shell: rpm -i /tmp/rpm_download/{{ item.value }}* --prefix {{ prefix_path.mrzcpd }} --force
   with_dict: "{{ mrzcpd_rpm_version }}"
 
 - name: "Install  mlnx-ofed-user-space rpm package"
