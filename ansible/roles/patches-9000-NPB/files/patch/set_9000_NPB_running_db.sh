@@ -17,7 +17,7 @@ add_network_into_running_db()
        <interface>
           <name>eth_pf_smbio</name>
           <type>endpoint</type>
-          <address>10.252.${SLOT_ID}.1</address>
+          <address>10.252.${SLOT_ID}.1/16</address>
        </interface>
        <interface>
           <name>eth_vf_mirr</name>
