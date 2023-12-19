@@ -122,14 +122,6 @@ key_log_file=log/sslkeylog.log
 
 # mid cert cache
 mc_cache_enable=1
-mc_vsystem_id={% raw %}{{ vsys_id }}
-{% endraw %}
-mc_cache_eth={{ control_and_policy.nic_name }}
-{% raw %}mc_cache_broker_list={{ olap.kafka_broker.address_list | join(",") }}
-{% endraw %}
-mc_cache_topic=PXY-EXCH-INTERMEDIA-CERT
-sasl_username=admin
-sasl_passwd=galaxy2019
 
 [key_keeper]
 #Mode: debug - generate cert with ca_path, normal - generate cert with cert store
@@ -212,6 +204,7 @@ NIC_NAME={{ control_and_policy.nic_name }}
 {% endraw %}
 logger_send_topic=PROXY-EVENT
 file_bucket_topic=TRAFFIC-FILE-STREAM-RECORD
+mc_cache_topic=PXY-EXCH-INTERMEDIA-CERT
 sasl_username=admin
 sasl_passwd=galaxy2019
 device_id_filepath=/opt/tsg/etc/tsg_sn.json
