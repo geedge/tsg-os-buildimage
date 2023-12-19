@@ -93,6 +93,18 @@ DEVICE_SEQ_IN_DATA_CENTER={{ session_id_generator.snowflake_worker_id_offset }}
 {% endraw %}
 GENERATE_JA3_FINGERPRINT=1
 
+[FIREWALL]
+DNS_RESPONSE_MODE=replace # hijack, replace
+HTTP_PAGE200=./tsgconf/HTTP200.html
+HTTP_PAGE204=./tsgconf/HTTP204.html
+HTTP_PAGE403=./tsgconf/HTTP403.html
+HTTP_PAGE404=./tsgconf/HTTP404.html
+
+[FIREWALL_LOCAL_STAT]
+STAT_NAME="firewall"
+STAT_INTERVAL_TIME_S=5
+STAT_OUTPATH="/opt/tsg/sapp/log/firewall_local_file_stat.json"
+
 [context_based_detector]
 LOG_LEVEL=30
 LOG_PATH="log/context_based_detector.log"
