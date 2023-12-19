@@ -140,3 +140,6 @@
 
 - name: "install python3 prettytable"
   shell: python3 -m pip install prettytable
+
+- name: "install python3 jinja2"
+  shell: python3 -m pip install jinja2
