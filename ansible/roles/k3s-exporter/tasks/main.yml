@@ -27,7 +27,7 @@
 
 - name: "copy prometheus chart to dest"
   copy:
-    src: "{{ role_path }}/files/prometheus/prometheus-15.16.1.tgz"
+    src: "{{ role_path }}/files/prometheus/prometheus-25.8.2.tgz"
     dest: /var/lib/rancher/k3s/server/static/charts/
 
 - name: "get prometheus chart images to dest"
@@ -37,12 +37,7 @@
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
   loop:
-    - prometheus-alertmanager.tar
-    - prometheus-config-reload.tar
-    - prometheus-node-exporter.tar
-    - prometheus-pushgateway.tar
-    - prometheus.tar
-    - kube-state-metrics.tar
+    - prometheus-v25.8.2.tar
 
 #### mrzcpd exporter start
 - name: "copy chart directory to dest"

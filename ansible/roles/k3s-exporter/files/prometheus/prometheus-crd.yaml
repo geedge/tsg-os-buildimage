@@ -4,7 +4,7 @@ metadata:
   name: prometheus
   namespace: kube-system
 spec:
-  chart: https://%{KUBERNETES_API}%/static/charts/prometheus-15.16.1.tgz
+  chart: https://%{KUBERNETES_API}%/static/charts/prometheus-25.8.2.tgz
   targetNamespace: tsg-os-system
   valuesContent: |-
     kube-state-metrics:
@@ -29,22 +29,23 @@ spec:
     alertmanager:
       image:
         pullPolicy: Never
-    nodeExporter:
-      image:
-        pullPolicy: Never
-    pushgateway:
+    prometheus-pushgateway:
+      nameOverride: pushgateway
       image:
         pullPolicy: Never
 
-    nodeExporter:
+    prometheus-node-exporter:
+      nameOverride: node-exporter
+      image:
+        pullPolicy: Never
       service:
         annotations:
           prometheus.io/scrape: "true"
           tsg/monitor: "true"
       extraArgs:
-        collector.ethtool:
-        collector.ethtool.device-include: ".*"
-        collector.ethtool.metrics-include: ".*"
+        - --collector.ethtool
+        - --collector.ethtool.device-include=.*
+        - --collector.ethtool.metrics-include=.*
 
     serverFiles:
       prometheus.yml:
