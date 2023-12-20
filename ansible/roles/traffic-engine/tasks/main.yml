@@ -23,6 +23,9 @@
     remote_src: yes
 #install helm binary end
 
+- name: "Helm Completion Bash"
+  shell: helm completion bash > /etc/bash_completion.d/helm
+
 - name: "copy kubeconfig.sh to destination"
   copy:
     src: "{{ role_path }}/files/kubeconfig.sh"
