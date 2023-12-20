@@ -20,7 +20,7 @@
     - {role: redis, tags: redis}
     - {role: maat-redis, tags: maat-redis}
     - {role: certstore, tags: certstore}
-    - {role: telegraf_statistic, tags: telegraf_statistic}
+    - {role: telegraf, tags: telegraf}
     - {role: sysctl, tags: sysctl}
     - {role: exporter, tags: exporter}
     - {role: tsg-diagnose, tags: tsg-diagnose}
@@ -128,7 +128,7 @@
     - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
-    - {role: telegraf_statistic, tags: telegraf_statistic}
+    - {role: telegraf, tags: telegraf}
 
 - hosts: x86_64_COTS-sce
   remote_user: root
