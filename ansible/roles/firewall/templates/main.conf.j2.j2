@@ -3,7 +3,7 @@ PROFILE="./tsgconf/maat.conf"
 
 [TSG_LOG]
 MODE=kafka
-VSYSTEM_ID={% raw %}{{ vsys_id }}
+TRAFFIC_VSYSTEM_ID={% raw %}{{ vsys_id }}
 {% endraw %}
 NAMESPACE_ID=1
 NIC_NAME="{{ control_and_policy.nic_name }}"
@@ -94,7 +94,8 @@ DEVICE_SEQ_IN_DATA_CENTER={{ session_id_generator.snowflake_worker_id_offset }}
 GENERATE_JA3_FINGERPRINT=1
 
 [FIREWALL]
-DNS_RESPONSE_MODE=replace # hijack, replace
+# hijack, replace
+DNS_RESPONSE_MODE=replace
 HTTP_PAGE200=./tsgconf/HTTP200.html
 HTTP_PAGE204=./tsgconf/HTTP204.html
 HTTP_PAGE403=./tsgconf/HTTP403.html
