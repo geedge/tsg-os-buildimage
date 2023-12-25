@@ -85,7 +85,7 @@ mergeExporter:
     pullPolicy: Never
     tag: "v0.2.0"
   mergePort: "9005"
-  mergeUrls: "http://0.0.0.0:8901/metrics http://0.0.0.0:8902/metrics http://0.0.0.0:8903/metrics"
+  mergeUrls: "http://127.0.0.1:8901/metrics http://127.0.0.1:8902/metrics http://127.0.0.1:8903/metrics"
 
 service:
   type: ClusterIP
