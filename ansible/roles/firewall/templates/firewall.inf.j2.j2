@@ -20,9 +20,9 @@ FUNC_NAME=firewall_http_plug_entry
 FUNC_FLAG=QUIC_CLIENT_HELLO,QUIC_SERVER_HELLO,QUIC_CACHED_CERT,QUIC_COMM_CERT,QUIC_CERT_CHAIN,QUIC_VERSION,QUIC_APPLICATION_DATA
 FUNC_NAME=firewall_quic_plug_entry
 
-#[FTP]
-#FUNC_FLAG=ALL
-#FUNC_NAME=firewall_ftp_plug_entry
+[FTP]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_ftp_plug_entry
 
 [RTP]
 FUNC_FLAG=ALL
@@ -43,3 +43,11 @@ FUNC_NAME=firewall_stratum_plug_entry
 [RDP]
 FUNC_FLAG=ALL
 FUNC_NAME=firewall_rdp_plug_entry
+
+[DNS]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_dns_plug_entry
+
+[DTLS]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_dtls_plug_entry

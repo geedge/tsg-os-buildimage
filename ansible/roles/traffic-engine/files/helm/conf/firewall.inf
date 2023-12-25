@@ -58,3 +58,20 @@ FUNC_FLAG=DTLS_CLIENT_HELLO,DTLS_SERVER_HELLO,DTLS_HELLO_VERIFY_REQUEST,DTLS_CLI
 FUNC_NAME=firewall_dtls_plug_entry
 {{- end }}
 
+{{- if eq .Values.decoders.STRATUM .Values.define_enable_val_yes }}
+[STRATUM]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_stratum_plug_entry
+{{- end }}
+
+{{- if eq .Values.decoders.RDP .Values.define_enable_val_yes }}
+[RDP]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_rdp_plug_entry
+{{- end }}
+
+{{- if eq .Values.decoders.SSH .Values.define_enable_val_yes }}
+[SSH]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_ssh_plug_entry
+{{- end }}
