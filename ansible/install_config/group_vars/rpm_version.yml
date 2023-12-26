@@ -26,7 +26,7 @@ firewall_rpm_version:
   rdp: rdp-1.0.3.f392ffd
   bgp: bgp-1.1.2.356c17d
   session_flags: session_flags-2.2.5.fb0ff23
-  stat_policy_enforcer: stat_policy_enforcer-3.1.10.b586d58
+  stat_policy_enforcer: stat_policy_enforcer-3.1.11.80a8539
   sf_classifier: sf_classifier-1.0.9.c0f9aa9
   stellar-c: stellar-c-1.0.6.37117f9
 
