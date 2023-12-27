@@ -23,7 +23,7 @@ spec:
         serviceFunction: {{ .Release.Name }}
         component: firewall
       annotations:
-        prometheus.io/port: "9273"
+        prometheus.io/port: "9010"
         prometheus.io/scrape: "true"
 
     spec:
@@ -92,12 +92,53 @@ spec:
           mountPath: /run/sapp/crashreport
         - name: firewall-log
           mountPath: /opt/tsg/sapp/log
+        - name: metrics-json-dir
+          mountPath: "/opt/tsg/sapp/metrics"
         {{ template "traffic-engine.mount.mrzcpd" . }}
         {{ template "traffic-engine.mount.localtime" . }}
         {{ template "traffic-engine.firewall.mount.prestart" . }}
         {{ template "traffic-engine.firewall.mount.hostpath" . }}
         {{ template "traffic-engine.mount.dev-bus-usb" . }}
         {{ template "traffic-engine.mount.dev-shm" . }}
+
+      - name: fieldstat-exporter
+        image: "registry.gdnt-cloud.website/tsg-firewall:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            ldconfig
+            python3 /opt/tsg/framework/bin/fieldstat_exporter.py prometheus -p 9011 -d /opt/tsg/sapp/metrics
+        ports:
+          - containerPort: 9011
+        securityContext:
+          privileged: true
+        livenessProbe:
+          tcpSocket:
+            port: 9011
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9011
+          failureThreshold: 5
+          periodSeconds: 10
+        volumeMounts:
+        - name: metrics-json-dir
+          mountPath: "/opt/tsg/sapp/metrics"
+        {{ template "traffic-engine.mount.localtime" . }}
+
+      - name: merged-exporter
+        image: "quay.io/rebuy/exporter-merger:v0.2.0"
+        imagePullPolicy: Never
+        env:
+        - name: MERGER_URLS
+          value: http://127.0.0.1:9273/metrics http://127.0.0.1:9011/metrics
+        - name: MERGER_PORT
+          value: "9010"
+        ports:
+        - containerPort: 9010
 
       initContainers:
       - name: firewall-init
@@ -127,6 +168,8 @@ spec:
         configMap:
           name: sapp-{{ .Release.Name }}
       - name: config-volume
+        emptyDir: {}
+      - name: metrics-json-dir
         emptyDir: {}
       - name: firewall-minidump
         hostPath:
