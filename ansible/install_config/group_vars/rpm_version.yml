@@ -87,14 +87,6 @@ tsg_diagnose_rpm_version:
 http_healthcheck_rpm_version:
   http_healthcheck: http_healthcheck-2.0.1.0884451
 
-wannat_wangw_rpm_version:
-  libwangw: libwangw-1.5.4.bd3edfa
-  libwannat_common: libwannat_common-1.0.3.6dc42b6
-
-wire_graft_rpm_version:
-  wire_graft: wire_graft_plug-1.5.10.60fa715
-  libwire_graft: libwire_graft-1.5.10.60fa715
-
 hasp_tools_rpm_version:
   hasp_tools: hasp-tools-1.0.11.148e4d0
 

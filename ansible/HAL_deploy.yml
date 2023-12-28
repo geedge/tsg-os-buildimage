@@ -25,9 +25,6 @@
     - {role: exporter, tags: exporter}
     - {role: tsg-diagnose, tags: tsg-diagnose}
     - {role: system-init, tags: system-init}
-    - {role: wannat_wangw, tags: wannat_wangw}
-    - {role: wannat_common, tags: wannat_common}
-    - {role: wire_graft, tags: wire_graft}
     - {role: consul, tags: consul}
     - {role: hasp, tags: hasp}
 
@@ -97,9 +94,6 @@
     - {role: sapp, tags: sapp}
     - {role: firewall, tags: firewall}
     - {role: tsg_app, tags: tsg_app}
-    - {role: wannat_wangw, tags: wannat_wangw}
-    - {role: wannat_common, tags: wannat_common}
-    - {role: wire_graft, tags: wire_graft}
     - {role: hasp, tags: hasp}
 
 - hosts: x86_64_COTS-proxy

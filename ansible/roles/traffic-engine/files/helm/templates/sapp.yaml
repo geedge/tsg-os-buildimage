@@ -10,8 +10,6 @@ data:
   maat.conf: {{ tpl (.Files.Get "conf/maat.conf") . | quote }}
   sapp.toml: {{ tpl (.Files.Get "conf/sapp.toml") . | quote }}
   send_raw_pkt.conf: {{ tpl (.Files.Get "conf/send_raw_pkt.conf") . | quote }}
-  wangw.conf: {{ tpl (.Files.Get "conf/wangw.conf") . | quote }}
-  wire_graft.conf: {{ tpl (.Files.Get "conf/wire_graft.conf") . | quote }}
   vlan_flipping_map.conf: {{ tpl (.Files.Get "conf/vlan_flipping_map.conf") . | quote }}
   tsg_device_tag.json: {{ tpl (.Files.Get "conf/tsg_device_tag.json") . | quote }}
   firewall.inf: {{ tpl (.Files.Get "conf/firewall.inf") . | quote }}

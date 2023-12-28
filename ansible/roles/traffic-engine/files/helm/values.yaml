@@ -127,11 +127,6 @@ overload_protection:
   detect_threshold_cpu_usages: 90
   recovery_detect_cycle_in_sec: 30
 
-wannat:
-  enable: yes
-  link_table_report_interval: 30
-  wan_gateway_listen_port_range_left_edge: 3545
-
 vsys_id: 1
 
 etherfabric_settings:

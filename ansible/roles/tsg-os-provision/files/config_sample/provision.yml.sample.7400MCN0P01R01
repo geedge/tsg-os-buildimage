@@ -35,11 +35,6 @@ radius:
 gtp:
   enable_gtp_c_record: 0/1
 
-wannat:
-  enable: 0/1
-  nat_gateway_address: "127.0.0.1"
-  reachability_test_server_address: "127.0.0.1"
-
 ddossketch:
   enable: 0/1
 

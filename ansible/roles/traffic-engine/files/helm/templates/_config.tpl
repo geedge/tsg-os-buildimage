@@ -148,8 +148,6 @@ enable_breakpad_upload=0
             cp /opt/tsg/config/main.conf               /opt/tsg/sapp/tsgconf/main.conf
             cp /opt/tsg/config/maat.conf               /opt/tsg/sapp/tsgconf/maat.conf
             cp /opt/tsg/config/sapp.toml               /opt/tsg/sapp/etc/sapp.toml
-            cp /opt/tsg/config/wangw.conf              /opt/tsg/sapp/etc/wannat/wangw.conf
-            cp /opt/tsg/config/wire_graft.conf         /opt/tsg/sapp/etc/wire_graft/wire_graft.conf
             cp /opt/tsg/config/send_raw_pkt.conf       /opt/tsg/sapp/etc/send_raw_pkt.conf
             cp /opt/tsg/config/tsg_device_tag.json     /opt/tsg/etc/tsg_device_tag.json
             cp /opt/tsg/config/vlan_flipping_map.conf  /opt/tsg/sapp/etc/vlan_flipping_map.conf
@@ -586,7 +584,6 @@ enable_breakpad_upload=0
 {{- define "traffic-engine.firewall.set-redis-ip" -}}
 {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
-            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/etc/wannat/wangw.conf
 {{- end }}
 {{- end -}}
 
