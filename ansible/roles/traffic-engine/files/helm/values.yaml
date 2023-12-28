@@ -61,7 +61,6 @@ session_id_generator:
 
 firewall:
   enable: yes
-  rapidjson_chunk_capacity: 2048
   enable_smartoffload: no
   logs:
     contains_app_id: yes
