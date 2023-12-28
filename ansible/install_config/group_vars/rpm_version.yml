@@ -3,7 +3,7 @@ certstore_rpm_version:
 
 firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-3.0.24.0a7d472
+  firewall: firewall-3.0.25.d1db696
   #gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
   #radius_collect_plug: radius_collect_plug-2.0.11.47a51f3
   glimpse_detector: glimpse_detector-3.0.0.7240884
@@ -14,11 +14,11 @@ firewall_rpm_version:
   http: http-2.0.16.81307df
   mail: mail-1.0.19.e982b44
   quic: quic-2.0.9.a7d76dd
-  ssl: ssl-3.0.3.3871309
+  ssl: ssl-3.0.4.8f3bde2
   rtp: rtp-1.0.7.530ac76
   gtp: gtp-1.0.7.e1041b2
   ssh: ssh-2.1.7.b053e65
-  dtls: dtls-1.0.10.ab7166e
+  dtls: dtls-2.0.3.51e8096
   radius: radius-1.0.7.54b70b2
   mesa_sip: mesa_sip-2.0.2.11024e4
   deal_socks: deal_socks-1.0.4.329bba3
@@ -28,7 +28,7 @@ firewall_rpm_version:
   session_flags: session_flags-2.2.5.fb0ff23
   stat_policy_enforcer: stat_policy_enforcer-3.1.12.8b70b17
   sf_classifier: sf_classifier-1.0.9.c0f9aa9
-  stellar-c: stellar-c-1.0.6.37117f9
+  stellar-c: stellar-c-1.0.8.c131eed
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf
