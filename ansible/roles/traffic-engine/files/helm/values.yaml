@@ -111,9 +111,6 @@ voip_record:
   enable_sip: yes
   enable_rtp: yes
 
-bgp_record:
-  enable: yes
-
 overload_protection:
   enable: yes
   detect_interval_in_ms: 500
@@ -172,7 +169,6 @@ decoders:
   SOCKS: yes
   STRATUM: yes
   RDP: yes
-  BGP: yes
   DTLS: yes
 
 configHash: "defaulthash"

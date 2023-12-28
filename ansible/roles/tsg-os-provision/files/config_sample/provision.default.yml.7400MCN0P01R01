@@ -8,7 +8,6 @@ firewall:
   rapidjson_chunk_capacity: 2048
   enable_dtls: 1
   enable_sip: 1
-  enable_bgp: 1
 
 proxy:
   enable: 1

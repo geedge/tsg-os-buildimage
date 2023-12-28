@@ -42,9 +42,6 @@
 {{- if eq .Values.decoders.RDP .Values.define_enable_val_yes }}
 ./plug/protocol/rdp/rdp.inf
 {{- end }}
-{{- if eq .Values.decoders.BGP .Values.define_enable_val_yes }}
-./plug/protocol/bgp/bgp.inf
-{{- end }}
 {{- if eq .Values.decoders.DTLS .Values.define_enable_val_yes }}
 ./plug/protocol/dtls/dtls.inf
 {{- end }}
