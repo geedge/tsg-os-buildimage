@@ -30,9 +30,6 @@ capturepacket:
 app_behavior:
   enable: 0
 
-gtp:
-  enable_gtp_c_record: 1
-
 ddossketch:
   enable: 1
   tcp_flood_report_thresh: 0.0008

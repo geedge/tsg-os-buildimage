@@ -14,7 +14,6 @@ firewall_rpm_version:
   quic: quic-2.0.9.a7d76dd
   ssl: ssl-3.0.4.8f3bde2
   rtp: rtp-1.0.7.530ac76
-  gtp: gtp-1.0.7.e1041b2
   ssh: ssh-2.1.7.b053e65
   dtls: dtls-2.0.3.51e8096
   mesa_sip: mesa_sip-2.0.2.11024e4

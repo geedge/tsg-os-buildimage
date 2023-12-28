@@ -146,16 +146,6 @@ NIC_NAME="{{ dp_traffic_mirror.nic_name }}"
 DEFAULT_VLAN_ID={{ dp_traffic_mirror.traffic_mirror_vlan_id }}
 {% endif %}
 
-[GTP_SIGNALING]
-{% raw %}{% if gtp.enable_gtp_c_record == 1 %}
-SENDLOG_SWITCH=1
-{% else %}
-SENDLOG_SWITCH=0
-{% endif %}
-{% endraw %}
-#NO/HASH/REDIS
-SIGNALING_ORIGIN="REDIS"
-
 {% raw %}
 [SHAPING]
 SWARMKV_CLUSTER_NAME="tsg-shaping-vsys{{ vsys_id }}"

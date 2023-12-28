@@ -114,9 +114,6 @@ voip_record:
 bgp_record:
   enable: yes
 
-gtpc_record:
-  enable: yes
-
 overload_protection:
   enable: yes
   detect_interval_in_ms: 500
@@ -177,7 +174,6 @@ decoders:
   RDP: yes
   BGP: yes
   DTLS: yes
-  GTPC: yes
 
 configHash: "defaulthash"
 

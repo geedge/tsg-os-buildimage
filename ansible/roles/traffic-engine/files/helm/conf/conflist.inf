@@ -33,9 +33,6 @@
 ./plug/protocol/quic/quic.inf
 {{- end }}
 ./plug/protocol/l2tp_protocol_plug/l2tp_protocol_plug.inf
-{{- if eq .Values.decoders.GTPC .Values.define_enable_val_yes }}
-./plug/protocol/gtp/gtp.inf
-{{- end }}
 {{- if eq .Values.decoders.SSH .Values.define_enable_val_yes }}
 ./plug/protocol/ssh/ssh.inf
 {{- end }}
@@ -55,8 +52,5 @@
 [business]
 {{- if eq .Values.firewall.enable .Values.define_enable_val_yes }}
 ./plug/business/firewall/firewall.inf
-{{- end }}
-{{- if eq .Values.decoders.GTPC .Values.define_enable_val_yes }}
-#./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
 {{- end }}
 ./plug/stellar_on_sapp/defer_loader.inf

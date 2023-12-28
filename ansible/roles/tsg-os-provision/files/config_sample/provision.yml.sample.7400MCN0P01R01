@@ -29,9 +29,6 @@ sessionrecord:
 capturepacket:
   enable: 0/1
 
-gtp:
-  enable_gtp_c_record: 0/1
-
 ddossketch:
   enable: 0/1
 
