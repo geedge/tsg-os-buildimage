@@ -22,11 +22,6 @@ SEND_APP_ID_SWITCH=1
 {% else %}
 SEND_APP_ID_SWITCH=0
 {% endif %}
-{% if sessionrecord.enable_contains_nat_linkinfo == 1 %}
-SEND_NAT_LINKINFO_SWITCH=1
-{% else %}
-SEND_NAT_LINKINFO_SWITCH=0
-{% endif %}
 {% if sessionrecord.enable_interim_record == 1 %}
 SEND_INTERIM_RECORD=1
 {% else %}

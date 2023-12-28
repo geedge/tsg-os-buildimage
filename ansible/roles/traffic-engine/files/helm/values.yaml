@@ -64,7 +64,6 @@ firewall:
   enable_smartoffload: no
   logs:
     contains_app_id: yes
-    contains_nat_linkinfo: yes
     contains_dns_resource_record: yes
 
 appsketch:

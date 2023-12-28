@@ -19,7 +19,6 @@ sessionrecord:
   enable_interim_record: 1
   enable_transcation_record: 1
   enable_contains_app_id: 0
-  enable_contains_nat_linkinfo: 0
   enable_contains_dns_resource_record: 0
 
 capturepacket:
