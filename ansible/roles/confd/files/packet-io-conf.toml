@@ -4,4 +4,4 @@ dest = "/opt/tsg/config/shared/mrglobal.dynamic.conf"
 keys = [
   "/obp_devices/"
 ]
-reload_cmd = "/opt/tsg/mrzcpd/bin/signal.sh"
+reload_cmd = "pkill -1 mrzcpd"

@@ -43,7 +43,6 @@ spec:
           - "bash"
           - "-ec"
           - |
-            chmod +x /opt/tsg/mrzcpd/bin/signal.sh
             /opt/confd/bin/confd -watch -backend file -file /opt/tsg/config/mrzcpd-reload-conf/reload-conf.yaml -log-level debug
         volumeMounts:
         - name: shared-dir
