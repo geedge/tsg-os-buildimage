@@ -36,9 +36,6 @@
 {{- if eq .Values.decoders.GTPC .Values.define_enable_val_yes }}
 ./plug/protocol/gtp/gtp.inf
 {{- end }}
-{{- if eq .Values.decoders.RADIUS .Values.define_enable_val_yes }}
-./plug/protocol/radius/radius.inf
-{{- end }}
 {{- if eq .Values.decoders.SSH .Values.define_enable_val_yes }}
 ./plug/protocol/ssh/ssh.inf
 {{- end }}
@@ -61,8 +58,5 @@
 {{- end }}
 {{- if eq .Values.decoders.GTPC .Values.define_enable_val_yes }}
 #./plug/business/gtp_signaling_plug/gtp_signaling_plug.inf
-{{- end }}
-{{- if and (eq .Values.radius_record.enable .Values.define_enable_val_yes) (eq .Values.decoders.RADIUS .Values.define_enable_val_yes) }}
-#./plug/business/radius_collect_plug/radius_collect_plug.inf
 {{- end }}
 ./plug/stellar_on_sapp/defer_loader.inf

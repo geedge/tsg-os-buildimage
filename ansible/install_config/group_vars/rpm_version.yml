@@ -4,8 +4,6 @@ certstore_rpm_version:
 firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   firewall: firewall-3.0.25.d1db696
-  #gtp_signaling_plug: gtp_signaling_plug-2.0.0.3f233d7
-  #radius_collect_plug: radius_collect_plug-2.0.11.47a51f3
   glimpse_detector: glimpse_detector-3.0.0.7240884
   qdpi_detector: qdpi_detector-4.0.3.9f81ea0
   tsg_ddos_sketch: tsg_ddos_sketch-2.0.1.918b16e
@@ -19,7 +17,6 @@ firewall_rpm_version:
   gtp: gtp-1.0.7.e1041b2
   ssh: ssh-2.1.7.b053e65
   dtls: dtls-2.0.3.51e8096
-  radius: radius-1.0.7.54b70b2
   mesa_sip: mesa_sip-2.0.2.11024e4
   deal_socks: deal_socks-1.0.4.329bba3
   stratum: stratum-1.1.0.29a2cff

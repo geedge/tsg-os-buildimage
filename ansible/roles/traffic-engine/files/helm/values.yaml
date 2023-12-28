@@ -110,9 +110,6 @@ proxy:
 voip_record:
   enable_sip: yes
   enable_rtp: yes
-     
-radius_record:
-  enable: yes
 
 bgp_record:
   enable: yes
@@ -175,7 +172,6 @@ decoders:
   RTP: yes
   SIP: yes
   SSH: yes
-  RADIUS: yes
   SOCKS: yes
   STRATUM: yes
   RDP: yes

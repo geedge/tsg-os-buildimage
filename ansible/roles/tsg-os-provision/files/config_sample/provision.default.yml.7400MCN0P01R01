@@ -27,9 +27,6 @@ sessionrecord:
 capturepacket:
   enable: 1
 
-radius:
-  enable: 1
-
 app_behavior:
   enable: 0
 
