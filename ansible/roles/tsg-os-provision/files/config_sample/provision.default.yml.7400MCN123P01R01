@@ -12,9 +12,6 @@ cm:
     db_static: 0
     db_dynamic: 1
 
-proxy:
-  enable_hos: 1
-
 olap:
   hos_server:
     token: "c21f969b5f03d33d43e04f8f136e7682"

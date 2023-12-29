@@ -76,12 +76,6 @@
         src: "../templates/tfe.conf.j2"
         dest: /opt/tsg/tfe/conf/tfe/tfe.conf
       tags: tfe
-  
-    - name: "tsg-os-provision: template the pangu_pxy.conf"
-      template:
-        src: "../templates/pangu_pxy.conf.j2"
-        dest: /opt/tsg/tfe/conf/pangu/pangu_pxy.conf
-      tags: tfe
 
     - name: "tsg-os-provision: coredump setup override - mkdir"
       file:

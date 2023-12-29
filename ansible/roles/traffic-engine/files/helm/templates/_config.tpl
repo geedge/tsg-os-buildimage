@@ -103,17 +103,6 @@ enable_breakpad_upload=0
 {{ join "," .Values.sapp_affinity }}
 {{- end -}}
 
-
-{{- define "traffic-engine.config.hos-address" -}}
-{{- $address_dict := index .Values.external_resources.olap.hos_servers.addresses 0 -}}
-{{- $address_dict.address }}
-{{- end -}}
-
-{{- define "traffic-engine.config.hos-port" -}}
-{{- $address_dict := index .Values.external_resources.olap.hos_servers.addresses 0 -}}
-{{- $address_dict.port }}
-{{- end -}}
-
 {{- define "traffic-engine.config.identify-proto-name" -}}
 {{- $proto_name := "" -}}
 {{- $val_yes := .Values.define_enable_val_yes }}
@@ -161,7 +150,6 @@ enable_breakpad_upload=0
 
 {{- define "traffic-engine.proxy.copy-config-to-dest" -}}
             cp /opt/tsg/config/tfe.conf             /opt/tsg/tfe/conf/tfe/tfe.conf
-            cp /opt/tsg/config/pangu_pxy.conf       /opt/tsg/tfe/conf/pangu/pangu_pxy.conf
             cp /opt/tsg/config/tsg_device_tag.json  /opt/tsg/etc/tsg_device_tag.json
 {{- end -}}
 

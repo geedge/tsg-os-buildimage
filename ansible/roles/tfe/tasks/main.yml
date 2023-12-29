@@ -67,12 +67,6 @@
     src: "{{ role_path }}/templates/future.conf.j2"
     dest: /opt/tsg/tfe/conf/tfe/future.conf
 
-- name: "template the pangu_pxy.conf"
-  template:
-    src: "{{ role_path }}/templates/pangu_pxy.conf.j2.j2"
-    dest: /opt/tsg/tsg-os-provision/templates/pangu_pxy.conf.j2
-  when: runtime_env != 'TSG-X-P0906'
-
 - name: "create conf/doh/"
   file:
     path: /opt/tsg/tfe/conf/doh/
@@ -117,7 +111,7 @@
     - /usr/lib/systemd/system/tfe.service
   when: runtime_env != 'TSG-X-P0906'
 
-- name: "template the pangu_pxy.conf"
+- name: "template the service_add_StartPostForRps.conf"
   template:
     src: "{{ role_path }}/templates/service_add_StartPostForRps.conf.j2.j2"
     dest: /opt/tsg/tsg-os-provision/templates/service_add_StartPostForRps.conf.j2

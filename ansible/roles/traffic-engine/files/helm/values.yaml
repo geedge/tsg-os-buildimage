@@ -32,12 +32,6 @@ external_resources:
       addresses:
       - address:
         port:
-    hos_servers:
-      use: yes
-      addresses:
-      - address:
-        port:
-      token:
     
   nat_gateway:
     address: 10.0.X.X
