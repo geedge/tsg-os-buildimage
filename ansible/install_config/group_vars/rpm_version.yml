@@ -41,8 +41,8 @@ framework_rpm_version:
   13_libMV_Sketch: libMV_Sketch-2.1.3.20231215.19725c6
   14_librdkafka: librdkafka-1.2.2.1218b3c
   15_libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
-  18_libswarmkv: libswarmkv-4.0.3.7332c66
-  19_libswarmkv-tools: libswarmkv-tools-4.0.3.7332c66
+  18_libswarmkv: libswarmkv-4.0.4.89e0a6a
+  19_libswarmkv-tools: libswarmkv-tools-4.0.4.89e0a6a
   20_libfieldstat3: libfieldstat3-3.0.16.475f806
   21_libmaatframe: libmaatframe-4.1.26.6d5fea2
   22_libMESA_sts: libMESA_sts-1.0.3.d515a96
