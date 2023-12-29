@@ -22,6 +22,7 @@ spec:
         serviceFunction: {{ .Release.Name }}
         component: packet-io-engine
       annotations:
+        kubectl.kubernetes.io/default-container: packet-io-engine
         prometheus.io/port: "9005"
         prometheus.io/scrape: "true"
     
@@ -34,10 +35,9 @@ spec:
       - key: node-role.kubernetes.io/master
         operator: Exists
         effect: NoSchedule
-      initContainers:
+      containers:
       - name: confd
         image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
-        restartPolicy: Always
         imagePullPolicy: Never
         command:
           - "bash"
@@ -51,7 +51,21 @@ spec:
           mountPath: /opt/tsg/config/mrzcpd-reload-conf/
         securityContext:
           privileged: true
-      containers:
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - "bash"
+                - "-ec"
+                - |
+                  while true; do
+                    if [ -f "/opt/tsg/config/shared/mrglobal.dynamic.conf" ]; then
+                      echo "File /opt/tsg/config/shared/mrglobal.dynamic.conf exists. Exiting."
+                      exit 0
+                    fi
+                    echo "File /opt/tsg/config/shared/mrglobal.dynamic.conf does not exist. Sleeping for 2 seconds."
+                    sleep 2
+                  done
       - name: packet-io-engine
         image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
