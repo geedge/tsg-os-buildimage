@@ -140,6 +140,20 @@ spec:
         ports:
         - containerPort: 9010
 
+      - name: log-dir-hook
+        image: "registry.gdnt-cloud.website/tsg-firewall:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            while true; do touch /opt/tsg/sapp/log/.log_dir_hook; sleep 600; done
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: firewall-log
+          mountPath: /opt/tsg/sapp/log
+
       initContainers:
       - name: firewall-init
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"

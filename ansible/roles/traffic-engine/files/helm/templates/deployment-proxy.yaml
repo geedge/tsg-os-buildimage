@@ -160,6 +160,22 @@ spec:
           subPath: "etc/profile.d/device_id.sh"
         {{ template "traffic-engine.mount.localtime" . }}
 
+      - name: log-dir-hook
+        image: "registry.gdnt-cloud.website/tsg-proxy:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            while true; do touch /opt/tsg/tfe/log/.log_dir_hook; touch /opt/tsg/certstore/logs/.log_dir_hook; sleep 600; done
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: proxy-log
+          mountPath: /opt/tsg/tfe/log
+        - name: certstore-log
+          mountPath: /opt/tsg/certstore/logs
+
       initContainers:
       - name: proxy-init
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"

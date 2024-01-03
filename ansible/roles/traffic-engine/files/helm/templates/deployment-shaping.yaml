@@ -123,6 +123,20 @@ spec:
           subPath: "etc/profile.d/device_id.sh"
         {{ template "traffic-engine.mount.localtime" . }}
 
+      - name: log-dir-hook
+        image: "registry.gdnt-cloud.website/tsg-shaping:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            while true; do touch /opt/tsg/shaping/log/.log_dir_hook; sleep 600; done
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: shaping-log
+          mountPath: /opt/tsg/shaping/log
+
       initContainers:
       - name: shaping-init
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
