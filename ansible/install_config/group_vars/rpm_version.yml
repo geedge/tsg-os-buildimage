@@ -70,8 +70,8 @@ sapp_rpm_version:
   sapp-pr: sapp-pr-4.3.34.10b3243
 
 tfe_rpm_version:
-  tfe: tfe-4.8.57.058a5e6
-  tfe-pr: tfe-pr-4.8.57.058a5e6
+  tfe: tfe-4.8.58.4e35c47
+  tfe-pr: tfe-pr-4.8.58.4e35c47
 
 tsg_app_rpm_version:
   context_based_detector: context_based_detector-6.0.2.039b5c3
@@ -88,7 +88,7 @@ hasp_tools_rpm_version:
 tsg_os_clixon_rpm_version:
   cligen: cligen-5.8.0-release
   clixon: clixon-5.8.0-release
-  tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.11.b6a2560
+  tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.12.fbd1bf5
 
 sce_rpm_version:
   sce: sce-1.2.7.b4e0025
