@@ -25,7 +25,6 @@ spec:
       annotations:
         prometheus.io/port: "9010"
         prometheus.io/scrape: "true"
-
     spec:
       tolerations:
       - key: node-role.kubernetes.io/control-plane
@@ -34,6 +33,7 @@ spec:
       - key: node-role.kubernetes.io/master
         operator: Exists
         effect: NoSchedule
+      serviceAccountName: {{ .Release.Name }}
       containers:
       - name: firewall
         image: "registry.gdnt-cloud.website/tsg-firewall:{{ .Chart.AppVersion }}"

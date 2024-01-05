@@ -42,12 +42,6 @@
     src: "{{ role_path }}/files/sudoers.d/00-kubconfig"
     dest: /etc/sudoers.d/
 
-- name: "copy clusterrole file to dest"
-  copy:
-    src: "{{ role_path }}/files/service-read-role.yaml"
-    dest: /var/lib/rancher/k3s/server/manifests/
-  when: runtime_env == 'TSG-X-P0906'
-
 - name: "copy reloader crd file to dest"
   copy:
     src: "{{ role_path }}/files/reloader/reloader-crd.yaml"

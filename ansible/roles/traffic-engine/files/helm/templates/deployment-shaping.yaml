@@ -35,6 +35,7 @@ spec:
       - key: node-role.kubernetes.io/master
         operator: Exists
         effect: NoSchedule
+      serviceAccountName: {{ .Release.Name }}
       containers:
       - name: shaping
         image: "registry.gdnt-cloud.website/tsg-shaping:{{ .Chart.AppVersion }}"
