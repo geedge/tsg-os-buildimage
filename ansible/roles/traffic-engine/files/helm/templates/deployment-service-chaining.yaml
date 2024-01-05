@@ -175,7 +175,7 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{ template "traffic-engine.init" . }}
+            {{- include "traffic-engine.init" . | nindent 12 }}
             {{ template "traffic-engine.init.sce" . }}
         securityContext:
           privileged: true
@@ -184,6 +184,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
         volumeMounts:
         - name: config-volume
           mountPath: /target_config 

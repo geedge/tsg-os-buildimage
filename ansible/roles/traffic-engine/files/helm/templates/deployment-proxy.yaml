@@ -212,8 +212,7 @@ spec:
             sysctl -w net.ipv4.tcp_window_scaling=0
 
 
-
-            {{ template "traffic-engine.init" . }}
+            {{ include "traffic-engine.init" . | nindent 12 }}
             ip tuntap add dev tap0 mode tap multi_queue
             /usr/sbin/ip link set tap0 address fe:65:b7:03:50:bd
             /usr/sbin/ip link set tap0 up
@@ -284,6 +283,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
         volumeMounts:
         - name: config-volume
           mountPath: /target_config 

@@ -7,5 +7,5 @@ metadata:
   name: {{ .Release.Name }}
 rules:
   - apiGroups: [""]
-    resources: ["services"]
+    resources: ["services", "nodes"]
     verbs: ["get", "list", "watch"]

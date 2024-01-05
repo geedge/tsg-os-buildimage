@@ -163,13 +163,23 @@ enable_breakpad_upload=0
 {{- end -}}
 
 
+{{- define "traffic-engine.public.prepare-access-API" -}}
+export APISERVER=https://kubernetes.default.svc
+export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+export NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
+export TOKEN=$(cat ${SERVICEACCOUNT}/token)
+export CACERT=${SERVICEACCOUNT}/ca.crt
+{{- end -}}
+
+
 {{- define "traffic-engine.init" -}}
-            mkdir -p /target_config/opt/tsg/etc
-            mkdir -p /target_config/etc/profile.d
-            /opt/tsg/scripts/read_sn_to_env.sh
-            source /etc/profile.d/sn.sh
-            echo "{\"sn\": \"$SN\"}" > /target_config/opt/tsg/etc/tsg_sn.json
-            echo "export device_id=${SN}" > /target_config/etc/profile.d/device_id.sh
+{{- include "traffic-engine.public.prepare-access-API" . }}
+curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/nodes/${NODE_NAME} -o /tmp/node-${NODE_NAME}.json
+export DEVICE_SN=$(cat /tmp/node-${NODE_NAME}.json | jq -r '.metadata.annotations."tsg-os/device-sn"')
+mkdir -p /target_config/opt/tsg/etc
+mkdir -p /target_config/etc/profile.d
+echo "{\"sn\": \"$DEVICE_SN\"}" > /target_config/opt/tsg/etc/tsg_sn.json
+echo "export device_id=${DEVICE_SN}" > /target_config/etc/profile.d/device_id.sh
 {{- end -}}
 
 {{- define "traffic-engine.init.sce" -}}

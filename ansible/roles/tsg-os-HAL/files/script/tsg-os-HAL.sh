@@ -29,6 +29,8 @@ TRAFFIC_ENGINE_LOGS_VDISK_PATH="/data/vdisks"
 TRAFFIC_ENGINE_LOGS_VDISK_SIZE_BYTES=
 NF_COUNT=16
 NIC_CPU_Affinity_Switch=
+DEVICE_TYPE=
+SN=
 
 cpu_format_conversion()
 {
@@ -273,12 +275,56 @@ isolated_cores=${IOCORE}
 EOF
 }
 
+read_device_type()
+{
+    product_name=`ipmitool fru list | grep 'Product Name' | awk '{print $4}' | head -n 1`
+
+    case ${product_name} in
+        "ACB300-040-00" | "9000-NPB-P01R01")
+            DEVICE_TYPE="9000-NPB"
+            ;;
+        *)
+        ;;
+    esac
+}
+
+read_sn()
+{
+    if [ ${DEVICE_TYPE} == "9000-NPB" ]; then
+        SN=`ipmitool fru -t 130 | awk 'NR==12' | awk '{ print $4}'`
+    else
+        SN=`ipmitool fru list | grep 'Product Serial' | awk '{ print $4}' | head -n 1`
+    fi
+
+    if [ -z "${SN}" ]; then
+        SN="unknown"
+    fi
+}
+
+add_node_metadata()
+{
+    local node_name="localhost"
+    local tsg_os_manifest="/var/lib/rancher/k3s/server/manifests/tsg-os"
+    local node_manifest="${tsg_os_manifest}/add-node-metadata.yaml"
+
+    mkdir -p ${tsg_os_manifest}
+    cat > ${node_manifest} << EOF
+apiVersion: v1
+kind: Node
+metadata:
+  name: ${node_name}
+  annotations:
+    tsg-os/device-sn: "${SN}"
+EOF
+}
+
 load_tsg_os_HAL_config
 mkdir -p /run/mrzcpd/hugepages
 mkdir -p /var/run/share
 
 build_and_mount_traffic_engine_logs_vdisk
 set_hugepages
+
 set_cpu_list
 set_grub_cmdline
 
@@ -295,3 +341,8 @@ set_mrzcpd_direct_pktmbuf
 set_k3s_config ${mem_num}
 set_tsg_clixon_conf
 set_mrzcpd_conf
+
+# add sn to k8s node annotations.
+read_device_type
+read_sn
+add_node_metadata
