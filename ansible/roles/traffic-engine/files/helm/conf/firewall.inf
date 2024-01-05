@@ -54,7 +54,7 @@ FUNC_NAME=firewall_quic_plug_entry
 
 {{- if eq .Values.decoders.DTLS .Values.define_enable_val_yes }}
 [DTLS]
-FUNC_FLAG=DTLS_CLIENT_HELLO,DTLS_SERVER_HELLO,DTLS_HELLO_VERIFY_REQUEST,DTLS_CLIENT_EXTENSION
+FUNC_FLAG=ALL
 FUNC_NAME=firewall_dtls_plug_entry
 {{- end }}
 
