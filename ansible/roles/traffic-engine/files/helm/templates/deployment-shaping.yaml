@@ -46,7 +46,6 @@ spec:
           - "-ec"
           - |
             ldconfig
-            {{ template "traffic-engine.shaping.copy-config-to-dest" . }}
             {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
             {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
@@ -99,11 +98,15 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
-        - name: shaping
-          mountPath: "/opt/tsg/config"
-        - name: config-volume
+        - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "opt/tsg/etc/tsg_sn.json"
+          subPath: "tsg_sn.json"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/shaping_engine/conf/shaping.conf"
+          subPath: "shaping/shaping.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/etc/tsg_device_tag.json"
+          subPath: "shaping/tsg_device_tag.json"
         - name: shaping-minidump
           mountPath: /run/shaping/crashreport
         - name: shaping-log
@@ -124,15 +127,15 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
-        - name: telegraf
+        - name: telegraf-configs-volume
           mountPath: "/etc/telegraf/telegraf_shaping.conf"
           subPath: "telegraf_shaping.conf"
-        - name: config-volume
+        - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "opt/tsg/etc/tsg_sn.json"
-        - name: config-volume
+          subPath: "tsg_sn.json"
+        - name: shared-configs-volume
           mountPath: "/etc/profile.d/device_id.sh"
-          subPath: "etc/profile.d/device_id.sh"
+          subPath: "device_id.sh"
         {{ template "traffic-engine.mount.localtime" . }}
 
       - name: log-dir-hook
@@ -157,6 +160,7 @@ spec:
           - "bash"
           - "-ec"
           - |
+            cp -r /opt/tsg/configs/* /opt/tsg/shared-configs/
             {{- include "public.prepare-access-API" . | nindent 12 }}
             {{- include "public.serialize-node-annotations" . | nindent 12 }}
         securityContext:
@@ -172,18 +176,20 @@ spec:
               fieldPath: spec.nodeName
       
         volumeMounts:
-        - name: config-volume
-          mountPath: /target_config 
+        - name: shared-configs-volume
+          mountPath: /opt/tsg/shared-configs
+        - name: shaping-configs-volume
+          mountPath: /opt/tsg/configs/shaping
         {{ template "traffic-engine.mount.localtime" . }}
 
       volumes:
-      - name: telegraf
+      - name: telegraf-configs-volume
         configMap:
           name: telegraf-{{ .Release.Name }}
-      - name: shaping
+      - name: shaping-configs-volume
         configMap:
           name: shaping-{{ .Release.Name }}
-      - name: config-volume
+      - name: shared-configs-volume
         emptyDir: {}
       - name: shaping-minidump
         hostPath:

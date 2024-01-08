@@ -122,40 +122,8 @@ enable_breakpad_upload=0
 {{- end }}
 {{- end -}}
 
-{{- define "traffic-engine.sce.copy-config-to-dest" -}}
-            cp /opt/tsg/config/sce.conf  /opt/tsg/sce/conf
-            cp /opt/tsg/config/tsg_device_tag.json  /opt/tsg/etc/tsg_device_tag.json
-{{- end -}}
-
 {{- define "traffic-engine.bfdd.prestart" -}}
             if [ -f "/etc/traffic-engine/hotfix/bfdd/scripts/prestart.sh" ]; then chmod 0755 /etc/traffic-engine/hotfix/bfdd/scripts/prestart.sh; /etc/traffic-engine/hotfix/bfdd/scripts/prestart.sh;fi
-{{- end -}}
-
-{{- define "traffic-engine.firewall.copy-config-to-dest" -}}
-            cp /opt/tsg/config/conflist.inf            /opt/tsg/sapp/plug/conflist.inf
-            cp /opt/tsg/config/gdev.conf               /opt/tsg/sapp/etc/gdev.conf
-            cp /opt/tsg/config/main.conf               /opt/tsg/sapp/tsgconf/main.conf
-            cp /opt/tsg/config/maat.conf               /opt/tsg/sapp/tsgconf/maat.conf
-            cp /opt/tsg/config/sapp.toml               /opt/tsg/sapp/etc/sapp.toml
-            cp /opt/tsg/config/send_raw_pkt.conf       /opt/tsg/sapp/etc/send_raw_pkt.conf
-            cp /opt/tsg/config/tsg_device_tag.json     /opt/tsg/etc/tsg_device_tag.json
-            cp /opt/tsg/config/vlan_flipping_map.conf  /opt/tsg/sapp/etc/vlan_flipping_map.conf
-            cp /opt/tsg/config/firewall.inf            /opt/tsg/sapp/plug/business/firewall/firewall.inf
-            cp /opt/tsg/config/necessary_plug_list.conf  /opt/tsg/sapp/etc/necessary_plug_list.conf
-            cp /opt/tsg/config/http_main.conf          /opt/tsg/sapp/conf/http/http_main.conf
-            cp /opt/tsg/config/mail.conf               /opt/tsg/sapp/conf/mail/mail.conf
-            cp /opt/tsg/config/ssl_main.conf           /opt/tsg/sapp/conf/ssl/ssl_main.conf
-            cp /opt/tsg/config/spec.toml               /opt/tsg/sapp/stellar_plugin/spec.toml
-{{- end -}}
-
-{{- define "traffic-engine.proxy.copy-config-to-dest" -}}
-            cp /opt/tsg/config/tfe.conf             /opt/tsg/tfe/conf/tfe/tfe.conf
-            cp /opt/tsg/config/tsg_device_tag.json  /opt/tsg/etc/tsg_device_tag.json
-{{- end -}}
-
-{{- define "traffic-engine.certstore.copy-config-to-dest" -}}
-            cp /opt/tsg/config/cert_store.ini       /opt/tsg/certstore/conf/cert_store.ini
-            cp /opt/tsg/config/tsg_device_tag.json  /opt/tsg/etc/tsg_device_tag.json
 {{- end -}}
 
 {{- define "traffic-engine.certstore.prestart" -}}
@@ -175,10 +143,8 @@ export CACERT=${SERVICEACCOUNT}/ca.crt
 {{- define "public.serialize-node-annotations" -}}
 curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/nodes/${NODE_NAME} -o /tmp/node-${NODE_NAME}.json
 export DEVICE_SN=$(cat /tmp/node-${NODE_NAME}.json | jq -r '.metadata.annotations."tsg-os/device-sn"')
-mkdir -p /target_config/opt/tsg/etc
-mkdir -p /target_config/etc/profile.d
-echo "{\"sn\": \"$DEVICE_SN\"}" > /target_config/opt/tsg/etc/tsg_sn.json
-echo "export device_id=${DEVICE_SN}" > /target_config/etc/profile.d/device_id.sh
+echo "{\"sn\": \"$DEVICE_SN\"}" >      /opt/tsg/shared-configs/tsg_sn.json
+echo "export device_id=${DEVICE_SN}" > /opt/tsg/shared-configs/device_id.sh
 {{- end -}}
 
 
@@ -198,11 +164,6 @@ echo "export device_id=${DEVICE_SN}" > /target_config/etc/profile.d/device_id.sh
 /usr/sbin/ip link set tap0 down
 */}}
 
-
-{{- define "traffic-engine.shaping.copy-config-to-dest" -}}
-            cp /opt/tsg/config/shaping.conf  /opt/tsg/shaping_engine/conf
-            cp /opt/tsg/config/tsg_device_tag.json  /opt/tsg/etc/tsg_device_tag.json
-{{- end -}}
 
 {{- define "traffic-engine.shaping.set-shaping-config" -}}
             sed -Ei "s|NODE_IP_LOCATION|${NODE_IP?}|g" /opt/tsg/shaping_engine/conf/shaping.conf 

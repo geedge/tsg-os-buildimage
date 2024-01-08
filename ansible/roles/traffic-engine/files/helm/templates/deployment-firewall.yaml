@@ -44,7 +44,6 @@ spec:
           - "-ec"
           - |
             ldconfig
-            {{ template "traffic-engine.firewall.copy-config-to-dest" . }}
             {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
             {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
@@ -94,10 +93,53 @@ spec:
           failureThreshold: 90
           periodSeconds: 10
 {{- end }}
+
         volumeMounts:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "opt/tsg/etc/tsg_sn.json"
+          subPath: "tsg_sn.json"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/plug/conflist.inf"
+          subPath: "sapp/conflist.inf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/etc/gdev.conf"
+          subPath: "sapp/gdev.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/tsgconf/main.conf"
+          subPath: "sapp/main.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/tsgconf/maat.conf"
+          subPath: "sapp/maat.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/etc/sapp.toml"
+          subPath: "sapp/sapp.toml"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/etc/send_raw_pkt.conf"
+          subPath: "sapp/send_raw_pkt.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/etc/tsg_device_tag.json"
+          subPath: "sapp/tsg_device_tag.json"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/etc/vlan_flipping_map.conf"
+          subPath: "sapp/vlan_flipping_map.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/plug/business/firewall/firewall.inf"
+          subPath: "sapp/firewall.inf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/etc/necessary_plug_list.conf"
+          subPath: "sapp/necessary_plug_list.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/conf/http/http_main.conf"
+          subPath: "sapp/http_main.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/conf/mail/mail.conf"
+          subPath: "sapp/mail.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/conf/ssl/ssl_main.conf"
+          subPath: "sapp/ssl_main.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/stellar_plugin/spec.toml"
+          subPath: "sapp/spec.toml"
         - name: firewall-minidump
           mountPath: /run/sapp/crashreport
         - name: firewall-log
@@ -172,7 +214,7 @@ spec:
           - "bash"
           - "-ec"
           - |
-            cp -r /opt/tsg/configs/* /opt/tsg/shared-configs
+            cp -r /opt/tsg/configs/* /opt/tsg/shared-configs/
             {{- include "public.prepare-access-API" . | nindent 12 }}
             {{- include "public.serialize-node-annotations" . | nindent 12 }}
         securityContext:
@@ -189,14 +231,14 @@ spec:
         volumeMounts:
         - name: shared-configs-volume
           mountPath: /opt/tsg/shared-configs
-        - name: app-configs-volume
-          mountPath: "/opt/tsg/config"
+        - name: sapp-configs-volume
+          mountPath: /opt/tsg/configs/sapp
         - name: localtime-node
           mountPath: /etc/localtime
           readOnly: true
 
       volumes:
-      - name: app-configs-volume
+      - name: sapp-configs-volume
         configMap:
           name: sapp-{{ .Release.Name }}
       - name: shared-configs-volume

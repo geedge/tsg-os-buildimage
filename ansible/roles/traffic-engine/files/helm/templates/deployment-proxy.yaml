@@ -46,7 +46,6 @@ spec:
           - "-ec"
           - |
             ldconfig
-            {{ template "traffic-engine.proxy.copy-config-to-dest" . }}
             {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
             {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/tfe/conf/tfe/tfe.conf
@@ -83,11 +82,15 @@ spec:
           periodSeconds: 10
 {{- end }}
         volumeMounts:
-        - name: tfe
-          mountPath: "/opt/tsg/config"
-        - name: config-volume
+        - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "opt/tsg/etc/tsg_sn.json"
+          subPath: "tsg_sn.json"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/tfe/conf/tfe/tfe.conf"
+          subPath: "tfe/tfe.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/etc/tsg_device_tag.json"
+          subPath: "tfe/tsg_device_tag.json"
         - name: proxy-minidump
           mountPath: /run/tfe/crashreport
         - name: proxy-log
@@ -106,7 +109,6 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{ template "traffic-engine.certstore.copy-config-to-dest" . }}
             {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
             {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/certstore/conf/cert_store.ini
@@ -128,11 +130,15 @@ spec:
         {{- end }}
         volumeMounts:
         {{ template "traffic-engine.mount.localtime" . }}
-        - name: certstore
-          mountPath: "/opt/tsg/config"
-        - name: config-volume
+        - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "opt/tsg/etc/tsg_sn.json"
+          subPath: "tsg_sn.json"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/certstore/conf/cert_store.ini"
+          subPath: "certstore/cert_store.ini"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/etc/tsg_device_tag.json"
+          subPath: "certstore/tsg_device_tag.json"
         - name: certstore-minidump
           mountPath: /run/certstore/crashreport
         - name: certstore-log
@@ -160,15 +166,15 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
-        - name: telegraf
+        - name: telegraf-configs-volume
           mountPath: "/etc/telegraf/telegraf_proxy.conf"
           subPath: "telegraf_proxy.conf"
-        - name: config-volume
+        - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "opt/tsg/etc/tsg_sn.json"
-        - name: config-volume
+          subPath: "tsg_sn.json"
+        - name: shared-configs-volume
           mountPath: "/etc/profile.d/device_id.sh"
-          subPath: "etc/profile.d/device_id.sh"
+          subPath: "device_id.sh"
         {{ template "traffic-engine.mount.localtime" . }}
 
       - name: log-dir-hook
@@ -284,6 +290,7 @@ spec:
             /usr/sbin/ip -6 rule add iif tap_c tab 102
             /usr/sbin/ip -6 rule add iif tap_s tab 102
 
+            cp -r /opt/tsg/configs/* /opt/tsg/shared-configs/
             {{ include "public.prepare-access-API" . | nindent 12 }}
             {{- include "public.serialize-node-annotations" . | nindent 12 }}
 
@@ -299,21 +306,25 @@ spec:
             fieldRef:
               fieldPath: spec.nodeName
         volumeMounts:
-        - name: config-volume
-          mountPath: /target_config 
+        - name: shared-configs-volume
+          mountPath: /opt/tsg/shared-configs
+        - name: certstore-configs-volume
+          mountPath: /opt/tsg/configs/certstore
+        - name: tfe-configs-volume
+          mountPath: /opt/tsg/configs/tfe
         {{ template "traffic-engine.mount.localtime" . }}
 
       volumes:
-      - name: certstore
+      - name: certstore-configs-volume
         configMap:
           name: certstore-{{ .Release.Name }}
-      - name: tfe
+      - name: tfe-configs-volume
         configMap:
           name: tfe-{{ .Release.Name }}
-      - name: telegraf
+      - name: telegraf-configs-volume
         configMap:
           name: telegraf-{{ .Release.Name }}
-      - name: config-volume
+      - name: shared-configs-volume
         emptyDir: {}
       - name: proxy-minidump
         hostPath:

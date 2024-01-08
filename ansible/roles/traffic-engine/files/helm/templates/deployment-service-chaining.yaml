@@ -46,7 +46,6 @@ spec:
           - "-ec"
           - |
             ldconfig
-            {{ template "traffic-engine.sce.copy-config-to-dest" . }}
             {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
             {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sce/conf/sce.conf
@@ -83,11 +82,15 @@ spec:
           periodSeconds: 10
 {{- end }}
         volumeMounts:
-        - name: sce
-          mountPath: "/opt/tsg/config"
-        - name: config-volume
+        - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "opt/tsg/etc/tsg_sn.json"
+          subPath: "tsg_sn.json"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sce/conf/sce.conf"
+          subPath: "sce/sce.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/etc/tsg_device_tag.json"
+          subPath: "sce/tsg_device_tag.json"
         - name: sce-minidump
           mountPath: /run/sce/crashreport
         - name: sce-log
@@ -121,9 +124,9 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
-        - name: config-volume
+        - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "opt/tsg/etc/tsg_sn.json"
+          subPath: "tsg_sn.json"
         - name: bfdd-minidump
           mountPath: /run/bfdd/crashreport
         - name: bfdd-log
@@ -145,15 +148,15 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
-        - name: telegraf
+        - name: telegraf-configs-volume
           mountPath: "/etc/telegraf/telegraf_sce.conf"
           subPath: "telegraf_sce.conf"
-        - name: config-volume
+        - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "opt/tsg/etc/tsg_sn.json"
-        - name: config-volume
+          subPath: "tsg_sn.json"
+        - name: shared-configs-volume
           mountPath: "/etc/profile.d/device_id.sh"
-          subPath: "etc/profile.d/device_id.sh"
+          subPath: "device_id.sh"
         {{ template "traffic-engine.mount.localtime" . }}
 
       - name: log-dir-hook
@@ -180,6 +183,7 @@ spec:
           - "bash"
           - "-ec"
           - |
+            cp -r /opt/tsg/configs/* /opt/tsg/shared-configs/
             {{- include "public.prepare-access-API" . | nindent 12 }}
             {{- include "public.serialize-node-annotations" . | nindent 12 }}
             {{- if .Values.sce_config.vxlan_config.endpoint_nic }}
@@ -204,18 +208,20 @@ spec:
             fieldRef:
               fieldPath: spec.nodeName
         volumeMounts:
-        - name: config-volume
-          mountPath: /target_config 
+        - name: shared-configs-volume
+          mountPath: /opt/tsg/shared-configs
+        - name: sce-configs-volume
+          mountPath: /opt/tsg/configs/sce
         {{ template "traffic-engine.mount.localtime" . }}
 
       volumes:
-      - name: telegraf
+      - name: telegraf-configs-volume
         configMap:
           name: telegraf-{{ .Release.Name }}
-      - name: sce
+      - name: sce-configs-volume
         configMap:
           name: sce-{{ .Release.Name }}
-      - name: config-volume
+      - name: shared-configs-volume
         emptyDir: {}
       - name: sce-minidump
         hostPath:
