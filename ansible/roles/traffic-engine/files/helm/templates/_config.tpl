@@ -163,7 +163,7 @@ enable_breakpad_upload=0
 {{- end -}}
 
 
-{{- define "traffic-engine.public.prepare-access-API" -}}
+{{- define "public.prepare-access-API" -}}
 export APISERVER=https://kubernetes.default.svc
 export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
 export NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
@@ -172,8 +172,7 @@ export CACERT=${SERVICEACCOUNT}/ca.crt
 {{- end -}}
 
 
-{{- define "traffic-engine.init" -}}
-{{- include "traffic-engine.public.prepare-access-API" . }}
+{{- define "public.serialize-node-annotations" -}}
 curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/nodes/${NODE_NAME} -o /tmp/node-${NODE_NAME}.json
 export DEVICE_SN=$(cat /tmp/node-${NODE_NAME}.json | jq -r '.metadata.annotations."tsg-os/device-sn"')
 mkdir -p /target_config/opt/tsg/etc
@@ -182,18 +181,6 @@ echo "{\"sn\": \"$DEVICE_SN\"}" > /target_config/opt/tsg/etc/tsg_sn.json
 echo "export device_id=${DEVICE_SN}" > /target_config/etc/profile.d/device_id.sh
 {{- end -}}
 
-{{- define "traffic-engine.init.sce" -}}
-{{ if .Values.sce_config.vxlan_config.endpoint_nic }}
-            ip tuntap add dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} mode tap
-            ip link set dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} up
-            ip route add {{ .Values.sce_config.vxlan_config.endpoint_netip }}/{{ .Values.sce_config.vxlan_config.endpoint_mask }} dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} table 10
-{{ if .Values.sce_config.vxlan_config.endpoint_gateway }}
-            ip route add default via {{ .Values.sce_config.vxlan_config.endpoint_gateway }} table 10
-{{- end }}
-            ip a a {{ .Values.sce_config.vxlan_config.endpoint_ip }}/{{ .Values.sce_config.vxlan_config.endpoint_mask }} dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} noprefixroute
-            ip rule add dport 3784 table 10
-{{- end }}
-{{- end -}}
 
 {{/*
 #tfe-env-stop.sh
@@ -215,20 +202,6 @@ echo "export device_id=${DEVICE_SN}" > /target_config/etc/profile.d/device_id.sh
 {{- define "traffic-engine.shaping.copy-config-to-dest" -}}
             cp /opt/tsg/config/shaping.conf  /opt/tsg/shaping_engine/conf
             cp /opt/tsg/config/tsg_device_tag.json  /opt/tsg/etc/tsg_device_tag.json
-{{- end -}}
-
-{{- define "traffic-engine.shaping.get-service-node-port" -}}
-            export APISERVER=https://kubernetes.default.svc
-            export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
-            export NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
-            export TOKEN=$(cat ${SERVICEACCOUNT}/token)
-            export CACERT=${SERVICEACCOUNT}/ca.crt
-            curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/${SERVICENAME} -o /tmp/service.txt
-            export CLUSTER_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="cluster-announce-port") | .nodePort')
-            export HEALTH_CHECK_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="healthcheck-announce-port") | .nodePort')
-            echo "export CLUSTER_ANNOUNCE_PORT=${CLUSTER_ANNOUNCE_PORT}" > /etc/profile.d/announceinfo.sh
-            echo "export HEALTH_CHECK_ANNOUNCE_PORT=${HEALTH_CHECK_ANNOUNCE_PORT}" >> /etc/profile.d/announceinfo.sh
-            chmod 0755 /etc/profile.d/announceinfo.sh
 {{- end -}}
 
 {{- define "traffic-engine.shaping.set-shaping-config" -}}
@@ -559,55 +532,14 @@ echo "export device_id=${DEVICE_SN}" > /target_config/etc/profile.d/device_id.sh
 
 {{- define "traffic-engine.global.cm.read-server-ip" -}}
 {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-            export APISERVER=https://kubernetes.default.svc
-            export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
-            export TOKEN=$(cat ${SERVICEACCOUNT}/token)
-            export CACERT=${SERVICEACCOUNT}/ca.crt
-            curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/${CM_CACHE_SERVICE_NAME} -o /tmp/cm-cache.txt
-            export CM_POLICY_LOCAL_CACHE_IP=$(cat /tmp/cm-cache.txt  | jq -r '.spec.clusterIP')
-            echo "export CM_POLICY_LOCAL_CACHE_IP=${CM_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/cm-local-cache.sh
-            chmod 0755 /etc/profile.d/cm-local-cache.sh
+{{ include "public.prepare-access-API" . }}
+curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/${CM_CACHE_SERVICE_NAME} -o /tmp/cm-cache.txt
+export CM_POLICY_LOCAL_CACHE_IP=$(cat /tmp/cm-cache.txt  | jq -r '.spec.clusterIP')
+echo "export CM_POLICY_LOCAL_CACHE_IP=${CM_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/cm-local-cache.sh
+chmod 0755 /etc/profile.d/cm-local-cache.sh
 {{- end }}
 {{- end -}}
 
-
-{{- define "traffic-engine.global.cm.env-service-name" -}}
-{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-        - name: CM_CACHE_SERVICE_NAME
-          value: {{ .Values.external_resources.cm.local_cache.cache_name }}-redis-master
-{{- end }}
-{{- end -}}
-
-
-{{- define "traffic-engine.firewall.set-redis-ip" -}}
-{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
-{{- end }}
-{{- end -}}
-
-{{- define "traffic-engine.proxy.certstore.set-redis-ip" -}}
-{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/certstore/conf/cert_store.ini
-{{- end }}
-{{- end -}}
-
-{{- define "traffic-engine.proxy.tfe.set-redis-ip" -}}
-{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/tfe/conf/tfe/tfe.conf
-{{- end }}
-{{- end -}}
-
-{{- define "traffic-engine.sce.set-redis-ip" -}}
-{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sce/conf/sce.conf
-{{- end }}
-{{- end -}}
-
-{{- define "traffic-engine.shaping.set-redis-ip" -}}
-{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
-{{- end }}
-{{- end -}}
 
 {{- define "traffic-engine.volume.dev-shm" -}}
       - name: dev-shm
@@ -643,33 +575,11 @@ echo "export device_id=${DEVICE_SN}" > /target_config/etc/profile.d/device_id.sh
 {{- define "traffic-engine.global.sd.read-server-ip" -}}
 {{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
 {{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
-            export APISERVER=https://kubernetes.default.svc
-            export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
-            export TOKEN=$(cat ${SERVICEACCOUNT}/token)
-            export CACERT=${SERVICEACCOUNT}/ca.crt
-            curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/${SD_CACHE_SERVICE_NAME} -o /tmp/sd-cache.txt
-            export SD_POLICY_LOCAL_CACHE_IP=$(cat /tmp/sd-cache.txt  | jq -r '.spec.clusterIP')
-            echo "export SD_POLICY_LOCAL_CACHE_IP=${SD_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/sd-local-cache.sh
-            chmod 0755 /etc/profile.d/sd-local-cache.sh
-{{- end }}
-{{- end }}
-{{- end -}}
-
-
-{{- define "traffic-engine.global.sd.env-service-name" -}}
-{{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
-{{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
-        - name: SD_CACHE_SERVICE_NAME
-          value: {{ .Values.external_resources.sd.local_cache.cache_name }}-redis-master
-{{- end }}
-{{- end }}
-{{- end -}}
-
-
-{{- define "traffic-engine.firewall.sd.set-redis-ip" -}}
-{{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
-{{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
-            sed -Ei "s|SD_POLICY_LOCAL_CACHE_IP_LOCATION|${SD_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
+{{ include "public.prepare-access-API" . }}
+curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/${SD_CACHE_SERVICE_NAME} -o /tmp/sd-cache.txt
+export SD_POLICY_LOCAL_CACHE_IP=$(cat /tmp/sd-cache.txt  | jq -r '.spec.clusterIP')
+echo "export SD_POLICY_LOCAL_CACHE_IP=${SD_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/sd-local-cache.sh
+chmod 0755 /etc/profile.d/sd-local-cache.sh
 {{- end }}
 {{- end }}
 {{- end -}}

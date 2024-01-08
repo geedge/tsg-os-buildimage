@@ -47,8 +47,10 @@ spec:
           - |
             ldconfig
             {{ template "traffic-engine.proxy.copy-config-to-dest" . }}
-            {{ template "traffic-engine.global.cm.read-server-ip" . }}
-            {{ template "traffic-engine.proxy.tfe.set-redis-ip" . }}
+            {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
+            {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
+            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/tfe/conf/tfe/tfe.conf
+            {{- end }}
             {{ template "traffic-engine.proxy.prestart" . }}
             {{ template "traffic-engine.proxy.start" . }}
         ports:
@@ -62,7 +64,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        {{ template "traffic-engine.global.cm.env-service-name" . }}
+        {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
+        - name: CM_CACHE_SERVICE_NAME
+          value: {{ .Values.external_resources.cm.local_cache.cache_name }}-redis-master
+        {{- end }}
         securityContext:
           privileged: true
 {{- if eq .Values.debug.proxy.enable_liveness_probe .Values.define_enable_val_yes }}
@@ -102,8 +107,10 @@ spec:
           - "-ec"
           - |
             {{ template "traffic-engine.certstore.copy-config-to-dest" . }}
-            {{ template "traffic-engine.global.cm.read-server-ip" . }}
-            {{ template "traffic-engine.proxy.certstore.set-redis-ip" . }}
+            {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
+            {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
+            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/certstore/conf/cert_store.ini
+            {{- end }}
             {{ template "traffic-engine.certstore.prestart" . }}
             exec /opt/tsg/certstore/bin/certstore
         securityContext:
@@ -115,7 +122,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        {{ template "traffic-engine.global.cm.env-service-name" . }}
+        {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
+        - name: CM_CACHE_SERVICE_NAME
+          value: {{ .Values.external_resources.cm.local_cache.cache_name }}-redis-master
+        {{- end }}
         volumeMounts:
         {{ template "traffic-engine.mount.localtime" . }}
         - name: certstore
@@ -211,8 +221,6 @@ spec:
             # disable tcp windows scaling for kernel bugs
             sysctl -w net.ipv4.tcp_window_scaling=0
 
-
-            {{ include "traffic-engine.init" . | nindent 12 }}
             ip tuntap add dev tap0 mode tap multi_queue
             /usr/sbin/ip link set tap0 address fe:65:b7:03:50:bd
             /usr/sbin/ip link set tap0 up
@@ -275,6 +283,9 @@ spec:
             /usr/sbin/ip -6 route add default dev tap_s via fd03::01 table 444
             /usr/sbin/ip -6 rule add iif tap_c tab 102
             /usr/sbin/ip -6 rule add iif tap_s tab 102
+
+            {{ include "public.prepare-access-API" . | nindent 12 }}
+            {{- include "public.serialize-node-annotations" . | nindent 12 }}
 
         securityContext:
           privileged: true

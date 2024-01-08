@@ -47,8 +47,10 @@ spec:
           - |
             ldconfig
             {{ template "traffic-engine.sce.copy-config-to-dest" . }}
-            {{ template "traffic-engine.global.cm.read-server-ip" . }}
-            {{ template "traffic-engine.sce.set-redis-ip" . }}
+            {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
+            {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
+            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sce/conf/sce.conf
+            {{- end }}
             {{ template "traffic-engine.service-chaining.prestart" . }}
             {{ template "traffic-engine.service-chaining.start" . }}
         ports:
@@ -62,7 +64,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        {{ template "traffic-engine.global.cm.env-service-name" . }}
+        {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
+        - name: CM_CACHE_SERVICE_NAME
+          value: {{ .Values.external_resources.cm.local_cache.cache_name }}-redis-master
+        {{- end }}
         securityContext:
           privileged: true
 {{- if eq .Values.debug.service_chaining.enable_liveness_probe .Values.define_enable_val_yes }}
@@ -175,8 +180,18 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{- include "traffic-engine.init" . | nindent 12 }}
-            {{ template "traffic-engine.init.sce" . }}
+            {{- include "public.prepare-access-API" . | nindent 12 }}
+            {{- include "public.serialize-node-annotations" . | nindent 12 }}
+            {{- if .Values.sce_config.vxlan_config.endpoint_nic }}
+            ip tuntap add dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} mode tap
+            ip link set dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} up
+            ip route add {{ .Values.sce_config.vxlan_config.endpoint_netip }}/{{ .Values.sce_config.vxlan_config.endpoint_mask }} dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} table 10
+            {{- if .Values.sce_config.vxlan_config.endpoint_gateway }}
+            ip route add default via {{ .Values.sce_config.vxlan_config.endpoint_gateway }} table 10
+            {{- end }}
+            ip a a {{ .Values.sce_config.vxlan_config.endpoint_ip }}/{{ .Values.sce_config.vxlan_config.endpoint_mask }} dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} noprefixroute
+            ip rule add dport 3784 table 10
+            {{- end }}
         securityContext:
           privileged: true
         env:
