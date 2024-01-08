@@ -30,11 +30,11 @@ dictator_enable=0
 
     destroy_all_plug_enabled = 0
 
-	### note, used to represent inbound or outbound direction value,
-	### because it comes from Third party device, so it needs to be specified manually,
-	### if inbound_route_dir=1, then outbound_route_dir=0, vice versa,
-	### in other words, outbound_route_dir = 1 ^ inbound_route_dir;
-	inbound_route_dir=1
+    ### note, used to represent inbound or outbound direction value,
+    ### because it comes from Third party device, so it needs to be specified manually,
+    ### if inbound_route_dir=1, then outbound_route_dir=0, vice versa,
+    ### in other words, outbound_route_dir = 1 ^ inbound_route_dir;
+    inbound_route_dir=1
 
 ### note, BSD_packet_filter, if you do not want to set any filter rule, keep it empty as ""
     BSD_packet_filter=""
@@ -106,20 +106,20 @@ bypass_trigger_cpu_usage={{ .Values.overload_protection.detect_threshold_cpu_usa
     tcp_drop_pure_ack_pkt=0
     tcp_syn_option_parse_enabled=1
     skip_not_ip_layer_over_eth=0
-	skip_gtp_seq_field_for_inject=1
+    skip_gtp_seq_field_for_inject=1
 
 [DUPLICATE_PKT]
 [dup_pkt.traffic.original]
     kickout_udp_stream_enabled=0
 {{- if  eq .Values.session_manager.tcp_duplicated_packet_filter  .Values.define_enable_val_yes }}
-	original_ipv4_tcp_enabled=1
+    original_ipv4_tcp_enabled=1
 {{- else }}
-	original_ipv4_tcp_enabled=0
+    original_ipv4_tcp_enabled=0
 {{- end }}
 {{- if  eq .Values.session_manager.udp_duplicated_packet_filter  .Values.define_enable_val_yes }}
-	original_ipv4_udp_enabled=1
+    original_ipv4_udp_enabled=1
 {{- else }}
-	original_ipv4_udp_enabled=0
+    original_ipv4_udp_enabled=0
 {{- end }}
 ### note, can't distinguish between duplicate traffic and application retransmit traffic for IPv6 packets,
 ###       so not support IPv6 original duplicate traffic check.
@@ -127,15 +127,15 @@ bypass_trigger_cpu_usage={{ .Values.overload_protection.detect_threshold_cpu_usa
 
 [dup_pkt.traffic.inject]
 {{- if  eq .Values.session_manager.inject_duplicated_packet_filter  .Values.define_enable_val_yes }}
-	inject_all_enabled=1
+    inject_all_enabled=1
 {{- else }}
     inject_all_enabled=0
 {{- end }}
 
 [dup_pkt.parameters]
-	bloom_capacity=1000000
-	bloom_error_rate=0.00001
-	bloom_timeout=10
+    bloom_capacity=1000000
+    bloom_error_rate=0.00001
+    bloom_timeout=10
 
 [STREAM]
 ### note, stream_id_base_time format is "%Y-%m-%d %H:%M:%S"
@@ -225,7 +225,7 @@ bypass_trigger_cpu_usage={{ .Values.overload_protection.detect_threshold_cpu_usa
 
         [tools.pkt_dump.udp]
         command_port=9345
-		pkt_dump_ratio=30
+        pkt_dump_ratio=30
 
         [tools.pkt_dump.storage]
 ### note, file path must be double quotation mark extension, for example,  path="/dev/shm/pkt_dump"
@@ -235,7 +235,7 @@ bypass_trigger_cpu_usage={{ .Values.overload_protection.detect_threshold_cpu_usa
 
 
 [BREAKPAD]
-{{- include "traffic-engine.coredump" . | indent 4 }}
+    {{- include "traffic-engine.coredump" . | indent 4 }}
     breakpad_minidump_dir="/run/sapp/crashreport"
     breakpad_upload_tools="/opt/tsg/framework/bin/minidump_upload"
 
@@ -255,7 +255,7 @@ bypass_trigger_cpu_usage={{ .Values.overload_protection.detect_threshold_cpu_usa
     cfg_file_stream_compare_layer="etc/stream_compare_layer.conf"
     cfg_file_vlan_flipping="etc/vlan_flipping_map.conf"
     cfg_file_asymmetric_addr_layer="etc/asymmetric_addr_layer.conf"
-	cfg_file_well_known_port="etc/well_known_port.conf"
+    cfg_file_well_known_port="etc/well_known_port.conf"
 
 [SECONDARY_DATA_LINK]
     data_file_sysinfo_log="log/sysinfo.log"
