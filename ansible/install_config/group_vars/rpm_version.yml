@@ -65,9 +65,9 @@ mlnx_ofed_user_space_only_rpm_version:
   mlnx_ofed_user_space: mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch
 
 sapp_rpm_version:
-  sapp: sapp-4.3.35.84091e5
+  sapp: sapp-4.3.36.abab760
   tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
-  sapp-pr: sapp-pr-4.3.35.84091e5
+  sapp-pr: sapp-pr-4.3.36.abab760
 
 tfe_rpm_version:
   tfe: tfe-4.8.60.b1f670c
