@@ -57,8 +57,10 @@ firewall:
   enable: yes
   enable_smartoffload: no
   logs:
-    contains_app_id: yes
-    contains_dns_resource_record: yes
+    contains_app_id:
+      enable: yes
+    contains_dns_resource_record:
+      enable: yes
 
 appsketch:
   enable: yes
