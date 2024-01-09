@@ -46,8 +46,9 @@ spec:
           - "-ec"
           - |
             ldconfig
-            {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
             {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
+            {{- include "public.prepare-access-API" . | nindent 12 }}
+            {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sce/conf/sce.conf
             {{- end }}
             {{- if eq .Values.debug.service_chaining.enable_prestart_script .Values.define_enable_val_yes }}

@@ -122,7 +122,10 @@ enable_breakpad_upload=0
 {{- end }}
 {{- end -}}
 
-
+{{/*
+Set up the environment to enable API access. 
+The template should be invoked in command line.
+*/}}
 {{- define "public.prepare-access-API" -}}
 export APISERVER=https://kubernetes.default.svc
 export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
@@ -131,7 +134,11 @@ export TOKEN=$(cat ${SERVICEACCOUNT}/token)
 export CACERT=${SERVICEACCOUNT}/ca.crt
 {{- end -}}
 
-
+{{/*
+Read the node annotations information and serialize it into a file.
+The template should be invoked from the command line.
+The template requires "public.prepare-access-API".
+*/}}
 {{- define "public.serialize-node-annotations" -}}
 curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/nodes/${NODE_NAME} -o /tmp/node-${NODE_NAME}.json
 export DEVICE_SN=$(cat /tmp/node-${NODE_NAME}.json | jq -r '.metadata.annotations."tsg-os/device-sn"')
@@ -139,6 +146,10 @@ echo "{\"sn\": \"$DEVICE_SN\"}" >      /opt/tsg/shared-configs/tsg_sn.json
 echo "export device_id=${DEVICE_SN}" > /opt/tsg/shared-configs/device_id.sh
 {{- end -}}
 
+{{/*
+The volumes related to "mrzcpd". 
+The volumes will be mounted by "traffic-engine.mount.mrzcpd".
+*/}}
 {{- define "traffic-engine.volume.mrzcpd" -}}
 - name: opt-tsg-mrzcpd
   hostPath:
@@ -159,6 +170,10 @@ echo "export device_id=${DEVICE_SN}" > /opt/tsg/shared-configs/device_id.sh
     type: File
 {{- end -}}
 
+{{/*
+The volumeMounts related to "mrzcpd".  
+Requires "traffic-engine.volume.mrzcpd"
+*/}}
 {{- define "traffic-engine.mount.mrzcpd" -}}
 - name: opt-tsg-mrzcpd
   mountPath: /opt/tsg/mrzcpd
@@ -194,14 +209,15 @@ echo "export device_id=${DEVICE_SN}" > /opt/tsg/shared-configs/device_id.sh
 {{- end }}
 {{- end -}}
 
+{{/*
+Read cm service ip and set it up as an environment variable.
+Requires "public.prepare-access-API"
+*/}}
 {{- define "traffic-engine.global.cm.read-server-ip" -}}
-{{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-{{ include "public.prepare-access-API" . }}
 curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/${CM_CACHE_SERVICE_NAME} -o /tmp/cm-cache.txt
 export CM_POLICY_LOCAL_CACHE_IP=$(cat /tmp/cm-cache.txt  | jq -r '.spec.clusterIP')
 echo "export CM_POLICY_LOCAL_CACHE_IP=${CM_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/cm-local-cache.sh
 chmod 0755 /etc/profile.d/cm-local-cache.sh
-{{- end }}
 {{- end -}}
 
 {{- define "traffic-engine.global.sd.server-ip" -}}
@@ -224,16 +240,15 @@ chmod 0755 /etc/profile.d/cm-local-cache.sh
 {{- end }}
 {{- end -}}
 
+{{/*
+Read sd service ip and set it up as an environment variable.
+Requires "public.prepare-access-API"
+*/}}
 {{- define "traffic-engine.global.sd.read-server-ip" -}}
-{{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
-{{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
-{{ include "public.prepare-access-API" . }}
 curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/${SD_CACHE_SERVICE_NAME} -o /tmp/sd-cache.txt
 export SD_POLICY_LOCAL_CACHE_IP=$(cat /tmp/sd-cache.txt  | jq -r '.spec.clusterIP')
 echo "export SD_POLICY_LOCAL_CACHE_IP=${SD_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/sd-local-cache.sh
 chmod 0755 /etc/profile.d/sd-local-cache.sh
-{{- end }}
-{{- end }}
 {{- end -}}
 
 {{- define "public.sync-host-timezone.volume" -}}
