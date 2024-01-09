@@ -50,8 +50,15 @@ spec:
             {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sce/conf/sce.conf
             {{- end }}
-            {{ template "traffic-engine.service-chaining.prestart" . }}
-            {{ template "traffic-engine.service-chaining.start" . }}
+            {{- if eq .Values.debug.service_chaining.enable_prestart_script .Values.define_enable_val_yes }}
+            chmod 0755 /opt/tsg/scripts/prestart.sh
+            /opt/tsg/scripts/prestart.sh
+            {{- end }}
+            {{- if eq .Values.debug.service_chaining.enable_interactive_startup .Values.define_enable_val_yes }}
+            while true; do sleep 10;done
+            {{- else }}
+            exec /opt/tsg/sce/bin/sce
+            {{- end }}
         ports:
           - containerPort: 9006
         env:
@@ -91,16 +98,22 @@ spec:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_device_tag.json"
           subPath: "sce/tsg_device_tag.json"
-        - name: sce-minidump
-          mountPath: /run/sce/crashreport
         - name: sce-log
           mountPath: /opt/tsg/sce/log
         - name: bfdd-unix-socket
           mountPath: /run/frr
-        {{ template "traffic-engine.mount.mrzcpd" . }}
-        {{ template "traffic-engine.mount.localtime" . }}
-        {{ template "traffic-engine.service-chaining.mount.prestart" . }}
-        {{ template "traffic-engine.service-chaining.mount.hostpath" . }}
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+        {{- if eq .Values.debug.service_chaining.enable_prestart_script .Values.define_enable_val_yes }}
+        - name: prestart-dir
+          mountPath: /tmp/prestart
+        - name: service-chaining-prestart
+          mountPath: /opt/tsg/scripts/prestart.sh
+        {{- end }}
+        {{- if eq .Values.debug.service_chaining.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+        - name: host-root
+          mountPath: /host
+        {{- end }}
+        {{- include "traffic-engine.mount.mrzcpd" . | nindent 8 }}
 
       - name: bfdd
         image: "registry.gdnt-cloud.website/tsg-bfdd:{{ .Chart.AppVersion }}"
@@ -110,7 +123,6 @@ spec:
           - "bash"
           - "-ec"
           - |
-            {{ template "traffic-engine.bfdd.prestart" . }}
             exec /opt/tsg/bfdd/bfdd -u root -g root
         env:
         - name: MRZCPD_CTRLMSG_LISTEN_ADDR
@@ -127,15 +139,11 @@ spec:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "tsg_sn.json"
-        - name: bfdd-minidump
-          mountPath: /run/bfdd/crashreport
         - name: bfdd-log
           mountPath: /opt/tsg/bfdd/log
-        - name: hotfix-bfdd
-          mountPath: /etc/traffic-engine/hotfix/bfdd
         - name: bfdd-unix-socket
           mountPath: /run/frr
-        {{ template "traffic-engine.mount.localtime" . }}
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       - name: telegraf-sce
         image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
@@ -157,7 +165,7 @@ spec:
         - name: shared-configs-volume
           mountPath: "/etc/profile.d/device_id.sh"
           subPath: "device_id.sh"
-        {{ template "traffic-engine.mount.localtime" . }}
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       - name: log-dir-hook
         image: "registry.gdnt-cloud.website/tsg-sce:{{ .Chart.AppVersion }}"
@@ -212,7 +220,7 @@ spec:
           mountPath: /opt/tsg/shared-configs
         - name: sce-configs-volume
           mountPath: /opt/tsg/configs/sce
-        {{ template "traffic-engine.mount.localtime" . }}
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       volumes:
       - name: telegraf-configs-volume
@@ -223,29 +231,33 @@ spec:
           name: sce-{{ .Release.Name }}
       - name: shared-configs-volume
         emptyDir: {}
-      - name: sce-minidump
-        hostPath:
-          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-sce:{{ .Chart.AppVersion }}/
-      - name: bfdd-minidump
-        hostPath:
-          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-bfdd:{{ .Chart.AppVersion }}/
       - name: sce-log
         hostPath:
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sce/
       - name: bfdd-log
         hostPath:
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/bfdd/
-      - name: hotfix-bfdd
-        hostPath:
-          path: /etc/traffic-engine/hotfix/bfdd
       - name: bfdd-unix-socket
         emptyDir: {}
+      {{- include "traffic-engine.volume.mrzcpd" . | nindent 6 }}
+      {{- include "public.sync-host-timezone.volume" . | nindent 6 }}
+      {{- if eq .Values.debug.service_chaining.enable_prestart_script .Values.define_enable_val_yes }}
       - name: prestart-dir
         hostPath: 
           path: /etc/tsg-os/{{ .Release.Name }}/
           type: DirectoryOrCreate
-      {{ template "traffic-engine.volume.mrzcpd" . }}
-      {{ template "traffic-engine.volume.localtime" . }}
-      {{ template "traffic-engine.service-chaining.volume.prestart" . }}
-      {{ template "traffic-engine.volume.hostpath" . }}
+      - name: service-chaining-prestart
+        hostPath:
+      {{- if .Values.debug.service_chaining.prestart_script }}
+          path: {{ .Values.debug.service_chaining.prestart_script }}
+      {{- else }}
+          path: /etc/tsg-os/{{ .Release.Name }}/service_chaining_prestart_script.sh
+      {{- end }}
+          type: FileOrCreate
+      {{- end }}
+      {{- if eq .Values.debug.service_chaining.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+      - name: host-root
+        hostPath:
+          path: /
+      {{- end }}
 {{- end }}

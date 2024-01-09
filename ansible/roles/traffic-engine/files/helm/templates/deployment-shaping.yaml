@@ -57,9 +57,19 @@ spec:
             echo "export CLUSTER_ANNOUNCE_PORT=${CLUSTER_ANNOUNCE_PORT}" > /etc/profile.d/announceinfo.sh
             echo "export HEALTH_CHECK_ANNOUNCE_PORT=${HEALTH_CHECK_ANNOUNCE_PORT}" >> /etc/profile.d/announceinfo.sh
             chmod 0755 /etc/profile.d/announceinfo.sh
-            {{ template "traffic-engine.shaping.set-shaping-config" . }}
-            {{ template "traffic-engine.shaping.prestart" . }}
-            {{ template "traffic-engine.shaping.start" . }}
+
+            sed -Ei "s|NODE_IP_LOCATION|${NODE_IP?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
+            sed -Ei "s|CLUSTER_ANNOUNCE_PORT_LOCATION|${CLUSTER_ANNOUNCE_PORT?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
+            sed -Ei "s|HEALTH_CHECK_ANNOUNCE_PORT_LOCATION|${HEALTH_CHECK_ANNOUNCE_PORT?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
+            {{- if eq .Values.debug.shaping.enable_prestart_script .Values.define_enable_val_yes }}
+            chmod 0755 /opt/tsg/scripts/prestart.sh
+            /opt/tsg/scripts/prestart.sh
+            {{- end }}
+            {{- if eq .Values.debug.shaping.enable_interactive_startup .Values.define_enable_val_yes }}
+            while true; do sleep 10;done
+            {{- else }}
+            exec /opt/tsg/shaping_engine/bin/shaping_engine
+            {{- end }}
         ports:
           - containerPort: 8551
           - containerPort: 8552
@@ -107,14 +117,20 @@ spec:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_device_tag.json"
           subPath: "shaping/tsg_device_tag.json"
-        - name: shaping-minidump
-          mountPath: /run/shaping/crashreport
         - name: shaping-log
           mountPath: /opt/tsg/shaping/log
-        {{ template "traffic-engine.mount.mrzcpd" . }}
-        {{ template "traffic-engine.mount.localtime" . }}
-        {{ template "traffic-engine.shaping.mount.prestart" . }}
-        {{ template "traffic-engine.shaping.mount.hostpath" . }}        
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+        {{- if eq .Values.debug.shaping.enable_prestart_script .Values.define_enable_val_yes }}
+        - name: prestart-dir
+          mountPath: /tmp/prestart
+        - name: shaping-prestart
+          mountPath: /opt/tsg/scripts/prestart.sh
+        {{- end }}
+        {{- if eq .Values.debug.shaping.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+        - name: host-root
+          mountPath: /host
+        {{- end }}
+        {{- include "traffic-engine.mount.mrzcpd" . | nindent 8 }}
 
       - name: telegraf-shaping
         image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
@@ -136,7 +152,7 @@ spec:
         - name: shared-configs-volume
           mountPath: "/etc/profile.d/device_id.sh"
           subPath: "device_id.sh"
-        {{ template "traffic-engine.mount.localtime" . }}
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       - name: log-dir-hook
         image: "registry.gdnt-cloud.website/tsg-shaping:{{ .Chart.AppVersion }}"
@@ -180,7 +196,7 @@ spec:
           mountPath: /opt/tsg/shared-configs
         - name: shaping-configs-volume
           mountPath: /opt/tsg/configs/shaping
-        {{ template "traffic-engine.mount.localtime" . }}
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       volumes:
       - name: telegraf-configs-volume
@@ -191,18 +207,28 @@ spec:
           name: shaping-{{ .Release.Name }}
       - name: shared-configs-volume
         emptyDir: {}
-      - name: shaping-minidump
-        hostPath:
-          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-shaping:{{ .Chart.AppVersion }}/
       - name: shaping-log
         hostPath:
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/shaping/
+      {{- include "traffic-engine.volume.mrzcpd" . | nindent 6 }}
+      {{- include "public.sync-host-timezone.volume" . | nindent 6 }}
+      {{- if eq .Values.debug.shaping.enable_prestart_script .Values.define_enable_val_yes }}
       - name: prestart-dir
         hostPath: 
           path: /etc/tsg-os/{{ .Release.Name }}/
           type: DirectoryOrCreate
-      {{ template "traffic-engine.volume.mrzcpd" . }}
-      {{ template "traffic-engine.volume.localtime" . }}
-      {{ template "traffic-engine.shaping.volume.prestart" . }}
-      {{ template "traffic-engine.volume.hostpath" . }}
+      - name: shaping-prestart
+        hostPath:
+      {{- if .Values.debug.shaping.prestart_script }}
+          path: {{ .Values.debug.shaping.prestart_script }}
+      {{- else }}
+          path: /etc/tsg-os/{{ .Release.Name }}/shaping_prestart_script.sh
+      {{- end }}
+          type: FileOrCreate
+      {{- end }}
+      {{- if eq .Values.debug.shaping.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+      - name: host-root
+        hostPath:
+          path: /
+      {{- end }}
 {{- end }}

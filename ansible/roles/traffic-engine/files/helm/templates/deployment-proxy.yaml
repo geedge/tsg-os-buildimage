@@ -50,8 +50,15 @@ spec:
             {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/tfe/conf/tfe/tfe.conf
             {{- end }}
-            {{ template "traffic-engine.proxy.prestart" . }}
-            {{ template "traffic-engine.proxy.start" . }}
+            {{- if eq .Values.debug.proxy.enable_prestart_script .Values.define_enable_val_yes }}
+            chmod 0755 /opt/tsg/scripts/prestart.sh
+            /opt/tsg/scripts/prestart.sh
+            {{- end }}
+            {{- if eq .Values.debug.proxy.enable_interactive_startup .Values.define_enable_val_yes }}
+            while true; do sleep 10;done
+            {{- else }}
+            exec /opt/tsg/tfe/bin/tfe
+            {{- end }}
         ports:
           - containerPort: 9001
         env:
@@ -91,15 +98,21 @@ spec:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_device_tag.json"
           subPath: "tfe/tsg_device_tag.json"
-        - name: proxy-minidump
-          mountPath: /run/tfe/crashreport
         - name: proxy-log
           mountPath: /opt/tsg/tfe/log
-        {{ template "traffic-engine.mount.mrzcpd" . }}
-        {{ template "traffic-engine.mount.localtime" . }}
-        {{ template "traffic-engine.proxy.mount.prestart" . }}
-        {{ template "traffic-engine.proxy.mount.hostpath" . }}
-        {{ template "traffic-engine.mount.dev-bus-usb" . }}
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+        {{- if eq .Values.debug.proxy.enable_prestart_script .Values.define_enable_val_yes }}
+        - name: prestart-dir
+          mountPath: /tmp/prestart
+        - name: proxy-prestart
+          mountPath: /opt/tsg/scripts/prestart.sh
+        {{- end }}
+        {{- if eq .Values.debug.proxy.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+        - name: host-root
+          mountPath: /host
+        {{- end }}
+        {{- include "traffic-engine.mount.mrzcpd" . | nindent 8 }}
+        {{- include "public.license-support.dev-bus-usb-volume-mount" . | nindent 8 }}
 
       - name: certstore
         image: "registry.gdnt-cloud.website/tsg-certstore:{{ .Chart.AppVersion }}"
@@ -113,7 +126,6 @@ spec:
             {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/certstore/conf/cert_store.ini
             {{- end }}
-            {{ template "traffic-engine.certstore.prestart" . }}
             exec /opt/tsg/certstore/bin/certstore
         securityContext:
           privileged: true
@@ -129,7 +141,6 @@ spec:
           value: {{ .Values.external_resources.cm.local_cache.cache_name }}-redis-master
         {{- end }}
         volumeMounts:
-        {{ template "traffic-engine.mount.localtime" . }}
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "tsg_sn.json"
@@ -139,12 +150,9 @@ spec:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_device_tag.json"
           subPath: "certstore/tsg_device_tag.json"
-        - name: certstore-minidump
-          mountPath: /run/certstore/crashreport
         - name: certstore-log
           mountPath: /opt/tsg/certstore/logs
-        - name: hotfix-certstore
-          mountPath: /etc/traffic-engine/hotfix/certstore
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       - name: cert-redis
         image: "registry.gdnt-cloud.website/tsg-certstore:{{ .Chart.AppVersion }}"
@@ -153,7 +161,7 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
-        {{ template "traffic-engine.mount.localtime" . }}  
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}  
 
       - name: telegraf-proxy
         image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
@@ -175,7 +183,7 @@ spec:
         - name: shared-configs-volume
           mountPath: "/etc/profile.d/device_id.sh"
           subPath: "device_id.sh"
-        {{ template "traffic-engine.mount.localtime" . }}
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       - name: log-dir-hook
         image: "registry.gdnt-cloud.website/tsg-proxy:{{ .Chart.AppVersion }}"
@@ -312,7 +320,7 @@ spec:
           mountPath: /opt/tsg/configs/certstore
         - name: tfe-configs-volume
           mountPath: /opt/tsg/configs/tfe
-        {{ template "traffic-engine.mount.localtime" . }}
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       volumes:
       - name: certstore-configs-volume
@@ -326,29 +334,33 @@ spec:
           name: telegraf-{{ .Release.Name }}
       - name: shared-configs-volume
         emptyDir: {}
-      - name: proxy-minidump
-        hostPath:
-          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-proxy:{{ .Chart.AppVersion }}/
-      - name: certstore-minidump
-        hostPath:
-          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-certstore:{{ .Chart.AppVersion }}/
       - name: proxy-log
         hostPath:
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/tfe/
       - name: certstore-log
         hostPath:
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/certstore/
-      - name: hotfix-certstore
-        hostPath:
-          path: /etc/traffic-engine/hotfix/certstore
+      {{- include "traffic-engine.volume.mrzcpd" . | nindent 6 }}
+      {{- include "public.sync-host-timezone.volume" . | nindent 6 }}
+      {{- if eq .Values.debug.proxy.enable_prestart_script .Values.define_enable_val_yes }}
       - name: prestart-dir
         hostPath: 
           path: /etc/tsg-os/{{ .Release.Name }}/
           type: DirectoryOrCreate
-      {{ template "traffic-engine.volume.mrzcpd" . }}
-      {{ template "traffic-engine.volume.localtime" . }}
-      {{ template "traffic-engine.proxy.volume.prestart" . }}
-      {{ template "traffic-engine.volume.hostpath" . }}
-      {{ template "traffic-engine.volume.dev-bus-usb" . }}
+      - name: proxy-prestart
+        hostPath:
+      {{- if .Values.debug.proxy.prestart_script }}
+          path: {{ .Values.debug.proxy.prestart_script }}
+      {{- else }}
+          path: /etc/tsg-os/{{ .Release.Name }}/proxy_prestart_script.sh
+      {{- end }}
+          type: FileOrCreate
+      {{- end }}
+      {{- if eq .Values.debug.proxy.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+      - name: host-root
+        hostPath:
+          path: /
+      {{- end }}
+      {{- include "public.license-support.dev-bus-usb-volume" . | nindent 6 }}
 
 {{- end }}

@@ -52,8 +52,15 @@ spec:
             {{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
             sed -Ei "s|SD_POLICY_LOCAL_CACHE_IP_LOCATION|${SD_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
             {{- end }}
-            {{ template "traffic-engine.firewall.prestart" . }}
-            {{ template "traffic-engine.firewall.start" . }}
+            {{- if eq .Values.debug.firewall.enable_prestart_script .Values.define_enable_val_yes }}
+            chmod 0755 /opt/tsg/scripts/prestart.sh
+            /opt/tsg/scripts/prestart.sh
+            {{- end }}
+            {{- if eq .Values.debug.firewall.enable_interactive_startup .Values.define_enable_val_yes }}
+            while true; do sleep 10;done
+            {{- else }}
+            exec /opt/tsg/sapp/sapp
+            {{- end }}
         ports:
           - containerPort: 9273
         env:
@@ -140,18 +147,24 @@ spec:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/sapp/stellar_plugin/spec.toml"
           subPath: "sapp/spec.toml"
-        - name: firewall-minidump
-          mountPath: /run/sapp/crashreport
         - name: firewall-log
           mountPath: /opt/tsg/sapp/log
         - name: metrics-json-dir
           mountPath: "/opt/tsg/sapp/metrics"
-        {{ template "traffic-engine.mount.mrzcpd" . }}
-        {{ template "traffic-engine.mount.localtime" . }}
-        {{ template "traffic-engine.firewall.mount.prestart" . }}
-        {{ template "traffic-engine.firewall.mount.hostpath" . }}
-        {{ template "traffic-engine.mount.dev-bus-usb" . }}
-        {{ template "traffic-engine.mount.dev-shm" . }}
+        {{- if eq .Values.debug.firewall.enable_prestart_script .Values.define_enable_val_yes }}
+        - name: prestart-dir
+          mountPath: /tmp/prestart
+        - name: firewall-prestart
+          mountPath: /opt/tsg/scripts/prestart.sh
+        {{- end }}
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+        {{- if eq .Values.debug.firewall.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+        - name: host-root
+          mountPath: /host
+        {{- end }}
+        {{- include "traffic-engine.mount.mrzcpd" . | nindent 8 }}
+        {{- include "public.license-support.dev-bus-usb-volume-mount" . | nindent 8 }}
+        {{- include "public.license-support.dev-shm-volume-mount" . | nindent 8 }}
 
       - name: fieldstat-exporter
         image: "registry.gdnt-cloud.website/tsg-firewall:{{ .Chart.AppVersion }}"
@@ -179,7 +192,7 @@ spec:
         volumeMounts:
         - name: metrics-json-dir
           mountPath: "/opt/tsg/sapp/metrics"
-        {{ template "traffic-engine.mount.localtime" . }}
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       - name: merged-exporter
         image: "quay.io/rebuy/exporter-merger:v0.2.0"
@@ -233,9 +246,7 @@ spec:
           mountPath: /opt/tsg/shared-configs
         - name: sapp-configs-volume
           mountPath: /opt/tsg/configs/sapp
-        - name: localtime-node
-          mountPath: /etc/localtime
-          readOnly: true
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       volumes:
       - name: sapp-configs-volume
@@ -245,19 +256,29 @@ spec:
         emptyDir: {}
       - name: metrics-json-dir
         emptyDir: {}
-      - name: firewall-minidump
-        hostPath:
-          path: /var/crashreport/traffic-engine/traffic-engine-{{ .Release.Name }}/tsg-firewall:{{ .Chart.AppVersion }}/
       - name: firewall-log
         hostPath: 
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sapp/
+      {{- if eq .Values.debug.firewall.enable_prestart_script .Values.define_enable_val_yes }}
       - name: prestart-dir
         hostPath: 
           path: /etc/tsg-os/{{ .Release.Name }}/
           type: DirectoryOrCreate
-      {{ template "traffic-engine.volume.mrzcpd" . }}
-      {{ template "traffic-engine.volume.localtime" . }}
-      {{ template "traffic-engine.firewall.volume.prestart" . }}
-      {{ template "traffic-engine.volume.hostpath" . }}
-      {{ template "traffic-engine.volume.dev-bus-usb" . }}
-      {{ template "traffic-engine.volume.dev-shm" . }}
+      - name: firewall-prestart
+        hostPath:
+      {{- if .Values.debug.firewall.prestart_script }}
+          path: {{ .Values.debug.firewall.prestart_script }}
+      {{- else }}
+          path: /etc/tsg-os/{{ .Release.Name }}/firewall_prestart_script.sh
+      {{- end }}
+          type: FileOrCreate
+      {{- end }}
+      {{- include "traffic-engine.volume.mrzcpd" . | nindent 6 }}
+      {{- include "public.sync-host-timezone.volume" . | nindent 6 }}
+      {{- if eq .Values.debug.firewall.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+      - name: host-root
+        hostPath:
+          path: /
+      {{- end }}
+      {{- include "public.license-support.dev-bus-usb-volume" . | nindent 6 }}
+      {{- include "public.license-support.dev-shm-volume" . | nindent 6 }}
