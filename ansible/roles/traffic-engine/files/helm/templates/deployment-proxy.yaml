@@ -172,6 +172,7 @@ spec:
           - "bash"
           - "-ec"
           - |
+            source /etc/profile.d/device_id.sh
             /usr/bin/telegraf -config /etc/telegraf/telegraf_proxy.conf -config-directory /etc/telegraf/telegraf_statistic.d
         securityContext:
           privileged: true
