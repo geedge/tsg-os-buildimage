@@ -49,7 +49,7 @@ spec:
             {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             {{- include "public.prepare-access-API" . | nindent 12 }}
             {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
-            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/tfe/conf/tfe/tfe.conf
+            sed -Ei -c "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/tfe/conf/tfe/tfe.conf
             {{- end }}
             {{- if eq .Values.debug.proxy.enable_prestart_script .Values.define_enable_val_yes }}
             chmod 0755 /opt/tsg/scripts/prestart.sh
@@ -126,7 +126,7 @@ spec:
             {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             {{- include "public.prepare-access-API" . | nindent 12 }}
             {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
-            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/certstore/conf/cert_store.ini
+            sed -Ei -c "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/certstore/conf/cert_store.ini
             {{- end }}
             exec /opt/tsg/certstore/bin/certstore
         securityContext:

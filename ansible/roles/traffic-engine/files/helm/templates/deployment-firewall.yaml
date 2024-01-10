@@ -49,11 +49,11 @@ spec:
             {{- end }}
             {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
             {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
-            sed -Ei "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
+            sed -Ei -c "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
             {{- end }}
             {{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
             {{- include "traffic-engine.global.sd.read-server-ip" . | nindent 12 }}
-            sed -Ei "s|SD_POLICY_LOCAL_CACHE_IP_LOCATION|${SD_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
+            sed -Ei -c "s|SD_POLICY_LOCAL_CACHE_IP_LOCATION|${SD_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
             {{- end }}
             {{- if eq .Values.debug.firewall.enable_prestart_script .Values.define_enable_val_yes }}
             chmod 0755 /opt/tsg/scripts/prestart.sh
