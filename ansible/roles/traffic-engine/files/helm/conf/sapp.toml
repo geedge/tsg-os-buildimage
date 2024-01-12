@@ -235,7 +235,7 @@ bypass_trigger_cpu_usage={{ .Values.overload_protection.detect_threshold_cpu_usa
 
 
 [BREAKPAD]
-    {{- include "traffic-engine.coredump" . | indent 4 }}
+    {{- include "traffic-engine.coredump" . | nindent 4 }}
     breakpad_minidump_dir="/run/sapp/crashreport"
     breakpad_upload_tools="/opt/tsg/framework/bin/minidump_upload"
 
