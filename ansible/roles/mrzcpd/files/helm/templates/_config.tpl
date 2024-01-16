@@ -48,6 +48,9 @@
 
 {{- define "mrzcpd.config" -}}
 {{- $nf_nic_list := "" }}
+{{- $ef_adapter_num:= 0}}
+{{- $tera_adapter_num:= 0}}
+{{- $vwire_num:= 1}}
 {{- $mirr_nic_list := "" }}
 {{- $ep_nic_l2_list := "" }}
 {{- $ep_nic_l3_list := "" }}
@@ -76,18 +79,18 @@
 {{- $mirr_nic_list = (printf "%s,mirr_%d_proxy" $mirr_nic_list $index) }}
 {{- end }}
 
-{{- end }}
+{{- end -}}
 
 [device]
 {{- if .Values.mrzcpd.interfaces }}
-device= {{- range $interface := .Values.mrzcpd.interfaces }}{{ $interface.name }},{{- end }}{{ $nf_nic_list }},{{ $ep_nic_l2_list }},{{ $ep_nic_l3_list }},{{ $mirr_nic_list }},nf_inject,virtio_dign_c,virtio_dign_s
+device= {{- range $interface := .Values.mrzcpd.interfaces }}{{ $interface.name }},{{- end }}{{- range $interface := .Values.mrzcpd.virtual_interfaces }}{{ $interface.name }},{{- end }}{{ $nf_nic_list }},{{ $ep_nic_l2_list }},{{ $ep_nic_l3_list }},{{ $mirr_nic_list }},nf_inject,virtio_dign_c,virtio_dign_s
 {{- else }}
 device= {{ $nf_nic_list }},{{ $ep_nic_l2_list}},{{ $ep_nic_l3_list }},{{ $mirr_nic_list}},nf_inject,virtio_dign_c,virtio_dign_s
 {{- end }}
 sz_tunnel=8192
 sz_buffer=0
 
-{{- range $interface := .Values.mrzcpd.interfaces }}
+{{ range $interface := .Values.mrzcpd.interfaces }}
 [device:{{ $interface.name }}]
 {{- if $interface.address }}
 in_addr={{ $interface.address }}
@@ -102,7 +105,63 @@ allmulticast=1
 rssmode=3
 promisc={{ $interface.promisc }}
 mtu={{ $interface.mtu }}
+{{- if eq $interface.role "5"}}
+driver=1
+{{- else}}
 driver=0
+{{- end}}
+role={{ $interface.role }}
+{{- if $interface.type }}
+type={{ $interface.type }}
+{{- end }}
+{{- if $interface.vlan }}
+{{- if ne (len $interface.vlan) 0}}
+allow_vlan_ids={{- range $index,$vlan := $interface.vlan }}{{- if ne $index 0 }},{{ end -}}{{ $vlan.vlan_id }}{{- end }}
+{{- end }}
+{{- end }}
+{{- if $interface.en_representor }}
+en_representor={{ $interface.en_representor }}
+{{- end }}
+{{- if $interface.representor_ns }}
+representor_ns={{ $interface.representor_ns }}
+{{- end }}
+{{- if $interface.representor_dev }}
+representor_dev={{ $interface.representor_dev }}
+{{- end }}
+{{$enter}}
+{{- if $interface.vlan }}
+{{- range $vlan := $interface.vlan }}
+[device:{{$interface.name}}:vlan:{{$vlan.vlan_id}}]
+{{- if $vlan.ipv4_address }}
+in_addr_v4={{ $vlan.ipv4_address }}
+{{- end }}
+{{- if $vlan.ipv4_mask }}
+in_mask_v4={{ $vlan.ipv4_mask }}
+{{- end }}
+{{- if $vlan.ipv6_address }}
+in_addr_v6={{ $vlan.ipv6_address }}
+{{- end }}
+{{- if $vlan.ipv6_mask }}
+in_mask_v6={{ $vlan.ipv6_mask }}
+{{- end }}
+{{$enter}}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- range $interface := .Values.mrzcpd.virtual_interfaces }}
+[device:{{ $interface.name }}]
+{{- if $interface.promisc }}
+promisc={{ $interface.promisc }}
+{{- end}}
+{{- if $interface.mtu }}
+mtu={{ $interface.mtu }}
+{{- end}}
+{{- if eq $interface.role "5"}}
+driver=1
+{{- else}}
+driver=0
+{{- end}}
 role={{ $interface.role }}
 {{- if $interface.type }}
 type={{ $interface.type }}
@@ -114,12 +173,41 @@ mode={{ $interface.bond_mode }}
 xmit_policy={{ $interface.bond_xmit_policy }}
 {{- end }}
 {{- if $interface.slaves }}
-slaves={{- range $slave := $interface.slaves }}{{ $slave.interface }}{{- end }}
+slaves={{- range $index,$slave := $interface.slaves }}{{- if ne $index 0 }},{{ end -}}{{ $slave.interface }}{{- end }}
 {{- end }}
 {{- if $interface.rxcore }}
 rx_cores={{ $interface.rxcore }}
 {{- end }}
+{{- if $interface.vlan }}
+{{- if ne (len $interface.vlan) 0}}
+allow_vlan_ids={{- range $index,$vlan := $interface.vlan }}{{- if ne $index 0 }},{{ end -}}{{ $vlan.vlan_id }}{{- end }}
+{{- end }}
+{{- end }}
+{{- if $interface.en_representor }}
+en_representor={{ $interface.en_representor }}
+{{- end }}
+{{- if $interface.representor_ns }}
+representor_ns={{ $interface.representor_ns }}
+{{- end }}
 {{$enter}}
+{{- if $interface.vlan }}
+{{- range $vlan := $interface.vlan }}
+[device:{{$interface.name}}:vlan:{{$vlan.vlan_id}}]
+{{- if $vlan.ipv4_address }}
+in_addr_v4={{ $vlan.ipv4_address }}
+{{- end }}
+{{- if $vlan.ipv4_mask }}
+in_mask_v4={{ $vlan.ipv4_mask }}
+{{- end }}
+{{- if $vlan.ipv6_address }}
+in_addr_v6={{ $vlan.ipv6_address }}
+{{- end }}
+{{- if $vlan.ipv6_mask }}
+in_mask_v6={{ $vlan.ipv6_mask }}
+{{- end }}
+{{$enter}}
+{{- end }}
+{{- end }}
 {{- end }}
 
 [device:virtio_dign_c]
@@ -222,6 +310,12 @@ listen_port=46789
 addr=127.0.0.1
 port=56789
 
+[limits]
+nr_max_ef_adapters={{ .Values.mrzcpd.nr_max_ef_adapters }}
+nr_max_vwires={{ .Values.mrzcpd.nr_max_vwires }}
+nr_max_tera_adapters={{ .Values.mrzcpd.nr_max_tera_adapters }}
+nr_max_link_dbs={{ .Values.mrzcpd.nr_max_link_dbs }}
+
 # sid
 [ef_adapters]
 sid_start=100
@@ -233,16 +327,32 @@ sid_start=300
 sid_end=400
 max_rules=32
 
+[tera_adapters]
+sid_start=500
+sid_end=600
+max_rules=64
+
 [service_lb]
 sid_start={{ .Values.mrzcpd.service_lb.sid_range_start }}
 sid_end={{ .Values.mrzcpd.service_lb.sid_range_end }}
-
 {{- range $service := .Values.mrzcpd.services }}
-[ef_adapter:{{ $service.id }}]
+{{- if eq $service.type "etherfabric_adapter"}}
+
+[ef_adapter:{{ $ef_adapter_num }}]
+ef_adapter_id={{ $service.id }}
 mode={{ $service.mode }}
 listen_device={{ $service.listen_on_device }}
-{{$enter}}
+{{- $ef_adapter_num = ($ef_adapter_num | add 1)}}
+{{- else }}
 
+[tera_adapter:{{ $tera_adapter_num }}]
+tera_adapter_id={{ $service.id }}
+listen_device={{ $service.listen_on_device }}
+vlan_int={{ $service.vlan_int }}
+vlan_ext={{ $service.vlan_ext }}
+mac_flipping={{ $service.mac_flipping }}
+{{- $tera_adapter_num = ($tera_adapter_num | add 1)}}
+{{- end}}
 {{- end }}
 
 # health check
@@ -313,11 +423,13 @@ health_check_sessions=nf_inject_health_check
 
 # vwire
 [vwire:0]
+vwire_id=0
 interface_int=virtio_dign_c
 interface_ext=virtio_dign_s
 
 {{- range $virtual_wire := .Values.mrzcpd.virtual_wires }}
-[vwire:{{ $virtual_wire.id }}]
+[vwire:{{ $vwire_num }}]
+vwire_id={{ $virtual_wire.id }}
 interface_int={{ $virtual_wire.internal_interface }}
 interface_ext={{ $virtual_wire.external_interface }}
 {{- if $virtual_wire.obp_device }}
@@ -326,35 +438,10 @@ obp_device={{ $virtual_wire.obp_device }}
 {{- if $virtual_wire.obp_segment }}
 obp_segment={{ $virtual_wire.obp_segment }}
 {{- end }}
+{{- $vwire_num = ($vwire_num | add 1)}}
 {{$enter}}
 {{- end }}
-# classifier rule
-# dst ip
-{{- range $index, $_ := until $cycle }}
-[classifier_rule:{{ $index }}]
-rule_id={{ $index | add 1 }}
-dst_ip_addr_v4=192.0.2.{{ $index | add 101 }}
-dst_ip_mask_v4=32
-action=nf_steering
-priority=1
-category=0
-sid={{ $index | mul $sid_step | add 1000 }}
-vwire_id=0
-{{$enter}}
-{{- end }}
-# src ip
-{{- range $index, $_ := until $cycle }}
-[classifier_rule:{{ $index | add $cycle }}]
-rule_id={{ $index | add $cycle | add 1 }}
-src_ip_addr_v4=192.0.2.{{ $index | add 101 }}
-src_ip_mask_v4=32
-action=nf_steering
-priority=1
-category=0
-sid={{ $index | mul $sid_step | add 1000 }}
-vwire_id=0
-{{$enter}}
-{{- end }}
+
 # bridge
 [bridge:0]
 {{- if .Values.mrzcpd.service_chaining.vxlan_interface  }}
