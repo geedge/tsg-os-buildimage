@@ -15,3 +15,132 @@ heartbeat_lost_threshold = {{getv $hb_lost_threshold_dir}}
 nonrevertive_mode = {{getv $nonrevertive_mode_dir}}
 {{end}}
 {{end}}
+
+{{- $sid_step := 4 }}
+{{- $rule_num := 0 }}
+{{ range $index, $_ := split (getv "/cycle") "," }}
+[classifier_rule:{{ $rule_num }}]
+rule_id={{ add $rule_num 1 }}
+ruleset_type=classifier
+dst_ip_addr_v4=192.0.2.{{ add $index 101 }}
+dst_ip_mask_v4=32
+action=nf_steering
+priority=0
+sid={{ add (mul $index $sid_step) 1000 }}
+vwire_id=0
+{{- $rule_num = add $rule_num 1 }}
+{{ end }}
+
+# src ip
+{{ range $index, $_ :=  split (getv "/cycle") "," }}
+[classifier_rule:{{ $rule_num }}]
+rule_id={{ add $rule_num 1 }}
+ruleset_type=classifier
+src_ip_addr_v4=192.0.2.{{ add $index 101 }}
+src_ip_mask_v4=32
+action=nf_steering
+priority=0
+sid={{ add (mul $index $sid_step) 1000 }}
+vwire_id=0
+{{- $rule_num = add $rule_num 1 }}
+{{ end }}
+
+{{ range $key, $dir := lsdir "/ruleset"}}
+{{- $SrcIpV4_dir := printf "/ruleset/%s/SrcIpV4" $dir}}
+{{- $SrcIpMaskV4_dir := printf "/ruleset/%s/SrcIpMask" $dir}}
+{{- $DstIpV4_dir := printf "/ruleset/%s/DstIpV4" $dir}}
+{{- $DstIpMaskV4_dir := printf "/ruleset/%s/DstIpMask" $dir}}
+{{- $SrcIpV6_dir := printf "/ruleset/%s/SrcIpV6" $dir}}
+{{- $SrcIpMaskV6_dir := printf "/ruleset/%s/SrcIpMask" $dir}}
+{{- $DstIpV6_dir := printf "/ruleset/%s/DstIpV6" $dir}}
+{{- $DstIpMaskV6_dir := printf "/ruleset/%s/DstIpMask" $dir}}
+{{- $RuleId_dir := printf "/ruleset/%s/RuleId" $dir}}
+{{- $SrcPortLow_dir := printf "/ruleset/%s/SrcPortLow" $dir}}
+{{- $SrcPortHigh_dir := printf "/ruleset/%s/SrcPortHigh" $dir}}
+{{- $DstPortLow_dir := printf "/ruleset/%s/DstPortLow" $dir}}
+{{- $DstPortHigh_dir := printf "/ruleset/%s/DstPortHigh" $dir}}
+{{- $Proto_dir := printf "/ruleset/%s/Proto" $dir}}
+{{- $Priority_dir := printf "/ruleset/%s/Priority" $dir}}
+{{- $Sid_dir := printf "/ruleset/%s/Sid" $dir}}
+{{- $VwireId_dir := printf "/ruleset/%s/VwireId" $dir}}
+{{- $EfId_dir := printf "/ruleset/%s/EfId" $dir}}
+{{- $TeraId_dir := printf "/ruleset/%s/TeraId" $dir}}
+[classifier_rule:{{ $rule_num }}]
+{{- if exists $RuleId_dir }}
+rule_id={{getv $RuleId_dir}}
+{{- end }}
+ruleset_type=classifier
+{{- if exists $SrcIpV4_dir }}
+src_ip_addr_v4={{getv $SrcIpV4_dir}}
+{{- if exists $SrcIpMaskV4_dir }}
+src_ip_mask_v4={{getv $SrcIpMaskV4_dir}}
+{{- end -}}
+{{- end -}}
+
+
+{{- if exists $DstIpV4_dir }}
+dst_ip_addr_v4={{getv $DstIpV4_dir}}
+{{- if exists $DstIpMaskV4_dir }}
+dst_ip_mask_v4={{getv $DstIpMaskV4_dir}}
+{{- end -}}
+{{- end -}}
+
+
+{{- if exists $SrcIpV6_dir }}
+src_ip_addr_v6={{getv $SrcIpV6_dir}}
+{{- if exists $SrcIpMaskV6_dir }}
+src_ip_mask_v6={{getv $SrcIpMaskV6_dir}}
+{{- end -}}
+{{- end -}}
+
+
+{{- if exists $DstIpV6_dir }}
+dst_ip_addr_v6={{getv $DstIpV6_dir}}
+{{- if exists $DstIpMaskV6_dir }}
+dst_ip_mask_v6={{getv $DstIpMaskV6_dir}}
+{{- end -}}
+{{- end -}}
+
+
+{{- if exists $SrcPortLow_dir }}
+src_port_low={{getv $SrcPortLow_dir}}
+{{- end -}}
+
+{{- if exists $SrcPortHigh_dir }}
+src_port_high={{getv $SrcPortHigh_dir}}
+{{- end -}}
+
+{{- if exists $DstPortLow_dir }}
+dst_port_low={{getv $DstPortLow_dir}}
+{{- end -}}
+
+{{- if exists $DstPortHigh_dir }}
+dst_port_high={{getv $DstPortHigh_dir}}
+{{- end -}}
+
+{{- if exists $Proto_dir }}
+proto={{getv $Proto_dir}}
+{{- end -}}
+
+{{- if exists $Priority_dir }}
+priority={{getv $Priority_dir}}
+{{- end -}}
+
+{{- if exists $Sid_dir }}
+sid={{getv $Sid_dir}}
+{{- end -}}
+
+{{- if exists $VwireId_dir }}
+vwire_id={{getv $VwireId_dir}}
+{{- end -}}
+
+{{- if exists $EfId_dir }}
+ef_adapter_id={{getv $EfId_dir}}
+{{- end -}}
+
+{{- if exists $TeraId_dir }}
+tera_adapter_id={{getv $TeraId_dir}}
+{{- end }}
+action=nf_steering
+{{- $rule_num = add $rule_num 1 }}
+{{end}}

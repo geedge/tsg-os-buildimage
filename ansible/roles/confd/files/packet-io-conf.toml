@@ -2,6 +2,8 @@
 src = "packet-io.conf.tmpl"
 dest = "/opt/tsg/config/shared/mrglobal.dynamic.conf"
 keys = [
-  "/obp_devices/"
+  "/obp_devices/",
+  "/cycle/",
+  "/ruleset"
 ]
 reload_cmd = "pkill -1 mrzcpd"

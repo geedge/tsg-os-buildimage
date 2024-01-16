@@ -13,3 +13,6 @@ metadata:
 data:
   reload-conf.yaml: |
     obp_devices: {{ .Values.mrzcpd.obp_devices | toJson }}
+    ruleset: {{ .Values.mrzcpd.ruleset | toJson }}
+    {{- $cycle := int .Values.mrzcpd.nf_count }}
+    cycle: {{(printf "\"")}} {{- range $index, $_ := until $cycle }}{{- if ne $index 0 }},{{ end -}} {{ (printf "%d" $index) }}{{- end -}} {{(printf "\"")}}
