@@ -32,17 +32,7 @@ external_resources:
       addresses:
       - address:
         port:
-    
-  nat_gateway:
-    address: 10.0.X.X
-    connection_table_listen_port: 5671
-    data_listen_port: 3544
 
-  reachability_test_server:
-    address: 10.0.Y.Y
-    link_table_listen_port: 8888
-    connection_table_listen_port: 5672
-    data_listen_port: 3542
 
 device:
   tags:
