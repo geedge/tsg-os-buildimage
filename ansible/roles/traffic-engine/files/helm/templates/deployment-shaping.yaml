@@ -68,13 +68,15 @@ spec:
             {{- if eq .Values.debug.shaping.enable_interactive_startup .Values.define_enable_val_yes }}
             while true; do sleep 10;done
             {{- else }}
-            exec /opt/tsg/shaping_engine/bin/shaping_engine
+            exec /opt/tsg/shaping_engine/bin/shaping_engine 2>&1|tee >(systemd-cat -t $DEPLOYMENT_NAME)
             {{- end }}
         ports:
           - containerPort: 8551
           - containerPort: 8552
           - containerPort: 9007
         env:
+        - name: DEPLOYMENT_NAME
+          value: {{ .Release.Name }}-shaping
         - name: SERVICENAME
           value: shaping-announce-port-{{ .Release.Name }}
         - name: NODE_IP
@@ -108,6 +110,8 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
+        - name: journal-volume
+          mountPath: /run/systemd/journal
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_sn.json"
           subPath: "tsg_sn.json"
@@ -200,6 +204,10 @@ spec:
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       volumes:
+      - name: journal-volume
+        hostPath:
+          path: /run/systemd/journal
+          type: Directory
       - name: telegraf-configs-volume
         configMap:
           name: telegraf-{{ .Release.Name }}

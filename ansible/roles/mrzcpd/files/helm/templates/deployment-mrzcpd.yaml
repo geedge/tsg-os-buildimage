@@ -89,6 +89,8 @@ spec:
             {{ template "mrzcpd.prestart" . }}
             {{ template "mrzcpd.start" . }}
         volumeMounts:
+        - name: journal-volume
+          mountPath: /run/systemd/journal
         - name: shared-dir
           mountPath: /opt/tsg/mrzcpd/shared
         - name: mrzcpd
@@ -115,7 +117,7 @@ spec:
           mountPropagation: HostToContainer
         - name: localtime-node
           mountPath: /etc/localtime
-          readOnly: true
+          readOnly: true 
         {{ template "mrzcpd.mount.prestart" . }}
         resources: 
           limits:
@@ -131,6 +133,8 @@ spec:
         env:
         - name: MLX5_GLUE_PATH
           value: /opt/tsg/mrzcpd/lib
+        - name: DEPLOYMENT_NAME
+          value: packet-io-engine
 {{- if eq .Values.mrzcpd.debug.enable_liveness_probe .Values.define_enable_val_yes }}
         livenessProbe:
           httpGet:
@@ -232,6 +236,10 @@ spec:
           containerPort: {{ .Values.mergeExporter.mergePort }}
           protocol: TCP
       volumes:
+      - name: journal-volume
+        hostPath:
+          path: /run/systemd/journal
+          type: Directory
       - name: shared-dir
         emptyDir: {}
       - name: prestart-dir

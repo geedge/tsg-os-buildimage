@@ -49,6 +49,8 @@ spec:
         ports:
           - containerPort: 9009
         env:
+        - name: DEPLOYMENT_NAME
+          value: inject-adapter
         - name: SERVICENAME
           value: {{ .Release.Name }}-announce-port
         - name: NODE_IP
@@ -78,6 +80,8 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
+        - name: journal-volume
+          mountPath: /run/systemd/journal
         - name: inject-adapter
           mountPath: "/opt/tsg/config"
         - name: inject-log
@@ -88,6 +92,10 @@ spec:
         {{ template "traffic-engine.inject_adapter.mount.hostpath" . }}    
       hostNetwork: true
       volumes:
+      - name: journal-volume
+        hostPath:
+          path: /run/systemd/journal
+          type: Directory
       - name: inject-adapter
         configMap:
           name: inject-adapter
