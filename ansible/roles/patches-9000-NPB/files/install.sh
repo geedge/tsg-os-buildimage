@@ -43,10 +43,6 @@ function install_patch_files()
     mkdir -p /usr/lib/systemd/system/tsg-clixon-backend.service.d
     cp $UNARCHIVE_DIR/service_add_prestart.conf /usr/lib/systemd/system/tsg-clixon-backend.service.d/service_add_prestart.conf
 
-    mkdir -p /opt/tsg/clixon/bin
-    cp $UNARCHIVE_DIR/set_9000_NPB_running_db.sh /opt/tsg/clixon/bin/set_9000_NPB_running_db.sh
-    chmod 0755 /opt/tsg/clixon/bin/set_9000_NPB_running_db.sh
-
     mkdir -p /opt/tsg/clixon/yang
     cp /opt/tsg/clixon/deviation/tsg-os-mgnt-augment-9000-NPB.yang /opt/tsg/clixon/yang/tsg-os-mgnt-augment-9000-NPB.yang
 }
