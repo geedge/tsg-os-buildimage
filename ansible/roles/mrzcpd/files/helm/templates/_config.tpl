@@ -167,13 +167,13 @@ role={{ $interface.role }}
 type={{ $interface.type }}
 {{- end }}
 {{- if $interface.bond_mode }}
-mode={{ $interface.bond_mode }}
+bond_mode={{ $interface.bond_mode }}
 {{- end }}
 {{- if $interface.bond_xmit_policy }}
-xmit_policy={{ $interface.bond_xmit_policy }}
+bond_xmit_policy={{ $interface.bond_xmit_policy }}
 {{- end }}
 {{- if $interface.slaves }}
-slaves={{- range $index,$slave := $interface.slaves }}{{- if ne $index 0 }},{{ end -}}{{ $slave.interface }}{{- end }}
+bond_slaves={{- range $index,$slave := $interface.slaves }}{{- if ne $index 0 }},{{ end -}}{{ $slave.interface }}{{- end }}
 {{- end }}
 {{- if $interface.rxcore }}
 rx_cores={{ $interface.rxcore }}
