@@ -62,8 +62,13 @@ spec:
             sed -Ei -c "s|CLUSTER_ANNOUNCE_PORT_LOCATION|${CLUSTER_ANNOUNCE_PORT?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
             sed -Ei -c "s|HEALTH_CHECK_ANNOUNCE_PORT_LOCATION|${HEALTH_CHECK_ANNOUNCE_PORT?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
             {{- if eq .Values.debug.shaping.enable_prestart_script .Values.define_enable_val_yes }}
+            echo WARNING: PRESTART.sh is enable, the commands in PRESTART.sh is:
+            cat /opt/tsg/scripts/prestart.sh
+            
             chmod 0755 /opt/tsg/scripts/prestart.sh
             /opt/tsg/scripts/prestart.sh
+
+            echo PRESTART.sh has been exec......
             {{- end }}
             {{- if eq .Values.debug.shaping.enable_interactive_startup .Values.define_enable_val_yes }}
             while true; do sleep 10;done

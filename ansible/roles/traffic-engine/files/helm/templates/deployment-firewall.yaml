@@ -56,8 +56,13 @@ spec:
             sed -Ei -c "s|SD_POLICY_LOCAL_CACHE_IP_LOCATION|${SD_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
             {{- end }}
             {{- if eq .Values.debug.firewall.enable_prestart_script .Values.define_enable_val_yes }}
+            echo WARNING: PRESTART.sh is enable, the commands in PRESTART.sh is:
+            cat /opt/tsg/scripts/prestart.sh
+            
             chmod 0755 /opt/tsg/scripts/prestart.sh
             /opt/tsg/scripts/prestart.sh
+
+            echo PRESTART.sh has been exec......
             {{- end }}
             {{- if eq .Values.debug.firewall.enable_interactive_startup .Values.define_enable_val_yes }}
             while true; do sleep 10;done

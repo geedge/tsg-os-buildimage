@@ -39,8 +39,13 @@
 
 {{- define "mrzcpd.prestart" -}}
 {{- if eq .Values.mrzcpd.debug.enable_prestart_script  .Values.define_enable_val_yes }}
+            echo WARNING: PRESTART.sh is enable, the commands in PRESTART.sh is:
+            cat /opt/tsg/scripts/prestart.sh
+            
             chmod 0755 /opt/tsg/scripts/prestart.sh
             /opt/tsg/scripts/prestart.sh
+
+            echo PRESTART.sh has been exec......
 {{- end }}
 {{- end -}}
 
