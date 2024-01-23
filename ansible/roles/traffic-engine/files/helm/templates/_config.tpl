@@ -214,7 +214,7 @@ Read cm service ip and set it up as an environment variable.
 Requires "public.prepare-access-API"
 */}}
 {{- define "traffic-engine.global.cm.read-server-ip" -}}
-curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/${CM_CACHE_SERVICE_NAME} -o /tmp/cm-cache.txt
+curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/{{ .Values.external_resources.cm.local_cache.cache_name }}-redis-master -o /tmp/cm-cache.txt
 export CM_POLICY_LOCAL_CACHE_IP=$(cat /tmp/cm-cache.txt  | jq -r '.spec.clusterIP')
 echo "export CM_POLICY_LOCAL_CACHE_IP=${CM_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/cm-local-cache.sh
 chmod 0755 /etc/profile.d/cm-local-cache.sh
@@ -245,7 +245,7 @@ Read sd service ip and set it up as an environment variable.
 Requires "public.prepare-access-API"
 */}}
 {{- define "traffic-engine.global.sd.read-server-ip" -}}
-curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/${SD_CACHE_SERVICE_NAME} -o /tmp/sd-cache.txt
+curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/{{ .Values.external_resources.sd.local_cache.cache_name }}-redis-master -o /tmp/sd-cache.txt
 export SD_POLICY_LOCAL_CACHE_IP=$(cat /tmp/sd-cache.txt  | jq -r '.spec.clusterIP')
 echo "export SD_POLICY_LOCAL_CACHE_IP=${SD_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/sd-local-cache.sh
 chmod 0755 /etc/profile.d/sd-local-cache.sh

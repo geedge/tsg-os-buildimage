@@ -51,9 +51,11 @@ spec:
             {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
             sed -Ei -c "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
             {{- end }}
+            {{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
             {{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
             {{- include "traffic-engine.global.sd.read-server-ip" . | nindent 12 }}
             sed -Ei -c "s|SD_POLICY_LOCAL_CACHE_IP_LOCATION|${SD_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
+            {{- end }}
             {{- end }}
             {{- if eq .Values.debug.firewall.enable_prestart_script .Values.define_enable_val_yes }}
             echo WARNING: PRESTART.sh is enable, the commands in PRESTART.sh is:
@@ -86,16 +88,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-        - name: CM_CACHE_SERVICE_NAME
-          value: {{ .Values.external_resources.cm.local_cache.cache_name }}-redis-master
-        {{- end }}
-        {{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
-        {{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
-        - name: SD_CACHE_SERVICE_NAME
-          value: {{ .Values.external_resources.sd.local_cache.cache_name }}-redis-master
-        {{- end }}
-        {{- end }}
         securityContext:
           privileged: true
 {{- if eq .Values.debug.firewall.enable_liveness_probe .Values.define_enable_val_yes }}
@@ -232,6 +224,39 @@ spec:
           mountPath: /opt/tsg/sapp/log
 
       initContainers:
+      - name: init-default-svc
+        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until nslookup kubernetes.default.svc; do echo waiting for kubernetes service; sleep 2; done
+
+      {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
+      - name: init-cm-svc
+        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until nslookup {{ .Values.external_resources.cm.local_cache.cache_name }}-redis-master.tsg-os-system.svc; do echo waiting for cm cache service; sleep 2; done
+      {{- end }}
+
+      {{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
+      {{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
+      - name: init-sd-svc
+        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until nslookup {{ .Values.external_resources.sd.local_cache.cache_name }}-redis-master.tsg-os-system.svc; do echo waiting for sd cache service; sleep 2; done
+      {{- end }}
+      {{- end }}
+
       - name: firewall-init
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never

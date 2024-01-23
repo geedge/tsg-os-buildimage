@@ -143,3 +143,9 @@
 
 - name: "install python3 jinja2"
   shell: python3 -m pip install jinja2
+
+- name: "install dnsutils"
+  yum:
+    name: dnsutils
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
