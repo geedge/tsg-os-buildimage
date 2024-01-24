@@ -3,13 +3,13 @@ certstore_rpm_version:
 
 firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-3.0.34.2b13c3d
+  firewall: firewall-3.0.35.bd5007d
   glimpse_detector: glimpse_detector-3.0.0.7240884
   qdpi_detector: qdpi_detector-4.0.3.9f81ea0
   tsg_ddos_sketch: tsg_ddos_sketch-2.0.2.35e03d0
   dns: dns-2.1.7.1da8dfa
   ftp: ftp-1.0.15.1fc64fe
-  http: http-2.0.16.81307df
+  http: http-2.0.18.328131d
   mail: mail-1.0.21.aec281b
   quic: quic-2.0.9.a7d76dd
   ssl: ssl-3.0.4.8f3bde2
