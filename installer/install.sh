@@ -1,23 +1,13 @@
 #!/bin/sh
-
-install_device_platform()
+read_blk_dev()
 {
-    # Virtual IO block device
-    if grep -q vda /proc/partitions ; then
-        echo /dev/vda
-        return 0
-    fi
-
-    # SATA, SCSI, USB block device
-    if grep -q sda /proc/partitions ; then
-        echo /dev/sda
-        return 0
-    fi
-
-    echo /dev/sda
+    kernel_name_descriptor=$(blkid | grep ONIE-BOOT | awk -F ":" '{print $1}' | awk -F "/" '{print $NF}')
+    major_device_number=$(cat /proc/partitions | grep ${kernel_name_descriptor} | awk '{print $1}')
+    disk_device_name=$(cat /proc/partitions | awk -v major="$major_device_number" '$1 == major && $2 == "0" {print $4}')
+    echo "/dev/${disk_device_name}"
 }
 
-blk_dev=$(install_device_platform)
+blk_dev=$(read_blk_dev)
 echo "TSG-OS install on ${blk_dev}"
 random_dev=/dev/urandom
 root_disk=hd0
