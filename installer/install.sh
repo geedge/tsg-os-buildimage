@@ -76,24 +76,37 @@ check_is_upgrade()
 }
 
 format_update_partitions() {
-  mkfs.ext4 -L "TGS-OS-UPDATE" $dev_part_tsg_os_update || {
+  mkfs.ext4 -L $vol_label_tsg_os_update $dev_part_tsg_os_update || {
     echo "ERROR: Unable to create file system on \$dev_part_tsg_os_update"
     exit 1
   }
 }
 
 format_sysroot_partitions() {
-  mkfs.ext4 -L "TGS-OS-SYSROOT" $dev_part_tsg_os_sysroot || {
+  mkfs.ext4 -L $vol_label_tsg_os_sysroot $dev_part_tsg_os_sysroot || {
     echo "ERROR: Unable to create file system on \$dev_part_tsg_os_sysroot"
     exit 1
   }
 }
 
 format_presistent_partitions() {
-  mkfs.ext4 -L "TSG-OS-DATA" $dev_part_tsg_os_data || {
+  mkfs.ext4 -L $vol_label_tsg_os_data $dev_part_tsg_os_data || {
     echo "ERROR: Unable to create file system on \$dev_part_tsg_os_data"
     exit 1
   }
+}
+
+fix_fs_volume_name() {
+    local dev_part=$1
+    local desired_fs_volume_name=$2
+
+    current_fs_volume_name=$(tune2fs -l $dev_part | grep 'Filesystem volume name' | awk '{print $4}')
+    if [ "$current_fs_volume_name" != "$desired_fs_volume_name" ]; then
+        tune2fs -L $desired_fs_volume_name $dev_part ||  {
+            echo "ERROR: Failed to update $dev_part volume name from $current_fs_volume_name to $desired_fs_volume_name"
+            exit 1
+        }
+    fi
 }
 
 create_gpt_partitions() {
@@ -279,6 +292,8 @@ else
        exit 1
    }
 fi
+
+fix_fs_volume_name $dev_part_tsg_os_update $vol_label_tsg_os_update
 
 # Mount filesystem
 mkdir -p $distro_mnt || {

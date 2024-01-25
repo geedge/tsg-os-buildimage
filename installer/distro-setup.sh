@@ -127,10 +127,10 @@ fi
 
 # Setup o/s mount points
 (cat <<EOF2
-${blk_dev}4             /                       ext4    defaults        1 1
-${blk_dev}2             /mnt/onie-boot/         ext4    defaults        1 1
-${blk_dev}3             /update                 ext4    defaults        1 1
-${blk_dev}5             /data                   ext4    defaults        1 1
+LABEL=TSG-OS-SYSROOT    /                       ext4    defaults        1 1
+LABEL=ONIE-BOOT         /mnt/onie-boot/         ext4    defaults        1 1
+LABEL=TSG-OS-UPDATE     /update                 ext4    defaults        1 1
+LABEL=TSG-OS-DATA       /data                   ext4    defaults        1 1
 overlay                 /etc                    overlay x-systemd.requires=/,x-systemd.requires=/data,lowerdir=/etc,upperdir=/data/overlay/rootfs_etc/rw,workdir=/data/overlay/rootfs_etc/work 0 0
 /data/var               /var/              none     bind,x-systemd.requires=/,x-systemd.requires=/data           0 0
 /data/home              /home/             none     bind,x-systemd.requires=/,x-systemd.requires=/data           0 0
