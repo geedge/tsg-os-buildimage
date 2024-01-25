@@ -399,7 +399,7 @@ EOF2
 menuentry 'TSG-OS ${DISTR0_VER} (${MACHINE_ID})' {
   set root='(${root_disk},gpt${distro_part})'
   echo    'Loading TSG-OS ${DISTR0_VER} (${MACHINE_ID}) ...'
-  linux   /boot/vmlinuz ${kernel_args} root=${blk_dev}${distro_part}
+  linux   /boot/vmlinuz ${kernel_args} root="LABEL=${vol_label_tsg_os_sysroot}"
   echo    'Loading TSG-OS ${DISTR0_VER} (${MACHINE_ID}) initial ramdisk ...'
   initrd  /boot/initrd.img
  }
