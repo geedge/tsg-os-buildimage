@@ -23,7 +23,7 @@ set_onie_next_boot()
         # select ONIE as the next OS to boot.  The "BootNext" variable
         # is only used once by the firmware, after which the permanent
         # "BootOrder" variable is used.
-        local boot_num=$(efibootmgr | grep "ONIE:" | grep "HD" | awk '{ print $1 }')
+        local boot_num=$(efibootmgr -v| grep "ONIE:" | grep "HD" | awk '{ print $1 }')
         boot_num=${boot_num#Boot}
         # Remove trailing '*'
         boot_num=${boot_num%\*}
