@@ -9,6 +9,7 @@ stages:
   - build
   - merge_build
   - deploy
+  - notify
 
 .build_tsg-buildimage:
   script:
@@ -43,6 +44,17 @@ stages:
   tags:
     - tsg-os-builder-el8
 
+.notify_jobs_done:
+  cache:
+    key: $CI_COMMIT_REF_SLUG-x86_64_COTS
+    paths:
+      - images/
+  script:
+      - chmod +x ./tools/notify-jobs-done.sh
+      - ./tools/notify-jobs-done.sh
+  tags:
+    - tsg-os-builder-el8
+
 .build_tsg_vm_image:
   cache:
     key: $BUILD_OS_CACHE_KEY
@@ -68,7 +80,9 @@ stages:
     - ls -lh images
     - chmod +x ./tools/upload.sh
     - ./tools/upload.sh
+    - TSG_OS_VERSION=$(basename images/*-ONIE.bin | awk -F '-x86_64' '{print $1}')
     - rm -rf images/*
+    - echo $TSG_OS_VERSION > images/tsg-os-version.txt
   tags:
     - tsg-os-builder-el8
 
@@ -144,6 +158,16 @@ feature_branch_build_kvm_image_x86_64_COTS:
   needs: ["feature_branch_build_x86_64_COTS"]
   variables:
     BUILD_OS_CACHE_KEY: $CI_COMMIT_REF_SLUG-x86_64_COTS
+  except:
+    - tags
+    - /^dev-.*$/i
+    - /^rel-.*$/i
+    - /^update-.*$/i
+
+feature_branch_notify_jobs_done_x86_64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: notify
+  extends: .notify_jobs_done
   except:
     - tags
     - /^dev-.*$/i
@@ -234,6 +258,13 @@ develop_build_kvm_image_x86_64_COTS:
   only:
     - /^dev-.*$/i
 
+develop_notify_jobs_done_x86_64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: notify
+  extends: .notify_jobs_done
+  only:
+    - /^dev-.*$/i
+
 # testing_build_7400_mcn0:
 #   image: $BUILD_BASED_IMAGE_CENTOS7
 #   stage: build
@@ -315,6 +346,15 @@ testing_build_kvm_image_x86_64_COTS:
     PULP3_FILE_REPO_NAME: tsg-os-images-testing
     PULP3_FILE_DIST_NAME: tsg-os-images-testing
     FILE_REPO_PATH: install/testing/tsg-os-images
+  only:
+    - /^rel-.*$/i
+
+testing_notify_jobs_done_x86_64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: notify
+  extends: .notify_jobs_done
+  variables:
+    ENABLE_NOTIFY_TESTING_JOBS_DONE: 1
   only:
     - /^rel-.*$/i
 
@@ -401,6 +441,16 @@ rc_build_kvm_image_x86_64_COTS:
     FILE_REPO_PATH: install/rc/tsg-os-images
   only:
     - /^.*-rc.*$/i
+
+rc_notify_jobs_done_x86_64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: notify
+  extends: .notify_jobs_done
+  variables:
+    ENABLE_NOTIFY_RC_JOBS_DONE: 1
+  only:
+    - /^.*-rc.*$/i
+
 
 # release_build_7400_mcn0:
 #   image: $BUILD_BASED_IMAGE_CENTOS7
@@ -491,6 +541,17 @@ release_build_kvm_image_x86_64_COTS:
     PULP3_FILE_REPO_NAME: tsg-os-images-release
     PULP3_FILE_DIST_NAME: tsg-os-images-release
     FILE_REPO_PATH: install/release/tsg-os-images
+  only:
+    - tags
+  except:
+    - /^.*-rc.*$/i
+
+release_notify_jobs_done_x86_64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX8
+  stage: notify
+  extends: .notify_jobs_done
+  variables:
+    ENABLE_NOTIFY_RELEASE_JOBS_DONE: 1
   only:
     - tags
   except:
