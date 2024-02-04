@@ -7,7 +7,7 @@ TSG_OS_VERSION=
 if [ -f $TSG_OS_VERSION_FILE ]; then TSG_OS_VERSION=$(cat $TSG_OS_VERSION_FILE); fi
 echo $TSG_OS_VERSION
 
-NOTIFY_CONTENT="{\"msgtype\": \"text\",\"text\": {\"content\": \"TSG-OS version: $TSG_OS_VERSION has been generated.\",\"mentioned_list\":[\"@all\"]}}"
+NOTIFY_CONTENT="{\"msgtype\": \"text\",\"text\": {\"content\": \"TSG-OS version: $TSG_OS_VERSION has been released.\",\"mentioned_list\":[\"@all\"]}}"
 echo $NOTIFY_CONTENT
 
 if [ -z "$TSG_OS_VERSION" ]; then echo "TSG_OS version: $TSG_OS_VERSION is NULL."; exit 1; fi
