@@ -3,7 +3,7 @@ certstore_rpm_version:
 
 firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-3.0.35.bd5007d
+  firewall: firewall-3.1.0.01799a4
   glimpse_detector: glimpse_detector-3.0.0.7240884
   qdpi_detector: qdpi_detector-4.0.3.9f81ea0
   tsg_ddos_sketch: tsg_ddos_sketch-2.0.2.35e03d0
@@ -16,7 +16,7 @@ firewall_rpm_version:
   rtp: rtp-1.0.7.530ac76
   ssh: ssh-2.1.7.b053e65
   dtls: dtls-2.0.3.51e8096
-  mesa_sip: mesa_sip-2.0.2.11024e4
+  mesa_sip: mesa_sip-2.0.8.43559f7
   deal_socks: deal_socks-1.0.4.329bba3
   stratum: stratum-1.1.0.29a2cff
   rdp: rdp-1.0.3.f392ffd
@@ -65,9 +65,9 @@ mlnx_ofed_user_space_only_rpm_version:
   mlnx_ofed_user_space: mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch
 
 sapp_rpm_version:
-  sapp: sapp-4.3.36.abab760
+  sapp: sapp-4.3.37.59096f0
   tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
-  sapp-pr: sapp-pr-4.3.36.abab760
+  sapp-pr: sapp-pr-4.3.37.59096f0
 
 tfe_rpm_version:
   tfe: tfe-4.8.64.2c32c20
