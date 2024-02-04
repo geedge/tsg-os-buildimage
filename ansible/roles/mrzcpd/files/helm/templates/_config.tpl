@@ -95,7 +95,9 @@ device= {{ $nf_nic_list }},{{ $ep_nic_l2_list}},{{ $ep_nic_l3_list }},{{ $mirr_n
 sz_tunnel=8192
 sz_buffer=0
 
-{{ range $interface := .Values.mrzcpd.interfaces }}
+
+# Configuration settings for the physical device (Phy dev).
+{{- range $interface := .Values.mrzcpd.interfaces }}
 [device:{{ $interface.name }}]
 {{- if $interface.address }}
 in_addr={{ $interface.address }}
@@ -133,28 +135,10 @@ representor_ns={{ $interface.representor_ns }}
 {{- if $interface.representor_dev }}
 representor_dev={{ $interface.representor_dev }}
 {{- end }}
-{{$enter}}
-{{- if $interface.vlan }}
-{{- range $vlan := $interface.vlan }}
-[device:{{$interface.name}}:vlan:{{$vlan.vlan_id}}]
-{{- if $vlan.ipv4_address }}
-in_addr_v4={{ $vlan.ipv4_address }}
-{{- end }}
-{{- if $vlan.ipv4_mask }}
-in_mask_v4={{ $vlan.ipv4_mask }}
-{{- end }}
-{{- if $vlan.ipv6_address }}
-in_addr_v6={{ $vlan.ipv6_address }}
-{{- end }}
-{{- if $vlan.ipv6_mask }}
-in_mask_v6={{ $vlan.ipv6_mask }}
-{{- end }}
-{{$enter}}
-{{- end }}
-{{- end }}
-{{- end }}
-
+{{ end }}
+# Configuration settings for network bonding (bond) functionality.
 {{- range $interface := .Values.mrzcpd.virtual_interfaces }}
+{{- if eq $interface.type "1"}}
 [device:{{ $interface.name }}]
 {{- if $interface.promisc }}
 promisc={{ $interface.promisc }}
@@ -183,6 +167,36 @@ bond_slaves={{- range $index,$slave := $interface.slaves }}{{- if ne $index 0 }}
 {{- if $interface.rxcore }}
 rx_cores={{ $interface.rxcore }}
 {{- end }}
+{{- end }}
+{{- end }}
+
+
+# Configuration settings for the virtual device (virtual dev) management.
+[device:virtio_dign_c]
+driver=1
+role=1
+
+[device:virtio_dign_s]
+driver=1
+role=1
+
+
+# Configuration settings for the representational (repsent) device.
+{{- range $interface := .Values.mrzcpd.virtual_interfaces }}
+{{- if eq $interface.en_representor "1"}}
+[device:{{ $interface.name }}]
+{{- if $interface.promisc }}
+promisc={{ $interface.promisc }}
+{{- end}}
+{{- if $interface.mtu }}
+mtu={{ $interface.mtu }}
+{{- end}}
+{{- if eq $interface.role "5"}}
+driver=1
+{{- else}}
+driver=0
+{{- end}}
+role={{ $interface.role }}
 {{- if $interface.vlan }}
 {{- if ne (len $interface.vlan) 0}}
 allow_vlan_ids={{- range $index,$vlan := $interface.vlan }}{{- if ne $index 0 }},{{ end -}}{{ $vlan.vlan_id }}{{- end }}
@@ -194,9 +208,18 @@ en_representor={{ $interface.en_representor }}
 {{- if $interface.representor_ns }}
 representor_ns={{ $interface.representor_ns }}
 {{- end }}
-{{$enter}}
+{{- if $interface.rxcore }}
+rx_cores={{ $interface.rxcore }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+
+# Configuration settings for the VLAN (Virtual Local Area Network) sub-interface.
+{{- range $interface := .Values.mrzcpd.interfaces }}
 {{- if $interface.vlan }}
 {{- range $vlan := $interface.vlan }}
+{{- if or $vlan.ipv4_address $vlan.ipv6_address }}
 [device:{{$interface.name}}:vlan:{{$vlan.vlan_id}}]
 {{- if $vlan.ipv4_address }}
 in_addr_v4={{ $vlan.ipv4_address }}
@@ -210,39 +233,38 @@ in_addr_v6={{ $vlan.ipv6_address }}
 {{- if $vlan.ipv6_mask }}
 in_mask_v6={{ $vlan.ipv6_mask }}
 {{- end }}
-{{$enter}}
+{{ end }}
+{{- end -}}
+{{- end -}}
+{{ end }}
+{{- range $interface := .Values.mrzcpd.virtual_interfaces }}
+{{- if $interface.vlan }}
+{{- range $vlan := $interface.vlan }}
+{{- if or $vlan.ipv4_address $vlan.ipv6_address }}
+[device:{{$interface.name}}:vlan:{{$vlan.vlan_id}}]
+{{- if $vlan.ipv4_address }}
+in_addr_v4={{ $vlan.ipv4_address }}
 {{- end }}
+{{- if $vlan.ipv4_mask }}
+in_mask_v4={{ $vlan.ipv4_mask }}
 {{- end }}
+{{- if $vlan.ipv6_address }}
+in_addr_v6={{ $vlan.ipv6_address }}
 {{- end }}
+{{- if $vlan.ipv6_mask }}
+in_mask_v6={{ $vlan.ipv6_mask }}
+{{- end }}
+{{ end }}
+{{- end -}}
+{{- end -}}
+{{ end }}
 
-[device:virtio_dign_c]
-driver=1
-role=1
-{{$enter}}
-[device:virtio_dign_s]
-driver=1
-role=1
-{{$enter}}
+
+# Configuration settings for the shmdey device.
 [device:nf_inject]
 driver=3
 role=4
-{{$enter}}
-{{- range $linkdb := .Values.mrzcpd.linkdb }}
-[link_db:{{ $linkdb.id }}]
-type={{ $linkdb.type }}
-traffic_link_id={{ $linkdb.traffic_link_id}}
-{{- if $linkdb.vwire_id }}
-vwire_id={{ $linkdb.vwire_id }}
-{{- end }}
-{{- if and $linkdb.ef_ip_addr $linkdb.ef_link_id  }}
-ef_ip_addr={{ $linkdb.ef_ip_addr }}
-ef_link_id={{ $linkdb.ef_link_id }}
-{{- end }}
-{{$enter}}
-{{- end }}
-
-
-{{- range $index, $_ := until $cycle }}
+{{ range $index, $_ := until $cycle }}
 [device:nf_{{ $index }}_fw]
 driver=3
 role=4
@@ -276,9 +298,10 @@ role=4
 [device:mirr_{{ $index }}_proxy]
 driver=3
 role=4
-{{$enter}}
 {{- end }}
 
+
+# This module handles the global configuration settings.
 [service]
 iocore=1,2,3,4
 distmode={{ .Values.mrzcpd.distmode }}
@@ -321,112 +344,31 @@ nr_max_vwires={{ .Values.mrzcpd.nr_max_vwires }}
 nr_max_tera_adapters={{ .Values.mrzcpd.nr_max_tera_adapters }}
 nr_max_link_dbs={{ .Values.mrzcpd.nr_max_link_dbs }}
 
-# sid
+# This module is used to configure the access mode settings.
+# The configuration sets the access mode to etherfabric adapter mode.
 [ef_adapters]
 sid_start=100
 sid_end=200
-max_rules=32
+{{ range $service := .Values.mrzcpd.services }}
+{{- if eq $service.type "etherfabric_adapter" }}
+[ef_adapter:{{ $ef_adapter_num }}]
+ef_adapter_id={{ $service.id }}
+{{- if eq $service.mode "virtual-wire"}}
+mode=1
+{{ end -}}
+{{- if eq $service.mode "tap"}}
+mode=2
+{{ end -}}
+listen_device={{ $service.listen_on_device }}
+{{ $ef_adapter_num = ($ef_adapter_num | add 1) -}}
+{{ end -}}
+{{ end }}
 
+# The configuration sets the access mode to vwire mode.
 [vwires]
 sid_start=300
 sid_end=400
-max_rules=32
 
-[tera_adapters]
-sid_start=500
-sid_end=600
-max_rules=64
-
-[service_lb]
-sid_start={{ .Values.mrzcpd.service_lb.sid_range_start }}
-sid_end={{ .Values.mrzcpd.service_lb.sid_range_end }}
-{{- range $service := .Values.mrzcpd.services }}
-{{- if eq $service.type "etherfabric_adapter"}}
-
-[ef_adapter:{{ $ef_adapter_num }}]
-ef_adapter_id={{ $service.id }}
-mode={{ $service.mode }}
-listen_device={{ $service.listen_on_device }}
-{{- $ef_adapter_num = ($ef_adapter_num | add 1)}}
-{{- else }}
-
-[tera_adapter:{{ $tera_adapter_num }}]
-tera_adapter_id={{ $service.id }}
-listen_device={{ $service.listen_on_device }}
-vlan_int={{ $service.vlan_int }}
-vlan_ext={{ $service.vlan_ext }}
-mac_flipping={{ $service.mac_flipping }}
-{{- $tera_adapter_num = ($tera_adapter_num | add 1)}}
-{{- end}}
-{{- end }}
-
-# health check
-{{- range $index, $_ := until $cycle }}
-[health_check:{{ $index | mul $sid_step }}]
-name=nf{{ $index }}_fw_health_check
-device=nf_{{ $index }}_fw
-method=private
-multiplier=20
-interval=10
-
-[health_check:{{ $index | mul $sid_step | add 1 }}]
-name=nf{{ $index }}_proxy_health_check
-device=nf_{{ $index }}_proxy
-method=private
-multiplier=20
-interval=10
-
-[health_check:{{ $index | mul $sid_step | add 2 }}]
-name=nf{{ $index }}_sce_health_check
-device=nf_{{ $index }}_sce
-method=private
-multiplier=20
-interval=10
-
-[health_check:{{ $index | mul $sid_step | add 3 }}]
-name=nf{{ $index }}_shaping_engine_health_check
-device=nf_{{ $index }}_shaping_engine
-method=private
-multiplier=20
-interval=10
-{{$enter}}
-{{- end }}
-[health_check:{{ $cycle | mul $sid_step }}]
-name=nf_inject_health_check
-device=nf_inject
-method=private
-multiplier=20
-interval=10
-
-# load balance
-{{- range $index, $_ := until $cycle }}
-[load_balance:{{ $index | mul $sid_step }}]
-mode=balance
-devices=nf_{{ $index }}_fw,normal
-health_check_sessions=nf{{ $index }}_fw_health_check
-
-[load_balance:{{ $index | mul $sid_step | add 1 }}]
-mode=balance
-devices=nf_{{ $index }}_proxy,normal
-health_check_sessions=nf{{ $index }}_proxy_health_check
-
-[load_balance:{{ $index | mul $sid_step | add 2 }}]
-mode=balance
-devices=nf_{{ $index }}_sce,normal
-health_check_sessions=nf{{ $index }}_sce_health_check
-
-[load_balance:{{ $index | mul $sid_step | add 3 }}]
-mode=balance
-devices=nf_{{ $index }}_shaping_engine,normal
-health_check_sessions=nf{{ $index }}_shaping_engine_health_check
-{{$enter}}
-{{- end }}
-[load_balance:{{ $cycle | mul $sid_step }}]
-mode=balance
-devices=nf_inject,normal
-health_check_sessions=nf_inject_health_check
-
-# vwire
 [vwire:0]
 vwire_id=0
 interface_int=virtio_dign_c
@@ -447,7 +389,117 @@ obp_segment={{ $virtual_wire.obp_segment }}
 {{$enter}}
 {{- end }}
 
-# bridge
+
+# The configuration sets the access mode to tera adapter mode.
+[tera_adapters]
+sid_start=500
+sid_end=600
+{{ range $service := .Values.mrzcpd.services }}
+{{- if eq $service.type "tera_adapter" }}
+[tera_adapter:{{ $tera_adapter_num }}]
+tera_adapter_id={{ $service.id }}
+listen_device={{ $service.listen_on_device }}
+vlan_int={{ $service.vlan_int }}
+vlan_ext={{ $service.vlan_ext }}
+mac_flipping={{ $service.mac_flipping }}
+{{ $tera_adapter_num = ($tera_adapter_num | add 1) -}}
+{{ end -}}
+{{ end }}
+
+# This module is used to configure health check settings.
+{{- range $index, $_ := until $cycle }}
+[health_check:{{ $index | mul $sid_step }}]
+name=nf{{ $index }}_fw_health_check
+device=nf_{{ $index }}_fw
+method=0
+multiplier=20
+interval=10
+
+[health_check:{{ $index | mul $sid_step | add 1 }}]
+name=nf{{ $index }}_proxy_health_check
+device=nf_{{ $index }}_proxy
+method=0
+multiplier=20
+interval=10
+
+[health_check:{{ $index | mul $sid_step | add 2 }}]
+name=nf{{ $index }}_sce_health_check
+device=nf_{{ $index }}_sce
+method=0
+multiplier=20
+interval=10
+
+[health_check:{{ $index | mul $sid_step | add 3 }}]
+name=nf{{ $index }}_shaping_engine_health_check
+device=nf_{{ $index }}_shaping_engine
+method=0
+multiplier=20
+interval=10
+{{ end }}
+[health_check:{{ $cycle | mul $sid_step }}]
+name=nf_inject_health_check
+device=nf_inject
+method=0
+multiplier=20
+interval=10
+
+
+# This module is used for configuring the service load balancing settings.
+[service_lb]
+sid_start={{ .Values.mrzcpd.service_lb.sid_range_start }}
+sid_end={{ .Values.mrzcpd.service_lb.sid_range_end }}
+
+{{ range $index, $_ := until $cycle }}
+{{- $load_balance_index:= $index | mul $sid_step }}
+[load_balance:{{ $load_balance_index }}]
+sid={{ $.Values.mrzcpd.service_lb.sid_range_start | add $load_balance_index}}
+mode=0
+devices=nf_{{ $index }}_fw,0
+health_check_sessions=nf{{ $index }}_fw_health_check
+
+[load_balance:{{ $load_balance_index | add 1 }}]
+sid={{ $.Values.mrzcpd.service_lb.sid_range_start | add $load_balance_index| add 1 }}
+mode=0
+devices=nf_{{ $index }}_proxy,0
+health_check_sessions=nf{{ $index }}_proxy_health_check
+
+[load_balance:{{ $load_balance_index | add 2 }}]
+sid={{ $.Values.mrzcpd.service_lb.sid_range_start | add $load_balance_index| add 2}}
+mode=0
+devices=nf_{{ $index }}_sce,0
+health_check_sessions=nf{{ $index }}_sce_health_check
+
+[load_balance:{{ $load_balance_index | add 3 }}]
+sid={{ $.Values.mrzcpd.service_lb.sid_range_start | add $load_balance_index| add 3}}
+mode=0
+devices=nf_{{ $index }}_shaping_engine,0
+health_check_sessions=nf{{ $index }}_shaping_engine_health_check
+{{ end }}
+[load_balance:{{ $cycle | mul $sid_step }}]
+{{-  $load_balance_index:= $cycle | mul $sid_step }}
+sid={{ $.Values.mrzcpd.service_lb.sid_range_start | add $load_balance_index}}
+mode=0
+devices=nf_inject,0
+health_check_sessions=nf_inject_health_check
+
+
+# This module is responsible for configuring the link database (linkdb) settings.
+{{- range $linkdb := .Values.mrzcpd.linkdb }}
+[link_db:{{ $linkdb.id }}]
+type={{ $linkdb.type }}
+traffic_link_id={{ $linkdb.traffic_link_id}}
+{{- if $linkdb.vwire_id }}
+vwire_id={{ $linkdb.vwire_id }}
+{{- end }}
+{{- if and $linkdb.ef_ip_addr $linkdb.ef_link_id  }}
+ef_ip_addr={{ $linkdb.ef_ip_addr }}
+ef_link_id={{ $linkdb.ef_link_id }}
+{{- end }}
+{{$enter}}
+{{- end }}
+
+
+# This module is used for configuring the network bridge settings.
 [bridge:0]
 {{- if .Values.mrzcpd.service_chaining.vxlan_interface  }}
 master_device={{ .Values.mrzcpd.service_chaining.vxlan_interface }}
@@ -456,23 +508,44 @@ devices={{ .Values.mrzcpd.service_chaining.vxlan_interface }},{{ $ep_nic_l3_list
 devices={{ $ep_nic_l3_list}}
 {{- end }}
 
-# bridge
 [bridge:1]
 {{- if .Values.mrzcpd.traffic_mirror.interface  }}
 master_device={{ .Values.mrzcpd.traffic_mirror.interface }}
 devices={{ .Values.mrzcpd.traffic_mirror.interface }},{{ $mirr_nic_list}}
 {{- else }}
 devices={{ $mirr_nic_list}}
-{{- end -}}
-{{$enter}}
+{{- end }}
 
-# bridge
 [bridge:2]
 {{- if .Values.mrzcpd.service_chaining.vlan_interface  }}
 master_device={{ .Values.mrzcpd.service_chaining.vlan_interface }}
 devices={{ .Values.mrzcpd.service_chaining.vlan_interface }},{{ $ep_nic_l2_list}}
 {{- else }}
 devices={{ $ep_nic_l2_list}}
+{{- end }}
+
+
+#This module is responsible for configuring the static classifier rules.
+{{- range $index, $_ := until $cycle }}
+[classifier_rule:{{ $index }}]
+rule_id={{ $index | add 1 }}
+dst_ip_addr_v4=192.0.2.{{ $index | add 101 }}
+dst_ip_mask_v4=32
+action=2
+priority=1
+sid={{ $index | mul $sid_step | add 1000 }}
+vwire_id=0
+{{ end }}
+{{ range $index, $_ := until $cycle }}
+[classifier_rule:{{ $index | add $cycle }}]
+rule_id={{ $index | add $cycle | add 1 }}
+src_ip_addr_v4=192.0.2.{{ $index | add 101 }}
+src_ip_mask_v4=32
+action=2
+priority=1
+sid={{ $index | mul $sid_step | add 1000 }}
+vwire_id=0
+{{$enter}}
 {{- end }}
 
 {{- end -}}

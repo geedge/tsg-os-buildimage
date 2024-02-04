@@ -16,34 +16,8 @@ nonrevertive_mode = {{getv $nonrevertive_mode_dir}}
 {{end}}
 {{end}}
 
-{{- $sid_step := 4 }}
+{{- $sid_step := 4 -}}
 {{- $rule_num := 0 }}
-{{ range $index, $_ := split (getv "/cycle") "," }}
-[classifier_rule:{{ $rule_num }}]
-rule_id={{ add $rule_num 1 }}
-ruleset_type=classifier
-dst_ip_addr_v4=192.0.2.{{ add $index 101 }}
-dst_ip_mask_v4=32
-action=nf_steering
-priority=0
-sid={{ add (mul $index $sid_step) 1000 }}
-vwire_id=0
-{{- $rule_num = add $rule_num 1 }}
-{{ end }}
-
-# src ip
-{{ range $index, $_ :=  split (getv "/cycle") "," }}
-[classifier_rule:{{ $rule_num }}]
-rule_id={{ add $rule_num 1 }}
-ruleset_type=classifier
-src_ip_addr_v4=192.0.2.{{ add $index 101 }}
-src_ip_mask_v4=32
-action=nf_steering
-priority=0
-sid={{ add (mul $index $sid_step) 1000 }}
-vwire_id=0
-{{- $rule_num = add $rule_num 1 }}
-{{ end }}
 
 {{ range $key, $dir := lsdir "/ruleset"}}
 {{- $SrcIpV4_dir := printf "/ruleset/%s/SrcIpV4" $dir}}
@@ -69,7 +43,7 @@ vwire_id=0
 {{- if exists $RuleId_dir }}
 rule_id={{getv $RuleId_dir}}
 {{- end }}
-ruleset_type=classifier
+ruleset_type=0
 {{- if exists $SrcIpV4_dir }}
 src_ip_addr_v4={{getv $SrcIpV4_dir}}
 {{- if exists $SrcIpMaskV4_dir }}
@@ -103,19 +77,19 @@ dst_ip_mask_v6={{getv $DstIpMaskV6_dir}}
 
 
 {{- if exists $SrcPortLow_dir }}
-src_port_low={{getv $SrcPortLow_dir}}
+src_port_start={{getv $SrcPortLow_dir}}
 {{- end -}}
 
 {{- if exists $SrcPortHigh_dir }}
-src_port_high={{getv $SrcPortHigh_dir}}
+src_port_end={{getv $SrcPortHigh_dir}}
 {{- end -}}
 
 {{- if exists $DstPortLow_dir }}
-dst_port_low={{getv $DstPortLow_dir}}
+dst_port_start={{getv $DstPortLow_dir}}
 {{- end -}}
 
 {{- if exists $DstPortHigh_dir }}
-dst_port_high={{getv $DstPortHigh_dir}}
+dst_port_end={{getv $DstPortHigh_dir}}
 {{- end -}}
 
 {{- if exists $Proto_dir }}
@@ -141,6 +115,6 @@ ef_adapter_id={{getv $EfId_dir}}
 {{- if exists $TeraId_dir }}
 tera_adapter_id={{getv $TeraId_dir}}
 {{- end }}
-action=nf_steering
+action=2
 {{- $rule_num = add $rule_num 1 }}
 {{end}}
