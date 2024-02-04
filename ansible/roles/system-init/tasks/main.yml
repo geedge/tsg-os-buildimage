@@ -68,6 +68,9 @@
      dest: /etc/profile
      line: 'export MLX5_GLUE_PATH=/opt/tsg/mrzcpd/lib'
 
+- name: "Add 'MLX5_GLUE_PATH' to the list of environment variables preserved in sudoers"
+  shell: echo "Defaults    env_keep += \"MLX5_GLUE_PATH\"" > /etc/sudoers.d/01-mrzcpd
+
 - name: "Generate ansiblg.cfg after ansible upgrade in rockylinux8"
   shell: ansible-config init --disabled > /etc/ansible/ansible.cfg
   when: runtime_env == 'TSG-X-P0906'
