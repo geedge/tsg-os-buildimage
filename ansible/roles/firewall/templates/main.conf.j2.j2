@@ -2,7 +2,10 @@
 PROFILE="./tsgconf/maat.conf"
 
 [TSG_LOG]
-MODE=kafka
+SENDLOG_SWITCH=on
+RINGBUFF_NUM=2
+RINGBUFF_SIZE=100000
+ASYNC_SENDLOG_ENABLED=1
 TRAFFIC_VSYSTEM_ID={% raw %}{{ vsys_id }}
 {% endraw %}
 NAMESPACE_ID=1
