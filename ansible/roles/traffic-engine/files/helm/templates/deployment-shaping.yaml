@@ -121,7 +121,7 @@ spec:
           mountPath: "/opt/tsg/etc/tsg_device_tag.json"
           subPath: "shaping/tsg_device_tag.json"
         - name: shaping-log
-          mountPath: /opt/tsg/shaping/log
+          mountPath: /opt/tsg/shaping_engine/log
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
         {{- if eq .Values.debug.shaping.enable_prestart_script .Values.define_enable_val_yes }}
         - name: prestart-dir
@@ -165,12 +165,12 @@ spec:
           - "bash"
           - "-ec"
           - |
-            while true; do touch /opt/tsg/shaping/log/.log_dir_hook; sleep 600; done
+            while true; do touch /opt/tsg/shaping_engine/log/.log_dir_hook; sleep 600; done
         securityContext:
           privileged: true
         volumeMounts:
         - name: shaping-log
-          mountPath: /opt/tsg/shaping/log
+          mountPath: /opt/tsg/shaping_engine/log
 
       initContainers:
       - name: init-default-svc
@@ -246,7 +246,7 @@ spec:
         emptyDir: {}
       - name: shaping-log
         hostPath:
-          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/shaping/
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/shaping_engine/
       {{- include "traffic-engine.volume.mrzcpd" . | nindent 6 }}
       {{- include "public.sync-host-timezone.volume" . | nindent 6 }}
       {{- if eq .Values.debug.shaping.enable_prestart_script .Values.define_enable_val_yes }}
