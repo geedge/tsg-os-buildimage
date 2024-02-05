@@ -80,9 +80,9 @@ stages:
     - ls -lh images
     - chmod +x ./tools/upload.sh
     - ./tools/upload.sh
-    - TSG_OS_VERSION=$(basename images/*-ONIE.bin | awk -F '-x86_64' '{print $1}')
+    - find ./images/ -type f | awk -F '/' '{print $NF}' > /tmp/has-built-files.txt
     - rm -rf images/*
-    - echo $TSG_OS_VERSION > images/tsg-os-version.txt
+    - mv /tmp/has-built-files.txt ./images
   tags:
     - tsg-os-builder-el8
 
