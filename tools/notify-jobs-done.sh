@@ -39,7 +39,7 @@ build_notify_content()
     bj_download_urls=$(build_download_urls https repo.geedge.net        $aliyun_url_subpath    $has_built_files)
     de_download_urls=$(build_download_urls https de.repo.gdnt-cloud.com $aliyun_url_subpath    $has_built_files)
     sg_download_urls=$(build_download_urls https sg.repo.gdnt-cloud.com $aliyun_url_subpath    $has_built_files)
-    bj_office_download_urls=$(build_download_urls http 192.168.44.24    $bj_office_url_subpath $has_built_files)
+    bj_office_download_urls=$(build_download_urls ftp 192.168.44.24    $bj_office_url_subpath $has_built_files)
 
     title_content="$tsg_os_version has been built. You can download it from the nearest mirror site.\n"
     bj_content="Beijing:\n$bj_download_urls"

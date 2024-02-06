@@ -80,7 +80,7 @@ stages:
     - ls -lh images
     - chmod +x ./tools/upload.sh
     - ./tools/upload.sh
-    - find ./images/ -type f | awk -F '/' '{print $NF}' > /tmp/has-built-files.txt
+    - find ./images/ -type f | grep x86_64_COTS | grep -v APP-BUNDLE | awk -F '/' '{print $NF}' > /tmp/has-built-files.txt
     - rm -rf images/*
     - mv /tmp/has-built-files.txt ./images
   tags:
