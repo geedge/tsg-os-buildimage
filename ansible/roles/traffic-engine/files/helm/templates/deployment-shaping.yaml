@@ -202,6 +202,20 @@ spec:
             until nslookup {{ .Values.external_resources.cm.local_cache.cache_name }}-redis-master.tsg-os-system.svc; do echo waiting for cm cache service; sleep 2; done
       {{- end }}
 
+      - name: init-packet-io-engine-ready
+        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until [ $(curl -s -o /dev/null -w "%{http_code}" http://${NODE_IP}:9086/probe) -eq 200 ]; do echo waiting for packet-io-engine ready; sleep 2; done
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+
       - name: shaping-init
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
