@@ -6,7 +6,7 @@
 
 - name: "get k3s to dest"
   get_url:
-    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.28.4/k3s
+    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s
     dest: /usr/bin/k3s
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
@@ -26,13 +26,13 @@
 
 - name: "get k3s-airgap-images-amd64.tar to dest"
   get_url:
-    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.28.4/k3s-airgap-images-amd64.tar
+    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s-airgap-images-amd64.tar
     dest: /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
 
 - name: "execute k3s install"
-  shell: curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_SKIP_ENABLE=true INSTALL_K3S_BIN_DIR=/usr/bin INSTALL_K3S_SYSTEMD_DIR=/usr/lib/systemd/system sh -s - --flannel-backend=none --node-name=localhost
+  shell: curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_SKIP_ENABLE=true INSTALL_K3S_BIN_DIR=/usr/bin INSTALL_K3S_SYSTEMD_DIR=/usr/lib/systemd/system sh -s - --flannel-backend=none --node-name=localhost --disable-helm-controller
 
 - name: "enable k3s"
   systemd:
@@ -154,3 +154,15 @@
     src: "{{ role_path }}/files/k3s-reset.sh"
     dest: /usr/bin/
     mode: 0755
+
+- name: "download helm-controller images tar"
+  get_url:
+    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s-helm-controller-amd64.tar
+    dest: /var/lib/rancher/k3s/agent/images/k3s-helm-controller-amd64.tar
+    url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
+    url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
+
+- name: "install deploy helm-controller mainfest file to dest"
+  copy:
+    src: "{{ role_path }}/files/deploy-helm-controller.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/
