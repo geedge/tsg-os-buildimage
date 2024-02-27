@@ -288,7 +288,7 @@ read_device_type()
 read_sn()
 {
     if [ ${DEVICE_TYPE} == "9000-NPB" ]; then
-        SN=`ipmitool fru -t 130 | awk 'NR==12' | awk '{ print $4}'`
+        SN=`ipmitool fru -t 130 | grep 'Product Serial' | awk '{ print $4}' | head -n 1`
     else
         SN=`ipmitool fru list | grep 'Product Serial' | awk '{ print $4}' | head -n 1`
     fi
@@ -296,6 +296,18 @@ read_sn()
     if [ -z "${SN}" ]; then
         SN="unknown"
     fi
+}
+
+retry_read_sn_when_sn_unavailable()
+{
+    retry_max_count=10
+    i=1
+    until [ $i -gt $retry_max_count ] || [ $SN != "unknown" ]
+    do
+        sleep $((RANDOM % 6 + 1))
+        read_sn
+        ((i++))
+    done
 }
 
 add_node_metadata()
@@ -342,4 +354,5 @@ set_mrzcpd_conf
 # add sn to k8s node annotations.
 read_device_type
 read_sn
+retry_read_sn_when_sn_unavailable
 add_node_metadata
