@@ -388,6 +388,7 @@ EOF2
 (cat <<EOF3
 menuentry 'TSG-OS ${DISTR0_VER} (${MACHINE_ID})' {
   set root='(${root_disk},gpt${distro_part})'
+  search --no-floppy --label --set=root ${vol_label_tsg_os_sysroot}
   echo    'Loading TSG-OS ${DISTR0_VER} (${MACHINE_ID}) ...'
   linux   /boot/vmlinuz ${kernel_args} root="LABEL=${vol_label_tsg_os_sysroot}"
   echo    'Loading TSG-OS ${DISTR0_VER} (${MACHINE_ID}) initial ramdisk ...'
