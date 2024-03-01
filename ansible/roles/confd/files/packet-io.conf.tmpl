@@ -118,3 +118,27 @@ tera_adapter_id={{getv $TeraId_dir}}
 action=2
 {{- $rule_num = add $rule_num 1 }}
 {{end}}
+
+[dp_trace_rule]
+{{- $enable:= getv "/datapath_trace/enable" -}}
+{{- if eq $enable "yes" }}
+enable=1
+{{- end}}
+{{- if eq $enable "no" }}
+enable=0
+{{- end}}
+dp_trace_file_path=/var/run/mrzcpd/dp_trace.pcapng
+datapath_trace_file_max_size_in_KB={{getv "/datapath_trace/datapath_trace_file_max_size_in_KB"}}
+{{$num:="" -}}
+{{range $key, $dir := lsdir "/datapath_trace/rule"}}
+{{- $index:= len $num -}}
+{{- $bpf_expr := printf "/datapath_trace/rule/%d/bpf_expr" $index -}}
+{{- $packet_max_count := printf "/datapath_trace/rule/%d/packet_max_count" $index -}}
+{{- $id := printf "/datapath_trace/rule/%d/id" $index -}}
+{{- $num = printf "%s1" $num }}
+[dp_trace_rule:{{getv $id}}]
+bpf_expr={{getv $bpf_expr}}
+{{- if exists $packet_max_count }}
+pkt_cnt_max={{getv $packet_max_count}}
+{{- end }}
+{{ end -}}

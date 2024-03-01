@@ -16,3 +16,4 @@ data:
     ruleset: {{ .Values.mrzcpd.ruleset | toJson }}
     {{- $cycle := int .Values.mrzcpd.nf_count }}
     cycle: {{(printf "\"")}} {{- range $index, $_ := until $cycle }}{{- if ne $index 0 }},{{ end -}} {{ (printf "%d" $index) }}{{- end -}} {{(printf "\"")}}
+    datapath_trace: {{ .Values.mrzcpd.datapath_trace | toJson }}

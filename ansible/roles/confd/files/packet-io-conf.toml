@@ -4,6 +4,7 @@ dest = "/opt/tsg/config/shared/mrglobal.dynamic.conf"
 keys = [
   "/obp_devices/",
   "/cycle/",
-  "/ruleset"
+  "/ruleset",
+  "/datapath_trace"
 ]
 reload_cmd = "pkill -1 mrzcpd"
