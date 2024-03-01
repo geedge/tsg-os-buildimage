@@ -103,6 +103,8 @@ kubelet-arg:
   - "kube-reserved=memory=${KUBE_RESERVED}Gi"
   - "system-reserved=memory=${system_mem}Gi"
   - "sync-frequency=1s"
+kube-apiserver-arg:
+  - "event-ttl=48h0m0s"
 EOF
 }
 
