@@ -23,6 +23,7 @@ spec:
         vsysId: "{{ .Values.vsys_id }}"
         serviceFunction: {{ .Release.Name }}
         component: shaping
+        dynamic-hostports: '8551.8552'
       annotations:
         prometheus.io/port: "9007"
         prometheus.io/scrape: "true"
@@ -51,9 +52,12 @@ spec:
             {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
             sed -Ei -c "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
             {{- end }}
-            curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/shaping-announce-port-{{ .Release.Name }} -o /tmp/service.txt
-            export CLUSTER_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="cluster-announce-port") | .nodePort')
-            export HEALTH_CHECK_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | select(.name=="healthcheck-announce-port") | .nodePort')
+            until nslookup ${MY_POD_NAME}-8551.default.svc; do echo waiting for kubernetes service; sleep 2; done
+            curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/${MY_POD_NAME}-8551 -o /tmp/service.txt
+            export CLUSTER_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | .nodePort')
+            until nslookup ${MY_POD_NAME}-8552.default.svc; do echo waiting for kubernetes service; sleep 2; done
+            curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/${MY_POD_NAME}-8552 -o /tmp/service.txt
+            export HEALTH_CHECK_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] |  .nodePort')
             echo "export CLUSTER_ANNOUNCE_PORT=${CLUSTER_ANNOUNCE_PORT}" > /etc/profile.d/announceinfo.sh
             echo "export HEALTH_CHECK_ANNOUNCE_PORT=${HEALTH_CHECK_ANNOUNCE_PORT}" >> /etc/profile.d/announceinfo.sh
             chmod 0755 /etc/profile.d/announceinfo.sh
@@ -80,6 +84,10 @@ spec:
           - containerPort: 8552
           - containerPort: 9007
         env:
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         - name: DEPLOYMENT_NAME
           value: {{ .Release.Name }}-shaping
         - name: NODE_IP
@@ -182,14 +190,6 @@ spec:
           - |
             until nslookup kubernetes.default.svc; do echo waiting for kubernetes service; sleep 2; done
 
-      - name: init-announce-svc
-        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
-        imagePullPolicy: Never
-        command:
-          - "bash"
-          - "-ec"
-          - |
-            until nslookup shaping-announce-port-{{ .Release.Name }}.default.svc; do echo waiting for kubernetes service; sleep 2; done
 
       {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
       - name: init-cm-svc
