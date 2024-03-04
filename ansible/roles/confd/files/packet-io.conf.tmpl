@@ -128,7 +128,7 @@ enable=1
 enable=0
 {{- end}}
 dp_trace_file_path=/var/run/mrzcpd/dp_trace.pcapng
-datapath_trace_file_max_size_in_KB={{getv "/datapath_trace/datapath_trace_file_max_size_in_KB"}}
+dp_trace_file_max_size_in_KB={{getv "/datapath_trace/datapath_trace_file_max_size_in_KB"}}
 {{$num:="" -}}
 {{range $key, $dir := lsdir "/datapath_trace/rule"}}
 {{- $index:= len $num -}}
