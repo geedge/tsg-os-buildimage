@@ -15,7 +15,7 @@ firewall_rpm_version:
   ssl: ssl-3.0.4.8f3bde2
   rtp: rtp-1.0.7.530ac76
   ssh: ssh-2.1.7.b053e65
-  dtls: dtls-2.0.3.51e8096
+  dtls: dtls-2.0.4.9a1155d
   mesa_sip: mesa_sip-2.0.8.43559f7
   deal_socks: deal_socks-1.0.4.329bba3
   stratum: stratum-1.1.0.29a2cff
