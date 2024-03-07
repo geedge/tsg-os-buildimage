@@ -3,22 +3,22 @@ certstore_rpm_version:
 
 firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-3.1.8.a9be824
+  firewall: firewall-3.1.9.0f92a30
   glimpse_detector: glimpse_detector-3.0.0.7240884
   qdpi_detector: qdpi_detector-4.0.3.9f81ea0
   tsg_ddos_sketch: tsg_ddos_sketch-2.0.2.35e03d0
   dns: dns-2.1.7.1da8dfa
   ftp: ftp-1.0.15.1fc64fe
-  http: http-2.0.18.328131d
+  http: http-2.0.20.0571d0b
   mail: mail-1.0.21.aec281b
-  quic: quic-2.0.9.a7d76dd
+  quic: quic-2.0.11.1ab2559
   ssl: ssl-3.0.4.8f3bde2
   rtp: rtp-1.0.7.530ac76
   ssh: ssh-2.1.7.b053e65
   dtls: dtls-2.0.4.9a1155d
   mesa_sip: mesa_sip-2.0.8.43559f7
   deal_socks: deal_socks-1.0.4.329bba3
-  stratum: stratum-1.1.0.29a2cff
+  stratum: stratum-1.1.1.043785d
   rdp: rdp-1.0.3.f392ffd
   session_flags: session_flags-2.3.3.7561d9f
   stat_policy_enforcer: stat_policy_enforcer-3.1.26.e2b5562
