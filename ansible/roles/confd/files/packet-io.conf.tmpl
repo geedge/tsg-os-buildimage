@@ -132,13 +132,29 @@ dp_trace_file_max_size_in_KB={{getv "/datapath_trace/datapath_trace_file_max_siz
 {{$num:="" -}}
 {{range $key, $dir := lsdir "/datapath_trace/rule"}}
 {{- $index:= len $num -}}
+{{- $rule_enable_path := printf "/datapath_trace/rule/%d/enable" $index -}}
+{{- $rule_enable := getv $rule_enable_path -}}
 {{- $bpf_expr := printf "/datapath_trace/rule/%d/bpf_expr" $index -}}
 {{- $packet_max_count := printf "/datapath_trace/rule/%d/packet_max_count" $index -}}
+{{- $sampling := printf "/datapath_trace/rule/%d/sampling" $index -}}
+{{- $snaplen := printf "/datapath_trace/rule/%d/snaplen" $index -}}
 {{- $id := printf "/datapath_trace/rule/%d/id" $index -}}
 {{- $num = printf "%s1" $num }}
 [dp_trace_rule:{{getv $id}}]
+{{- if eq $rule_enable "yes" }}
+enable=1
+{{- end}}
+{{- if eq $rule_enable "no" }}
+enable=0
+{{- end}}
 bpf_expr={{getv $bpf_expr}}
 {{- if exists $packet_max_count }}
 pkt_cnt_max={{getv $packet_max_count}}
+{{- end }}
+{{- if exists $sampling }}
+sampling={{getv $sampling}}
+{{- end }}
+{{- if exists $snaplen }}
+snaplen={{getv $snaplen}}
 {{- end }}
 {{ end -}}
