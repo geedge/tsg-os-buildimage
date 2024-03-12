@@ -45,6 +45,9 @@ function install_patch_files()
 
     mkdir -p /opt/tsg/clixon/yang
     cp /opt/tsg/clixon/deviation/tsg-os-mgnt-augment-9000-NPB.yang /opt/tsg/clixon/yang/tsg-os-mgnt-augment-9000-NPB.yang
+
+    mkdir -p /opt/tsg/tools/9000_NBP_upgrade_from_v2307
+    cp $UNARCHIVE_DIR/convert-configs-from-provison-to-clixon.py /opt/tsg/tools/9000_NBP_upgrade_from_v2307/convert-configs-from-provison-to-clixon.py
 }
 
 function set_HAL_config()

@@ -245,9 +245,198 @@ append_kernel_args()
         kernel_args="${kernel_args} ${kernel_args_device_9000}"
     fi
 }
+
+############### 9000-NPB v23.07 to v24.02 upgrade function start ################
+check_is_9000_npb_upgrade_from_v2307()
+{
+    local sysroot_dir="$1"
+
+    os_version_line=$(cat ${sysroot_dir}/etc/os-release | grep VERSION)
+
+    if echo ${os_version_line} | grep -q "9000NPBP01R01" && echo ${os_version_line} | grep -q "23.07"; then
+        echo "true"
+    else
+        echo "false"
+    fi
+}
+
+backup_configs_from_old_os()
+{
+    local sysroot_dir="$1"
+    local data_dir="$2"
+    local backup_dir="$3"
+
+    mkdir -p ${backup_dir}
+
+    # backup ip network of policy&log nic.
+    backup_network_dir="${backup_dir}/network"
+    mkdir -p ${backup_network_dir}
+
+    if [ -e "${data_dir}/overlay/rootfs_etc/rw/sysconfig/network-scripts/ifcfg-eth_vf_ctl" ]; then
+        cp -a ${data_dir}/overlay/rootfs_etc/rw/sysconfig/network-scripts/ifcfg-eth_vf_ctl ${backup_network_dir}
+    fi
+
+    backup_etc_dir="${backup_dir}/etc"
+    mkdir -p ${backup_etc_dir}
+
+    # backup user accounts and groups.
+    if [ -e "${data_dir}/overlay/rootfs_etc/rw/passwd" ];then
+        cp -a ${data_dir}/overlay/rootfs_etc/rw/passwd ${backup_etc_dir}
+    fi
+
+    if [ -e "${data_dir}/overlay/rootfs_etc/rw/shadow" ];then
+        cp -a ${data_dir}/overlay/rootfs_etc/rw/shadow ${backup_etc_dir}
+    fi
+
+    if [ -e "${data_dir}/overlay/rootfs_etc/rw/group" ];then
+        cp -a ${data_dir}/overlay/rootfs_etc/rw/group ${backup_etc_dir}
+    fi
+
+    if [ -e "${data_dir}/overlay/rootfs_etc/rw/gshadow" ];then
+        cp -a ${data_dir}/overlay/rootfs_etc/rw/gshadow ${backup_etc_dir}
+    fi
+
+    if [ -e "${data_dir}/overlay/rootfs_etc/rw/subuid" ];then
+        cp -a ${data_dir}/overlay/rootfs_etc/rw/subuid ${backup_etc_dir}
+    fi
+
+    if [ -e "${data_dir}/overlay/rootfs_etc/rw/subgid" ];then
+        cp -a ${data_dir}/overlay/rootfs_etc/rw/subgid ${backup_etc_dir}
+    fi
+
+    # backup hostname.
+    if [ -e "${data_dir}/overlay/rootfs_etc/rw/hostname" ];then
+        cp -a ${data_dir}/overlay/rootfs_etc/rw/hostname ${backup_etc_dir}
+    fi
+
+    # backup chrony.conf.
+    if [ -e "${data_dir}/overlay/rootfs_etc/rw/chrony.conf" ]; then
+        cp -a ${data_dir}/overlay/rootfs_etc/rw/chrony.conf ${backup_etc_dir}
+    fi
+
+    # backup timezone.
+    if [ -L "${data_dir}/overlay/rootfs_etc/rw/localtime" ]; then
+        cp -a ${data_dir}/overlay/rootfs_etc/rw/localtime ${backup_etc_dir}
+    fi
+
+    # backup dns server.
+    if [ -e "${data_dir}/overlay/rootfs_etc/rw/resolv.conf" ]; then
+        cp -a ${data_dir}/overlay/rootfs_etc/rw/resolv.conf ${backup_etc_dir}
+    fi    
+
+    # backup provision configs.
+    backup_provision_dir="${backup_dir}/provision"
+    mkdir -p ${backup_provision_dir}
+
+    if [ -e "${sysroot_dir}/opt/tsg/tsg-os-provision/provision.default.yml" ]; then
+        cp -a ${sysroot_dir}/opt/tsg/tsg-os-provision/provision.default.yml ${backup_provision_dir}
+    fi
+    if [ -e "${data_dir}/tsg-os-provision/provision.yml" ]; then
+        cp -a ${data_dir}/tsg-os-provision/provision.yml ${backup_provision_dir}
+    fi
+    if [ -d "${data_dir}/tsg-os-provision/provision.yml.d" ]; then
+        cp -a ${data_dir}/tsg-os-provision/provision.yml.d ${backup_provision_dir}
+    fi
+}
+
+remove_old_os_persistent_data()
+{
+    local data_dir="$1"
+
+    if [ -n "${data_dir}" ]; then
+        rm -rf ${data_dir}/overlay
+        rm -rf ${data_dir}/var
+        rm -rf ${data_dir}/tsg-os-provision
+    fi
+}
+
+recovery_configs_to_new_os()
+{
+    local sysroot_dir="$1"
+    local data_dir="$2"
+    local backup_dir="$3"
+
+    # recovery network config of policy&log nic.
+    target_network_dir="${data_dir}/overlay/rootfs_etc/rw/sysconfig/network-scripts"
+
+    if [ -e "${backup_dir}/network/ifcfg-eth_vf_ctl" ]; then
+        mkdir -p ${target_network_dir}
+        cp -a ${backup_dir}/network/ifcfg-eth_vf_ctl ${target_network_dir}
+    fi
+
+    # recovery user accounts and groups + hostname + timezone + chrony.conf.
+    target_etc_dir="${data_dir}/overlay/rootfs_etc/rw"
+    mkdir -p ${target_etc_dir}
+
+    if [ -d "${backup_dir}/etc" ] && [ "$(ls -A ${backup_dir}/etc)" ]; then
+        cp -a ${backup_dir}/etc/* ${target_etc_dir}
+    fi
+
+    # recovery provision configs to clixon config.
+    provison_workdir_in_chroot="/tmp/provision_workdir"
+    mkdir -p ${sysroot_dir}/${provison_workdir_in_chroot}
+
+    if [ -d  "${backup_dir}/provision" ] && [ "$(ls -A ${backup_dir}/provision)" ]; then
+        cp -a ${backup_dir}/provision/* ${sysroot_dir}/${provison_workdir_in_chroot}
+    fi
+
+    target_clixon_dir="${data_dir}/overlay/rootfs_etc/rw/clixon/"
+    mkdir -p ${target_clixon_dir}
+
+    chroot ${sysroot_dir} \
+        python3 /opt/tsg/tools/9000_NBP_upgrade_from_v2307/convert-configs-from-provison-to-clixon.py \
+        -d ${provison_workdir_in_chroot}/provision.default.yml \
+        -c ${provison_workdir_in_chroot}/provision.yml \
+        --config-dir ${provison_workdir_in_chroot}/provision.yml.d \
+        > ${target_clixon_dir}/running_db
+
+    rm -rf ${sysroot_dir}/${provison_workdir_in_chroot}
+}
+
+mount_volume_into_dir()
+{
+    volume_path="$1"
+    mount_dir="$2"
+
+    mkdir -p ${mount_dir}
+    mount ${volume_path} ${mount_dir}
+}
+
+umount_volume_from_dir()
+{
+    mount_dir="$1"
+
+    if [ -d "${mount_dir}" ]; then
+        umount ${mount_dir}
+    fi
+}
+
+################9000-NPB v23.07 to v24.02 upgrade function end #################
+
 ############################### START AT HERE #########################################
 lib_dir="/lib/onie"
 . $lib_dir/onie-blkdev-common
+
+IS_9000_NPB_UPGRADE_FROM_V2307="false"
+DATA_MOUNT_DIR="/tmp/9000_npb_upgrade_from_v2307/mount/data"
+BACKUP_DIR="${DATA_MOUNT_DIR}/backup/v2307"
+
+old_os_sysroot_mount_dir="/tmp/9000_npb_upgrade_from_v2307/old_os/mount/sysroot"
+mount_volume_into_dir "${dev_part_tsg_os_sysroot}" "${old_os_sysroot_mount_dir}"
+
+IS_9000_NPB_UPGRADE_FROM_V2307=$(check_is_9000_npb_upgrade_from_v2307 "${old_os_sysroot_mount_dir}")
+echo "Is 9000-NPB upgrade from v23.07: ${IS_9000_NPB_UPGRADE_FROM_V2307}"
+
+if [ "${IS_9000_NPB_UPGRADE_FROM_V2307}" == "true" ]; then
+    mount_volume_into_dir "${dev_part_tsg_os_data}" "${DATA_MOUNT_DIR}"
+
+    backup_configs_from_old_os ${old_os_sysroot_mount_dir} ${DATA_MOUNT_DIR} ${BACKUP_DIR}
+    remove_old_os_persistent_data ${DATA_MOUNT_DIR}
+
+    umount_volume_from_dir "${DATA_MOUNT_DIR}"
+fi
+
+umount_volume_from_dir "${old_os_sysroot_mount_dir}"
 
 cd $(dirname $0)
 
@@ -409,6 +598,19 @@ cat ${grub_cfg} >> ${distro_mnt}/etc/grub.d/40_onie_grub
 umount ${distro_mnt}
 
 cd /
+
+if [ "${IS_9000_NPB_UPGRADE_FROM_V2307}" == "true" ]; then
+    new_os_sysroot_mount_dir="/tmp/9000_npb_upgrade_from_v2307/new_os/mount/sysroot"
+
+    mount_volume_into_dir "${dev_part_tsg_os_sysroot}" "${new_os_sysroot_mount_dir}"
+    mount_volume_into_dir "${dev_part_tsg_os_data}" "${DATA_MOUNT_DIR}"
+
+    recovery_configs_to_new_os ${new_os_sysroot_mount_dir} ${DATA_MOUNT_DIR} ${BACKUP_DIR}
+    rm -rf ${DATA_MOUNT_DIR}/var/lib/.tsg-os-oobc-enable
+
+    umount_volume_from_dir "${new_os_sysroot_mount_dir}"
+    umount_volume_from_dir "${DATA_MOUNT_DIR}"
+fi
 
 echo "TSG-OS install successfully, need to reboot."
 exit 0
