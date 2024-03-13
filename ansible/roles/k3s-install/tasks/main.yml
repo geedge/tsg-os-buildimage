@@ -143,3 +143,8 @@
     dest: /var/lib/rancher/k3s/agent/images/dynamic-host-port.tar
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
+
+- name: "copy coredns-custom yaml file to k3s manifests directory"
+  copy:
+    src: "{{ role_path }}/files/coredns-custom.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/

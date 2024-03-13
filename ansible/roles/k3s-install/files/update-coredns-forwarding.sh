@@ -5,7 +5,7 @@ set -eufo pipefail
 readonly CONTAINERD_SOCK='/run/k3s/containerd/containerd.sock'
 
 # The absolute path to the CoreDNS manifest file.
-readonly COREDNS_YAML='/var/lib/rancher/k3s/server/manifests/coredns.yaml'
+readonly COREDNS_YAML='/var/lib/rancher/k3s/server/manifests/coredns-custom.yaml'
 
 get_file_mtime() {
     # Get file "$1" mtime in Epoch seconds.
@@ -19,13 +19,6 @@ wait_for_file() {
     done
 }
 
-wait_for_newer_mtime() {
-    # Wait for file "$1" to have newer mtime than file "$2".
-    until [[ $(get_file_mtime "$1") -gt $(get_file_mtime "$2") ]]; do
-        sleep 1
-    done
-}
-
 get_nameservers() {
     # Get a list of DNS nameservers defined in /etc/resolv.conf.
     if [[ -e /etc/resolv.conf ]]; then
@@ -35,6 +28,8 @@ get_nameservers() {
 
 restart_coredns_deployment() {
     # Restart the CoreDNS deployment.
+    kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml \
+        apply -f $COREDNS_YAML
     kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml --namespace kube-system \
         rollout restart deployment coredns
 }
@@ -47,7 +42,11 @@ update_coredns_forwarding() {
     mapfile -t nameservers < <(get_nameservers)
     if [[ "${#nameservers[@]}" -eq 0 ]]; then
         echo 'Disabling CoreDNS host forwarding ...'
-        sed -i 's/\(^\s\+\)forward/\1#forward/' "$COREDNS_YAML"
+        sed -i 's/\(^\s\+\)forward \. \/etc\/resolve\.conf/\1#forward \. \/etc\/resolve\.conf/' "$COREDNS_YAML"
+        restart_coredns_deployment
+    else
+        echo 'Enabling CoreDNS host forwarding ...'
+        sed -i 's/\(^\s\+\)#forward \. \/etc\/resolve\.conf/\1forward \. \/etc\/resolve\.conf/' "$COREDNS_YAML"
         restart_coredns_deployment
     fi
 }
@@ -55,7 +54,6 @@ update_coredns_forwarding() {
 main() {
     wait_for_file "$CONTAINERD_SOCK"
     wait_for_file "$COREDNS_YAML"
-    wait_for_newer_mtime "$COREDNS_YAML" "$CONTAINERD_SOCK"
     update_coredns_forwarding
 }
 
