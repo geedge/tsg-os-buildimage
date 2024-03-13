@@ -131,3 +131,8 @@
   copy:
     src: "{{ role_path }}/files/daemonset-mrzcpd-deviceplugin.yaml"
     dest: /var/lib/rancher/k3s/server/manifests/
+
+- name: "copy coredns-custom yaml file to k3s manifests directory"
+  copy:
+    src: "{{ role_path }}/files/coredns-custom.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/
