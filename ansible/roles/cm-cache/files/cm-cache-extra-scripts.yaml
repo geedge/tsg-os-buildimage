@@ -155,8 +155,7 @@ data:
     done
 
     if [[ -z $m_value ]] || [[ -z $s_value ]]; then
-      echo "Missing required options."
-      usage
+      echo "Info: Only one Redis master IP is configured. The master-slave Redis switch program will be terminated."
     else
       m_str=(${m_value//:/ })
       REDIS_MASTER=${m_str[0]}
