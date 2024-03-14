@@ -16,7 +16,7 @@ TARGET_INSTALLER_DIR			:= $(TARGET_BUILD_DIR)/installer
 TRAFFIC_ENGINE_HELM_FILE_PATH   := /ansible/roles/traffic-engine/files/helm
 INJECT_ADAPTER_HELM_FILE_PATH   := /ansible/roles/packet_adapter/files/helm
 MRZCPD_HELM_FILE_PATH           := /ansible/roles/mrzcpd/files/helm
-MRZCPD_DEVICE_PLUGIN_FILE_PATH  := /ansible/roles/k3s-install/files/daemonset-mrzcpd-deviceplugin.yaml
+MRZCPD_DEVICE_PLUGIN_FILE_PATH  := /ansible/roles/k3s-install/files/packet-io-uio-binder.yaml
 
 
 .PHONY: all build_dir installer clean_installer_dir prebuild_container_images build_container_images build_helm_charts build_app_bundle_bin 

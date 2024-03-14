@@ -68,7 +68,7 @@ function export_images()
             ${IMAGE_REPO_PREFIX}/tsg-inject:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-packet-io-engine:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-shaping:${OS_RELEASE_VER} \
-            ${IMAGE_REPO_PREFIX}/tsg-packet-io-engine-deviceplugin:${OS_RELEASE_VER}
+            ${IMAGE_REPO_PREFIX}/tsg-packet-io-uio-binder:${OS_RELEASE_VER}
 }
 ##function define end
 
@@ -87,7 +87,7 @@ build_image "bfdd"      "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-bfdd:${OS
 build_image "shaping"   "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-shaping:${OS_RELEASE_VER}"
 build_image "inject"    "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-inject:${OS_RELEASE_VER}"
 build_image "packet-io-engine"    "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-packet-io-engine:${OS_RELEASE_VER}"
-build_image "packet-io-engine-deviceplugin"    "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-packet-io-engine-deviceplugin:${OS_RELEASE_VER}"
+build_image "packet-io-uio-binder"    "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-packet-io-uio-binder:${OS_RELEASE_VER}"
 
 export_images
 

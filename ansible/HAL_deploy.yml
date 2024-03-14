@@ -179,11 +179,11 @@
   roles:
     - {role: container-tools-install, tags: container-tools-install}
 
-- hosts: x86_64_COTS-packet-io-engine-deviceplugin
+- hosts: x86_64_COTS-packet-io-uio-binder
   remote_user: root
   vars_files:
     - install_config/group_vars/HAL_x86_64_COTS.yml
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: framework, tags: framework}
-    - {role: mrzcpd-deviceplugin, tags: mrzcpd-deviceplugin}
+    - {role: packet-io-uio-binder, tags: packet-io-uio-binder}

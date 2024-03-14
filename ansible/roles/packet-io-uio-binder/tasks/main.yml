@@ -1,8 +1,8 @@
 ---
-- name: "install mrzcpd-deviceplugin"
+- name: "install packet-io-uio-binder"
   yum:
     name:
-      - "{{ mrzcpd_deviceplugin_rpm_version.mrzcpd_deviceplugin }}"
+      - "{{ packet_io_uio_binder_rpm_version.packet_io_uio_binder }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 

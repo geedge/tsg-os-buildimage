@@ -127,9 +127,9 @@
     name: k3s-orphaned-pods-dir-clean.timer
     enabled: yes
 
-- name: "copy mrzcpd-deviceplugin file to dest"
+- name: "copy packet-io-uio-binder file to dest"
   copy:
-    src: "{{ role_path }}/files/daemonset-mrzcpd-deviceplugin.yaml"
+    src: "{{ role_path }}/files/packet-io-uio-binder.yaml"
     dest: /var/lib/rancher/k3s/server/manifests/
 
 - name: "copy dynamic-hostport yaml file to k3s manifests directory"

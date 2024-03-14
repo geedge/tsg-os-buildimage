@@ -14,7 +14,7 @@ APP_BUNDLE_BIN			:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-APP-BUNDLE.b
 
 TARGET_BUILD_DIR 		:= $(BUILDDIR_BASE)/$(PROFILE_ID)
 TARGET_INSTALLER_DIR 	:= $(TARGET_BUILD_DIR)/installer
-MRZCPD_DEVICE_PLUGIN_FILE_PATH  := /ansible/roles/k3s-install/files/daemonset-mrzcpd-deviceplugin.yaml
+MRZCPD_DEVICE_PLUGIN_FILE_PATH  := /ansible/roles/k3s-install/files/packet-io-uio-binder.yaml
 MRZCPD_DEVICE_PLUGIN_IMAGE_TAG  := ${OS_RELEASE_VER}
 TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
 
