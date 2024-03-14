@@ -3,7 +3,7 @@ certstore_rpm_version:
 
 firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-3.1.9.0f92a30
+  firewall: firewall-3.1.11.f273c73
   glimpse_detector: glimpse_detector-3.0.0.7240884
   qdpi_detector: qdpi_detector-4.0.3.9f81ea0
   tsg_ddos_sketch: tsg_ddos_sketch-2.0.2.35e03d0
@@ -12,7 +12,7 @@ firewall_rpm_version:
   http: http-2.0.20.0571d0b
   mail: mail-1.0.21.aec281b
   quic: quic-2.0.11.1ab2559
-  ssl: ssl-3.0.4.8f3bde2
+  ssl: ssl-3.1.0.0021889
   rtp: rtp-1.0.7.530ac76
   ssh: ssh-2.1.7.b053e65
   dtls: dtls-2.0.4.9a1155d
