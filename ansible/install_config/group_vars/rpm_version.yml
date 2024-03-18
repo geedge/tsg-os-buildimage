@@ -83,7 +83,7 @@ http_healthcheck_rpm_version:
   http_healthcheck: http_healthcheck-2.0.1.0884451
 
 hasp_tools_rpm_version:
-  hasp_tools: hasp-tools-1.0.11.148e4d0
+  hasp_tools: hasp-tools-1.0.12.66db85d
 
 tsg_os_clixon_rpm_version:
   cligen: cligen-5.8.0-release
