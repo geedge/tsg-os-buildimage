@@ -10,30 +10,6 @@
 {{- join $separtor $kafka_brokers }}
 {{- end -}}
 
-{{- define "traffic-engine.coredump" -}}
-{{- if eq .Values.coredump.format "none" -}}
-disable_coredump=1
-enable_breakpad=0
-enable_breakpad_upload=0
-{{- end }}
-{{- if eq .Values.coredump.format "core" -}}
-disable_coredump=0
-enable_breakpad=0
-enable_breakpad_upload=0
-{{- end }}
-{{- if eq .Values.coredump.format "minidump" -}}
-disable_coredump=1
-enable_breakpad=1
-{{- if eq .Values.coredump.collect "sentry" }}
-enable_breakpad_upload=1
-breakpad_upload_url={{ .Values.coredump.sentry_url }}
-{{- end }}
-{{- if eq .Values.coredump.collect "local" }}
-enable_breakpad_upload=0
-{{- end }}
-{{- end }}
-{{- end -}}
-
 {{- define "traffic-engine.tfe.workerthread" -}}
 {{- if eq (len .Values.tfe_affinity) 1 }}
 {{- 1 }}
