@@ -135,40 +135,10 @@ representor_ns={{ $interface.representor_ns }}
 {{- if $interface.representor_dev }}
 representor_dev={{ $interface.representor_dev }}
 {{- end }}
-{{ end }}
-# Configuration settings for network bonding (bond) functionality.
-{{- range $interface := .Values.mrzcpd.virtual_interfaces }}
-{{- if eq $interface.type "1"}}
-[device:{{ $interface.name }}]
-{{- if $interface.promisc }}
-promisc={{ $interface.promisc }}
-{{- end}}
-{{- if $interface.mtu }}
-mtu={{ $interface.mtu }}
-{{- end}}
-{{- if eq $interface.role "5"}}
-driver=1
-{{- else}}
-driver=0
-{{- end}}
-role={{ $interface.role }}
-{{- if $interface.type }}
-type={{ $interface.type }}
-{{- end }}
-{{- if $interface.bond_mode }}
-bond_mode={{ $interface.bond_mode }}
-{{- end }}
-{{- if $interface.bond_xmit_policy }}
-bond_xmit_policy={{ $interface.bond_xmit_policy }}
-{{- end }}
-{{- if $interface.slaves }}
-bond_slaves={{- range $index,$slave := $interface.slaves }}{{- if ne $index 0 }},{{ end -}}{{ $slave.interface }}{{- end }}
-{{- end }}
 {{- if $interface.rxcore }}
 rx_cores={{ $interface.rxcore }}
 {{- end }}
-{{- end }}
-{{- end }}
+{{ end }}
 
 
 # Configuration settings for the virtual device (virtual dev) management.
@@ -532,7 +502,7 @@ rule_id={{ $index | add 1 }}
 dst_ip_addr_v4=192.0.2.{{ $index | add 101 }}
 dst_ip_mask_v4=32
 action=2
-priority=1
+priority=0
 sid={{ $index | mul $sid_step | add 1000 }}
 vwire_id=0
 {{ end }}
@@ -542,7 +512,7 @@ rule_id={{ $index | add $cycle | add 1 }}
 src_ip_addr_v4=192.0.2.{{ $index | add 101 }}
 src_ip_mask_v4=32
 action=2
-priority=1
+priority=0
 sid={{ $index | mul $sid_step | add 1000 }}
 vwire_id=0
 {{$enter}}
