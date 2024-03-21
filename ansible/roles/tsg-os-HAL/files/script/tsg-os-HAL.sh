@@ -22,8 +22,8 @@ WORKLOAD_CORE=
 MRZCPD_DIRECT_PKTMBUF=
 MRZCPD_INDIRECT_PKTMBUF=
 MRZCPD_POLL_WAIT_THROTTLE=512
-MRZCPD_SZ_DATA=4096
-MRZCPD_SZ_TUNNEL=8192
+MRZCPD_SZ_DATA=8192
+MRZCPD_SZ_TUNNEL=1024
 MRZCPD_CHECK_BUFFER_LEAK=1
 TRAFFIC_ENGINE_LOGS_VDISK_PATH="/data/vdisks"
 TRAFFIC_ENGINE_LOGS_VDISK_SIZE_BYTES=
@@ -136,7 +136,7 @@ set_hugepages()
         elif [ $mem_num -le "131072" ]; then
             HUGEPAGES=16
         else
-            HUGEPAGES=32
+            HUGEPAGES=48
         fi
     fi
 }
@@ -152,13 +152,13 @@ set_mrzcpd_direct_pktmbuf()
 {
     if [ ! -n "$MRZCPD_DIRECT_PKTMBUF" ]; then
         if [ $mem_num -le "32768" ]; then
-            MRZCPD_DIRECT_PKTMBUF=`expr 262144 / $NUMA_NODE_CNT`
+            MRZCPD_DIRECT_PKTMBUF=`expr 262144 / $NUMA_NODE_CNT - 1`
         elif [ $mem_num -le "65536" ]; then
-            MRZCPD_DIRECT_PKTMBUF=`expr 1048576 / $NUMA_NODE_CNT`
+            MRZCPD_DIRECT_PKTMBUF=`expr 524288 / $NUMA_NODE_CNT - 1`
         elif [ $mem_num -le "131072" ]; then
-            MRZCPD_DIRECT_PKTMBUF=`expr 2097152 / $NUMA_NODE_CNT`
+            MRZCPD_DIRECT_PKTMBUF=`expr 1048576 / $NUMA_NODE_CNT - 1`
         else
-            MRZCPD_DIRECT_PKTMBUF=`expr 4194304 / $NUMA_NODE_CNT`
+            MRZCPD_DIRECT_PKTMBUF=`expr 4194304 / $NUMA_NODE_CNT - 1`
         fi
     fi
 }
