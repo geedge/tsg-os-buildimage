@@ -22,12 +22,12 @@ firewall_rpm_version:
   rdp: rdp-1.0.3.f392ffd
   session_flags: session_flags-2.3.4.334532f
   stat_policy_enforcer: stat_policy_enforcer-3.1.30.280c6b3
-  sf_classifier: sf_classifier-1.1.0.e31d248
-  stellar-c: stellar-c-1.0.15.dc679ea
+  sf_classifier: sf_classifier-1.1.1.e7a994a
+  stellar-c: stellar-c-1.0.16.3c5de40
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf
-  01_libdocumentanalyze: libdocumentanalyze-2.0.10.4c04402
+  01_libdocumentanalyze: libdocumentanalyze-2.0.11.719a8ff
   02_libMESA_field_stat: libMESA_field_stat-1.0.3.0de785d
   03_libMESA_field_stat2: libMESA_field_stat2-2.10.11.b2095aa
   04_libMESA_handle_logger: libMESA_handle_logger-2.0.12.1dd9e1e
@@ -65,7 +65,7 @@ mlnx_ofed_user_space_only_rpm_version:
   mlnx_ofed_user_space: mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch
 
 sapp_rpm_version:
-  sapp: sapp-4.3.39.c714acb
+  sapp: sapp-4.3.40.94baa4d
   tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
   sapp-pr: sapp-pr-4.3.39.c714acb
 
