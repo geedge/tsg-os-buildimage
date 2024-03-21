@@ -27,7 +27,7 @@ firewall_rpm_version:
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf
-  01_libdocumentanalyze: libdocumentanalyze-2.0.10.4c04402
+  01_libdocumentanalyze: libdocumentanalyze-2.0.11.719a8ff
   02_libMESA_field_stat: libMESA_field_stat-1.0.3.0de785d
   03_libMESA_field_stat2: libMESA_field_stat2-2.10.11.b2095aa
   04_libMESA_handle_logger: libMESA_handle_logger-2.0.12.1dd9e1e
