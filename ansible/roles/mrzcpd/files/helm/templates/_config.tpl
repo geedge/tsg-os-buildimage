@@ -1,4 +1,3 @@
-
 {{- define "mrzcpd.resources" -}}
 {{- if .Values.mrzcpd.interfaces }}
 {{- range $interface := .Values.mrzcpd.interfaces }}
@@ -140,6 +139,46 @@ rx_cores={{ $interface.rxcore }}
 {{- end }}
 {{ end }}
 
+# Configuration settings for network bonding (bond) functionality.
+{{- range $interface := .Values.mrzcpd.virtual_interfaces }}
+{{- if eq $interface.type "1"}}
+[device:{{ $interface.name }}]
+{{- if $interface.address }}
+in_addr={{ $interface.address }}
+in_mask={{ $interface.mask }}
+{{- if $interface.gateway }}
+gateway={{ $interface.gateway }}
+{{- end }}
+{{- end }}
+{{- if $interface.promisc }}
+promisc={{ $interface.promisc }}
+{{- end}}
+{{- if $interface.mtu }}
+mtu={{ $interface.mtu }}
+{{- end}}
+{{- if eq $interface.role "5"}}
+driver=1
+{{- else}}
+driver=0
+{{- end}}
+role={{ $interface.role }}
+{{- if $interface.type }}
+type={{ $interface.type }}
+{{- end }}
+{{- if $interface.bond_mode }}
+bond_mode={{ $interface.bond_mode }}
+{{- end }}
+{{- if $interface.bond_xmit_policy }}
+bond_xmit_policy={{ $interface.bond_xmit_policy }}
+{{- end }}
+{{- if $interface.slaves }}
+bond_slaves={{- range $index,$slave := $interface.slaves }}{{- if ne $index 0 }},{{ end -}}{{ $slave.interface }}{{- end }}
+{{- end }}
+{{- if $interface.rxcore }}
+rx_cores={{ $interface.rxcore }}
+{{- end }}
+{{- end }}
+{{ end }}
 
 # Configuration settings for the virtual device (virtual dev) management.
 [device:virtio_dign_c]
