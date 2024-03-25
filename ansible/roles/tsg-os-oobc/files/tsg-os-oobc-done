@@ -1,0 +1,8 @@
+#!/bin/sh
+
+rm -rf /var/lib/.tsg-os-oobc-enable
+
+systemctl start hasp_monitor
+systemctl start k3s
+systemctl start tsg-clixon-backend
+systemctl start tsg-clixon-restconf

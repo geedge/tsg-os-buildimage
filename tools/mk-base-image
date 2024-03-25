@@ -77,6 +77,22 @@ NETWORKING=yes
 HOSTNAME=localhost.localdomain
 EOF
 
+mkdir -p $target/etc/profile.d
+
+cat > $target/etc/profile.d/prompt_command.sh << EOF
+oobc_enable_file_path="/var/lib/.tsg-os-oobc-enable"
+
+read_oobc_value()
+{
+    if [ -e "\$oobc_enable_file_path" ]; then
+        echo "(OOBC) "
+    fi
+}
+PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "\${USER}" "\${HOSTNAME%%.*}" "\${PWD/#\$HOME/\~}"; PS1="[\\\u@\\\h \$(read_oobc_value)\\\W]\\\\$ "'
+EOF
+
+chmod 0755 $target/etc/profile.d/prompt_command.sh
+
 # effectively: febootstrap-minimize --keep-zoneinfo --keep-rpmdb
 # --keep-services "$target".  Stolen from mkimage-rinse.sh
 #  locales
