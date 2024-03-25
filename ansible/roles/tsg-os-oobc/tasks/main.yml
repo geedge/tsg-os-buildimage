@@ -1,0 +1,39 @@
+---
+- name: "copy profile to dest"
+  copy:
+    src: '{{ role_path }}/files/tsg-os-oobc.sh'
+    dest: /etc/profile.d/
+    mode: 0755
+
+- name: "copy tsg-os-oobc-done to dest"
+  copy:
+    src: '{{ role_path }}/files/tsg-os-oobc-done'
+    dest: /opt/tsg/tools/tsg-os-oobc/
+    mode: 0755
+
+- name: "copy enable service after oobc done to k3s.service.d"
+  copy:
+    src: '{{ role_path }}/files/service_enabled_after_oobc_done.conf'
+    dest: /usr/lib/systemd/system/k3s.service.d/
+    mode: 0755
+
+- name: "copy enable service after oobc done to hasp_monitor.service.d"
+  copy:
+    src: '{{ role_path }}/files/service_enabled_after_oobc_done.conf'
+    dest: /usr/lib/systemd/system/hasp_monitor.service.d/
+    mode: 0755
+
+- name: "copy enable service after oobc done to tsg-clixon-backend.service.d"
+  copy:
+    src: '{{ role_path }}/files/service_enabled_after_oobc_done.conf'
+    dest: /usr/lib/systemd/system/tsg-clixon-backend.service.d/
+    mode: 0755
+
+- name: "copy enable service after oobc done to tsg-clixon-restconf.service.d"
+  copy:
+    src: '{{ role_path }}/files/service_enabled_after_oobc_done.conf'
+    dest: /usr/lib/systemd/system/tsg-clixon-restconf.service.d/
+    mode: 0755
+
+- name: "create file .tsg-os-oobc-enable"
+  shell: touch /var/lib/.tsg-os-oobc-enable
