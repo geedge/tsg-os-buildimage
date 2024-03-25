@@ -150,6 +150,7 @@ in_mask={{ $interface.mask }}
 gateway={{ $interface.gateway }}
 {{- end }}
 {{- end }}
+rssmode=3
 {{- if $interface.promisc }}
 promisc={{ $interface.promisc }}
 {{- end}}
