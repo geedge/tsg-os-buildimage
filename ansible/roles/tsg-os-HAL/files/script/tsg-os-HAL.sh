@@ -22,8 +22,8 @@ WORKLOAD_CORE=
 MRZCPD_DIRECT_PKTMBUF=
 MRZCPD_INDIRECT_PKTMBUF=
 MRZCPD_POLL_WAIT_THROTTLE=512
-MRZCPD_SZ_DATA=8192
-MRZCPD_SZ_TUNNEL=1024
+MRZCPD_SZ_DATA=4096
+MRZCPD_SZ_TUNNEL=
 MRZCPD_CHECK_BUFFER_LEAK=1
 TRAFFIC_ENGINE_LOGS_VDISK_PATH="/data/vdisks"
 TRAFFIC_ENGINE_LOGS_VDISK_SIZE_BYTES=
@@ -136,7 +136,7 @@ set_hugepages()
         elif [ $mem_num -le "131072" ]; then
             HUGEPAGES=16
         else
-            HUGEPAGES=48
+            HUGEPAGES=32
         fi
     fi
 }
@@ -148,15 +148,30 @@ set_mrzcpd_indirect_pktmbuf()
     fi
 }
 
+set_mrzcpd_sz_tunnel()
+{
+    if [ ! -n "$MRZCPD_SZ_TUNNEL" ]; then
+        if [ $mem_num -le "32768" ]; then
+            MRZCPD_SZ_TUNNEL=512
+        elif [ $mem_num -le "65536" ]; then
+            MRZCPD_SZ_TUNNEL=512
+        elif [ $mem_num -le "131072" ]; then
+            MRZCPD_SZ_TUNNEL=256
+        else
+            MRZCPD_SZ_TUNNEL=512
+        fi
+    fi
+}
+
 set_mrzcpd_direct_pktmbuf()
 {
     if [ ! -n "$MRZCPD_DIRECT_PKTMBUF" ]; then
         if [ $mem_num -le "32768" ]; then
-            MRZCPD_DIRECT_PKTMBUF=`expr 262144 / $NUMA_NODE_CNT - 1`
-        elif [ $mem_num -le "65536" ]; then
             MRZCPD_DIRECT_PKTMBUF=`expr 524288 / $NUMA_NODE_CNT - 1`
-        elif [ $mem_num -le "131072" ]; then
+        elif [ $mem_num -le "65536" ]; then
             MRZCPD_DIRECT_PKTMBUF=`expr 1048576 / $NUMA_NODE_CNT - 1`
+        elif [ $mem_num -le "131072" ]; then
+            MRZCPD_DIRECT_PKTMBUF=`expr 2097152 / $NUMA_NODE_CNT - 1`
         else
             MRZCPD_DIRECT_PKTMBUF=`expr 4194304 / $NUMA_NODE_CNT - 1`
         fi
@@ -347,6 +362,7 @@ echo 1 > /sys/module/vfio/parameters/enable_unsafe_noiommu_mode
 modprobe vfio_pci
 
 set_mrzcpd_indirect_pktmbuf
+set_mrzcpd_sz_tunnel
 set_mrzcpd_direct_pktmbuf
 
 set_k3s_config ${mem_num}
