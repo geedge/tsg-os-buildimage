@@ -42,11 +42,11 @@ update_coredns_forwarding() {
     mapfile -t nameservers < <(get_nameservers)
     if [[ "${#nameservers[@]}" -eq 0 ]]; then
         echo 'Disabling CoreDNS host forwarding ...'
-        sed -i 's/\(^\s\+\)forward \. \/etc\/resolve\.conf/\1#forward \. \/etc\/resolve\.conf/' "$COREDNS_YAML"
+        sed -i 's/\(^\s\+\)forward \. \/etc\/resolv\.conf/\1#forward \. \/etc\/resolv\.conf/' "$COREDNS_YAML"
         restart_coredns_deployment
     else
         echo 'Enabling CoreDNS host forwarding ...'
-        sed -i 's/\(^\s\+\)#forward \. \/etc\/resolve\.conf/\1forward \. \/etc\/resolve\.conf/' "$COREDNS_YAML"
+        sed -i 's/\(^\s\+\)#forward \. \/etc\/resolv\.conf/\1forward \. \/etc\/resolv\.conf/' "$COREDNS_YAML"
         restart_coredns_deployment
     fi
 }
