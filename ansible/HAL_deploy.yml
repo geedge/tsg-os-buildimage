@@ -75,6 +75,7 @@
     - {role: exporter, tags: exporter}
     - {role: tuned, tags: tuned}
     - {role: patches-9000-NPB, tags: patches-9000-NPB}
+    - {role: tsg-os-oobc, tags: tsg-os-oobc}
 
 - hosts: x86_64_COTS-init
   remote_user: root
