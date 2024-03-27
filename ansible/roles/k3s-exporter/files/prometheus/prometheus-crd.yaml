@@ -46,6 +46,9 @@ spec:
         - --collector.ethtool
         - --collector.ethtool.device-include=.*
         - --collector.ethtool.metrics-include=.*
+        - --collector.cpu.info
+        - --collector.netdev
+        - --collector.netdev.address-info
 
     serverFiles:
       prometheus.yml:
@@ -124,6 +127,10 @@ spec:
                 target_label: serviceFunctionIndex
                 regex: (sapp4|tfe|shaping|sce)(-|_)(.*)
                 replacement: $3
+              - source_labels: [__name__, device]
+                separator: ';'
+                regex: '^node\w+;(lo|usb\d+|cnibr\d+|docker\d+|br_dign_[sc]|virtio_dign_[sc]|veth\w+)'
+                action: drop
               - regex:  instance
                 action: labeldrop
 
