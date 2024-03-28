@@ -44,13 +44,14 @@ framework_rpm_version:
   18_libswarmkv: libswarmkv-4.0.5.a75b7b6
   19_libswarmkv-tools: libswarmkv-tools-4.0.5.a75b7b6
   20_libfieldstat3: libfieldstat3-3.0.16.475f806
-  21_libmaatframe: libmaatframe-4.1.33.3e1acdd
+  #21_libmaatframe: libmaatframe-4.1.33.3e1acdd
   22_libMESA_sts: libMESA_sts-1.0.3.d515a96
   23_libfieldstat4: libfieldstat4-4.5.4.3269ef2
   #24_libstatistics: libstatistics-2.0.20.895d68e
   25_libipfix_exporter: libipfix_exporter-1.0.6.0e73c24
   26_libosfp: libosfp-1.3.6.af67397
   27_libutable: utable-1.0.5.ab2d376
+  28_libmaatframe: libmaatframe-4.1.33.3e1acdd
 
 kni_rpm_version:
   kni: kni-5.1.9.9b96928
