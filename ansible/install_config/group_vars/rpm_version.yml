@@ -70,8 +70,8 @@ sapp_rpm_version:
   sapp-pr: sapp-pr-4.3.41.b3a528f
 
 tfe_rpm_version:
-  tfe: tfe-4.8.71.d20b3f8
-  tfe-pr: tfe-pr-4.8.71.d20b3f8
+  tfe: tfe-4.8.72.da53368
+  tfe-pr: tfe-pr-4.8.72.da53368
 
 tsg_app_rpm_version:
   context_based_detector: context_based_detector-6.0.4.2ae3d61
