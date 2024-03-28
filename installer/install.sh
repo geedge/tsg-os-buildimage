@@ -372,6 +372,10 @@ recovery_configs_to_new_os()
         cp -a ${backup_dir}/etc/* ${target_etc_dir}
     fi
 
+    if [ ! -e "${target_etc_dir}/resolv.conf" ] || ! grep -q "^nameserver" ${target_etc_dir}/resolv.conf; then
+        echo "nameserver 127.0.0.1" > ${target_etc_dir}/resolv.conf
+    fi
+
     # recovery provision configs to clixon config.
     provison_workdir_in_chroot="/tmp/provision_workdir"
     mkdir -p ${sysroot_dir}/${provison_workdir_in_chroot}
