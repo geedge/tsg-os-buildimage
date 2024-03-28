@@ -148,3 +148,9 @@
   copy:
     src: "{{ role_path }}/files/coredns-custom.yaml"
     dest: /var/lib/rancher/k3s/server/manifests/
+
+- name: "copy k3s-reset.sh to /usr/bin"
+  copy:
+    src: "{{ role_path }}/files/k3s-reset.sh"
+    dest: /usr/bin/
+    mode: 0755
