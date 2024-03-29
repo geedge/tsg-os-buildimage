@@ -151,6 +151,9 @@ spec:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/sapp/stellar_plugin/spec.toml"
           subPath: "sapp/spec.toml"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/tsgconf/firewall_l7_protocol.conf"
+          subPath: "sapp/firewall_l7_protocol.conf"          
         - name: firewall-log
           mountPath: /opt/tsg/sapp/log
         - name: metrics-json-dir
