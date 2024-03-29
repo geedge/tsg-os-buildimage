@@ -1,7 +1,7 @@
 - name: "copy sosreport Auditd_info script file to dest"
   copy:
-    src: '{{ role_path }}/files/Auditd_info.py'
-    dest: /usr/lib/python3.6/site-packages/sos/report/plugins/Auditd_info.py
+    src: '{{ role_path }}/files/aureport.py'
+    dest: /usr/lib/python3.6/site-packages/sos/report/plugins/aureport.py
 
 - name: "copy sosreport clixon script file to dest"
   copy:
