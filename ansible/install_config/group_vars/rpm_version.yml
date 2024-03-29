@@ -1,5 +1,5 @@
 certstore_rpm_version:
-  certstore: certstore-3.0.3.20231221.30830c6
+  certstore: certstore-3.0.4.20240329.f0d1361
 
 firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
