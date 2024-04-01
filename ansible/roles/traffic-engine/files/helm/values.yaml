@@ -234,3 +234,6 @@ debug:
 
 session_flags:
   enable: yes
+
+dos_protector:
+  enable: no
