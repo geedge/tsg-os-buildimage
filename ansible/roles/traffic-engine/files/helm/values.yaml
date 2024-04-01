@@ -78,13 +78,6 @@ traffic_mirror:
   enable_raw_traffic: yes
   enable_decrypted_traffic: yes
 
-ddos_event:
-  enable: yes
-  tcp_traffic_report_ratio: 0.0008
-  udp_traffic_report_ratio: 0.0008
-  icmp_traffic_report_ratio: 0.0008
-  dns_traffic_report_ratio: 0.0008
-
 packet_capture:
   enable: yes
 
@@ -237,3 +230,12 @@ session_flags:
 
 dos_protector:
   enable: no
+
+stat_policy_enforcer:
+  enable: yes
+
+traffic_sketch:
+  enable: yes
+
+policy_sketch:
+  enable: yes
