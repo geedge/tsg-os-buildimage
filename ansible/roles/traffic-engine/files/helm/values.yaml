@@ -151,7 +151,7 @@ decoders:
 configHash: "defaulthash"
 
 shaping:
-  enable: yes
+  enable: no
 inject_adapter:
   enable: yes
 
