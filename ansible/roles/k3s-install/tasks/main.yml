@@ -139,8 +139,8 @@
 
 - name: "Get dynamic-hostport chart images to dest"
   get_url:
-    url: https://repo.geedge.net/filerepo/install/release/tsg-container-images/dynamic-host-port.tar
-    dest: /var/lib/rancher/k3s/agent/images/dynamic-host-port.tar
+    url: https://repo.geedge.net/filerepo/install/release/tsg-container-images/dynamic-hostport.tar
+    dest: /var/lib/rancher/k3s/agent/images/dynamic-hostport.tar
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
 
