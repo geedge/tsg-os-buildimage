@@ -60,6 +60,12 @@ function set_HAL_config()
     sed -i '/WORKLOAD_CORE=/c\WORKLOAD_CORE=5-55' $HAL_config
     # deafault memory hugepages number.
     sed -i '/HUGEPAGES=/c\HUGEPAGES=16' $HAL_config
+    # sz_direct_pktmbuf=1048575
+    sed -i '/MRZCPD_DIRECT_PKTMBUF=/c\MRZCPD_DIRECT_PKTMBUF=1048575' $HAL_config
+    # sz_data=12800
+    sed -i '/MRZCPD_SZ_DATA=/c\MRZCPD_SZ_DATA=12800' $HAL_config
+    # create_mode=3
+    sed -i '/MRZCPD_CREATE_MODE=/c\MRZCPD_CREATE_MODE=3' $HAL_config
 }
 
 function clean_unarchive_dir()

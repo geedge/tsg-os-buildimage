@@ -25,6 +25,7 @@ MRZCPD_POLL_WAIT_THROTTLE=512
 MRZCPD_SZ_DATA=4096
 MRZCPD_SZ_TUNNEL=8192
 MRZCPD_CHECK_BUFFER_LEAK=1
+MRZCPD_CREATE_MODE=1
 TRAFFIC_ENGINE_LOGS_VDISK_PATH="/data/vdisks"
 TRAFFIC_ENGINE_LOGS_VDISK_SIZE_BYTES=
 NF_COUNT=16
@@ -124,6 +125,7 @@ set_mrzcpd_conf()
     echo "sz_data=${MRZCPD_SZ_DATA}" >> ${mrzcpd_conf_file}
     echo "sz_tunnel=${MRZCPD_SZ_TUNNEL}" >> ${mrzcpd_conf_file}
     echo "check_buffer_leak=${MRZCPD_CHECK_BUFFER_LEAK}" >> ${mrzcpd_conf_file}
+    echo "create_mode=${MRZCPD_CREATE_MODE}" >> ${mrzcpd_conf_file}
 }
 
 set_hugepages()
