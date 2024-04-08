@@ -16,11 +16,6 @@ init = "firewall_stellar_runtime_init"
 exit = "firewall_stellar_runtime_exit"
 
 [[plugin]]
-path = "./stellar_plugin/stat_policy_enforcer.so"
-init = "STATISTICS_INIT"
-exit = "STATISTICS_EXIT"
-
-[[plugin]]
 path = "./stellar_plugin/sf_classifier.so"
 init = "sf_classifier_init"
 exit = "sf_classifier_exit"
