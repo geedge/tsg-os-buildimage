@@ -46,6 +46,9 @@ spec:
         - --collector.ethtool
         - --collector.ethtool.device-include=.*
         - --collector.ethtool.metrics-include=.*
+        - --collector.cpu.info
+        - --collector.netdev
+        - --collector.netdev.address-info
 
     serverFiles:
       prometheus.yml:
@@ -85,6 +88,14 @@ spec:
                 action: labeldrop
               - regex: pod
                 action: labeldrop
+              - source_labels: [__name__, device]
+                separator: ';'
+                regex: '^container_fs\w+;(.+k3s/containerd.+|.+kubelet/pods.+)'
+                action: drop
+              - source_labels: [__name__, device]
+                separator: ';'
+                regex: '^container_fs\w+;overlay.+'
+                action: drop
 
           - job_name: 'exporter'
             honor_labels: true
@@ -124,6 +135,26 @@ spec:
                 target_label: serviceFunctionIndex
                 regex: (sapp4|tfe|shaping|sce)(-|_)(.*)
                 replacement: $3
+              - source_labels: [__name__, device]
+                separator: ';'
+                regex: '^node\w+;(lo|usb\d+|cnibr\d+|docker\d+|br_dign_[sc]|virtio_dign_[sc]|veth\w+)'
+                action: drop
+              - source_labels: [__name__, type]
+                separator: ';'
+                regex: '^systemd\w+;(scope|mount|device|slice)'
+                action: drop
+              - regex:  image_id
+                action: labeldrop
+              - regex:  container_id
+                action: labeldrop
+              - regex:  uid
+                action: labeldrop
+              - regex:  image_spec
+                action: labeldrop
+              - source_labels: [mountpoint]
+                separator: ';'
+                regex: '(.+k3s/containerd.+|.+kubelet/pods.+)'
+                action: drop
               - regex:  instance
                 action: labeldrop
 
