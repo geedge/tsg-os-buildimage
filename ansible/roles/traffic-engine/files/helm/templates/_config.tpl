@@ -1,15 +1,3 @@
-{{- define "traffic-engine.config.olap-address" -}}
-{{- $kafka_brokers := list -}}
-{{- $separtor := index . 1  -}}
-{{- with index . 0 }}
-{{- range .Values.external_resources.olap.kafka_brokers.addresses -}}
-{{- $broker_address := ( print .address  ":"  .port ) -}}
-{{- $kafka_brokers = append $kafka_brokers $broker_address -}}
-{{- end -}}
-{{- end }}
-{{- join $separtor $kafka_brokers }}
-{{- end -}}
-
 {{- define "traffic-engine.config.addresses.converter" -}}
 {{- $addresses := list -}}
 {{- $source := index . 0  -}}
