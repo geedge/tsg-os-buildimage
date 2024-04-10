@@ -43,7 +43,7 @@
         },
         {{- end }}
         {
-            "async": "off",
+            "async": "on",
             "name": "SESSION-RECORD",
             "mode": [
                 {{- if eq .Values.external_resources.olap.udp_collectors.enable .Values.define_enable_val_yes }}
@@ -63,7 +63,7 @@
             ]
         },
         {
-            "async": "off",
+            "async": "on",
             "name": "TRANSACTION-RECORD",
             "mode": [
                 {
@@ -75,7 +75,7 @@
             ]
         },
         {
-            "async": "off",
+            "async": "on",
             "name": "VOIP-RECORD",
             "mode": [
                 {
@@ -87,7 +87,7 @@
             ]
         },
         {
-            "async": "off",
+            "async": "on",
             "name": "TRAFFIC-FILE-STREAM-RECORD",
             "mode": [
                 {
@@ -99,7 +99,7 @@
             ]
         },
         {
-            "async": "off",
+            "async": "on",
             "name": "TROUBLESHOOTING-FILE-STREAM-RECORD",
             "mode": [
                 {

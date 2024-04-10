@@ -2,22 +2,14 @@
 PROFILE="./tsgconf/maat.conf"
 
 [TSG_LOG]
-SENDLOG_SWITCH=on
-RINGBUFF_NUM=2
-RINGBUFF_SIZE=100000
-ASYNC_SENDLOG_ENABLED=1
+IPFIX_SCHEMA_PROFILE=./tsgconf/firewall_logger_ipfix_schema.json
+LOGGER_SCHEMA_PROFILE=./tsgconf/firewall_logger_transmitter_schema.json
+
 TRAFFIC_VSYSTEM_ID={% raw %}{{ vsys_id }}
 {% endraw %}
-NAMESPACE_ID=1
+
 NIC_NAME="{{ control_and_policy.nic_name }}"
-MAX_SERVICE=1
-LOG_LEVEL=30
-LOG_PATH="log/firewall.kafka"
-COMPRESSION_TYPE="snappy"
-SASL_USERNAME="admin"
-SASL_PASSWD="galaxy2019"
-{% raw %}BROKER_LIST="{{ olap.kafka_broker.address_list | join(",") }}"
-{% endraw %}
+
 COMMON_FIELD_FILE="tsgconf/tsg_log_field.conf"
 {% raw %}
 {% if sessionrecord.enable_contains_app_id == 1 %}
