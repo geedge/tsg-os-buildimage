@@ -1,0 +1,186 @@
+{
+    "log_switch": "on",
+    "channel_list": [
+        {{- if eq .Values.external_resources.olap.udp_collectors.enable .Values.define_enable_val_yes }}
+        {
+            "channel": "udpsock",
+            "collector": "{{- include "traffic-engine.config.addresses.converter" (list .Values.external_resources.olap.udp_collectors.addresses  ",") }}"
+        },
+        {{- end }}
+        {
+            "channel": "kafka",
+            "broker_list": "{{- include "traffic-engine.config.addresses.converter" (list .Values.external_resources.olap.kafka_brokers.addresses  ",") }}",
+            "sasl_username": "{{ .Values.external_resources.olap.kafka_brokers.sasl_username }}",
+            "sasl_password": "{{ .Values.external_resources.olap.kafka_brokers.sasl_password }}",
+            "compression": "snappy",
+            "refresh_interval_ms": "600000",
+            "send_queue_max_msg": "1000000",
+            "required_acks": "1"
+        }
+    ],
+    "format_list": [
+        "json",
+        "ipfix",
+        "mpack"
+    ],
+    "ringbuff": {
+        "size": {{ .Values.firewall.logs.ringbuf.size }},
+        "num": 2
+    },
+    "transmitter_list": [
+        {{- if eq .Values.external_resources.olap.udp_collectors.enable .Values.define_enable_val_yes }}
+        {
+            "async": "off",
+            "name": "IPFIX-TEMPLATE",
+            "mode": [
+                {
+                    "channel": "udpsock",
+                    "format": [
+                        "ipfix"
+                    ]
+                }
+            ]
+        },
+        {{- end }}
+        {
+            "async": "off",
+            "name": "SESSION-RECORD",
+            "mode": [
+                {{- if eq .Values.external_resources.olap.udp_collectors.enable .Values.define_enable_val_yes }}
+                {
+                    "channel": "udpsock",
+                    "format": [
+                        "ipfix"
+                    ]
+                },
+                {{- end }}
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "json"
+                    ]
+                }
+            ]
+        },
+        {
+            "async": "off",
+            "name": "TRANSACTION-RECORD",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "json"
+                    ]
+                }
+            ]
+        },
+        {
+            "async": "off",
+            "name": "VOIP-RECORD",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "json"
+                    ]
+                }
+            ]
+        },
+        {
+            "async": "off",
+            "name": "TRAFFIC-FILE-STREAM-RECORD",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "mpack"
+                    ]
+                }
+            ]
+        },
+        {
+            "async": "off",
+            "name": "TROUBLESHOOTING-FILE-STREAM-RECORD",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "mpack"
+                    ]
+                }
+            ]
+        },
+        {
+            "async": "off",
+            "name": "DOS-SKETCH-RECORD",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "json"
+                    ]
+                }
+            ]
+        },
+        {
+            "async": "off",
+            "name": "POLICY-RULE-METRIC",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "json"
+                    ]
+                }
+            ]
+        },
+        {
+            "async": "off",
+            "name": "NETWORK-TRAFFIC-METRIC",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "json"
+                    ]
+                }
+            ]
+        },
+        {
+            "async": "off",
+            "name": "TRAFFIC-TOP-METRIC",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "json"
+                    ]
+                }
+            ]
+        },
+        {
+            "async": "off",
+            "name": "STATISTICS-RULE-METRIC",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "json"
+                    ]
+                }
+            ]
+        },
+        {
+            "async": "off",
+            "name": "OBJECT-STATISTICS-METRIC",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "json"
+                    ]
+                }
+            ]
+        }
+    ]
+}

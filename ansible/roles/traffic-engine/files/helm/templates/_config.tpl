@@ -10,6 +10,19 @@
 {{- join $separtor $kafka_brokers }}
 {{- end -}}
 
+{{- define "traffic-engine.config.addresses.converter" -}}
+{{- $addresses := list -}}
+{{- $source := index . 0  -}}
+{{- $separator := index . 1  -}}
+{{- if $source }}
+{{- range $source -}}
+{{- $address := ( print .address  ":"  .port ) -}}
+{{- $addresses = append $addresses $address -}}
+{{- end -}}
+{{- join $separator $addresses }}
+{{- end }}
+{{- end -}}
+
 {{- define "traffic-engine.tfe.workerthread" -}}
 {{- if eq (len .Values.tfe_affinity) 1 }}
 {{- 1 }}

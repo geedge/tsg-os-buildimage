@@ -178,7 +178,10 @@ spec:
           subPath: "sapp/spec.toml"
         - name: shared-configs-volume
           mountPath: "/opt/tsg/sapp/tsgconf/firewall_l7_protocol.conf"
-          subPath: "sapp/firewall_l7_protocol.conf"            
+          subPath: "sapp/firewall_l7_protocol.conf"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/tsgconf/firewall_logger_transmitter_schema.json"
+          subPath: "sapp/firewall_logger_transmitter_schema.json"
         - name: firewall-log
           mountPath: /opt/tsg/sapp/log
         - name: metrics-json-dir

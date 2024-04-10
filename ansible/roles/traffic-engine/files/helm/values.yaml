@@ -32,6 +32,11 @@ external_resources:
       addresses:
       - address:
         port:
+    udp_collectors:
+      enable: no
+      addresses:
+      - address:
+        port:
 
 
 device:
@@ -51,6 +56,8 @@ firewall:
       enable: yes
     contains_dns_resource_record:
       enable: yes
+    ringbuf:
+      size: 100000
 
 appsketch:
   enable: yes
