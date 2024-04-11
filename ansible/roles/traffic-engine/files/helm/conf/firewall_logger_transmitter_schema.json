@@ -1,5 +1,5 @@
 {
-    "log_switch": "on",
+    "switch": "on",
     "channel_list": [
         {{- if eq .Values.external_resources.olap.udp_collectors.enable .Values.define_enable_val_yes }}
         {
@@ -30,6 +30,7 @@
     "transmitter_list": [
         {{- if eq .Values.external_resources.olap.udp_collectors.enable .Values.define_enable_val_yes }}
         {
+            "switch": "on",
             "async": "off",
             "name": "IPFIX-TEMPLATE",
             "mode": [
@@ -43,6 +44,7 @@
         },
         {{- end }}
         {
+            "switch": "on",
             "async": "on",
             "name": "SESSION-RECORD",
             "mode": [
@@ -63,6 +65,7 @@
             ]
         },
         {
+            "switch": "on",
             "async": "on",
             "name": "TRANSACTION-RECORD",
             "mode": [
@@ -75,6 +78,7 @@
             ]
         },
         {
+            "switch": "on",
             "async": "on",
             "name": "VOIP-RECORD",
             "mode": [
@@ -87,6 +91,7 @@
             ]
         },
         {
+            "switch": "on",
             "async": "on",
             "name": "TRAFFIC-FILE-STREAM-RECORD",
             "mode": [
@@ -99,6 +104,7 @@
             ]
         },
         {
+            "switch": "on",
             "async": "on",
             "name": "TROUBLESHOOTING-FILE-STREAM-RECORD",
             "mode": [
@@ -111,6 +117,7 @@
             ]
         },
         {
+            "switch": "on",
             "async": "off",
             "name": "DOS-SKETCH-RECORD",
             "mode": [
@@ -123,6 +130,7 @@
             ]
         },
         {
+            "switch": "on",
             "async": "off",
             "name": "POLICY-RULE-METRIC",
             "mode": [
@@ -135,6 +143,7 @@
             ]
         },
         {
+            "switch": "on",
             "async": "off",
             "name": "NETWORK-TRAFFIC-METRIC",
             "mode": [
@@ -147,6 +156,7 @@
             ]
         },
         {
+            "switch": "on",
             "async": "off",
             "name": "TRAFFIC-TOP-METRIC",
             "mode": [
@@ -159,6 +169,7 @@
             ]
         },
         {
+            "switch": "on",
             "async": "off",
             "name": "STATISTICS-RULE-METRIC",
             "mode": [
@@ -171,6 +182,7 @@
             ]
         },
         {
+            "switch": "on",
             "async": "off",
             "name": "OBJECT-STATISTICS-METRIC",
             "mode": [
