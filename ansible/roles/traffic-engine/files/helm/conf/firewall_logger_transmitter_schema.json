@@ -1,5 +1,9 @@
 {
+    {{- if eq .Values.firewall.logs.enable .Values.define_enable_val_yes }}
     "switch": "on",
+    {{- else }}
+    "switch": "off",
+    {{- end }}
     "channel_list": [
         {{- if eq .Values.external_resources.olap.udp_collectors.enable .Values.define_enable_val_yes }}
         {
@@ -44,7 +48,11 @@
         },
         {{- end }}
         {
+            {{- if eq .Values.session_record.enable .Values.define_enable_val_yes }}
             "switch": "on",
+            {{- else }}
+            "switch": "off",
+            {{- end }}
             "async": "on",
             "name": "SESSION-RECORD",
             "mode": [
@@ -65,7 +73,11 @@
             ]
         },
         {
+            {{- if eq .Values.session_record.enable .Values.define_enable_val_yes }}
             "switch": "on",
+            {{- else }}
+            "switch": "off",
+            {{- end }}
             "async": "on",
             "name": "TRANSACTION-RECORD",
             "mode": [
@@ -91,7 +103,11 @@
             ]
         },
         {
+            {{- if eq .Values.file_stream_record.enable .Values.define_enable_val_yes }}
             "switch": "on",
+            {{- else }}
+            "switch": "off",
+            {{- end }}
             "async": "on",
             "name": "TRAFFIC-FILE-STREAM-RECORD",
             "mode": [

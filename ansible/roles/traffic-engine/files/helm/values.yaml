@@ -52,6 +52,7 @@ firewall:
   enable: yes
   enable_smartoffload: no
   logs:
+    enable: yes
     contains_app_id:
       enable: yes
     contains_dns_resource_record:
@@ -68,6 +69,12 @@ transaction_record:
   enable_http: yes
   enable_dns: yes
   enable_mail: yes
+
+session_record:
+  enable: yes
+
+file_stream_record:
+  enable: yes
 
 session_manager:
   tcp_session_max: 20021
