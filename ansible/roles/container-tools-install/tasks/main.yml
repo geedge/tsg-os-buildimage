@@ -149,3 +149,15 @@
     name: dnsutils
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+
+- name: "install wireshark"
+  yum:
+    name: wireshark
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+
+- name: "install crudini"
+  yum:
+    name: crudini
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
