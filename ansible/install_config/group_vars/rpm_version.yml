@@ -7,7 +7,7 @@ firewall_rpm_version:
   glimpse_detector: glimpse_detector-3.0.2.eb2ae13
   qdpi_detector: qdpi_detector-4.0.3.9f81ea0
   #tsg_ddos_sketch: tsg_ddos_sketch-2.0.2.35e03d0
-  dos_protector: dos_protector-1.0.0.f80a1fd
+  dos_protector: dos_protector-1.0.2.c7c3f0b
   dns: dns-2.1.7.1da8dfa
   ftp: ftp-1.0.15.1fc64fe
   http: http-2.0.20.0571d0b
