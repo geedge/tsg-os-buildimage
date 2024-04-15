@@ -24,7 +24,7 @@ firewall_rpm_version:
   session_flags: session_flags-2.3.5.437f005
   stat_policy_enforcer: stat_policy_enforcer-3.2.2.8c29b34
   sf_classifier: sf_classifier-1.1.2.46a52d8
-  stellar-c: stellar-c-1.0.18.244dd65
+  stellar-c: stellar-c-1.0.19.66ff45a
   policy_sketch: policy_sketch-1.0.3.9d05c0e
   traffic_sketch: traffic_sketch-1.0.3.4ef366c
 
@@ -69,9 +69,9 @@ mlnx_ofed_user_space_only_rpm_version:
   mlnx_ofed_user_space: mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch
 
 sapp_rpm_version:
-  sapp: sapp-4.3.42.1cedda1
+  sapp: sapp-4.3.44.6c1e6a6
   tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
-  sapp-pr: sapp-pr-4.3.42.1cedda1
+  sapp-pr: sapp-pr-4.3.44.6c1e6a6
 
 tfe_rpm_version:
   tfe: tfe-4.8.78.4ca3f5a
