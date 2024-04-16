@@ -188,3 +188,12 @@
   roles:
     - {role: framework, tags: framework}
     - {role: packet-io-uio-binder, tags: packet-io-uio-binder}
+
+- hosts: x86_64_COTS-dp-trace-telemetry
+  remote_user: root
+  vars_files:
+    - install_config/group_vars/HAL_x86_64_COTS.yml
+    - install_config/group_vars/rpm_version.yml
+  roles:
+    - {role: framework, tags: framework}
+    - {role: dp-trace-telemetry, tags: dp-trace-telemetry}

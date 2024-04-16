@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dp-trace-conf
+data:
+  config: |
+    [global]
+    iocore={{- range $index,$core := .Values.datapath_trace.datapath_trace_affinity }}{{- if ne $index 0 }},{{ end -}}{{ $core }}{{- end }}
+    zlog_config_path=../etc/dp_trace_zlog.conf
+    dp_trace_dir=/var/lib/dp_telemetry_daemon
+    {{- if .Values.device }}
+    device_group={{- range $tag := .Values.device.tags }}{{- if $tag.device_group }}{{ $tag.device_group }}{{ end -}}{{- end }}
+    {{- else }}
+    device_group=
+    {{- end }}
+    monit_file_path=/var/run/mrzcpd/mrmonit.app.dp_trace_telemetry.saving
+
+    [http_server]
+    listen_addr=127.0.0.1
+    listen_port=10000
+    keep_alive_path=/probe
+
+    [kafka]
+    kafka_dump_to_log=0
+    borker_list="192.168.44.12:9094"
+    topic_name="DATAPATH-TELEMETRY-RECORD"
+    sasl_username=admin
+    sasl_password=galaxy2019
+
+    [maat]
+    maat_log_level=3
+    # 0:json 1:redis
+    maat_input_mode=1
+    deferred_load_on=0
+    table_schema=../etc/table_schema.json
+    json_cfg_file=../etc/dp_telemetry_rules.json
+    maat_redis_server=192.168.44.3
+    maat_redis_port_range=7002
+    maat_redis_db_index=1
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dp-trace-dy
+data:
+  config: |
+    [dp_trace_rule]
+    dp_trace_file_max_size_in_KB={{ .Values.datapath_trace.datapath_trace_file_max_size_in_KB }}
+    dp_trace_merge_timeout=30
+    {{- range $rule := .Values.datapath_trace.rule }}
+    [dp_trace_rule:{{ $rule.id }}]
+    {{- if eq $rule.enable "yes" }}
+    enable=1
+    {{- end}}
+    {{- if eq $rule.enable "no" }}
+    enable=0
+    {{- end}}
+    {{- if $rule.bpf_expr }}
+    bpf_expr={{ $rule.bpf_expr }}
+    {{- end }}
+    {{- if $rule.packet_max_count }}
+    pkt_cnt_max={{ $rule.packet_max_count }}
+    {{- end }}
+    {{- if $rule.sampling }}
+    sampling={{ $rule.sampling }}
+    {{- end }}
+    {{- if $rule.snaplen }}
+    snaplen={{ $rule.snaplen }}
+    {{- end }}
+
+    {{ end -}}
+
