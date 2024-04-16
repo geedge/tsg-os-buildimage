@@ -26,7 +26,7 @@ firewall_rpm_version:
   sf_classifier: sf_classifier-1.1.2.46a52d8
   stellar-c: stellar-c-1.0.18.244dd65
   policy_sketch: policy_sketch-1.0.3.9d05c0e
-  traffic_sketch: traffic_sketch-1.0.2.a88f5e9
+  traffic_sketch: traffic_sketch-1.0.3.4ef366c
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf
