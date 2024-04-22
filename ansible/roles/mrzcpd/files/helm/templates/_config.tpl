@@ -93,6 +93,7 @@ device= {{ $nf_nic_list }},{{ $ep_nic_l2_list}},{{ $ep_nic_l3_list }},{{ $mirr_n
 {{- end }}
 sz_tunnel=8192
 sz_buffer=0
+sz_max_inflight=131072
 
 
 # Configuration settings for the physical device (Phy dev).
