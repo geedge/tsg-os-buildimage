@@ -57,6 +57,13 @@
     - tsg-os-HAL.conf
   when: runtime_env == 'TSG-X-P0906'
 
+- name: "Override fstrim.timer OnCalendar"
+  copy:
+    src: "{{ role_path }}/files/timer.d/timer_override_oncalendar.conf"
+    dest: /usr/lib/systemd/system/fstrim.timer.d/
+    mode: 0644
+  when: runtime_env == 'TSG-X-P0906'
+
 - name: "enable fstrim.timer"
   systemd:
     name: fstrim.timer
