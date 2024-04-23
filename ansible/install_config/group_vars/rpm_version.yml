@@ -92,7 +92,7 @@ hasp_tools_rpm_version:
 tsg_os_clixon_rpm_version:
   cligen: cligen-5.8.0-release
   clixon: clixon-5.8.0-release
-  tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.27.c98f2e6
+  tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.29.3727279
 
 sce_rpm_version:
   sce: sce-1.2.13.b0cd1a0
