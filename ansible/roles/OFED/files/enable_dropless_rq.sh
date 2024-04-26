@@ -8,8 +8,8 @@ NET_INTERFACE=$(basename /sys/bus/pci/devices/${PCI_ADDRESS}/net/*)
 # Enable dropless_rq feature
 # /sbin/ethtool --set-priv-flags ${NET_INTERFACE} dropless_rq on
 
-# Disable flow control
-/sbin/ethtool -A ${NET_INTERFACE} rx off tx off
+# Enable flow control
+/sbin/ethtool -A ${NET_INTERFACE} rx on tx on
 
 # Change PCI MaxReadReq to 1024B 
 current_value=$(/usr/sbin/setpci -s ${PCI_ADDRESS} 68.w)
