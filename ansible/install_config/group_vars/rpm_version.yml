@@ -4,7 +4,7 @@ certstore_rpm_version:
 firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   firewall: firewall-3.1.32.e8abc03
-  glimpse_detector: glimpse_detector-3.0.2.eb2ae13
+  glimpse_detector: glimpse_detector-3.0.3.5555ba7
   qdpi_detector: qdpi_detector-4.0.3.9f81ea0
   tsg_ddos_sketch: tsg_ddos_sketch-2.0.2.35e03d0
   dns: dns-2.1.7.1da8dfa
