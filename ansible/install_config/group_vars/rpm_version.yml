@@ -9,7 +9,7 @@ firewall_rpm_version:
   #tsg_ddos_sketch: tsg_ddos_sketch-2.0.2.35e03d0
   dos_protector: dos_protector-1.1.5.ff9800e
   dns: dns-2.1.7.1da8dfa
-  ftp: ftp-1.0.15.1fc64fe
+  ftp: ftp-1.0.16.d996236
   http: http-2.0.20.0571d0b
   mail: mail-1.0.21.aec281b
   quic: quic-2.0.11.1ab2559
@@ -69,9 +69,9 @@ mlnx_ofed_user_space_only_rpm_version:
   mlnx_ofed_user_space: mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch
 
 sapp_rpm_version:
-  sapp: sapp-4.3.49.16a6338
+  sapp: sapp-4.3.50.32b40e3
   tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
-  sapp-pr: sapp-pr-4.3.49.16a6338
+  sapp-pr: sapp-pr-4.3.50.32b40e3
 
 tfe_rpm_version:
   tfe: tfe-4.9.1.491e721
