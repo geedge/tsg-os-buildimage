@@ -71,8 +71,8 @@ sapp_rpm_version:
   sapp-pr: sapp-pr-4.3.49.16a6338
 
 tfe_rpm_version:
-  tfe: tfe-4.8.79.db3d812
-  tfe-pr: tfe-pr-4.8.79.db3d812
+  tfe: tfe-4.8.82.1ef48bf
+  tfe-pr: tfe-pr-4.8.82.1ef48bf
 
 tsg_app_rpm_version:
   context_based_detector: context_based_detector-6.0.6.1cb9137
@@ -92,7 +92,7 @@ tsg_os_clixon_rpm_version:
   tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.28.ddec934
 
 sce_rpm_version:
-  sce: sce-1.2.14.61f81d1
+  sce: sce-1.2.16.6652a55
   
 bfdd_rpm_version:
   bfdd: bfdd-1.0.2-release
