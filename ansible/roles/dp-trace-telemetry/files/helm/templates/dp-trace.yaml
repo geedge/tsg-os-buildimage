@@ -16,16 +16,23 @@ data:
     monit_file_path=/var/run/mrzcpd/mrmonit.app.dp_trace_telemetry.saving
 
     [http_server]
-    listen_addr=127.0.0.1
-    listen_port=10000
+    listen_addr=0.0.0.0
+    listen_port=9086
     keep_alive_path=/probe
 
     [kafka]
     kafka_dump_to_log=0
-    borker_list="192.168.44.12:9094"
+    {{- if .Values.datapath_trace.olap.kafka_brokers}}
+    borker_list="{{- range $index,$kafka := .Values.datapath_trace.olap.kafka_brokers.addresses }}{{- if ne $index 0 }},{{ end -}}{{ $kafka.address }}:{{ $kafka.port}}{{- end }}"
     topic_name="DATAPATH-TELEMETRY-RECORD"
-    sasl_username=admin
-    sasl_password=galaxy2019
+    sasl_username={{.Values.datapath_trace.olap.kafka_brokers.sasl_username }}
+    sasl_password={{.Values.datapath_trace.olap.kafka_brokers.sasl_password }}
+    {{- else }}
+    borker_list=""
+    topic_name="DATAPATH-TELEMETRY-RECORD"
+    sasl_username=
+    sasl_password=
+    {{- end }}
 
     [maat]
     maat_log_level=3
@@ -34,8 +41,18 @@ data:
     deferred_load_on=0
     table_schema=../etc/table_schema.json
     json_cfg_file=../etc/dp_telemetry_rules.json
-    maat_redis_server=192.168.44.3
-    maat_redis_port_range=7002
+    {{- if .Values.datapath_trace.cm}}
+    {{- if eq .Values.datapath_trace.cm.connectivity "local_cache"}}
+    maat_redis_server=CM_POLICY_LOCAL_CACHE_IP_LOCATION
+    maat_redis_port_range=6379
+    {{- else }}
+    maat_redis_server={{ .Values.datapath_trace.cm.direct.address}}
+    maat_redis_port_range={{ .Values.datapath_trace.cm.direct.port}}
+    {{- end }}
+    {{- else }}
+    maat_redis_server=
+    maat_redis_port_range=
+    {{- end }}
     maat_redis_db_index=1
 ---
 apiVersion: v1

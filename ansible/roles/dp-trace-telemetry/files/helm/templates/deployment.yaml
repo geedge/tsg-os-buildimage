@@ -26,6 +26,7 @@ spec:
         prometheus.io/port: "9005"
         prometheus.io/scrape: "true"
     spec:
+      serviceAccountName: {{ .Release.Name }}
       shareProcessNamespace: true
       tolerations:
       - key: node-role.kubernetes.io/control-plane
@@ -42,6 +43,14 @@ spec:
           - "bash"
           - "-ec"
           - |
+            dnf -y install autoconf automake libtool
+            wget -c https://github.com/inotify-tools/inotify-tools/archive/refs/tags/3.21.9.6.tar.gz
+            tar -zvxf 3.21.9.6.tar.gz -C /usr/local/src/
+            cd /usr/local/src/inotify-tools-3.21.9.6/
+            ./autogen.sh && ./configure --prefix=/usr/local/inotify-tools && make && make install
+            echo 'export PATH=$PATH:/usr/local/inotify-tools/bin/' >> ~/.bashrc
+            source ~/.bashrc
+
             WATCH_DIR="/opt/tsg/dp_trace_telemetry/etc/dynamic"
             while inotifywait -r -e modify,create "$WATCH_DIR"; do
               echo "send HUB signal to dp_trace"
@@ -60,9 +69,21 @@ spec:
           - "-ec"
           - |
             ldconfig
-            {{ template "dp_trace_telemetry.prestart" . }}
             cp /opt/tsg/dp_trace_telemetry/etc/dp_trace_configmap.conf /opt/tsg/dp_trace_telemetry/etc/dp_trace.conf
-            cp /opt/tsg/dp_trace_telemetry/etc/dynamic/config /opt/tsg/dp_trace_telemetry/etc/dp_trace_dy.conf
+            {{- if eq .Values.datapath_trace.cm.connectivity "local_cache" }}
+            export APISERVER=https://kubernetes.default.svc
+            export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+            export NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
+            export TOKEN=$(cat ${SERVICEACCOUNT}/token)
+            export CACERT=${SERVICEACCOUNT}/ca.crt
+            curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/{{ .Values.datapath_trace.cm.local_cache.cache_name }}-redis-master -o /tmp/cm-cache.txt
+            export CM_POLICY_LOCAL_CACHE_IP=$(cat /tmp/cm-cache.txt  | jq -r '.spec.clusterIP')
+            echo "export CM_POLICY_LOCAL_CACHE_IP=${CM_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/cm-local-cache.sh
+            chmod 0755 /etc/profile.d/cm-local-cache.sh
+            sed -Ei -c "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/dp_trace_telemetry/etc/dp_trace.conf
+            {{- end }}
+            ln -sf /opt/tsg/dp_trace_telemetry/etc/dynamic/config /opt/tsg/dp_trace_telemetry/etc/dp_trace_dy.conf
+            {{ template "dp_trace_telemetry.prestart" . }}
             {{ template "dp_trace_telemetry.start" . }}
         volumeMounts:
         - name: dp-telemetry-daemon
@@ -93,11 +114,11 @@ spec:
         - name: ldconfig-mrzcpd
           mountPath: /etc/ld.so.conf.d/mrzcpd.conf
           readOnly: true
-        {{- if eq .Values.dp_trace_telemetry.debug.enable_mount_host_filesystem .Values.define_enable_val_yes }}
+        {{- if eq .Values.datapath_trace.debug.enable_mount_host_filesystem .Values.define_enable_val_yes }}
         - name: host-root
           mountPath: /host
         {{- end }}
-        {{- if eq .Values.dp_trace_telemetry.debug.enable_prestart_script .Values.define_enable_val_yes }}
+        {{- if eq .Values.datapath_trace.debug.enable_prestart_script .Values.define_enable_val_yes }}
         - name: prestart-dir
           mountPath: /tmp/prestart
         - name: dp-trace-prestart
@@ -112,15 +133,17 @@ spec:
           value: dp-trace-telemetry
         securityContext:
           privileged: true
-{{- if eq .Values.dp_trace_telemetry.debug.enable_liveness_probe .Values.define_enable_val_yes }}
+        ports:
+          - containerPort: 9086
+{{- if eq .Values.datapath_trace.debug.enable_liveness_probe .Values.define_enable_val_yes }}
         livenessProbe:
           httpGet:
             httpHeaders:
             - name: Custom-Header
               value: Awesome
             path: /probe
-            port: 10000
-          initialDelaySeconds: 120
+            port: 9086
+          initialDelaySeconds: 30
           periodSeconds: 3
           successThreshold: 1
           timeoutSeconds: 10
@@ -130,8 +153,8 @@ spec:
             - name: Custom-Header
               value: Awesome
             path: /probe
-            port: 10000
-          initialDelaySeconds: 120
+            port: 9086
+          initialDelaySeconds: 30
           periodSeconds: 3
           successThreshold: 1
           timeoutSeconds: 10
@@ -149,6 +172,25 @@ spec:
         - name: ex-trace-port
           containerPort: {{ .Values.mergeExporter.mergePort }}
           protocol: TCP
+      {{- if eq .Values.datapath_trace.cm.connectivity "local_cache" }}
+      initContainers:
+      - name: init-default-svc
+        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until nslookup kubernetes.default.svc; do echo waiting for kubernetes service; sleep 2; done
+      - name: init-cm-svc
+        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until nslookup {{ .Values.datapath_trace.cm.local_cache.cache_name }}-redis-master.tsg-os-system.svc; do echo waiting for cm cache service; sleep 2; done
+      {{- end }}
       volumes:
       - name: journal-volume
         hostPath:
@@ -160,8 +202,8 @@ spec:
           type: DirectoryOrCreate
       - name: dp-trace-prestart
         hostPath:
-      {{- if .Values.dp_trace_telemetry.debug.prestart_script }}
-          path: {{ .Values.dp_trace_telemetry.debug.prestart_script }}
+      {{- if .Values.datapath_trace.debug.prestart_script }}
+          path: {{ .Values.datapath_trace.debug.prestart_script }}
       {{- else }}
           path: /etc/tsg-os/{{ .Release.Name }}/dp_trace_prestart_script.sh
       {{- end }}

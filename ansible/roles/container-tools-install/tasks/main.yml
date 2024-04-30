@@ -161,3 +161,9 @@
     name: crudini
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+
+- name: "install inotify-tools"
+  yum:
+    name: inotify-tools
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present

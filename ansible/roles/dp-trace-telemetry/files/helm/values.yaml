@@ -85,15 +85,7 @@ mergeExporter:
 
 define_enable_val_yes: 'yes'
 
-datapath_trace: {}
+datapath_trace: { debug: { enable_liveness_probe:'no', enable_interactive_startup: 'no', enable_prestart_script: 'no', enable_mount_host_filesystem:'no', prestart_script: ""}}
 
 device: {}
 
-dp_trace_telemetry:
-  debug:
-    enable_liveness_probe: 'no'
-    define_enable_val_yes: 'yes'
-    enable_prestart_script: 'yes'
-    enable_mount_host_filesystem: 'yes'
-    #default: /etc/tsg-os/${service_function_name}/shaping_prestart_script.sh
-    prestart_script: ""
