@@ -168,6 +168,7 @@ spec:
                 - "bash"
                 - "-ec"
                 - |
+                  rm -f /run/mrzcpd/mrmonit.daemon
                   rm -f /run/mrzcpd/huge_pages/rtemap_*
                   rm -f /run/.rte_config
                   rm -f /run/.rte_hugepage_info
@@ -176,11 +177,40 @@ spec:
           privileged: true
 
       - command:
-        - /opt/tsg/mrzcpd/bin/monit_device
-        - --prometheus-client
+          - "bash"
+          - "-ec"
+          - |
+            while ! nc -z localhost 9086; do sleep 1; done;
+            /opt/tsg/mrzcpd/bin/monit_device --prometheus-client
         image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         name: mrapm-device
+{{- if eq .Values.mrzcpd.debug.enable_liveness_probe .Values.define_enable_val_yes }}
+        livenessProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+        startupProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+{{- end }}
         volumeMounts:
         - mountPath: /var/run/mrzcpd
           name: run-mrzcpd
@@ -192,11 +222,40 @@ spec:
           name: localtime-node
           readOnly: true
       - command:
-        - /opt/tsg/mrzcpd/bin/monit_stream
-        - --prometheus-client
+          - "bash"
+          - "-ec"
+          - |
+            while ! nc -z localhost 9086; do sleep 1; done;
+            /opt/tsg/mrzcpd/bin/monit_stream --prometheus-client
         image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         name: monit-stream
+{{- if eq .Values.mrzcpd.debug.enable_liveness_probe .Values.define_enable_val_yes }}
+        livenessProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+        startupProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+{{- end }}
         volumeMounts:
         - mountPath: /var/run/mrzcpd
           name: run-mrzcpd
@@ -208,11 +267,40 @@ spec:
           name: localtime-node
           readOnly: true
       - command:
-        - /opt/tsg/mrzcpd/bin/monit_obp
-        - --prometheus-client
+          - "bash"
+          - "-ec"
+          - |
+            while ! nc -z localhost 9086; do sleep 1; done;
+            /opt/tsg/mrzcpd/bin/monit_obp --prometheus-client
         image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         name: monit-obp
+{{- if eq .Values.mrzcpd.debug.enable_liveness_probe .Values.define_enable_val_yes }}
+        livenessProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+        startupProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+{{- end }}
         volumeMounts:
         - mountPath: /var/run/mrzcpd
           name: run-mrzcpd
