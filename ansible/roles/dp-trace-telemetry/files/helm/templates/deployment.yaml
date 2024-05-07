@@ -43,14 +43,6 @@ spec:
           - "bash"
           - "-ec"
           - |
-            dnf -y install autoconf automake libtool
-            wget -c https://github.com/inotify-tools/inotify-tools/archive/refs/tags/3.21.9.6.tar.gz
-            tar -zvxf 3.21.9.6.tar.gz -C /usr/local/src/
-            cd /usr/local/src/inotify-tools-3.21.9.6/
-            ./autogen.sh && ./configure --prefix=/usr/local/inotify-tools && make && make install
-            echo 'export PATH=$PATH:/usr/local/inotify-tools/bin/' >> ~/.bashrc
-            source ~/.bashrc
-
             WATCH_DIR="/opt/tsg/dp_trace_telemetry/etc/dynamic"
             while inotifywait -r -e modify,create "$WATCH_DIR"; do
               echo "send HUB signal to dp_trace"
