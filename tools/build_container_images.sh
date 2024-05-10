@@ -40,7 +40,7 @@ function build_image()
 	${CODE_TOOTS_DIR}/ansible-HAL-CONTAINER ${PROFILE_ID}-${component_name}  ${CODE_PROJECT_DIR} /tmp/empty/container /tmp/yum-RockyLinux-8.conf ${OS_RELEASE_VER} ${container_name}
 
     #clean install fine in container    
-    buildah run  ${container_name} -- bash -c "yum clean all -y; yum -c /tmp/yum-RockyLinux-8.conf clean all -y" 
+    buildah run  ${container_name} -- bash -c "yum clean all -y; yum -c /tmp/yum-RockyLinux-8.conf clean all -y; rm -rf /var/cache/yum/x86_64/8" 
     buildah run  ${container_name} -- bash -c "cp /tmp/ks-script-* /; cp /tmp/hosts.bak /etc/hosts; rm -rf /tmp/*; mv /ks-script-* /tmp"   
     
     ##
