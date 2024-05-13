@@ -5,4 +5,6 @@ class mrzcpd(Plugin, IndependentPlugin):
     def setup(self):
         self.add_copy_spec([
             "/opt/tsg/mrzcpd/etc",
+            "/var/run/mrzcpd/hwfile.json",
+            "/var/run/mrzcpd/mrmonit*",
         ])

@@ -5,7 +5,9 @@ class k3s(Plugin, IndependentPlugin):
     def setup(self):
         self.add_cmd_output([
             "kubectl get pod -A",
-            "kubectl get pod -A -o yaml"
+            "kubectl get pod -A -o yaml",
+            "kubectl get event",
+            "kubectl get event -n tsg-os-system",
         ])
         self.add_copy_spec([
             "/var/log/telegraf",
