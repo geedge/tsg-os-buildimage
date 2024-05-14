@@ -98,7 +98,7 @@ sce_rpm_version:
   sce: sce-1.3.1.6b03470
 
 bfdd_rpm_version:
-  bfdd: bfdd-1.0.2-release
+  bfdd: bfdd-1.0.3-release
 
 
 shaping_engine_rpm_version:

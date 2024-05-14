@@ -129,7 +129,7 @@ spec:
           - "bash"
           - "-ec"
           - |
-            exec /opt/tsg/bfdd/bfdd -u root -g root
+            exec /opt/tsg/bfdd/bin/bfdd -u root -g root
         env:
         - name: MRZCPD_CTRLMSG_LISTEN_ADDR
           valueFrom:
