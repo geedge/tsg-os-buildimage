@@ -164,8 +164,21 @@ spec:
         - name: ex-trace-port
           containerPort: {{ .Values.mergeExporter.mergePort }}
           protocol: TCP
-      {{- if eq .Values.datapath_trace.cm.connectivity "local_cache" }}
       initContainers:
+      - name: init-packet-io-engine-ready
+        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until [ $(curl -s -o /dev/null -w "%{http_code}" http://${NODE_IP}:9086/probe) -eq 200 ]; do echo waiting for packet-io-engine ready; sleep 2; done
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+      {{- if eq .Values.datapath_trace.cm.connectivity "local_cache" }}
       - name: init-default-svc
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
