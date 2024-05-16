@@ -37,6 +37,7 @@
             "switch": "on",
             "async": "off",
             "name": "IPFIX-TEMPLATE",
+            "topic": "IPFIX-TEMPLATE",
             "mode": [
                 {
                     "channel": "udpsock",
@@ -55,6 +56,7 @@
             {{- end }}
             "async": "on",
             "name": "SESSION-RECORD",
+            "topic": "SESSION-RECORD",
             "mode": [
                 {{- if eq .Values.external_resources.olap.udp_collectors.enable .Values.define_enable_val_yes }}
                 {
@@ -73,13 +75,14 @@
             ]
         },
         {
-            {{- if eq .Values.session_record.enable .Values.define_enable_val_yes }}
+            {{- if eq .Values.define_enable_val_yes .Values.transaction_record.enable_http }}
             "switch": "on",
             {{- else }}
             "switch": "off",
             {{- end }}
             "async": "on",
-            "name": "TRANSACTION-RECORD",
+            "name": "HTTP-TRANSACTION-RECORD",
+            "topic": "TRANSACTION-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -90,9 +93,68 @@
             ]
         },
         {
+            {{- if eq .Values.define_enable_val_yes .Values.transaction_record.enable_mail }}
             "switch": "on",
+            {{- else }}
+            "switch": "off",
+            {{- end }}
             "async": "on",
-            "name": "VOIP-RECORD",
+            "name": "MAIL-TRANSACTION-RECORD",
+            "topic": "TRANSACTION-RECORD",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "json"
+                    ]
+                }
+            ]
+        },
+        {
+            {{- if eq .Values.define_enable_val_yes .Values.transaction_record.enable_dns }}
+            "switch": "on",
+            {{- else }}
+            "switch": "off",
+            {{- end }}
+            "async": "on",
+            "name": "DNS-TRANSACTION-RECORD",
+            "topic": "TRANSACTION-RECORD",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "json"
+                    ]
+                }
+            ]
+        },
+        {
+            {{- if eq .Values.define_enable_val_yes .Values.voip_record.enable_sip }}
+            "switch": "on",
+            {{- else }}
+            "switch": "off",
+            {{- end }}
+            "async": "on",
+            "name": "SIP-VOIP-RECORD",
+            "topic": "VOIP-RECORD",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "json"
+                    ]
+                }
+            ]
+        },
+        {
+            {{- if eq .Values.define_enable_val_yes .Values.voip_record.enable_rtp }}
+            "switch": "on",
+            {{- else }}
+            "switch": "off",
+            {{- end }}
+            "async": "on",
+            "name": "RTP-VOIP-RECORD",
+            "topic": "VOIP-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -109,7 +171,8 @@
             "switch": "off",
             {{- end }}
             "async": "on",
-            "name": "TRAFFIC-FILE-STREAM-RECORD",
+            "name": "POLICY-PACKET-TRAFFIC-FILE-STREAM-RECORD",
+            "topic": "TRAFFIC-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -120,9 +183,86 @@
             ]
         },
         {
+            {{- if eq .Values.file_stream_record.enable .Values.define_enable_val_yes }}
             "switch": "on",
+            {{- else }}
+            "switch": "off",
+            {{- end }}
+            "async": "on",
+            "name": "HTTP-REQ-BODY-TRAFFIC-FILE-STREAM-RECORD",
+            "topic": "TRAFFIC-FILE-STREAM-RECORD",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "mpack"
+                    ]
+                }
+            ]
+        },
+        {
+            {{- if eq .Values.file_stream_record.enable .Values.define_enable_val_yes }}
+            "switch": "on",
+            {{- else }}
+            "switch": "off",
+            {{- end }}
+            "async": "on",
+            "name": "HTTP-RES-BODY-TRAFFIC-FILE-STREAM-RECORD",
+            "topic": "TRAFFIC-FILE-STREAM-RECORD",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "mpack"
+                    ]
+                }
+            ]
+        },
+        {
+            {{- if eq .Values.file_stream_record.enable .Values.define_enable_val_yes }}
+            "switch": "on",
+            {{- else }}
+            "switch": "off",
+            {{- end }}
+            "async": "on",
+            "name": "MAIL-EML-TRAFFIC-FILE-STREAM-RECORD",
+            "topic": "TRAFFIC-FILE-STREAM-RECORD",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "mpack"
+                    ]
+                }
+            ]
+        },
+        {
+            {{- if eq .Values.file_stream_record.enable .Values.define_enable_val_yes }}
+            "switch": "on",
+            {{- else }}
+            "switch": "off",
+            {{- end }}
+            "async": "on",
+            "name": "RTP-PACKET-TRAFFIC-FILE-STREAM-RECORD",
+            "topic": "TRAFFIC-FILE-STREAM-RECORD",
+            "mode": [
+                {
+                    "channel": "kafka",
+                    "format": [
+                        "mpack"
+                    ]
+                }
+            ]
+        },
+        {
+            {{- if eq .Values.define_enable_val_yes .Values.packet_capture.enable }}
+            "switch": "on",
+            {{- else }}
+            "switch": "off",
+            {{- end }}
             "async": "on",
             "name": "TROUBLESHOOTING-FILE-STREAM-RECORD",
+            "topic": "TROUBLESHOOTING-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -136,6 +276,7 @@
             "switch": "on",
             "async": "off",
             "name": "DOS-SKETCH-RECORD",
+            "topic": "DOS-SKETCH-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -149,6 +290,7 @@
             "switch": "on",
             "async": "off",
             "name": "POLICY-RULE-METRIC",
+            "topic": "POLICY-RULE-METRIC",
             "mode": [
                 {
                     "channel": "kafka",
@@ -162,6 +304,7 @@
             "switch": "on",
             "async": "off",
             "name": "NETWORK-TRAFFIC-METRIC",
+            "topic": "NETWORK-TRAFFIC-METRIC",
             "mode": [
                 {
                     "channel": "kafka",
@@ -175,6 +318,7 @@
             "switch": "on",
             "async": "off",
             "name": "TRAFFIC-TOP-METRIC",
+            "topic": "TRAFFIC-TOP-METRIC",
             "mode": [
                 {
                     "channel": "kafka",
@@ -188,6 +332,7 @@
             "switch": "on",
             "async": "off",
             "name": "STATISTICS-RULE-METRIC",
+            "topic": "STATISTICS-RULE-METRIC",
             "mode": [
                 {
                     "channel": "kafka",
@@ -201,6 +346,7 @@
             "switch": "on",
             "async": "off",
             "name": "OBJECT-STATISTICS-METRIC",
+            "topic": "OBJECT-STATISTICS-METRIC",
             "mode": [
                 {
                     "channel": "kafka",
