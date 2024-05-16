@@ -108,3 +108,30 @@
     src: "{{ role_path }}/files/99-tsg-dign.rules"
     dest: /usr/lib/udev/rules.d/99-tsg-dign.rules
     mode: 0644
+
+- name: "Create dracut/modules.d/99overlaymount directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /usr/lib/dracut/modules.d/99overlaymount
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "copy  dracut module-setup.sh to dest"
+  copy:
+    src: "{{ role_path }}/files/module-setup.sh"
+    dest: /usr/lib/dracut/modules.d/99overlaymount/module-setup.sh
+    mode: 0755
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "copy  overlaymount.sh to dest"
+  copy:
+    src: "{{ role_path }}/files/overlaymount.sh"
+    dest: /usr/lib/dracut/modules.d/99overlaymount/overlaymount.sh
+    mode: 0755
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "add dracut module to initramfs"
+  shell: dracut --force -v /boot/initramfs-5.17.15-1.el8.x86_64.img  5.17.15-1.el8.x86_64
+  when: runtime_env == 'TSG-X-P0906'
