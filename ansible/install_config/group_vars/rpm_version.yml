@@ -61,9 +61,9 @@ kni_rpm_version:
 
 mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.5.6.fa28206
-  mrzcpd-icelake-server: mrzcpd-icelake-server-4.8.9.64ad4ff
-  mrzcpd-znver1: mrzcpd-znver1-4.8.9.64ad4ff
-  mrzcpd-corei7: mrzcpd-corei7-4.8.9.64ad4ff
+  mrzcpd-icelake-server: mrzcpd-icelake-server-4.8.10.bd53868
+  mrzcpd-znver1: mrzcpd-znver1-4.8.10.bd53868
+  mrzcpd-corei7: mrzcpd-corei7-4.8.10.bd53868
 
 mlnx_ofed_user_space_only_rpm_version:
   mlnx_ofed_user_space: mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch
@@ -114,4 +114,4 @@ packet_io_uio_binder_rpm_version:
   packet_io_uio_binder: packet-io-uio-binder-1.0.8-dc29e58
 
 dp_trace_rpm_version:
-  dp_trace: dp_trace_telemetry-0.1.9.e8f6731
+  dp_trace: dp_trace_telemetry-0.1.10.2f6707f
