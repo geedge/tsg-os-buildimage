@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-service-chaining
+  name: {{ .Release.Name }}-sce
   labels:
     app: {{ .Release.Name }}
     component: service-chaining
