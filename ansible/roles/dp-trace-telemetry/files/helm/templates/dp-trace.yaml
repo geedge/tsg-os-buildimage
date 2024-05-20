@@ -55,6 +55,11 @@ data:
     maat_redis_port_range=
     {{- end }}
     maat_redis_db_index=1
+
+    [debug]
+    send_ctrlbuf=0
+    kafka_dump_to_log=0
+    arp_pkt_has_ip_test=0
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -86,11 +91,6 @@ data:
     snaplen={{ $rule.snaplen }}
     {{- end }}
 
-    {{ end }}
-
-    [debug]
-    send_ctrlbuf=0
-    kafka_dump_to_log=0
-    arp_pkt_has_ip_test=0
+    {{ end -}}
 
 
