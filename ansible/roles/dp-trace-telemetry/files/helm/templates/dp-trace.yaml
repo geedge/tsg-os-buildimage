@@ -10,8 +10,10 @@ data:
     dp_trace_dir=/var/lib/dp_telemetry_daemon
     {{- if .Values.device }}
     device_group={{- range $tag := .Values.device.tags }}{{- if $tag.device_group }}{{ $tag.device_group }}{{ end -}}{{- end }}
+    data_center={{- range $tag := .Values.device.tags }}{{- if $tag.data_center }}{{ $tag.data_center }}{{ end -}}{{- end }}
     {{- else }}
     device_group=
+    data_center=
     {{- end }}
     monit_file_path=/var/run/mrzcpd/mrmonit.app.dp_trace_telemetry.saving
 
@@ -21,7 +23,6 @@ data:
     keep_alive_path=/probe
 
     [kafka]
-    kafka_dump_to_log=0
     {{- if .Values.datapath_trace.olap.kafka_brokers}}
     borker_list="{{- range $index,$kafka := .Values.datapath_trace.olap.kafka_brokers.addresses }}{{- if ne $index 0 }},{{ end -}}{{ $kafka.address }}:{{ $kafka.port}}{{- end }}"
     topic_name="DATAPATH-TELEMETRY-RECORD"
@@ -85,5 +86,11 @@ data:
     snaplen={{ $rule.snaplen }}
     {{- end }}
 
-    {{ end -}}
+    {{ end }}
+
+    [debug]
+    send_ctrlbuf=0
+    kafka_dump_to_log=0
+    arp_pkt_has_ip_test=0
+
 
