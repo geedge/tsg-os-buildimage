@@ -180,7 +180,7 @@ spec:
           - "bash"
           - "-ec"
           - |
-            while ! nc -z localhost 9086; do sleep 1; done;
+            until [ $(curl -s -o /dev/null -w "%{http_code}" http://localhost:9086/probe) -eq 200 ]; do echo waiting for packet-io-engine ready; sleep 2; done
             /opt/tsg/mrzcpd/bin/monit_device --prometheus-client
         image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
@@ -225,7 +225,7 @@ spec:
           - "bash"
           - "-ec"
           - |
-            while ! nc -z localhost 9086; do sleep 1; done;
+            until [ $(curl -s -o /dev/null -w "%{http_code}" http://localhost:9086/probe) -eq 200 ]; do echo waiting for packet-io-engine ready; sleep 2; done
             /opt/tsg/mrzcpd/bin/monit_stream --prometheus-client
         image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
@@ -270,7 +270,7 @@ spec:
           - "bash"
           - "-ec"
           - |
-            while ! nc -z localhost 9086; do sleep 1; done;
+            until [ $(curl -s -o /dev/null -w "%{http_code}" http://localhost:9086/probe) -eq 200 ]; do echo waiting for packet-io-engine ready; sleep 2; done
             /opt/tsg/mrzcpd/bin/monit_obp --prometheus-client
         image: "registry.gdnt-cloud.website/tsg-packet-io-engine:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
