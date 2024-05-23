@@ -1,7 +1,7 @@
 
 PROFILE_ID 				:= x86_64_COTS
 SUPPORTED_MACHINE_ID 	:= x86_64_COTS
-KERNEL_ARGS 			:= crashkernel=512M default_hugepagesz=1G intel_iommu=on iommu=pt mitigations=off psi=1 selinux=0 quiet splash transparent_hugepage=never processor.max_cstate=0 intel_idle.max_cstate=0 intel_pstate=disable
+KERNEL_ARGS 			:= crashkernel=512M default_hugepagesz=1G intel_iommu=on iommu=pt mitigations=off psi=1 selinux=0 coredump_filter=0x3f quiet splash transparent_hugepage=never processor.max_cstate=0 intel_idle.max_cstate=0 intel_pstate=disable
 KERNEL_ARGS_9000_NPB := console=ttyS0,115200n8 pci=realloc,assign-busses
 GRUB_SERIAL_COMMAND 	:=
 SIZE_PART_SYSROOT		:= 16384M
