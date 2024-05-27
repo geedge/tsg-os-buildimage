@@ -1,80 +1,35 @@
-#- name: "Install  tsg-diagnose"
-#  shell: rpm -i /tmp/rpm_download/{{ tsg_diagnose_rpm_version.tsg_diagnose }}*
-#
-- name: "download rpm packages: tsg-diagnose"
+- name: "Install rpm packages."
   yum:
-    name:
-      - "{{ tsg_diagnose_rpm_version.tsg_diagnose }}"
+    name: "{{ tsg_diagnose_rpm_version.tsg_diagnose }}"
     conf_file: "{{ rpm_repo_config_path }}"
-    state: present
-    download_only: yes
-    download_dir: "{{ path_download }}"
-
-- name: "Get tsg_diagnose rpm path"
-  find:
-    path: /tmp/rpm_download/
-    pattern: "{{ tsg_diagnose_rpm_version.tsg_diagnose }}*"
-  register: tsg_diagnose_rpm_fullname
-
-- name: "Install tsg_diagnose from local path" 
-  yum: 
-    name: "{{ tsg_diagnose_rpm_fullname.files[0].path }}" 
     state: present
     disable_gpg_check: yes
 
-- name: "Templates docker-compose.yml"
-  template:
-    src: "{{role_path}}/templates/docker-compose.yml.j2"
-    dest: /opt/tsg/tsg-diagnose/compose/docker-compose.yml
-  tags: template
+- name: "Enable sudo exec tsg-diagnose command."
+  shell: sed -i -E 's/^(.*Defaults    secure_path =.*)$/\1:\/opt\/tsg\/tsg-diagnose\/scripts/' /etc/sudoers
+
+- name: "Set docker-compose.yaml server parent nic name."
+  shell: sed -i 's/eth_vf_dign_s/{{ diagnose.virtual_server_nic }}/g' /opt/tsg/tsg-diagnose/compose/docker-compose.yml
   when: runtime_env != 'TSG-X-P0906'
 
-- name: "copy tsg-diagnose.service file to dest"
-  copy:
-    src: "{{ role_path }}/files/tsg-diagnose.service"
-    dest: /usr/lib/systemd/system/tsg-diagnose.service
-    mode: 0644
+- name: "Set docker-compose.yaml client parent nic name."
+  shell: sed -i 's/eth_vf_dign_c/{{ diagnose.virtual_client_nic }}/g' /opt/tsg/tsg-diagnose/compose/docker-compose.yml
   when: runtime_env != 'TSG-X-P0906'
 
-- name: "Create /usr/lib/systemd/system/tsg-diagnose.service.d/ directory if it does not exist"
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: '0755'
-  with_items:
-    - /usr/lib/systemd/system/tsg-diagnose.service.d
+- name: "Set tsg-diagnose.service WantedBy to workload.target."
+  shell: sed -i 's/WantedBy=multi-user.target/WantedBy=workload.target/g' /usr/lib/systemd/system/tsg-diagnose.service
   when: runtime_env != 'TSG-X-P0906'
 
-- name: "copy prestart file to tsg-diagnose.service.d"
-  copy:
-    src: "{{ role_path }}/files/service_override_prestart.conf"
-    dest: /usr/lib/systemd/system/tsg-diagnose.service.d/
-    mode: 0644
-  when: runtime_env != 'TSG-X-P0906'
-
-- name: "replace action: replace service WantedBy from multi-user.target to workload.target"
-  replace:
-    path: "{{ item }}"
-    regexp: 'WantedBy=multi-user.target'
-    replace: 'WantedBy=workload.target'
-  with_items:
-    - /usr/lib/systemd/system/tsg-diagnose.service
-  when: runtime_env != 'TSG-X-P0906'
-
-- name: "add sudo secure_path"
-  lineinfile:
-    path: /etc/sudoers
-    backrefs: yes
-    regexp: "^(.*Defaults    secure_path =.*)$"
-    line: '\1:/opt/tsg/tsg-diagnose/scripts'
+- name: "Create k3s mainfest path."
+  shell: mkdir -p /var/lib/rancher/k3s/server/manifests/
+  when: runtime_env == 'TSG-X-P0906'
 
 - name: "copy k3s resouce file to k3s manifests directory"
-  copy:
-    src: "{{ role_path }}/files/{{ item }}"
-    dest: /var/lib/rancher/k3s/server/manifests/
-  with_items:
-    - dign-client.yaml
-    - dign-server.yaml
+  shell: cp /opt/tsg/tsg-diagnose/k8s-resource/* /var/lib/rancher/k3s/server/manifests/
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "Set service function config mount path."
+  shell: sed -i 's/\/opt\/tsg\/tsg-diagnose\/share/\/opt\/tsg\/clixon\/share/g' /var/lib/rancher/k3s/server/manifests/tsg-diagnose-client.yaml
   when: runtime_env == 'TSG-X-P0906'
 
 - name: "copy iptables shell to dispatcher.d"
@@ -82,11 +37,4 @@
     src: "{{ role_path }}/files/30-add_dign_br_iptable_rule.sh"
     dest: /etc/NetworkManager/dispatcher.d/
     mode: 0755
-  when: runtime_env == 'TSG-X-P0906'
-
-- name: "modify k3s command"
-  shell: sed -i 's/kubectl exec -it daemonset\/dign-client/kubectl exec -n tsg-os-system -it daemonset\/dign-client/g' {{ item }}
-  with_items:
-    - /opt/tsg/tsg-diagnose/scripts/tsg-diagnose-oneshot
-    - /opt/tsg/tsg-diagnose/scripts/tsg-diagnose-periodical
   when: runtime_env == 'TSG-X-P0906'
