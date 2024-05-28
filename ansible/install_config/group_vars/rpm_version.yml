@@ -114,4 +114,4 @@ packet_io_uio_binder_rpm_version:
   packet_io_uio_binder: packet-io-uio-binder-1.0.8-dc29e58
 
 dp_trace_rpm_version:
-  dp_trace: dp_trace_telemetry-0.1.15.d85f991
+  dp_trace: dp_trace_telemetry-0.1.16.e2200bb
