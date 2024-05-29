@@ -21,7 +21,7 @@
     dest: /var/lib/rancher/k3s/server/manifests/
 
 - name: "Set clixon config cm cache chart value."
-  shell: sed -ie "s/cm_local_cache_chart_name=.*/cm_local_cache_chart_name=redis-7.2.4.tgz/g" /opt/tsg/clixon/etc/mgnt-srv.conf
+  shell: sed -ie "s/^cm_local_cache_chart_name=.*/cm_local_cache_chart_name=redis-7.2.4.tgz/g" /opt/tsg/clixon/etc/mgnt-srv.conf
 
 - name: "Set clixon config sd cache chart value."
-  shell: sed -ie "s/sd_local_cache_chart_name=.*/sd_local_cache_chart_name=redis-7.2.4.tgz/g" /opt/tsg/clixon/etc/mgnt-srv.conf
+  shell: sed -ie "s/^sd_local_cache_chart_name=.*/sd_local_cache_chart_name=redis-7.2.4.tgz/g" /opt/tsg/clixon/etc/mgnt-srv.conf

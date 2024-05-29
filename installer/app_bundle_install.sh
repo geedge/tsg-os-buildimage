@@ -72,10 +72,10 @@ function replace_clixon_chart_name()
         exit 1
     fi
 
-    sed -ie "s/chart_name=.*/chart_name=${TRAFFIC_ENGINE_HELM_CHART_TAR}/g" ${clixon_conf_path}
-    sed -ie "s/inject_adapter_chart_name=.*/inject_adapter_chart_name=${INJECT_HELM_CHART_TAR}/g" ${clixon_conf_path}
-    sed -ie "s/mrzcpd_chart_name=.*/mrzcpd_chart_name=${MRZCPD_HELM_CHART_TAR}/g" ${clixon_conf_path}
-    sed -ie "s/datapath_trace_chart_name=.*/datapath_trace_chart_name=${DP_TRACE_HELM_CHART_TAR}/g" ${clixon_conf_path}
+    sed -ie "s/^chart_name=.*/chart_name=${TRAFFIC_ENGINE_HELM_CHART_TAR}/g" ${clixon_conf_path}
+    sed -ie "s/^inject_adapter_chart_name=.*/inject_adapter_chart_name=${INJECT_HELM_CHART_TAR}/g" ${clixon_conf_path}
+    sed -ie "s/^mrzcpd_chart_name=.*/mrzcpd_chart_name=${MRZCPD_HELM_CHART_TAR}/g" ${clixon_conf_path}
+    sed -ie "s/^datapath_trace_chart_name=.*/datapath_trace_chart_name=${DP_TRACE_HELM_CHART_TAR}/g" ${clixon_conf_path}
 }
 
 function load_images()
