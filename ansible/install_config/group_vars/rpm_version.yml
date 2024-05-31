@@ -3,7 +3,7 @@ certstore_rpm_version:
 
 firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-3.2.19.29dc1ac
+  firewall: firewall-3.2.20.d7d2b3f
   glimpse_detector: glimpse_detector-3.0.3.5555ba7
   qdpi_detector: qdpi_detector-4.0.5.5cd1ccb
   #tsg_ddos_sketch: tsg_ddos_sketch-2.0.2.35e03d0
@@ -22,11 +22,11 @@ firewall_rpm_version:
   stratum: stratum-1.1.3.82ba152
   rdp: rdp-1.0.3.f392ffd
   session_flags: session_flags-2.3.9.c4435b5
-  stat_policy_enforcer: stat_policy_enforcer-3.2.8.5fdb45c
+  stat_policy_enforcer: stat_policy_enforcer-3.2.9.3e12f4f
   sf_classifier: sf_classifier-1.2.0.5e6a9de
   stellar-c: stellar-c-1.0.20.513d4f1
-  policy_sketch: policy_sketch-1.0.6.0cbf130
-  traffic_sketch: traffic_sketch-1.0.5.1599c40
+  policy_sketch: policy_sketch-1.0.7.d38d159
+  traffic_sketch: traffic_sketch-1.0.6.72e00c0
 
 framework_rpm_version:
   00_libcjson: libcjson-1.7.12.6c09dcf
