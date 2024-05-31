@@ -96,19 +96,6 @@ else
     echo "$k3s_rancher_dir is not exist"
 fi
 
-air_gap_image_dir="/var/lib/rancher/k3s/agent/images"
-tsg_diagnose_images_dir="/opt/tsg/tsg-diagnose/images"
-if [ -d "$tsg_diagnose_images_dir" ]; then
-    echo "$tsg_diagnose_images_dir is exist"
-    if [ -d "$air_gap_image_dir" ]; then
-        mkdir -p /data$air_gap_image_dir
-        mv $tsg_diagnose_images_dir/* /data$air_gap_image_dir
-    fi
-else
-    echo "$tsg_diagnose_images_dir is not exist"
-fi
-
-
 # Setup o/s mount points
 (cat <<EOF2
 LABEL=TSG-OS-SYSROOT    /                       ext4    defaults        1 1
