@@ -21,7 +21,7 @@ firewall_rpm_version:
   deal_socks: deal_socks-1.0.4.329bba3
   stratum: stratum-1.1.3.82ba152
   rdp: rdp-1.0.3.f392ffd
-  session_flags: session_flags-2.3.8.b38ac06
+  session_flags: session_flags-2.3.9.c4435b5
   stat_policy_enforcer: stat_policy_enforcer-3.2.8.5fdb45c
   sf_classifier: sf_classifier-1.2.0.5e6a9de
   stellar-c: stellar-c-1.0.20.513d4f1
