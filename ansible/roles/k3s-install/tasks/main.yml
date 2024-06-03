@@ -93,11 +93,6 @@
     src: "{{ role_path }}/files/service_set_RuntimeMaxSec.conf"
     dest: /usr/lib/systemd/system/k3s.service.d/
 
-- name: "copy update-coredns-forwarding file to dest"
-  copy:
-    src: "{{ role_path }}/files/service_set_coredns_forwarding.conf"
-    dest: /usr/lib/systemd/system/k3s.service.d/
-
 - name: "Create /usr/libexec/k3s directory if it does not exist"
   file:
     path: "{{ item }}"
@@ -106,11 +101,6 @@
   with_items:
     - /usr/libexec/k3s
 
-- name: "copy  update-coredns-forwarding to dest"
-  copy:
-    src: "{{ role_path }}/files/update-coredns-forwarding.sh"
-    dest: /usr/libexec/k3s/update-coredns-forwarding.sh
-    mode: 0755
 
 - name: "copy k3s-orphaned-pods-dir-clean.service to destination"
   copy:
