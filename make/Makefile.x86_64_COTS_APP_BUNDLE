@@ -5,20 +5,22 @@ PROFILE_ID_IN_SHORT				:= $(subst -,$e,$(PROFILE_ID))
 CONTAINER_IMAGES_TAR			:= traffic-engine-${OS_RELEASE_VER}-docker.tar
 TRAFFIC_ENGINE_HELM_CHART_TAR	:= traffic-engine-$(HELM_CHART_VER).tgz
 MRZCPD_HELM_CHART_TAR	        := mrzcpd-$(HELM_CHART_VER).tgz
+TREX_HELM_CHART_TAR	            := TREX-$(HELM_CHART_VER).tgz
 DP_TRACE_HELM_CHART_TAR	        := datapath-trace-$(HELM_CHART_VER).tgz
 APP_BUNDLE_BIN					:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-APP-BUNDLE.bin
 INJECT_HELM_CHART_TAR           := inject-adapter-$(HELM_CHART_VER).tgz
 CONTAINER_IMAGES_TAR_GLOB		:= traffic-engine-*-docker.tar
 HELM_CHART_TAR_GLOB				:= traffic-engine-*.tgz
-MRZCPD_DEVICE_PLUGIN_IMAGE_TAG  := ${OS_RELEASE_VER}
+NIC_UIO_BINDER_IMAGE_TAR  := ${OS_RELEASE_VER}
 
 TARGET_BUILD_DIR				:= $(BUILDDIR_BASE)/$(PROFILE_ID)/containers
 TARGET_INSTALLER_DIR			:= $(TARGET_BUILD_DIR)/installer
 TRAFFIC_ENGINE_HELM_FILE_PATH   := /ansible/roles/traffic-engine/files/helm
 INJECT_ADAPTER_HELM_FILE_PATH   := /ansible/roles/packet_adapter/files/helm
 MRZCPD_HELM_FILE_PATH           := /ansible/roles/mrzcpd/files/helm
+TREX_HELM_FILE_PATH             :=/ansible/roles/trex/files/helm
 DP_TRACE_HELM_FILE_PATH         := /ansible/roles/dp-trace-telemetry/files/helm
-MRZCPD_DEVICE_PLUGIN_FILE_PATH  := /ansible/roles/k3s-install/files/packet-io-uio-binder.yaml
+NIC_UIO_BINDER_FILE_PATH        := /ansible/roles/k3s-install/files/nic-uio-binder.yaml
 
 
 .PHONY: all build_dir installer clean_installer_dir prebuild_container_images build_container_images build_helm_charts build_app_bundle_bin 
@@ -40,10 +42,11 @@ installer: build_dir
 	sed -i -e "s/%%TRAFFIC_ENGINE_HELM_CHART_TAR%%/$(TRAFFIC_ENGINE_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%INJECT_HELM_CHART_TAR%%/$(INJECT_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%MRZCPD_HELM_CHART_TAR%%/$(MRZCPD_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%TREX_HELM_CHART_TAR%%/$(TREX_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%DP_TRACE_HELM_CHART_TAR%%/$(DP_TRACE_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%CONTAINER_IMAGES_TAR_GLOB%%/$(CONTAINER_IMAGES_TAR_GLOB)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%HELM_CHART_TAR_GLOB%%/$(HELM_CHART_TAR_GLOB)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%MRZCPD_DEVICE_PLUGIN_IMAGE_TAG%%/$(MRZCPD_DEVICE_PLUGIN_IMAGE_TAG)/" $(PROJECTDIR)/$(MRZCPD_DEVICE_PLUGIN_FILE_PATH)
+	sed -i -e "s/%%NIC_UIO_BINDER_IMAGE_TAR%%/$(NIC_UIO_BINDER_IMAGE_TAR)/" $(PROJECTDIR)/$(NIC_UIO_BINDER_FILE_PATH)
 
 prebuild_container_images:
 ifeq ($(ENABLE_LICENSE_PROTECTED),1)
@@ -64,6 +67,7 @@ build_helm_charts: build_dir
 	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(TRAFFIC_ENGINE_HELM_FILE_PATH)
 	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(INJECT_ADAPTER_HELM_FILE_PATH)
 	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(MRZCPD_HELM_FILE_PATH)
+	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(TREX_HELM_FILE_PATH)
 	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(DP_TRACE_HELM_FILE_PATH)
 
 build_app_bundle_bin: clean_installer_dir installer build_helm_charts build_container_images

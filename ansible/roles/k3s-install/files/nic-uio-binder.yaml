@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: packet-io-uio-binder
+  name: nic-uio-binder
   labels:
-    app: packet-io-uio-binder
+    app: nic-uio-binder
   namespace: tsg-os-system
 spec:
   selector:
     matchLabels:
-      app: packet-io-uio-binder
+      app: nic-uio-binder
   template:
     metadata:
       labels:
-        app: packet-io-uio-binder
+        app: nic-uio-binder
     spec:
       containers:
-      - name: packet-io-uio-binder
-        image: registry.gdnt-cloud.website/tsg-packet-io-uio-binder:%%MRZCPD_DEVICE_PLUGIN_IMAGE_TAG%%
+      - name: nic-uio-binder
+        image: registry.gdnt-cloud.website/tsg-nic-uio-binder:%%MRZCPD_DEVICE_PLUGIN_IMAGE_TAG%%
         command:
           - "bash"
           - "-ec"
           - |
-            /opt/tsg/packet-io-uio-binder/bin/deviceplugin 
+            /opt/tsg/nic-uio-binder/bin/deviceplugin 
         volumeMounts:
         - name: hwfile
           mountPath: /var/run/mrzcpd
@@ -34,13 +34,13 @@ spec:
         securityContext:
           privileged: true
       initContainers:
-      - name: init-packet-io-uio-binder
-        image: registry.gdnt-cloud.website/tsg-packet-io-uio-binder:%%MRZCPD_DEVICE_PLUGIN_IMAGE_TAG%%
+      - name: init-nic-uio-binder
+        image: registry.gdnt-cloud.website/tsg-nic-uio-binder:%%MRZCPD_DEVICE_PLUGIN_IMAGE_TAG%%
         command: 
           - "bash"
           - "-ec"
           - |
-            /opt/tsg/packet-io-uio-binder/bin/generateHwfile
+            /opt/tsg/nic-uio-binder/bin/generateHwfile
         volumeMounts:
         - name: hwfile
           mountPath: /var/run/mrzcpd

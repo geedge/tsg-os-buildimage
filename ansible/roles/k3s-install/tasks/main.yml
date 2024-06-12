@@ -117,9 +117,9 @@
     name: k3s-orphaned-pods-dir-clean.timer
     enabled: yes
 
-- name: "copy packet-io-uio-binder file to dest"
+- name: "copy nic-uio-binder file to dest"
   copy:
-    src: "{{ role_path }}/files/packet-io-uio-binder.yaml"
+    src: "{{ role_path }}/files/nic-uio-binder.yaml"
     dest: /var/lib/rancher/k3s/server/manifests/
 
 - name: "copy dynamic-hostport yaml file to k3s manifests directory"

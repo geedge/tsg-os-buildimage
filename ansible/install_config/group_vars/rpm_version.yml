@@ -110,8 +110,8 @@ coredump_tools_rpm_version:
 packet_adapter_rpm_version:
   packet_adapter: packet_adapter-2.0.2.4f48b59
 
-packet_io_uio_binder_rpm_version:
-  packet_io_uio_binder: packet-io-uio-binder-1.0.8-dc29e58
+nic_uio_binder_rpm_version:
+  nic_uio_binder: nic-uio-binder-1.0.9-5408921
 
 dp_trace_rpm_version:
   dp_trace: dp_trace_telemetry-0.1.16.e2200bb

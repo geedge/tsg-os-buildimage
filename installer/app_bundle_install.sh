@@ -4,6 +4,7 @@ CONTAINER_IMAGES_TAR="%%CONTAINER_IMAGES_TAR%%"
 TRAFFIC_ENGINE_HELM_CHART_TAR="%%TRAFFIC_ENGINE_HELM_CHART_TAR%%"
 INJECT_HELM_CHART_TAR="%%INJECT_HELM_CHART_TAR%%"
 MRZCPD_HELM_CHART_TAR="%%MRZCPD_HELM_CHART_TAR%%"
+TREX_HELM_CHART_TAR="%%TREX_HELM_CHART_TAR%%"
 DP_TRACE_HELM_CHART_TAR="%%DP_TRACE_HELM_CHART_TAR%%"
 
 charts_dest_dir="/var/lib/rancher/k3s/server/static/charts"
@@ -51,6 +52,7 @@ function copy_charts_to_dest()
     cp -r ${src_dir}/${TRAFFIC_ENGINE_HELM_CHART_TAR} ${charts_dest_dir}
     cp -r ${src_dir}/${INJECT_HELM_CHART_TAR} ${charts_dest_dir}
     cp -r ${src_dir}/${MRZCPD_HELM_CHART_TAR} ${charts_dest_dir}
+    cp -r ${src_dir}/${TREX_HELM_CHART_TAR} ${charts_dest_dir}
     cp -r ${src_dir}/${DP_TRACE_HELM_CHART_TAR} ${charts_dest_dir}
 
 }
@@ -75,6 +77,7 @@ function replace_clixon_chart_name()
     sed -ie "s/^chart_name=.*/chart_name=${TRAFFIC_ENGINE_HELM_CHART_TAR}/g" ${clixon_conf_path}
     sed -ie "s/^inject_adapter_chart_name=.*/inject_adapter_chart_name=${INJECT_HELM_CHART_TAR}/g" ${clixon_conf_path}
     sed -ie "s/^mrzcpd_chart_name=.*/mrzcpd_chart_name=${MRZCPD_HELM_CHART_TAR}/g" ${clixon_conf_path}
+    sed -ie "s/^trex_chart_name=.*/trex_chart_name=${TREX_HELM_CHART_TAR}/g" ${clixon_conf_path}
     sed -ie "s/^datapath_trace_chart_name=.*/datapath_trace_chart_name=${DP_TRACE_HELM_CHART_TAR}/g" ${clixon_conf_path}
 }
 

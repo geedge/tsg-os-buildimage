@@ -1,8 +1,8 @@
 ---
-- name: "install packet-io-uio-binder"
+- name: "install nic-uio-binder"
   yum:
     name:
-      - "{{ packet_io_uio_binder_rpm_version.packet_io_uio_binder }}"
+      - "{{ nic_uio_binder_rpm_version.nic_uio_binder }}"
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
 

@@ -121,10 +121,10 @@ spec:
         {{ template "mrzcpd.mount.prestart" . }}
         resources: 
           limits:
-            mrzcpd/mrzcpd: 1
+            nic-uio/packet-io-engine: 1
 {{- if .Values.mrzcpd.interfaces }}
 {{- range $interface := .Values.mrzcpd.interfaces }}
-            mrzcpd/{{ $interface.name }}: 1
+            nic-uio/{{ $interface.name }}: 1
 {{- end }}
 {{- end }}
             hugepages-1Gi: {{.Values.mrzcpd.hugepages }}

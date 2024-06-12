@@ -1,0 +1,34 @@
+- name: "Install python3 module and dependent package"
+  shell: yum install -y lshw python3 which pciutils iproute vim kmod  libnl3-devel perl-generators iptables-devel numactl-libs
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "Install  mlnx-ofed-user-space rpm package"
+  yum:
+    name: "{{ item.value }}"
+    conf_file: "{{ rpm_repo_config_path }}"
+    state: present
+  with_dict: "{{ mlnx_ofed_user_space_only_rpm_version }}"
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "Create /opt/tsg/trex directory if it does not exist"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /opt/tsg/trex
+
+- name: "copy trex v3.02 to dest"
+  copy:
+    src: "{{ role_path }}/files/v3.02.tar.gz"
+    dest: /opt/tsg/trex/v3.02.tar.gz
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "copy generate-trex-conf.sh to dest"
+  copy:
+    src: "{{ role_path }}/files/generate-trex-conf.sh"
+    dest: /opt/tsg/trex/generate-trex-conf.sh
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "unzip trex.tar"
+  shell: tar -xzvf /opt/tsg/trex/v3.02.tar.gz -C /opt/tsg/trex && rm -f /opt/tsg/trex/v3.02.tar.gz
