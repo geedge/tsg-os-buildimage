@@ -4,11 +4,10 @@ set -x
 
 tsg_os_HAL_cfg_file="/etc/sysconfig/tsg-os-HAL.conf"
 
-grub_cfg_file="/boot/grub/grub.cfg"
 tsg_clixon_cfg_file="/opt/tsg/clixon/etc/mgnt-srv.conf"
-k3s_cfg_file="/etc/rancher/k3s/config.yaml"
 mrzcpd_conf_file="/var/run/share/container_mrzcpd.conf"
 cpu_partitioning_conf_file='/etc/tuned/cpu-partitioning-variables.conf'
+tsg_clixon_default_db_file='/etc/clixon/default_db'
 
 cpu_core_num=$(lscpu | grep "CPU(s):" | head -n 1 | sed  -r 's/CPU\(s\):\s{1,}//g')
 mem_num=$(free -m | grep Mem | awk '{print $2}')
@@ -77,50 +76,15 @@ load_tsg_os_HAL_config()
     fi
 }
 
-set_k3s_config()
+set_clixon_configuration()
 {
-    local mem_num="$1"
-    local system_mem
-
-    if [ ! -n "$KUBE_RESERVED" ]; then
-        KUBE_RESERVED=2
-    fi
-
-    if [ ! -n "$SYSTEM_RESERVED" ]; then
-        if [ $mem_num -le "32768" ]; then
-            SYSTEM_RESERVED=8
-        elif [ $mem_num -le "65536" ]; then
-            SYSTEM_RESERVED=8
-        elif [ $mem_num -le "131072" ]; then
-            SYSTEM_RESERVED=16
-        else
-            SYSTEM_RESERVED=32
-        fi
-    fi
-
-    system_mem=$(($HUGEPAGES + $SYSTEM_RESERVED))
-cat <<EOF > ${k3s_cfg_file}
-kubelet-arg:
-  - "kube-reserved=memory=${KUBE_RESERVED}Gi"
-  - "system-reserved=memory=${system_mem}Gi"
-  - "sync-frequency=1s"
-kube-apiserver-arg:
-  - "event-ttl=48h0m0s"
-EOF
-}
-
-set_tsg_clixon_conf()
-{
-    [ -f ${tsg_clixon_cfg_file} ] && sed -i "s/^cpu_range=.*$/cpu_range=${WORKLOAD_CORE}/g" ${tsg_clixon_cfg_file}
-    [ -f ${tsg_clixon_cfg_file} ] && sed -i "s/^hugepages=.*$/hugepages=${HUGEPAGES}/g" ${tsg_clixon_cfg_file}
     [ -f ${tsg_clixon_cfg_file} ] && sed -i "s/^nf_count=.*$/nf_count=${NF_COUNT}/g" ${tsg_clixon_cfg_file}
 }
 
-set_mrzcpd_conf()
+set_mrzcpd_configuration()
 {
     echo "sz_indirect_pktmbuf=${MRZCPD_INDIRECT_PKTMBUF}" > ${mrzcpd_conf_file}
     echo "sz_direct_pktmbuf=${MRZCPD_DIRECT_PKTMBUF}" >> ${mrzcpd_conf_file}
-    echo "iocore=${IOCORE}" >> ${mrzcpd_conf_file}
     echo "poll_wait_throttle=${MRZCPD_POLL_WAIT_THROTTLE}" >> ${mrzcpd_conf_file}
     echo "sz_data=${MRZCPD_SZ_DATA}" >> ${mrzcpd_conf_file}
     echo "sz_tunnel=${MRZCPD_SZ_TUNNEL}" >> ${mrzcpd_conf_file}
@@ -128,7 +92,7 @@ set_mrzcpd_conf()
     echo "create_mode=${MRZCPD_CREATE_MODE}" >> ${mrzcpd_conf_file}
 }
 
-set_hugepages()
+calculate_hugepages()
 {
     if [ ! -n "$HUGEPAGES" ]; then
         if [ $mem_num -le "32768" ]; then
@@ -143,14 +107,14 @@ set_hugepages()
     fi
 }
 
-set_mrzcpd_indirect_pktmbuf()
+calculate_mrzcpd_indirect_pktmbuf()
 {
     if [ ! -n "$MRZCPD_INDIRECT_PKTMBUF" ]; then
         MRZCPD_INDIRECT_PKTMBUF=`expr 8192 / $NUMA_NODE_CNT`
     fi
 }
 
-set_mrzcpd_sz_tunnel()
+calculate_mrzcpd_sz_tunnel()
 {
     if [ ! -n "$MRZCPD_SZ_TUNNEL" ]; then
         if [ $mem_num -le "32768" ]; then
@@ -165,7 +129,7 @@ set_mrzcpd_sz_tunnel()
     fi
 }
 
-set_mrzcpd_direct_pktmbuf()
+calculate_mrzcpd_direct_pktmbuf()
 {
     if [ ! -n "$MRZCPD_DIRECT_PKTMBUF" ]; then
         if [ $mem_num -le "32768" ]; then
@@ -180,58 +144,21 @@ set_mrzcpd_direct_pktmbuf()
     fi
 }
 
-set_cpu_list()
+calculate_cpu_list()
 {
     local vendor
 
     vendor=$(lscpu | grep "^Vendor ID" | awk '{print $3}')
-    if [ -n "$NIC_CPU_Affinity_Switch" ] && [ "$NIC_CPU_Affinity_Switch" == "1" ]; then
+    if [ "$vendor" == 'AuthenticAMD' ]; then
         . /opt/tsg/tsg-os-HAL/scripts/cpu_amd.sh
-    elif [ -n "$NIC_CPU_Affinity_Switch" ] && [ "$NIC_CPU_Affinity_Switch" == "0" ]; then
-        . /opt/tsg/tsg-os-HAL/scripts/cpu_default.sh
-    elif [ "$vendor" == 'AuthenticAMD' ]; then
-        . /opt/tsg/tsg-os-HAL/scripts/cpu_amd.sh
+        if [ ! -n "$NIC_CPU_Affinity_Switch" ]; then
+            NIC_CPU_Affinity_Switch=1
+        fi
     else
         . /opt/tsg/tsg-os-HAL/scripts/cpu_default.sh
     fi
 
     allocate_cpu
-}
-
-set_grub_cmdline_file()
-{
-    local result=0
-    local grub_cmdline_key="$1"
-    local grub_cmdline_value="$2"
-
-    if ! grep -q " ${grub_cmdline_key}=" "$grub_cfg_file"; then
-        sed -i "/ linux / s/$/ ${grub_cmdline_key}=${grub_cmdline_value} /" $grub_cfg_file
-        result=1
-    elif ! grep -qE " ${grub_cmdline_key}=${grub_cmdline_value}\s| ${grub_cmdline_key}=${grub_cmdline_value}$" "$grub_cfg_file"; then
-        sed -i "s/ ${grub_cmdline_key}=\(\w\+,\)*\(\w\+-\w\+,*\)*\w*,*\s*/ ${grub_cmdline_key}=${grub_cmdline_value} /" $grub_cfg_file
-        result=1
-    fi
-    return $result
-}
-
-set_grub_cmdline()
-{
-    local set_grub_flag=0
-
-    grub_cmdline_key=("hugepagesz" "hugepages" "isolcpus")
-    grub_cmdline_value=("1G" ${HUGEPAGES} ${IOCORE})
-
-    for index in "${!grub_cmdline_key[@]}"
-    do
-        set_grub_cmdline_file ${grub_cmdline_key[$index]} ${grub_cmdline_value[$index]}
-        if [ "$?" == "1" ]; then
-            set_grub_flag=1
-        fi
-    done
-
-    if [ "$set_grub_flag" == "1" ]; then
-        reboot
-    fi
 }
 
 build_and_mount_traffic_engine_logs_vdisk()
@@ -281,14 +208,6 @@ build_and_mount_traffic_engine_logs_vdisk()
         losetup -c ${loop_device}
         resize2fs  ${loop_device}
     fi
-}
-
-
-set_cpu_partitioning()
-{
-cat <<EOF > ${cpu_partitioning_conf_file}
-isolated_cores=${IOCORE}
-EOF
 }
 
 read_device_type()
@@ -346,33 +265,40 @@ metadata:
 EOF
 }
 
-load_tsg_os_HAL_config
-mkdir -p /run/mrzcpd/hugepages
 mkdir -p /var/run/share
-
-build_and_mount_traffic_engine_logs_vdisk
-set_hugepages
-
-set_cpu_list
-set_grub_cmdline
-
-set_cpu_partitioning
-
+mkdir -p /run/mrzcpd/hugepages
 mount -t hugetlbfs -o pagesize=1073741824 nodev /var/run/mrzcpd/hugepages
 modprobe vfio
 echo 1 > /sys/module/vfio/parameters/enable_unsafe_noiommu_mode
 modprobe vfio_pci
 
-set_mrzcpd_indirect_pktmbuf
-set_mrzcpd_sz_tunnel
-set_mrzcpd_direct_pktmbuf
+load_tsg_os_HAL_config
 
-set_k3s_config ${mem_num}
-set_tsg_clixon_conf
-set_mrzcpd_conf
+if [ ! -n "$NUMA_NODE_CNT" ]; then
+    NUMA_NODE_CNT=`lscpu | grep "NUMA node(s):" | head -n 1 | sed  -r 's/NUMA node\(s\):\s{1,}//g'`
+fi
+
+build_and_mount_traffic_engine_logs_vdisk
+
+calculate_hugepages
+calculate_cpu_list
+
+. /opt/tsg/tsg-os-HAL/scripts/set_nic_cpu_affinity.sh
+build_nic_cpu_affinity_configuration ${NIC_CPU_Affinity_Switch}
+
+calculate_mrzcpd_indirect_pktmbuf
+calculate_mrzcpd_sz_tunnel
+calculate_mrzcpd_direct_pktmbuf
+
+set_k3s_configuration ${mem_num}
+set_clixon_configuration
+set_mrzcpd_configuration
 
 # add sn to k8s node annotations.
 read_device_type
 read_sn
 retry_read_sn_when_sn_unavailable
 add_node_metadata
+
+. /opt/tsg/tsg-os-HAL/scripts/build_clixon_default_db.sh
+build_default_db
