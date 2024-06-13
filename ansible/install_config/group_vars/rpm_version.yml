@@ -81,7 +81,7 @@ tsg_app_rpm_version:
   context_based_detector: context_based_detector-6.0.6.1cb9137
 
 tsg_diagnose_rpm_version:
-  tsg_diagnose: tsg-diagnose-2.0.6.8b70f1f
+  tsg_diagnose: tsg-diagnose-2.0.7.4d60028
 
 http_healthcheck_rpm_version:
   http_healthcheck: http_healthcheck-2.0.1.0884451
