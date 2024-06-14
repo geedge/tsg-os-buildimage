@@ -44,5 +44,5 @@
   when: runtime_env == 'TSG-X-P0906'
 
 - name: "copy images tar to k3s images directory"
-  shell: cp /opt/tsg/tsg-diagnose/images/*.tar /var/lib/rancher/k3s/agent/images/
+  shell: mv /opt/tsg/tsg-diagnose/images/*.tar /var/lib/rancher/k3s/agent/images/
   when: runtime_env == 'TSG-X-P0906'
