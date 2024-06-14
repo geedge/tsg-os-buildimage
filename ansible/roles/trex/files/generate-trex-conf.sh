@@ -11,6 +11,8 @@ for interface in "${arr[@]}"; do
   NIC_PCI+="\"$interface\""
 done
 
+port_limit=${#arr[@]}
+
 declare -A NUMA
 for cpu in ${CPU_AFFINITY[@]:2}; do
   numa_node=$(lscpu -p=CPU,NODE | grep "^$cpu," | cut -d',' -f2)
@@ -18,7 +20,7 @@ for cpu in ${CPU_AFFINITY[@]:2}; do
 done
 
 cat << EOF > /etc/trex_cfg.yaml
-- port_limit: 2
+- port_limit: $port_limit
   version: 2
   stack: legacy
   interfaces: [${NIC_PCI}]
@@ -56,10 +58,3 @@ for numa_node in "${!NUMA[@]}"; do
   echo "        threads: [${threads// /,}]" >> /etc/trex_cfg.yaml
   ((socket_id++))
 done
-
-cat << EOF >> /etc/trex_cfg.yaml
-  tw:
-    buckets: 2048
-    levels: 3
-    bucket_time_usec: 40.0
-EOF

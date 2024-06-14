@@ -17,13 +17,13 @@ spec:
       hostNetwork: true
       containers:
       - name: trex
-        image: registry.gdnt-cloud.website/trex::{{ .Chart.AppVersion }}
+        image: registry.gdnt-cloud.website/trex:{{ .Chart.AppVersion }}
         command: 
           - "bash"
           - "-ec"
           - |
-            chmod +x /host/root/test.sh
-            /host/root/test.sh
+            chmod +x /opt/tsg/trex/generate-trex-conf.sh
+            /opt/tsg/trex/generate-trex-conf.sh
             while true; do sleep 1024;done
         securityContext:
           privileged: true
@@ -42,6 +42,12 @@ spec:
         env:
         - name: CPU_AFFINITY
           value: {{ range $index, $cpu :=.Values.trex.cpu_affinity -}}{{- if eq $index 0 -}}{{$cpu}}{{- else -}},{{$cpu}}{{- end -}}{{- end }}
+        - name: TREX_PATH
+          value: /opt/tsg/trex/v3.02
+        - name: PBT_PATH
+          value: /opt/tsg/perf-bench-tool
+        - name: PYTHONPATH
+          value: /opt/tsg/trex/v3.02/automation/trex_control_plane/interactive/
         volumeMounts:
         - name: host
           mountPath: /host

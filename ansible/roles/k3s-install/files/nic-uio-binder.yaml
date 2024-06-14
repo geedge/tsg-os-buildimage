@@ -16,12 +16,12 @@ spec:
     spec:
       containers:
       - name: nic-uio-binder
-        image: registry.gdnt-cloud.website/tsg-nic-uio-binder:%%MRZCPD_DEVICE_PLUGIN_IMAGE_TAG%%
+        image: registry.gdnt-cloud.website/tsg-nic-uio-binder:%%NIC_UIO_BINDER_IMAGE_TAR%%
         command:
           - "bash"
           - "-ec"
           - |
-            /opt/tsg/nic-uio-binder/bin/deviceplugin 
+            /opt/tsg/nic-uio-binder/bin/nic-uio-binder
         volumeMounts:
         - name: hwfile
           mountPath: /var/run/mrzcpd
@@ -35,7 +35,7 @@ spec:
           privileged: true
       initContainers:
       - name: init-nic-uio-binder
-        image: registry.gdnt-cloud.website/tsg-nic-uio-binder:%%MRZCPD_DEVICE_PLUGIN_IMAGE_TAG%%
+        image: registry.gdnt-cloud.website/tsg-nic-uio-binder:%%NIC_UIO_BINDER_IMAGE_TAR%%
         command: 
           - "bash"
           - "-ec"
