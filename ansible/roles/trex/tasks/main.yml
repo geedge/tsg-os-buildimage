@@ -36,3 +36,17 @@
 
 - name: "unzip trex.tar"
   shell: tar -xzvf /opt/tsg/trex/v3.02.tar.gz -C /opt/tsg/trex && rm -f /opt/tsg/trex/v3.02.tar.gz
+
+- name: "copy performance benchmark tool to dest"
+  copy:
+    src: "{{ role_path }}/files/perf-bench-tool.tar.gz"
+    dest: /opt/tsg/perf-bench-tool.tar.gz
+  when: runtime_env == 'TSG-X-P0906'
+
+- name: "unzip perf-bench-tool.tar.gz"
+  shell: tar -xzvf /opt/tsg/perf-bench-tool.tar.gz -C /opt/tsg/ && rm -f /opt/tsg/perf-bench-tool.tar.gz
+
+- name: "change opt/tsg/perf-bench-tool/pbt permission to 755"
+  file:
+    path: /opt/tsg/perf-bench-tool/pbt
+    mode: '0755'
