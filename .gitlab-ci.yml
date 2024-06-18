@@ -21,6 +21,7 @@ stages:
     - ./tools/upload.sh 
   tags:
     - tsg-os-installer
+  resource_group: global
 
 .build_onie_bin_x86_64_COTS:
   script:
@@ -33,6 +34,7 @@ stages:
     - ./tools/upload.sh 
   tags:
     - tsg-os-builder-el8
+  resource_group: global
 
 .build_container_images_x86_64_COTS:
   script:
@@ -46,6 +48,7 @@ stages:
     - ./tools/upload.sh 
   tags:
     - tsg-os-builder-el8
+  resource_group: global
 
 .notify_jobs_done:
   cache:
@@ -89,6 +92,7 @@ stages:
     - mv /tmp/has-built-files.txt ./images
   tags:
     - tsg-os-builder-el8
+  resource_group: global
 
 # feature_branch_build_7400_mcn0:
 #   image: $BUILD_BASED_IMAGE_CENTOS7
