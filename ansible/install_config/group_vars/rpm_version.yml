@@ -77,7 +77,7 @@ tfe_rpm_version:
   tfe-pr: tfe-pr-4.9.2.adf5858
 
 tsg_app_rpm_version:
-  context_based_detector: context_based_detector-6.0.6.1cb9137
+  context_based_detector: context_based_detector-7.0.0.91d8e66
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.8.ffa9968
