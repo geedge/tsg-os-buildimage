@@ -5,8 +5,7 @@ firewall_rpm_version:
   conn_telemetry: conn_telemetry-1.0.3.4ef6df6
   firewall: firewall-3.3.1.face8e3
   glimpse_detector: glimpse_detector-3.0.3.5555ba7
-  qdpi_detector: qdpi_detector-4.0.5.5cd1ccb
-  #tsg_ddos_sketch: tsg_ddos_sketch-2.0.2.35e03d0
+  qdpi_detector: qdpi_detector-5.0.0.75424a0
   dos_protector: dos_protector-2.0.1.434f8b6
   dns: dns-2.1.7.1da8dfa
   ftp: ftp-1.0.16.d996236
