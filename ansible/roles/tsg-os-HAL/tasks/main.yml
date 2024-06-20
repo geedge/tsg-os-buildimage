@@ -5,24 +5,10 @@
     mode: 0755
   with_items:
     - tsg-os-HAL.sh
-  when: runtime_env == 'TSG-X-P0906'
-
-- name: "cpu_amd: copy shell file to dest"
-  copy:
-    src: "{{ role_path }}/files/script/{{ item }}"
-    dest: /opt/tsg/tsg-os-HAL/scripts/
-    mode: 0755
-  with_items:
     - cpu_amd.sh
-  when: runtime_env == 'TSG-X-P0906'
-
-- name: "cpu_default: copy shell file to dest"
-  copy:
-    src: "{{ role_path }}/files/script/{{ item }}"
-    dest: /opt/tsg/tsg-os-HAL/scripts/
-    mode: 0755
-  with_items:
     - cpu_default.sh
+    - build_clixon_default_db.sh
+    - set_nic_cpu_affinity.sh
   when: runtime_env == 'TSG-X-P0906'
 
 - name: "tsg-os-HAL: install numactl"
