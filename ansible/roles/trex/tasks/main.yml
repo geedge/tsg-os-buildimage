@@ -6,6 +6,10 @@
   shell: pip3 install pyyaml
   when: runtime_env == 'TSG-X-P0906'
 
+- name: "Install argcomplete module"
+  shell: pip3 install argcomplete
+  when: runtime_env == 'TSG-X-P0906'  
+
 - name: "Install  mlnx-ofed-user-space rpm package"
   yum:
     name: "{{ item.value }}"
