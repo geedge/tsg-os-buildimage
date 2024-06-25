@@ -313,7 +313,7 @@ role=4
 
 # This module handles the global configuration settings.
 [service]
-iocore=1,2,3,4
+iocore={{ range $index,$core := .Values.mrzcpd.cpu_affinity}}{{- if ne $index 0 }},{{ end -}}{{ $core }}{{- end }}
 distmode={{ .Values.mrzcpd.distmode }}
 hashmode=0
 poll_wait_throttle=512

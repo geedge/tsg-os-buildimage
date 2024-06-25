@@ -23,6 +23,9 @@ spec:
           - "-ec"
           - |
             chmod +x /opt/tsg/trex/generate-trex-conf.sh
+            echo 'export PATH=$PATH:/opt/tsg/perf-bench-tool' >> ~/.bashrc
+            echo 'eval "$(register-python-argcomplete pbt)"' >> ~/.bashrc
+            source ~/.bashrc
             /opt/tsg/trex/generate-trex-conf.sh
             while true; do sleep 1024;done
         securityContext:
@@ -49,8 +52,6 @@ spec:
         - name: PYTHONPATH
           value: /opt/tsg/trex/v3.02/automation/trex_control_plane/interactive/
         volumeMounts:
-        - name: host
-          mountPath: /host
         - name: dev-vfio
           mountPath: /dev/vfio
         - name: modules
@@ -69,9 +70,6 @@ spec:
       - name: dev-vfio
         hostPath:
           path: /dev/vfio
-      - name: host
-        hostPath:
-          path: /
       - name: hugepage-1gi
         emptyDir:
           medium: HugePages-1Gi
