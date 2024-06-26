@@ -244,6 +244,7 @@ spec:
             {{- end }}
             ip a a {{ .Values.sce_config.vxlan_config.endpoint_ip }}/{{ .Values.sce_config.vxlan_config.endpoint_mask }} dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} noprefixroute
             ip rule add dport 3784 table 10
+            iptables -t mangle -A PREROUTING -p udp --dport 3784 -j TTL --ttl-set 255
             {{- end }}
         securityContext:
           privileged: true
