@@ -6,8 +6,8 @@ build_default_db()
    <system xmlns=\"urn:yang:tsg-os-mgnt-srv\">
       <resources>
          <packet_io_engine_hugepages>${HUGEPAGES}</packet_io_engine_hugepages>
-         <packet_io_engine_core>${IOCORE}</packet_io_engine_core>
-         <workload_core>${WORKLOAD_CORE}</workload_core>
+         <packet_io_engine_cores>${IOCORE}</packet_io_engine_cores>
+         <workload_cores>${WORKLOAD_CORE}</workload_cores>
       </resources>
    </system>
 </config>"
