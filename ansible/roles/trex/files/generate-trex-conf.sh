@@ -14,7 +14,7 @@ done
 port_limit=${#arr[@]}
 
 declare -A NUMA
-for cpu in ${CPU_AFFINITY[@]:2}; do
+for cpu in ${CPU_AFFINITY[@]}; do
   numa_node=$(lscpu -p=CPU,NODE | grep "^$cpu," | cut -d',' -f2)
   NUMA[$numa_node]+="$cpu,"
 done
@@ -46,8 +46,8 @@ cat << EOF > /etc/trex_cfg.yaml
             dest_mac   : "aa:bb:cc:dd:ee:fe"
             src_mac    : "00:11:22:33:44:54"
   platform:
-    master_thread_id: ${CPU_AFFINITY[0]}
-    latency_thread_id: ${CPU_AFFINITY[1]}
+    master_thread_id: ${MASTER_IOCORE}
+    latency_thread_id: ${LATENCY_IOCORE}
     dual_if:
 EOF
 

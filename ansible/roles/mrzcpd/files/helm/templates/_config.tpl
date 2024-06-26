@@ -323,6 +323,7 @@ poll_wait_enable=1
 virtaddr=0x500000000000
 loglevel=7
 huge-dir=/run/mrzcpd/hugepages
+legacy_mem=0
 
 [keepalive]
 check_spinlock=1
