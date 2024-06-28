@@ -200,6 +200,6 @@ spec:
       containers:
       - command:
         - helm-controller
-        image: rancher/helm-controller:v0.15.8-amd64
+        image: rancher/helm-controller:v0.15.10-amd64
         name: helm-controller
 ---
