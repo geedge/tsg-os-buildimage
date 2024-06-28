@@ -74,7 +74,7 @@ spec:
               - source_labels: [pod]
                 action: replace
                 target_label: serviceFunction
-                regex: (.*)-(firewall|proxy|shaping|service-chaining)-([a-z0-9]+)-([a-z0-9]+)
+                regex: (.*)-(firewall|proxy|shaping|sce)-([a-z0-9]+)-([a-z0-9]+)
                 replacement: $1
               - regex:  instance
                 action: labeldrop
@@ -183,7 +183,7 @@ spec:
               - source_labels: [__meta_kubernetes_pod_name]
                 action: replace
                 target_label: serviceFunction
-                regex: (.*)-(firewall|proxy|shaping|service-chaining)-([a-z0-9]+)-([a-z0-9]+)
+                regex: (.*)-(firewall|proxy|shaping|sce)-([a-z0-9]+)-([a-z0-9]+)
                 replacement: $1
               - source_labels: [__meta_kubernetes_pod_label_vsysId]
                 action: replace
