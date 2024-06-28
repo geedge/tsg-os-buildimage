@@ -57,6 +57,7 @@
             "async": "on",
             "name": "SESSION-RECORD",
             "topic": "SESSION-RECORD",
+            "client_id": "SESSION-RECORD",
             "mode": [
                 {{- if eq .Values.external_resources.olap.udp_collectors.enable .Values.define_enable_val_yes }}
                 {
@@ -83,6 +84,7 @@
             "async": "on",
             "name": "HTTP-TRANSACTION-RECORD",
             "topic": "TRANSACTION-RECORD",
+            "client_id": "TRANSACTION-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -101,6 +103,7 @@
             "async": "on",
             "name": "MAIL-TRANSACTION-RECORD",
             "topic": "TRANSACTION-RECORD",
+            "client_id": "TRANSACTION-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -119,6 +122,7 @@
             "async": "on",
             "name": "DNS-TRANSACTION-RECORD",
             "topic": "TRANSACTION-RECORD",
+            "client_id": "TRANSACTION-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -137,6 +141,7 @@
             "async": "on",
             "name": "SIP-VOIP-RECORD",
             "topic": "VOIP-RECORD",
+            "client_id": "VOIP-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -155,6 +160,7 @@
             "async": "on",
             "name": "RTP-VOIP-RECORD",
             "topic": "VOIP-RECORD",
+            "client_id": "VOIP-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -173,6 +179,7 @@
             "async": "on",
             "name": "POLICY-PACKET-TRAFFIC-FILE-STREAM-RECORD",
             "topic": "TRAFFIC-FILE-STREAM-RECORD",
+            "client_id": "TRAFFIC-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -191,6 +198,7 @@
             "async": "on",
             "name": "HTTP-REQ-BODY-TRAFFIC-FILE-STREAM-RECORD",
             "topic": "TRAFFIC-FILE-STREAM-RECORD",
+            "client_id": "TRAFFIC-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -209,6 +217,7 @@
             "async": "on",
             "name": "HTTP-RES-BODY-TRAFFIC-FILE-STREAM-RECORD",
             "topic": "TRAFFIC-FILE-STREAM-RECORD",
+            "client_id": "TRAFFIC-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -227,6 +236,7 @@
             "async": "on",
             "name": "MAIL-EML-TRAFFIC-FILE-STREAM-RECORD",
             "topic": "TRAFFIC-FILE-STREAM-RECORD",
+            "client_id": "TRAFFIC-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -245,6 +255,7 @@
             "async": "on",
             "name": "RTP-PACKET-TRAFFIC-FILE-STREAM-RECORD",
             "topic": "TRAFFIC-FILE-STREAM-RECORD",
+            "client_id": "TRAFFIC-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -263,6 +274,7 @@
             "async": "on",
             "name": "TROUBLESHOOTING-FILE-STREAM-RECORD",
             "topic": "TROUBLESHOOTING-FILE-STREAM-RECORD",
+            "client_id": "TROUBLESHOOTING-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -277,6 +289,7 @@
             "async": "off",
             "name": "DOS-SKETCH-RECORD",
             "topic": "DOS-SKETCH-RECORD",
+            "client_id": "DOS-SKETCH-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -291,6 +304,7 @@
             "async": "off",
             "name": "POLICY-RULE-METRIC",
             "topic": "POLICY-RULE-METRIC",
+            "client_id": "POLICY-RULE-METRIC",
             "mode": [
                 {
                     "channel": "kafka",
@@ -305,6 +319,7 @@
             "async": "off",
             "name": "NETWORK-TRAFFIC-METRIC",
             "topic": "NETWORK-TRAFFIC-METRIC",
+            "client_id": "NETWORK-TRAFFIC-METRIC",
             "mode": [
                 {
                     "channel": "kafka",
@@ -319,6 +334,7 @@
             "async": "off",
             "name": "TRAFFIC-TOP-METRIC",
             "topic": "TRAFFIC-TOP-METRIC",
+            "client_id": "TRAFFIC-TOP-METRIC",
             "mode": [
                 {
                     "channel": "kafka",
@@ -333,6 +349,7 @@
             "async": "off",
             "name": "STATISTICS-RULE-METRIC",
             "topic": "STATISTICS-RULE-METRIC",
+            "client_id": "STATISTICS-RULE-METRIC",
             "mode": [
                 {
                     "channel": "kafka",
@@ -347,6 +364,7 @@
             "async": "off",
             "name": "OBJECT-STATISTICS-METRIC",
             "topic": "OBJECT-STATISTICS-METRIC",
+            "client_id": "OBJECT-STATISTICS-METRIC",
             "mode": [
                 {
                     "channel": "kafka",
