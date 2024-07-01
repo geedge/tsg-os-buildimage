@@ -1,8 +1,90 @@
 #!/bin/sh
 
+usage()
+{
+    echo 'Usage:'
+    echo '      --allow-reboot         Reboot the device directly without manual confirmation.'
+    echo '      -h, --help             Give this help'
+    echo 'example: tsg-os-oobc-done '
+    echo 'example: tsg-os-oobc-done --allow-reboot'
+    exit 0
+}
+
+handle_sigterm() {
+    systemctl stop tsg-clixon-restconf
+    systemctl stop tsg-clixon-backend
+    systemctl stop k3s
+    systemctl stop hasp_monitor
+    exit 0
+}
+
+trap 'handle_sigterm' SIGINT SIGTERM
+
+case $1 in
+    --allow-reboot)
+        ;;
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    *)
+        read -p "Executing this command will reboot the device. Do you want to continue and reboot the device? (yes/no): " reboot_status
+        if [[ "$reboot_status" != "yes" ]]; then
+            exit 0
+        fi
+        ;;
+esac
+
 rm -rf /var/lib/.tsg-os-oobc-enable
 
 systemctl start hasp_monitor
 systemctl start k3s
 systemctl start tsg-clixon-backend
 systemctl start tsg-clixon-restconf
+
+function expectpart() {
+    r=$?
+    ret=$1
+    retval=$2
+    expect=$3
+
+    if [ -z "$ret" -a -z "$expect" ]; then
+        return
+    fi
+    # Loop over all variable args expect strings (skip first two args)
+    # note that "expect" var is never actually used
+    # Then test positive for strings, if the token --not-- is detected, then test negative for the rest
+    positive=true
+    let i=0
+    for exp in "$@"; do
+        if [ $i -gt 1 ]; then
+            if [ "$exp" == "--not--" ]; then
+                positive=false
+            else
+                #	   echo "echo \"$ret\" | grep --null -o \"$exp"\"
+                match=$(echo "$ret" | grep --null -i -o "$exp") #-i ignore case XXX -EZo: -E cant handle {}
+                r=$?
+                if $positive; then
+                    if [ $r != 0 ]; then
+                        return 1
+                    fi
+                else
+                    if [ $r == 0 ]; then
+                        return 1
+                    fi
+                fi
+            fi
+        fi
+        let i++
+    done
+    return 0
+}
+
+while true
+do
+    expectpart "$(tsg-os-cli -1 -l o show conf cli)" 0 --not-- "config daemon not running?"
+    if [ "$?" == "0" ]; then
+        break
+    fi
+    sleep 1
+done
