@@ -167,3 +167,6 @@
     name: inotify-tools
     conf_file: "{{ rpm_repo_config_path }}"
     state: present
+
+- name: "install python3 tomlq"
+  shell: python3 -m pip install tomlq
