@@ -67,7 +67,7 @@ dictator_enable=0
 ### note, interface.type options: [pag,pcap,marsio]
     [packet_io.internal.interface]
         type="marsio"
-        name={{ .Values.nic_raw_name }}
+        name="{{ .Values.nic_raw_name }}"
     [packet_io.external.interface]
         type="pcap"
     name="lo"
