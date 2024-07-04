@@ -70,12 +70,6 @@
     - /usr/lib/systemd/system/mrzcpd_hwdb_setup.service
   when: runtime_env == 'TSG-X-P0906'
 
-- name: "copy replace.sh to dest"
-  copy:
-    src: "{{ role_path }}/files/replaceconf.sh"
-    dest: /opt/tsg/mrzcpd/bin/replaceconf.sh
-    mode: 0644
-  when: runtime_env == 'TSG-X-P0906'
 
 
 

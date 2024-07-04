@@ -82,8 +82,6 @@ spec:
             ldconfig -C /etc/ld.so.cache -r /host
 
             cp -f /opt/tsg/config/mrzcpd-static-conf/static.conf /opt/tsg/mrzcpd/etc/mrglobal.conf
-            chmod +x /opt/tsg/mrzcpd/bin/replaceconf.sh
-            /opt/tsg/mrzcpd/bin/replaceconf.sh
             ln -s /opt/tsg/mrzcpd/shared/mrglobal.dynamic.conf /opt/tsg/mrzcpd/etc/mrglobal.dynamic.conf
             
             {{ template "mrzcpd.prestart" . }}
@@ -108,8 +106,6 @@ spec:
           mountPath: /var/run/mrzcpd/hugepages
         - name: dpdk
           mountPath: /var/run/dpdk
-        - name: container-mrzcpd
-          mountPath: /var/run/share/container_mrzcpd.conf
         - name: dev-vfio
           mountPath: /dev/vfio
         - name: host-root
@@ -364,10 +360,6 @@ spec:
         hostPath:
           path: /etc/ld.so.conf.d
           type: Directory
-      - name: container-mrzcpd
-        hostPath:
-          path:  /var/run/share/container_mrzcpd.conf
-          type: File
       - name: dev-vfio
         hostPath:
           path: /dev/vfio

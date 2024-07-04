@@ -108,6 +108,13 @@ mrzcpd:
   hugepages: 32Gi
   linkdb: []
   obp_devices: [{'name': 'obp1', 'type': '2', 'connect': '3', 'address': '2.2.2.2', 'port': '6800', 'segment': [{'id': '1', 'workline':'0', 'heartbeat_mode': '1', 'hb_send_interval_in_ms': '100', 'hb_timeout_interval_in_ms': '100', 'hb_lost_threshold': '5', 'nonrevertive_mode': '1'}, {'id': '1', 'workline':'0', 'heartbeat_mode': '1', 'hb_send_interval_in_ms': '100', 'hb_timeout_interval_in_ms': '100', 'hb_lost_threshold': '5', 'nonrevertive_mode': '1'}]}]
+  pktmbuf_max_size: 4096
+  pktmbuf_queue_size: 512
+  pktmbuf_pool_create_mode: 1
+  pktmbuf_pool_max_elements_count: 2097151
+  enable_check_pktmbuf_leak: 1
+  enable_poll_wait_throttle: 512
+  indirect_pktmbuf: 8192
   debug:
     enable_liveness_probe: yes
     define_enable_val_yes: yes

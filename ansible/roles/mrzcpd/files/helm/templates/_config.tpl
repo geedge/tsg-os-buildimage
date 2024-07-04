@@ -91,7 +91,7 @@ device= {{- range $interface := .Values.mrzcpd.interfaces }}{{ $interface.name }
 {{- else }}
 device= {{ $nf_nic_list }},{{ $ep_nic_l2_list}},{{ $ep_nic_l3_list }},{{ $mirr_nic_list}},nf_inject,virtio_dign_c,virtio_dign_s
 {{- end }}
-sz_tunnel=8192
+sz_tunnel={{ .Values.mrzcpd.pktmbuf_queue_size}}
 sz_buffer=0
 
 
@@ -316,7 +316,7 @@ role=4
 iocore={{ range $index,$core := .Values.mrzcpd.cpu_affinity}}{{- if ne $index 0 }},{{ end -}}{{ $core }}{{- end }}
 distmode={{ .Values.mrzcpd.distmode }}
 hashmode=0
-poll_wait_throttle=512
+poll_wait_throttle={{ .Values.mrzcpd.enable_poll_wait_throttle }}
 poll_wait_enable=1
 
 [eal]
@@ -332,14 +332,14 @@ check_spinlock=1
 ctrlzone0=tunnat,64
 
 [pool]
-create_mode=1
-sz_direct_pktmbuf=2097152
-sz_indirect_pktmbuf=8192
+create_mode={{ .Values.mrzcpd.pktmbuf_pool_create_mode }}
+sz_direct_pktmbuf={{ int .Values.mrzcpd.pktmbuf_pool_max_elements_count}}
+sz_indirect_pktmbuf={{ .Values.mrzcpd.indirect_pktmbuf}}
 sz_cache=512
-sz_data=4096
+sz_data={{ .Values.mrzcpd.pktmbuf_max_size}}
 
 [buffer_leak_detect]
-check_buffer_leak=1
+check_buffer_leak={{ .Values.mrzcpd.enable_check_pktmbuf_leak}}
 
 [ctrlmsg]
 listen_addr=0.0.0.0
