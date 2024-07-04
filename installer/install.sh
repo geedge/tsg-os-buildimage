@@ -317,7 +317,7 @@ mount -t ext4 ${blk_dev}${exp_part_tsg_os_data} ${distro_mnt}/data
 
 echo "Setting up TSG-OS sysroot .."
 chroot ${distro_mnt} /distro-setup.sh ${blk_dev}
-
+rm -f ${distro_mnt}/distro-setup.sh
 read_device_type
 install_patches
 append_kernel_args
