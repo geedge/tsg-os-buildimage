@@ -15,7 +15,6 @@
     - {role: sapp, tags: sapp}
     - {role: kni, tags: kni}
     - {role: firewall, tags: firewall}
-    - {role: tsg_app, tags: tsg_app}
     - {role: http_healthcheck,tags: http_healthcheck}
     - {role: redis, tags: redis}
     - {role: maat-redis, tags: maat-redis}
@@ -94,7 +93,6 @@
     - {role: framework, tags: framework}
     - {role: sapp, tags: sapp}
     - {role: firewall, tags: firewall}
-    - {role: tsg_app, tags: tsg_app}
     - {role: hasp, tags: hasp}
 
 - hosts: x86_64_COTS-proxy

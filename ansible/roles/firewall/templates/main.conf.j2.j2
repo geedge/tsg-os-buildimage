@@ -67,37 +67,10 @@ STAT_NAME="firewall"
 STAT_INTERVAL_TIME_S=5
 STAT_OUTPATH="metrics/firewall_local_file_stat.json"
 
-[context_based_detector]
-LOG_LEVEL=30
-LOG_PATH="log/context_based_detector.log"
-SENDBACK_SWITCH=0
-
-[APP_SKETCH_FEEDBACK]
-QOS=0
-PUBLISH_TOPIC="APP_SIGNATURE_ID"
-#CLIENT_ID=
-#BROKER_IP=
-#BROKER_PORT=
-
 [qdpi_detector]
 debug_swtich=30
 intput_max_packet=20
 qmdpi_engine_config=injection_mode=stream;nb_workers={{ workload_firewall.worker_threads }};nb_flows=8000;basic_dpi_enable=1;classification_cache_enable=0;fm_flow_table_alloc_mode=0
-
-[TSG_DDOS_SKETCH]
-debug_swtich=30
-en_screen=1
-throughput=1
-mv_depth=4
-mv_width=13660
-timestemp=5
-max_report_num=5000
-min_report_num=0
-{% raw %}tcp_flood_thresh="{{ ddossketch.tcp_flood_report_thresh }}"
-udp_flood_thresh="{{ ddossketch.udp_flood_report_thresh }}"
-icmp_flood_thresh="{{ ddossketch.icmp_flood_report_thresh }}"
-dns_flood_thresh="{{ ddossketch.dns_flood_report_thresh }}"
-{% endraw %}
 
 {% if dp_steering_firewall.enable_mirror == 1 %}
 [TRAFFIC_MIRROR]
