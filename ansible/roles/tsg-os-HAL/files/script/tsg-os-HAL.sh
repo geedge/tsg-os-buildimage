@@ -5,7 +5,6 @@ set -x
 tsg_os_HAL_cfg_file="/etc/sysconfig/tsg-os-HAL.conf"
 
 tsg_clixon_cfg_file="/opt/tsg/clixon/etc/mgnt-srv.conf"
-mrzcpd_conf_file="/var/run/share/container_mrzcpd.conf"
 cpu_partitioning_conf_file='/etc/tuned/cpu-partitioning-variables.conf'
 tsg_clixon_default_db_file='/etc/clixon/default_db'
 
@@ -79,17 +78,6 @@ load_tsg_os_HAL_config()
 set_clixon_configuration()
 {
     [ -f ${tsg_clixon_cfg_file} ] && sed -i "s/^nf_count=.*$/nf_count=${NF_COUNT}/g" ${tsg_clixon_cfg_file}
-}
-
-set_mrzcpd_configuration()
-{
-    echo "sz_indirect_pktmbuf=${MRZCPD_INDIRECT_PKTMBUF}" > ${mrzcpd_conf_file}
-    echo "sz_direct_pktmbuf=${MRZCPD_DIRECT_PKTMBUF}" >> ${mrzcpd_conf_file}
-    echo "poll_wait_throttle=${MRZCPD_POLL_WAIT_THROTTLE}" >> ${mrzcpd_conf_file}
-    echo "sz_data=${MRZCPD_SZ_DATA}" >> ${mrzcpd_conf_file}
-    echo "sz_tunnel=${MRZCPD_SZ_TUNNEL}" >> ${mrzcpd_conf_file}
-    echo "check_buffer_leak=${MRZCPD_CHECK_BUFFER_LEAK}" >> ${mrzcpd_conf_file}
-    echo "create_mode=${MRZCPD_CREATE_MODE}" >> ${mrzcpd_conf_file}
 }
 
 calculate_hugepages()
@@ -290,9 +278,7 @@ calculate_mrzcpd_indirect_pktmbuf
 calculate_mrzcpd_sz_tunnel
 calculate_mrzcpd_direct_pktmbuf
 
-set_k3s_configuration ${mem_num}
 set_clixon_configuration
-set_mrzcpd_configuration
 
 # add sn to k8s node annotations.
 read_device_type
