@@ -51,10 +51,8 @@ cat << EOF > /etc/trex_cfg.yaml
     dual_if:
 EOF
 
-socket_id=0
 for numa_node in "${!NUMA[@]}"; do
   threads=${NUMA[$numa_node]%,}
-  echo "      - socket: $socket_id" >> /etc/trex_cfg.yaml
+  echo "      - socket: $numa_node" >> /etc/trex_cfg.yaml
   echo "        threads: [${threads// /,}]" >> /etc/trex_cfg.yaml
-  ((socket_id++))
 done
