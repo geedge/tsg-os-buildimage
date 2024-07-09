@@ -74,7 +74,7 @@ sapp_rpm_version:
   sapp-pr: sapp-pr-4.3.59.c5b96a4
 
 tfe_rpm_version:
-  tfe: tfe-4.9.2.adf5858
+  tfe: tfe-4.9.6.b73ad5e
 
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.8.ffa9968
