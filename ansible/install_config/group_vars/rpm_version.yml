@@ -77,7 +77,7 @@ tfe_rpm_version:
   tfe: tfe-4.9.7.88a7a8c
 
 tsg_diagnose_rpm_version:
-  tsg_diagnose: tsg-diagnose-2.0.8.ffa9968
+  tsg_diagnose: tsg-diagnose-2.0.9.7f4541b
 
 http_healthcheck_rpm_version:
   http_healthcheck: http_healthcheck-2.0.1.0884451
