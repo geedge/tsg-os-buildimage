@@ -23,8 +23,8 @@ spec:
           - "-ec"
           - |
             chmod +x /opt/tsg/trex/generate-trex-conf.sh
-            echo 'export PATH=$PATH:/opt/tsg/perf-bench-tool' >> ~/.bashrc
-            echo 'eval "$(register-python-argcomplete pbt)"' >> ~/.bashrc
+            echo 'export PATH=$PATH:/opt/tsg/trex-helper' >> ~/.bashrc
+            echo 'eval "$(register-python-argcomplete trex-helper)"' >> ~/.bashrc
             source ~/.bashrc
             /opt/tsg/trex/generate-trex-conf.sh
             while true; do sleep 1024;done
@@ -51,8 +51,8 @@ spec:
           value: {{ range $index, $cpu :=.Values.trex.cpu_affinity -}}{{- if eq $index 0 -}}{{$cpu}}{{- else -}},{{$cpu}}{{- end -}}{{- end }}
         - name: TREX_PATH
           value: /opt/tsg/trex/v3.02
-        - name: PBT_PATH
-          value: /opt/tsg/perf-bench-tool
+        - name: TREX_HELPER_PATH
+          value: /opt/tsg/trex-helper
         - name: PYTHONPATH
           value: /opt/tsg/trex/v3.02/automation/trex_control_plane/interactive/
         volumeMounts:

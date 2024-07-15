@@ -43,14 +43,14 @@
 
 - name: "copy performance benchmark tool to dest"
   copy:
-    src: "{{ role_path }}/files/perf-bench-tool.tar.gz"
-    dest: /opt/tsg/perf-bench-tool.tar.gz
+    src: "{{ role_path }}/files/trex-helper.tar.gz"
+    dest: /opt/tsg/trex-helper.tar.gz
   when: runtime_env == 'TSG-X-P0906'
 
-- name: "unzip perf-bench-tool.tar.gz"
-  shell: tar -xzvf /opt/tsg/perf-bench-tool.tar.gz -C /opt/tsg/ && rm -f /opt/tsg/perf-bench-tool.tar.gz
+- name: "unzip trex-helper.tar.gz"
+  shell: tar -xzvf /opt/tsg/trex-helper.tar.gz -C /opt/tsg/ && rm -f /opt/tsg/trex-helper.tar.gz
 
-- name: "change opt/tsg/perf-bench-tool/pbt permission to 755"
+- name: "change opt/tsg/trex-helper/trex-helper permission to 755"
   file:
-    path: /opt/tsg/perf-bench-tool/pbt
+    path: /opt/tsg/trex-helper/trex-helper
     mode: '0755'
