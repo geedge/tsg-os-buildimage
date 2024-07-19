@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 # Mount the overlay rootfs
 #touch /etc/overlay-mount.log
 read_blk_dev()
@@ -16,7 +16,5 @@ distro_dev="${blk_dev}${distro_part}"
 data_part=5
 data_dev="${blk_dev}${data_part}"
 mount ${distro_dev} /sysroot
-mkdir -p /data
-mount ${data_dev} /data
-mount -t overlay overlay -o lowerdir=/sysroot/etc,upperdir=/data/overlay/rootfs_etc/rw,workdir=/data/overlay/rootfs_etc/work /sysroot/etc -o x-systemd.requires=/sysroot,x-systemd.requires=/data
-umount /data
+mount ${data_dev} /sysroot/data
+mount -t overlay overlay -o lowerdir=/sysroot/etc,upperdir=/sysroot/data/overlay/rootfs_etc/rw,workdir=/sysroot/data/overlay/rootfs_etc/work /sysroot/etc -o x-systemd.requires=/sysroot,x-systemd.requires=/sysroot/data
