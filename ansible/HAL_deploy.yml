@@ -204,3 +204,12 @@
   roles:
     - {role: framework, tags: framework}
     - {role: trex, tags: trex}
+
+- hosts: x86_64_COTS-log-collector
+  remote_user: root
+  vars_files:
+    - install_config/group_vars/HAL_x86_64_COTS.yml
+    - install_config/group_vars/rpm_version.yml
+  roles:
+    - {role: framework, tags: framework}
+    - {role: log-collector, tags: log-collector}

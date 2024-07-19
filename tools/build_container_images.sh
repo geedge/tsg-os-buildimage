@@ -70,6 +70,7 @@ function export_images()
             ${IMAGE_REPO_PREFIX}/trex:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-shaping:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-nic-uio-binder:${OS_RELEASE_VER} \
+             ${IMAGE_REPO_PREFIX}/tsg-log-collector:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-dp-trace-telemetry:${OS_RELEASE_VER}
 }
 ##function define end
@@ -92,6 +93,7 @@ build_image "packet-io-engine"    "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg
 build_image "trex"      "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/trex:${OS_RELEASE_VER}"
 build_image "nic-uio-binder"    "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-nic-uio-binder:${OS_RELEASE_VER}"
 build_image "dp-trace-telemetry"    "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-dp-trace-telemetry:${OS_RELEASE_VER}"
+build_image "log-collector"    "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-log-collector:${OS_RELEASE_VER}"
 
 export_images
 

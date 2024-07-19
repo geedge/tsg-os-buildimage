@@ -122,6 +122,11 @@
     src: "{{ role_path }}/files/nic-uio-binder.yaml"
     dest: /var/lib/rancher/k3s/server/manifests/
 
+- name: "copy log-collector file to dest"
+  copy:
+    src: "{{ role_path }}/files/log-collector.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/
+
 - name: "copy dynamic-hostport yaml file to k3s manifests directory"
   copy:
     src: "{{ role_path }}/files/dynamic-hostport.yaml"
