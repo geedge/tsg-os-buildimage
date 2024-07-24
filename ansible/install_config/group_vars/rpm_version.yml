@@ -107,7 +107,7 @@ packet_adapter_rpm_version:
   packet_adapter: packet_adapter-2.0.2.4f48b59
 
 nic_uio_binder_rpm_version:
-  nic_uio_binder: nic-uio-binder-1.0.10-c67fa3b
+  nic_uio_binder: nic-uio-binder-1.0.11-08f054a
 
 dp_trace_rpm_version:
   dp_trace: dp_trace_telemetry-0.2.1.c48d240

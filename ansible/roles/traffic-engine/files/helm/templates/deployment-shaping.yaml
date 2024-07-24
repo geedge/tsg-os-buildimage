@@ -77,7 +77,7 @@ spec:
             {{- if eq .Values.debug.shaping.enable_interactive_startup .Values.define_enable_val_yes }}
             while true; do sleep 10;done
             {{- else }}
-            exec /opt/tsg/shaping_engine/bin/shaping_engine 2>&1|tee >(systemd-cat -t $DEPLOYMENT_NAME)
+            exec /opt/tsg/shaping_engine/bin/shaping_engine 
             {{- end }}
         ports:
           - containerPort: 8551

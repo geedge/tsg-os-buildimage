@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: log-collector
-        image: registry.gdnt-cloud.website/tsg-log-collector:%%NIC_UIO_BINDER_IMAGE_TAR%%
+        image: registry.gdnt-cloud.website/tsg-log-collector:%%LOG_COLLECTOR_IMAGE_TAR%%
         command:
           - "bash"
           - "-ec"

@@ -10,7 +10,7 @@
 {{- if eq .Values.mrzcpd.debug.enable_interactive_startup .Values.define_enable_val_yes -}}
             while true; do sleep 10;done
 {{- else -}}
-           exec /opt/tsg/mrzcpd/bin/mrzcpd -c /opt/tsg/mrzcpd/etc/mrglobal.conf -s /opt/tsg/mrzcpd/etc/mrglobal.dynamic.conf 2>&1|tee >(systemd-cat -t $DEPLOYMENT_NAME)
+           exec /opt/tsg/mrzcpd/bin/mrzcpd -c /opt/tsg/mrzcpd/etc/mrglobal.conf -s /opt/tsg/mrzcpd/etc/mrglobal.dynamic.conf 
 {{- end }}
 {{- end -}}
 
