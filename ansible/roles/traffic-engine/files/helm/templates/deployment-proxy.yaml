@@ -166,29 +166,6 @@ spec:
         volumeMounts:
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}  
 
-      - name: telegraf-proxy
-        image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
-        imagePullPolicy: Never
-        command:
-          - "bash"
-          - "-ec"
-          - |
-            source /etc/profile.d/device_id.sh
-            /usr/bin/telegraf -config /etc/telegraf/telegraf_proxy.conf -config-directory /etc/telegraf/telegraf_statistic.d
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - name: telegraf-configs-volume
-          mountPath: "/etc/telegraf/telegraf_proxy.conf"
-          subPath: "telegraf_proxy.conf"
-        - name: shared-configs-volume
-          mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "tsg_sn.json"
-        - name: shared-configs-volume
-          mountPath: "/etc/profile.d/device_id.sh"
-          subPath: "device_id.sh"
-        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
-
       - name: prometheus-endpoint
         image: "quay.io/rebuy/exporter-merger:v0.2.0"
         imagePullPolicy: Never
@@ -256,7 +233,7 @@ spec:
         imagePullPolicy: Never
         command:
           - "bash"
-          - "-ec"
+          - "-ecx"
           - |
             mount -o remount,rw /sys
             # disable rpfilter
@@ -350,6 +327,7 @@ spec:
             cp -r /opt/tsg/configs/* /opt/tsg/shared-configs/
             {{ include "public.prepare-access-API" . | nindent 12 }}
             {{- include "public.serialize-node-annotations" . | nindent 12 }}
+            sed -Ei -c "s|DEVICE_ID_PLACE_HOLDER_MARK|${DEVICE_SN?}|g" /opt/tsg/shared-configs/proxy/tfe.conf
 
         securityContext:
           privileged: true
@@ -382,9 +360,6 @@ spec:
       - name: tfe-configs-volume
         configMap:
           name: tfe-{{ .Release.Name }}
-      - name: telegraf-configs-volume
-        configMap:
-          name: telegraf-{{ .Release.Name }}
       - name: shared-configs-volume
         emptyDir: {}
       - name: proxy-log
