@@ -1,3 +1,4 @@
+{{- if eq .Values.service_chaining.enable .Values.define_enable_val_yes }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,3 +7,4 @@ metadata:
 data:
   sce.conf: {{ tpl (.Files.Get "conf/sce.conf") . | quote }}
   tsg_device_tag.json: {{ tpl (.Files.Get "conf/tsg_device_tag.json") . | quote }}
+{{- end }}
