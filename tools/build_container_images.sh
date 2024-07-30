@@ -61,7 +61,6 @@ function export_images()
             ${IMAGE_REPO_PREFIX}/tsg-firewall:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-proxy:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-certstore:${OS_RELEASE_VER} \
-            ${IMAGE_REPO_PREFIX}/tsg-telegraf:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-init:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-sce:${OS_RELEASE_VER} \
             ${IMAGE_REPO_PREFIX}/tsg-bfdd:${OS_RELEASE_VER} \
@@ -82,7 +81,6 @@ build_image "base" "rockylinux:8" "${BASE_IMAGE_NAME}"
 build_image "firewall"  "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-firewall:${OS_RELEASE_VER}"
 build_image "proxy"     "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-proxy:${OS_RELEASE_VER}"
 build_image "certstore" "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-certstore:${OS_RELEASE_VER}"
-build_image "telegraf"  "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-telegraf:${OS_RELEASE_VER}"
 build_image "init"      "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-init:${OS_RELEASE_VER}"
 build_image "sce"       "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-sce:${OS_RELEASE_VER}"
 build_image "bfdd"      "${BASE_IMAGE_NAME}" "${IMAGE_REPO_PREFIX}/tsg-bfdd:${OS_RELEASE_VER}"

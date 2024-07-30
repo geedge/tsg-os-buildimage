@@ -115,14 +115,6 @@
     - {role: redis, tags: redis}
     - {role: certstore, tags: certstore}
 
-- hosts: x86_64_COTS-telegraf
-  remote_user: root
-  vars_files:
-    - install_config/group_vars/HAL_x86_64_COTS.yml
-    - install_config/group_vars/rpm_version.yml
-  roles:
-    - {role: telegraf, tags: telegraf}
-
 - hosts: x86_64_COTS-sce
   remote_user: root
   vars_files:
