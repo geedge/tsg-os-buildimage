@@ -100,10 +100,10 @@ spec:
           subPath: "tsg_sn.json"
         - name: shared-configs-volume
           mountPath: "/opt/tsg/tfe/conf/tfe/tfe.conf"
-          subPath: "tfe/tfe.conf"
+          subPath: "proxy/tfe.conf"
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_device_tag.json"
-          subPath: "tfe/tsg_device_tag.json"
+          subPath: "proxy/tsg_device_tag.json"
         - name: proxy-log
           mountPath: /opt/tsg/tfe/log
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
@@ -149,10 +149,10 @@ spec:
           subPath: "tsg_sn.json"
         - name: shared-configs-volume
           mountPath: "/opt/tsg/certstore/conf/cert_store.ini"
-          subPath: "certstore/cert_store.ini"
+          subPath: "proxy/cert_store.ini"
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_device_tag.json"
-          subPath: "certstore/tsg_device_tag.json"
+          subPath: "proxy/tsg_device_tag.json"
         - name: certstore-log
           mountPath: /opt/tsg/certstore/logs
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
@@ -343,10 +343,8 @@ spec:
         volumeMounts:
         - name: shared-configs-volume
           mountPath: /opt/tsg/shared-configs
-        - name: certstore-configs-volume
-          mountPath: /opt/tsg/configs/certstore
-        - name: tfe-configs-volume
-          mountPath: /opt/tsg/configs/tfe
+        - name: proxy-configs-volume
+          mountPath: /opt/tsg/configs/proxy
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       volumes:
@@ -354,12 +352,9 @@ spec:
         hostPath:
           path: /run/systemd/journal
           type: Directory
-      - name: certstore-configs-volume
+      - name: proxy-configs-volume
         configMap:
-          name: certstore-{{ .Release.Name }}
-      - name: tfe-configs-volume
-        configMap:
-          name: tfe-{{ .Release.Name }}
+          name: proxy-{{ .Release.Name }}
       - name: shared-configs-volume
         emptyDir: {}
       - name: proxy-log
