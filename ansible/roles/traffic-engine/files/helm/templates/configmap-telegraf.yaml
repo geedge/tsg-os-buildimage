@@ -4,5 +4,4 @@ metadata:
   name: telegraf-{{ .Release.Name }}
   namespace: default
 data:
-  telegraf_shaping.conf: {{ tpl (.Files.Get "conf/telegraf_shaping.conf") . | quote }}
   telegraf_proxy.conf: {{ tpl (.Files.Get "conf/telegraf_proxy.conf") . | quote }}

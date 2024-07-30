@@ -82,7 +82,6 @@ spec:
         ports:
           - containerPort: 8551
           - containerPort: 8552
-          - containerPort: 9007
         env:
         - name: MY_POD_NAME
           valueFrom:
@@ -105,12 +104,12 @@ spec:
 {{- if eq .Values.debug.shaping.enable_liveness_probe .Values.define_enable_val_yes }}
         livenessProbe:
           tcpSocket:
-            port: 9007
+            port: 8552
           failureThreshold: 1
           timeoutSeconds: 10
         startupProbe:
           tcpSocket:
-            port: 9007
+            port: 8552
           failureThreshold: 30
           periodSeconds: 10
 {{- end }}
@@ -130,6 +129,8 @@ spec:
           subPath: "shaping/tsg_device_tag.json"
         - name: shaping-log
           mountPath: /opt/tsg/shaping_engine/log
+        - name: metrics-json-dir
+          mountPath: "/opt/tsg/shaping_engine/metric"
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
         {{- if eq .Values.debug.shaping.enable_prestart_script .Values.define_enable_val_yes }}
         - name: prestart-dir
@@ -143,27 +144,32 @@ spec:
         {{- end }}
         {{- include "traffic-engine.mount.mrzcpd" . | nindent 8 }}
 
-      - name: telegraf-shaping
-        image: "registry.gdnt-cloud.website/tsg-telegraf:{{ .Chart.AppVersion }}"
+      - name: fieldstat-exporter
+        image: "registry.gdnt-cloud.website/tsg-shaping:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
         command:
           - "bash"
           - "-ec"
           - |
-            source /etc/profile.d/device_id.sh
-            /usr/bin/telegraf -config /etc/telegraf/telegraf_shaping.conf -config-directory /etc/telegraf/telegraf_statistic.d
+            ldconfig
+            python3 /opt/tsg/framework/bin/fieldstat_exporter.py prometheus -p 9007 -d /opt/tsg/shaping_engine/metric
+        ports:
+          - containerPort: 9007
         securityContext:
           privileged: true
+        livenessProbe:
+          tcpSocket:
+            port: 9007
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9007
+          failureThreshold: 5
+          periodSeconds: 10
         volumeMounts:
-        - name: telegraf-configs-volume
-          mountPath: "/etc/telegraf/telegraf_shaping.conf"
-          subPath: "telegraf_shaping.conf"
-        - name: shared-configs-volume
-          mountPath: "/opt/tsg/etc/tsg_sn.json"
-          subPath: "tsg_sn.json"
-        - name: shared-configs-volume
-          mountPath: "/etc/profile.d/device_id.sh"
-          subPath: "device_id.sh"
+        - name: metrics-json-dir
+          mountPath: "/opt/tsg/shaping_engine/metric"
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       - name: log-dir-hook
@@ -221,11 +227,12 @@ spec:
         imagePullPolicy: Never
         command:
           - "bash"
-          - "-ec"
+          - "-ecx"
           - |
             cp -r /opt/tsg/configs/* /opt/tsg/shared-configs/
             {{- include "public.prepare-access-API" . | nindent 12 }}
             {{- include "public.serialize-node-annotations" . | nindent 12 }}
+            sed -Ei -c "s|DEVICE_ID_PLACE_HOLDER_MARK|${DEVICE_SN?}|g" /opt/tsg/shared-configs/shaping/shaping.conf
         securityContext:
           privileged: true
         env:
@@ -250,13 +257,12 @@ spec:
         hostPath:
           path: /run/systemd/journal
           type: Directory
-      - name: telegraf-configs-volume
-        configMap:
-          name: telegraf-{{ .Release.Name }}
       - name: shaping-configs-volume
         configMap:
           name: shaping-{{ .Release.Name }}
       - name: shared-configs-volume
+        emptyDir: {}
+      - name: metrics-json-dir
         emptyDir: {}
       - name: shaping-log
         hostPath:
