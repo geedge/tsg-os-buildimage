@@ -326,7 +326,7 @@ spec:
         volumeMounts:
         - name: shared-configs-volume
           mountPath: /opt/tsg/shared-configs
-        - name: sapp-configs-volume
+        - name: firewall-configs-volume
           mountPath: /opt/tsg/configs/sapp
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
@@ -335,9 +335,9 @@ spec:
         hostPath:
           path: /run/systemd/journal
           type: Directory
-      - name: sapp-configs-volume
+      - name: firewall-configs-volume
         configMap:
-          name: sapp-{{ .Release.Name }}
+          name: firewall-{{ .Release.Name }}
       - name: shared-configs-volume
         emptyDir: {}
       - name: metrics-json-dir
