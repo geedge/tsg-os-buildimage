@@ -172,20 +172,6 @@ spec:
           mountPath: "/opt/tsg/shaping_engine/metric"
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
-      - name: log-dir-hook
-        image: "registry.gdnt-cloud.website/tsg-shaping:{{ .Chart.AppVersion }}"
-        imagePullPolicy: Never
-        command:
-          - "bash"
-          - "-ec"
-          - |
-            while true; do touch /opt/tsg/shaping_engine/log/.log_dir_hook; sleep 600; done
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - name: shaping-log
-          mountPath: /opt/tsg/shaping_engine/log
-
       initContainers:
       - name: init-default-svc
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"

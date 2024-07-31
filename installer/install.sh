@@ -340,6 +340,8 @@ if [ -f ${APP_BUNDLE_BIN} ]; then
     ./${APP_BUNDLE_BIN}
 fi
 
+rm -rf ${distro_mnt}/data/vdisks
+
 umount ${distro_mnt}/proc
 umount ${distro_mnt}/sys
 umount ${distro_mnt}/data

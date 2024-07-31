@@ -1,0 +1,26 @@
+---
+- name: "Copy service file to dest."
+  copy:
+    src: "{{ role_path }}/files/tsg-os-logfile-cleaner.service"
+    dest: /usr/lib/systemd/system/
+
+- name: "Copy python scripts to dest."
+  copy:
+    src: "{{ role_path }}/files/logfile-cleaner.py"
+    dest: /opt/tsg/logfile-cleaner/bin/
+
+- name: "Copy config to dest."
+  copy:
+    src: "{{ role_path }}/files/config.toml"
+    dest: /opt/tsg/logfile-cleaner/etc/
+
+- name: "Copy profile to dest."
+  copy:
+    src: "{{ role_path }}/files/tsg-os-logfile-cleaner.sh"
+    dest: /etc/profile.d/
+    mode: 0644
+
+- name: "Enable service."
+  systemd:
+    name: tsg-os-logfile-cleaner
+    enabled: yes

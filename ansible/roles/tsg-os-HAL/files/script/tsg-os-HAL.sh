@@ -24,8 +24,6 @@ MRZCPD_SZ_DATA=4096
 MRZCPD_SZ_TUNNEL=
 MRZCPD_CHECK_BUFFER_LEAK=1
 MRZCPD_CREATE_MODE=1
-TRAFFIC_ENGINE_LOGS_VDISK_PATH="/data/vdisks"
-TRAFFIC_ENGINE_LOGS_VDISK_SIZE_BYTES=
 NF_COUNT=16
 NIC_CPU_Affinity_Switch=
 DEVICE_TYPE=
@@ -149,55 +147,6 @@ calculate_cpu_list()
     allocate_cpu
 }
 
-build_and_mount_traffic_engine_logs_vdisk()
-{
-    local vdisk_path=${TRAFFIC_ENGINE_LOGS_VDISK_PATH}
-    local vdisk_file="vdisk-traffic-engine-logs.ext4"
-    local vdisk_size=${TRAFFIC_ENGINE_LOGS_VDISK_SIZE_BYTES}
-    local mount_path="/var/log/traffic-engine"
-    local present_vdisk_size=0
-    local is_new_vdisk=0
-    local loop_device=
-
-    mkdir -p ${vdisk_path}
-    mkdir -p ${mount_path}
-
-    #Read /dev/sda5 size and get vdisk_size.
-    if [ ! -n "${vdisk_size}" ]; then
-        dev_sda5_size=`lsblk -b -o SIZE /dev/sda5 | sed -n 2p | tr -d ' '`
-        vdisk_size=$((dev_sda5_size/2))
-    fi
-
-    #Read present vdisk size.
-    if [ -e "${vdisk_path}/${vdisk_file}" ]; then
-        present_vdisk_size=`stat -c "%s" ${vdisk_path}/${vdisk_file}`
-    fi
-
-    #Create volume file.
-    if [ ! -e "${vdisk_path}/${vdisk_file}" ]; then
-        dd of=${vdisk_path}/${vdisk_file} bs=${vdisk_size} seek=1 count=0
-        mkfs -t ext4 ${vdisk_path}/${vdisk_file}
-        is_new_vdisk=1
-    elif [ ${vdisk_size} -gt ${present_vdisk_size} ]; then
-        dd of=${vdisk_path}/${vdisk_file} bs=${vdisk_size} seek=1 count=0 oflag=append
-    fi
-
-    #mount volume on /var/log/traffic-engine or resize loop device
-    #condition 1: ${mount_path} not mounted.                      action: mount
-    #condition 2: ${mount_path} mounted and need mount new vdisk. action: umount and mount new disk.
-    #condition 3: ${mount_path} mounted and vdisk size changed.   action: resize loop device.
-    loop_device=`df | grep ${mount_path} | awk '{print $1}'`
-    if [ -z ${loop_device} ]; then
-        mount -o loop,rw ${vdisk_path}/${vdisk_file} ${mount_path}
-    elif [ ${is_new_vdisk} -eq 1 ]; then
-        umount ${mount_path}
-        mount -o loop,rw ${vdisk_path}/${vdisk_file} ${mount_path}
-    elif [ ${vdisk_size} -gt ${present_vdisk_size} ]; then
-        losetup -c ${loop_device}
-        resize2fs  ${loop_device}
-    fi
-}
-
 read_device_type()
 {
     product_name=`ipmitool fru list | grep 'Product Name' | awk '{print $4}' | head -n 1`
@@ -265,8 +214,6 @@ load_tsg_os_HAL_config
 if [ ! -n "$NUMA_NODE_CNT" ]; then
     NUMA_NODE_CNT=`lscpu | grep "NUMA node(s):" | head -n 1 | sed  -r 's/NUMA node\(s\):\s{1,}//g'`
 fi
-
-build_and_mount_traffic_engine_logs_vdisk
 
 calculate_hugepages
 calculate_cpu_list

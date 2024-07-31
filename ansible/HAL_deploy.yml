@@ -75,6 +75,7 @@
     - {role: tuned, tags: tuned}
     - {role: patches-9000-NPB, tags: patches-9000-NPB}
     - {role: tsg-os-oobc, tags: tsg-os-oobc}
+    - {role: tsg-os-logfile-cleaner, tags: tsg-os-logfile-cleaner}
 
 - hosts: x86_64_COTS-init
   remote_user: root

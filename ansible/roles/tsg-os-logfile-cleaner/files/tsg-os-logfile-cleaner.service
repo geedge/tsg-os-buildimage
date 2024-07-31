@@ -1,0 +1,14 @@
+[Unit]
+Description=TSG OS logfile cleaner
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+LimitNOFILE=1024
+TimeoutStartSec=10s
+Restart=always
+RestartSec=5s
+WatchdogSec=60s
+ExecStart=/usr/bin/python3 /opt/tsg/logfile-cleaner/bin/logfile-cleaner.py --daemon

@@ -135,3 +135,9 @@
 - name: "add dracut module to initramfs"
   shell: dracut --force -v /boot/initramfs-5.17.15-1.el8.x86_64.img  5.17.15-1.el8.x86_64
   when: runtime_env == 'TSG-X-P0906'
+
+- name: "install python3 toml"
+  shell: python3 -m pip install toml
+
+- name: "install python3 sdnotify"
+  shell: python3 -m pip install sdnotify

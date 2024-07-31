@@ -1,0 +1,30 @@
+[main]
+# The time interval in seconds between files clean. Default: 30s.
+clean_interval_s=30
+# # Pick a logging level. Valid log levels are: "error", "warn", "info", "debug"
+loglevel="info"
+
+[[watched_dir]]
+path="/var/log/traffic-engine"
+low_watermark="40%"
+high_watermark="50%"
+
+[[clean_exclude]]
+path="/var/log/traffic-engine/*.metrics"
+
+[[clean_exclude]]
+path="/var/log/traffic-engine/*.metric"
+
+[[clean_exclude]]
+path="/var/log/traffic-engine/*.fs2"
+
+[[clean_exclude]]
+path="/var/log/traffic-engine/*.status"
+
+[[clean_exclude]]
+path="/var/log/traffic-engine/*.local"
+
+##score_adj config example.
+# [[clean_score_adj]]
+# path="/example/a.txt"
+# score_adj=1000

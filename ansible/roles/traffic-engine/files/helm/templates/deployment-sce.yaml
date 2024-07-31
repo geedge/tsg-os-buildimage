@@ -151,22 +151,6 @@ spec:
           mountPath: /run/frr
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
-      - name: log-dir-hook
-        image: "registry.gdnt-cloud.website/tsg-sce:{{ .Chart.AppVersion }}"
-        imagePullPolicy: Never
-        command:
-          - "bash"
-          - "-ec"
-          - |
-            while true; do touch /opt/tsg/bfdd/log/.log_dir_hook; touch /opt/tsg/sce/log/.log_dir_hook; sleep 600; done
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - name: bfdd-log
-          mountPath: /opt/tsg/bfdd/log
-        - name: sce-log
-          mountPath: /opt/tsg/sce/log
-
       initContainers:
       - name: init-default-svc
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
