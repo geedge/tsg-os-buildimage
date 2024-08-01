@@ -12,6 +12,7 @@ INJECT_HELM_CHART_TAR           := inject-adapter-$(HELM_CHART_VER).tgz
 CONTAINER_IMAGES_TAR_GLOB		:= traffic-engine-*-docker.tar
 HELM_CHART_TAR_GLOB				:= traffic-engine-*.tgz
 NIC_UIO_BINDER_IMAGE_TAR  := ${OS_RELEASE_VER}
+LOG_COLLECTOR_IMAGE_TAR  := ${OS_RELEASE_VER}
 
 TARGET_BUILD_DIR				:= $(BUILDDIR_BASE)/$(PROFILE_ID)/containers
 TARGET_INSTALLER_DIR			:= $(TARGET_BUILD_DIR)/installer
@@ -21,6 +22,7 @@ MRZCPD_HELM_FILE_PATH           := /ansible/roles/mrzcpd/files/helm
 TREX_HELM_FILE_PATH             :=/ansible/roles/trex/files/helm
 DP_TRACE_HELM_FILE_PATH         := /ansible/roles/dp-trace-telemetry/files/helm
 NIC_UIO_BINDER_FILE_PATH        := /ansible/roles/k3s-install/files/nic-uio-binder.yaml
+LOG_COLLECTOR_FILE_PATH        := /ansible/roles/k3s-install/files/log-collector.yaml
 
 
 .PHONY: all build_dir installer clean_installer_dir prebuild_container_images build_container_images build_helm_charts build_app_bundle_bin 
@@ -47,6 +49,7 @@ installer: build_dir
 	sed -i -e "s/%%CONTAINER_IMAGES_TAR_GLOB%%/$(CONTAINER_IMAGES_TAR_GLOB)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%HELM_CHART_TAR_GLOB%%/$(HELM_CHART_TAR_GLOB)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%NIC_UIO_BINDER_IMAGE_TAR%%/$(NIC_UIO_BINDER_IMAGE_TAR)/" $(PROJECTDIR)/$(NIC_UIO_BINDER_FILE_PATH)
+	sed -i -e "s/%%LOG_COLLECTOR_IMAGE_TAR%%/$(LOG_COLLECTOR_IMAGE_TAR)/" $(PROJECTDIR)/$(LOG_COLLECTOR_FILE_PATH)
 
 prebuild_container_images:
 ifeq ($(ENABLE_LICENSE_PROTECTED),1)

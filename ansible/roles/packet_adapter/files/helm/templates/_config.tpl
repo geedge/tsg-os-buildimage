@@ -84,7 +84,7 @@
 {{- if eq .Values.debug.inject_adapter.enable_interactive_startup .Values.define_enable_val_yes -}}
             while true; do sleep 10;done
 {{- else -}}
-           exec /opt/tsg/packet_adapter/bin/packet_adapter 2>&1 | tee >(systemd-cat -t $DEPLOYMENT_NAME)
+           exec /opt/tsg/packet_adapter/bin/packet_adapter 
 {{- end }}
 {{- end -}}
 
