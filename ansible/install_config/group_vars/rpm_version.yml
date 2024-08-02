@@ -11,7 +11,7 @@ firewall_rpm_version:
   http: http-2.0.20.0571d0b
   mail: mail-1.0.21.aec281b
   quic: quic-2.0.11.1ab2559
-  ssl: ssl-3.1.4.0d8ef6b
+  ssl: ssl-3.1.5.e52a604
   rtp: rtp-1.0.7.530ac76
   ssh: ssh-2.1.7.b053e65
   dtls: dtls-2.0.5.a559144
@@ -22,7 +22,7 @@ firewall_rpm_version:
   session_flags: session_flags-2.4.0.579bcde
   stat_policy_enforcer: stat_policy_enforcer-3.3.6.d833c58
   sf_classifier: sf_classifier-2.0.2.3b0d414
-  stellar-c: stellar-on-sapp-2.1.3.19969f6
+  stellar-c: stellar-on-sapp-2.1.4.e603265
   policy_sketch: policy_sketch-1.1.1.1dd5afe
   traffic_sketch: traffic_sketch-1.1.3.ade5f09
 
@@ -69,9 +69,9 @@ mlnx_ofed_user_space_only_rpm_version:
   mlnx_ofed_user_space: mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch
 
 sapp_rpm_version:
-  sapp: sapp-4.3.61.22585b9
+  sapp: sapp-4.3.62.70c4179
   tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
-  sapp-pr: sapp-pr-4.3.61.22585b9
+  sapp-pr: sapp-pr-4.3.62.70c4179
 
 tfe_rpm_version:
   tfe: tfe-4.9.8.88e6b0a
