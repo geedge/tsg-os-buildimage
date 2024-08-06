@@ -21,6 +21,7 @@ spec:
           - "bash"
           - "-ec"
           - |
+            sysctl -w fs.inotify.max_user_instances=8192
             /opt/tsg/log-collector/bin/log-collector
         volumeMounts:
         - name: logs
