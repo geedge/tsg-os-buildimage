@@ -104,6 +104,9 @@ spec:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_device_tag.json"
           subPath: "proxy/tsg_device_tag.json"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/tfe/conf/tfe/zlog.conf"
+          subPath: "proxy/tfe_log.conf"
         - name: proxy-log
           mountPath: /opt/tsg/tfe/log
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
@@ -153,6 +156,9 @@ spec:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_device_tag.json"
           subPath: "proxy/tsg_device_tag.json"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/certstore/conf/zlog.conf"
+          subPath: "proxy/certstore_log.conf"
         - name: certstore-log
           mountPath: /opt/tsg/certstore/logs
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}

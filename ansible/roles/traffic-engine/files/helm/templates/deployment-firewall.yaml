@@ -182,6 +182,9 @@ spec:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/sapp/tsgconf/firewall_logger_transmitter_schema.json"
           subPath: "sapp/firewall_logger_transmitter_schema.json"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sapp/etc/sapp_log.conf"
+          subPath: "sapp/sapp_log.conf"
         - name: firewall-log
           mountPath: /opt/tsg/sapp/log
         - name: metrics-json-dir

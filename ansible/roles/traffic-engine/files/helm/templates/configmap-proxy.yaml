@@ -8,4 +8,6 @@ data:
   tfe.conf: {{ tpl (.Files.Get "conf/tfe.conf") . | quote }}
   cert_store.ini: {{ tpl (.Files.Get "conf/cert_store.ini") . | quote }}
   tsg_device_tag.json: {{ tpl (.Files.Get "conf/tsg_device_tag.json") . | quote }}
+  certstore_log.conf: {{ tpl (.Files.Get "conf/certstore_log.conf") . | quote }}
+  tfe_log.conf: {{ tpl (.Files.Get "conf/tfe_log.conf") . | quote }}
 {{- end }}

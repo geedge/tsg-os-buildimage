@@ -104,6 +104,9 @@ spec:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_device_tag.json"
           subPath: "sce/tsg_device_tag.json"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/sce/conf/zlog.conf"
+          subPath: "sce/sce_log.conf"
         - name: sce-log
           mountPath: /opt/tsg/sce/log
         - name: bfdd-unix-socket

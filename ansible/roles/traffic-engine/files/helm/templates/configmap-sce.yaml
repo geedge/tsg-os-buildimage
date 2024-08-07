@@ -7,4 +7,5 @@ metadata:
 data:
   sce.conf: {{ tpl (.Files.Get "conf/sce.conf") . | quote }}
   tsg_device_tag.json: {{ tpl (.Files.Get "conf/tsg_device_tag.json") . | quote }}
+  sce_log.conf: {{ tpl (.Files.Get "conf/sce_log.conf") . | quote }}
 {{- end }}

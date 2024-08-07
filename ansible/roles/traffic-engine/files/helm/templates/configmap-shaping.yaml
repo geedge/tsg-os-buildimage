@@ -7,4 +7,5 @@ metadata:
 data:
   shaping.conf: {{ tpl (.Files.Get "conf/shaping.conf") . | quote }}
   tsg_device_tag.json: {{ tpl (.Files.Get "conf/tsg_device_tag.json") . | quote }}
+  shaping_log.conf: {{ tpl (.Files.Get "conf/shaping_log.conf") . | quote }}
 {{- end }}

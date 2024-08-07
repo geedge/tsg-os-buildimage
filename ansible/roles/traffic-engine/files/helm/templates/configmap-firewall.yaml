@@ -20,3 +20,4 @@ data:
   spec.toml: {{ tpl (.Files.Get "conf/spec.toml") . | quote }}
   firewall_l7_protocol.conf: {{ tpl (.Files.Get "conf/firewall_l7_protocol.conf") . | quote }}
   firewall_logger_transmitter_schema.json:  {{ tpl (.Files.Get "conf/firewall_logger_transmitter_schema.json") . | quote }}
+  sapp_log.conf: {{ tpl (.Files.Get "conf/sapp_log.conf") . | quote }}

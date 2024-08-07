@@ -6,8 +6,8 @@ loglevel="info"
 
 [[watched_dir]]
 path="/var/log/traffic-engine"
-low_watermark="40%"
-high_watermark="50%"
+low_watermark="50%"
+high_watermark="60%"
 
 [[clean_exclude]]
 path="/var/log/traffic-engine/*.metrics"

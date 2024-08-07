@@ -127,6 +127,9 @@ spec:
         - name: shared-configs-volume
           mountPath: "/opt/tsg/etc/tsg_device_tag.json"
           subPath: "shaping/tsg_device_tag.json"
+        - name: shared-configs-volume
+          mountPath: "/opt/tsg/shaping_engine/conf/zlog.conf"
+          subPath: "shaping/shaping_log.conf"
         - name: shaping-log
           mountPath: /opt/tsg/shaping_engine/log
         - name: metrics-json-dir
