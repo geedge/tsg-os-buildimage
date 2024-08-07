@@ -310,25 +310,20 @@ class DirFileInfosReader:
             dirs[:] = [d for d in dirs if not os.path.ismount(os.path.join(root, d))]
             for filename in sorted(filenames):
                 full_path = os.path.join(root, filename)
-                # match clean exclude path.
-                if self._config_reader.is_path_matched_exclude(full_path):
-                    logger.debug(f"Not read exclude files: %s in dir: %s." % (full_path, self._dir_path))
-                    continue
                 # exclude link file.
                 if os.path.islink(full_path):
                     logger.debug(f"Not read link file: %s in dir: %s." % (full_path, self._dir_path))
                     continue
-                # exclude open file.
-                if self._is_file_open(full_path):
-                    logger.info(f"Not read the open file: %s in dir: %s." % (full_path, self._dir_path))
-                    continue
+
+                # calc dir size.
+                size_in_bytes = os.path.getsize(full_path)
+                self._dir_usage_in_bytes += size_in_bytes
 
                 # build score units.
+                is_matched_exclude = self._config_reader.is_path_matched_exclude(full_path)
+                is_file_open = self._is_file_open(full_path)
                 score, score_base, score_adj = self._read_files_score(full_path)
-                size_in_bytes = os.path.getsize(full_path)
-                self._file_infos.append({"path": full_path, "score": score, "score_base": score_base, "score_adj": score_adj, "size_in_bytes": size_in_bytes})
-                # calc dir size.
-                self._dir_usage_in_bytes += size_in_bytes
+                self._file_infos.append({"path": full_path, "score": score, "score_base": score_base, "score_adj": score_adj, "size_in_bytes": size_in_bytes, "is_matched_exclude": is_matched_exclude,"is_file_open": is_file_open})
 
     def _validate_path(self):
         if not os.path.isdir(self._dir_path):
@@ -336,16 +331,6 @@ class DirFileInfosReader:
             return False
         return True
 
-    # def _is_file_open(self, file_path):
-    #     try:
-    #         result = subprocess.run(['lsof', file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    #         if result.stdout:
-    #             return True
-    #         else:
-    #             return False
-    #     except Exception as e:
-    #         logger.error(f"Error checking if file is open: {e}")
-    #         return False
 
     def _is_file_open(self, file_path):
         for proc in psutil.process_iter(['pid', 'open_files']):
@@ -361,7 +346,7 @@ class DirFileInfosReader:
         score_base = int(os.path.getmtime(path))
         score_adj = self._config_reader.read_score_adj_by_path(path)
         score = score_base + score_adj
-        logger.debug("File path %s base score %d, adjust score: %d, final score: %d." % (self._dir_path, score_base, score_adj, score))
+        logger.debug("File path %s base score %d, adjust score: %d, final score: %d." % (path, score_base, score_adj, score))
         return score, score_base, score_adj
 
     def _sort_files_info_by_score(self):
@@ -386,6 +371,12 @@ class DirFileInfosReader:
 
     def read_score_adj_from_file_info(self, file_info):
         return file_info["score_adj"]
+
+    def read_is_matched_exclude_from_file_info(self, file_info):
+        return file_info["is_matched_exclude"]
+
+    def read_is_file_open_from_file_info(self, file_info):
+        return file_info["is_file_open"]
 
     @property
     def file_infos(self):
@@ -442,6 +433,14 @@ class DirsFilesCleaner:
             file_path = reader.read_path_from_file_info(file_info)
             file_size = reader.read_file_size_from_file_info(file_info)
             file_score = reader.read_score_from_file_info(file_info)
+            if reader.read_is_matched_exclude_from_file_info(file_info):
+                logger.info(f"Not remove the file %s(size: %d bytes) that match exclusion rule." % (file_path, file_size))
+                continue
+
+            if reader.read_is_file_open_from_file_info(file_info):
+                logger.info(f"Not remove the open file %s (size: %d bytes)." % (file_path, file_size))
+                continue
+
             self._remove_file(file_path, file_size, file_score)
             try_remove_bytes -= file_size
 
@@ -450,8 +449,7 @@ class DirsFilesCleaner:
             os.remove(path)
             logger.info(f"File %s(size: %d bytes, score: %d) has been removed." % (path, file_size, file_score))
         else:
-            logger.info(f"IN dry-run Mode the file %s(size: %d bytes, score: %d) can be deleted." % (path, file_size, file_score))
-
+            logger.info(f"IN dry-run Mode the file %s(size: %d bytes, score: %d) can be removed." % (path, file_size, file_score))
 
 if __name__ == '__main__':
     set_logging()
