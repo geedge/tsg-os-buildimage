@@ -1,0 +1,4 @@
+packages:
+  - name: bfdd
+    version: 1.0.3-release
+    install_command: dnf

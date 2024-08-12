@@ -1,0 +1,49 @@
+{% import '/templates/macros.j2' as macros -%}
+[SYSTEM]
+WORK_THREAD_NUM={{ shaping_affinity | length }}
+ENABLE_CPU_AFFINITY=1
+CPU_AFFINITY_MASK={{ shaping_affinity | join(',') }}
+firewall_sids={{ sid.firewall }}
+
+[MARSIO]
+DEV_INTERFACE="{{ shaping_config.shaping_nic }}"
+RX_BRUST_MAX=64
+APP_SYMBOL="shaping-{{ app_symbol_index }}"
+
+[MAAT]
+INPUT_MODE=1
+TABLE_INFO="conf/table_info.json"
+JSON_FILE="conf/shaping_maat.json"
+REDIS_DB_IDX={{ vsys_id }}
+REDIS_IP="{{ macros.cm_address(external_resources.cm) }}"
+REDIS_PORT="{{ macros.cm_port(external_resources.cm) }}"
+
+
+[SWARMKV]
+SWARMKV_CLUSTER_NAME="tsg-shaping-vsys{{ vsys_id }}"
+SWARMKV_NODE_IP="0.0.0.0"
+SWARMKV_NODE_PORT=8551
+SWARMKV_CONSUL_IP="NODE_IP_LOCATION"
+SWARMKV_CONSUL_PORT=8500
+SWARMKV_CLUSTER_ANNOUNCE_IP="NODE_IP_LOCATION"
+SWARMKV_CLUSTER_ANNOUNCE_PORT=CLUSTER_ANNOUNCE_PORT_LOCATION
+SWARMKV_HEALTH_CHECK_PORT=8552
+SWARMKV_HEALTH_CHECK_ANNOUNCE_PORT=HEALTH_CHECK_ANNOUNCE_PORT_LOCATION
+
+[METRIC]
+DATA_CENTER={{ macros.read_device_tag_value(device, "data_center") }}
+DEVICE_GROUP={{ macros.read_device_tag_value(device, "device_group") }}
+
+
+DEVICE_ID="DEVICE_ID_PLACE_HOLDER_MARK"
+KAFKA_TOPIC="POLICY-RULE-METRIC"
+KAFKA_BROKERS="{{ macros.address_port_pairs_render(external_resources.olap.kafka_brokers.addresses,",") }}"
+KAFKA_USERNAME="{{ macros.safe_read(external_resources,"olap.kafka_brokers.sasl_username") }}"
+KAFKA_PASSWORD="{{ macros.safe_read(external_resources,"olap.kafka_brokers.sasl_password") }}"
+
+[CONFIG]
+#PROFILE_QUEUE_LEN_PER_PRIORITY_MAX=128
+SESSION_QUEUE_LEN_MAX=32
+QUEUEING_SESSIONS_PER_PRIORITY_PER_THREAD_MAX=1024
+POLLING_NODE_NUM_MAX={"polling_node_num_max":[ 3, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]}
+

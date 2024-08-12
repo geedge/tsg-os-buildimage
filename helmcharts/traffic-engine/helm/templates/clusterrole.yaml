@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    vsysId: "{{ .Values.vsys_id }}"
+    serviceFunction: {{ .Release.Name }}
+  name: {{ .Release.Name }}
+rules:
+  - apiGroups: [""]
+    resources: ["services", "nodes"]
+    verbs: ["get", "list", "watch"]

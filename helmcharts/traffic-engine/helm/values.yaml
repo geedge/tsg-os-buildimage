@@ -1,0 +1,256 @@
+# external_resources:
+#   cm:
+#     ## @param external_resources.cm.connection value in [direct, local_cache], default: direct
+#     ##
+#     connectivity: direct
+#     direct:
+#       address: 10.X.X.X
+#       port: 7002
+#     local_cache:
+#       cache_name: tsg_traffic_cm_local_cache_1
+#     port_num: 1
+#   sd:
+#     ## @param external_resources.cm.connection value in [direct, local_cache], default: local_cache
+#     ##
+#     enable: no
+#     connectivity: direct
+#     db_index: 0
+#     policy_effect_interval_ms: 100
+#     policy_garbage_collection_interval_ms: 30000
+#     policy_update_check_interval_ms: 100
+#     direct:
+#       address: 10.1.1.1
+#       port: 7002
+#     local_cache:
+#       cache_name: tsg_traffic_sd_local_cache_1
+
+
+#   olap:
+#     kafka_brokers:
+#       sasl_username: 
+#       sasl_password:
+#       addresses:
+#       - address:
+#         port:
+#     udp_collectors:
+#       enable: no
+#       addresses:
+#       - address:
+#         port:
+
+
+# device:
+#   tags:
+#     - key1: value1
+#     - key2: value2
+
+# session_id_generator:
+#   snowflake_worker_id_base: 1
+#   snowflake_worker_id_offset: 1
+
+# firewall:
+#   enable: yes
+#   enable_smartoffload: no
+#   logs:
+#     enable: yes
+#     contains_app_id:
+#       enable: yes
+#     contains_dns_resource_record:
+#       enable: yes
+#     ringbuf:
+#       size: 100000
+
+# appsketch:
+#   enable: yes
+#   qdpi_detector: yes   
+#   context_based_detector: yes
+
+# transaction_record:
+#   enable_http: yes
+#   enable_dns: yes
+#   enable_mail: yes
+
+# session_record:
+#   enable: yes
+
+# file_stream_record:
+#   enable: yes
+
+# session_manager:
+#   tcp_session_max: 20021
+#   tcp_session_unordered_pkt_max: 128
+#   tcp_session_timeout_in_sec: 30
+#   udp_session_timeout_in_sec: 60
+#   tcp_session_opening_timeout_in_sec: 60
+#   tcp_session_closing_timeout_in_sec: 30
+#   udp_session_max: 5021
+#   tcp_duplicated_packet_filter: yes
+#   udp_duplicated_packet_filter: yes
+#   inject_duplicated_packet_filter: yes
+
+# traffic_mirror:
+#   enable_raw_traffic: yes
+#   enable_decrypted_traffic: yes
+
+# packet_capture:
+#   enable: yes
+
+# proxy:
+#   enable: yes
+
+# voip_record:
+#   enable_sip: yes
+#   enable_rtp: yes
+
+# overload_protection:
+#   enable: yes
+#   detect_interval_in_ms: 500
+#   detect_smooth_avg_window: 2
+#   detect_threshold_cpu_usages: 90
+#   recovery_detect_cycle_in_sec: 30
+
+# vsys_id: 1
+
+# etherfabric_settings:
+#   keepalive:
+#     ip: 10.254.19.1
+#     mask: 255.255.255.0
+
+# sapp_affinity: [5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76]
+# tfe_affinity: [77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92]
+# sce_affinity: [92]
+# shaping_affinity: [93]
+# pktio_affinity: [94]
+# inject_adapter_affinity: [95]
+
+# tfe_rps_mask: "00000000"
+
+# nic_policy_log_name: eth0
+# nic_raw_name: eth0
+# nic_mirror_name: 
+#   firewall: eth0
+#   proxy: eth0
+
+# define_enable_val_yes: yes
+# define_enable_val_no: no
+
+# coredump:
+#     format: "minidump"
+#     collect: "local"
+#     sentry_url: "www.testing.com"
+
+# session_id_generator:
+#   snowflake_worker_id_base: 1
+#   snowflake_worker_id_offset: 1
+
+# decoders:
+#   DNS: yes
+#   QUIC: yes
+#   HTTP: yes
+#   HTTP_GZIP: yes
+#   MAIL: yes
+#   MAIL_BASE64: yes
+#   FTP: yes
+#   SSL: yes
+#   SSL_CERT: yes
+#   SSL_JA3: yes
+#   RTP: yes
+#   SIP: yes
+#   SSH: yes
+#   SOCKS: yes
+#   STRATUM: yes
+#   RDP: yes
+#   DTLS: yes
+#   SSL_DETAIN_FRAG_CHELLO: no
+
+# configHash: "defaulthash"
+
+# shaping:
+#   enable: no
+# inject_adapter:
+#   enable: yes
+
+# service_chaining:
+#   enable: yes
+
+# sce_config:
+#   steering_nic: nf_0_sce
+#   vxlan_config:
+#     endpoint_nic: ep_0_sce_l3
+#     endpoint_ip: 127.0.0.1
+#     endpoint_gateway: 127.0.0.1
+#     endpoint_netip: 127.0.0.1
+#     endpoint_mask: 24
+#   vlan_config:
+#     endpoint_nic: ep_0_sce_l2
+
+# proxy_config:
+#   proxy_nic: nf_1_proxy
+
+# sid:
+#   firewall: 1000
+#   proxy: 1001
+#   sce: 1002
+#   shaping: 1003
+#   inject_adapter: 1064
+
+# shaping_config:
+#   shaping_nic: nf_1_shaping_engine
+
+# inject_adapter_config:
+#   inject_adapter_nic: nf_1_shaping_engine
+
+# app_symbol_index: 1
+# distmode: 2
+
+# debug:
+#   firewall:
+#     enable_liveness_probe: yes
+#     enable_interactive_startup: no
+#     enable_prestart_script: no
+#     enable_mount_host_filesystem: no
+#     #default: /etc/tsg-os/${service_function_name}/firewall_prestart_script.sh
+#     prestart_script: ""
+#   proxy:
+#     enable_liveness_probe: yes
+#     enable_interactive_startup: no
+#     enable_prestart_script: no
+#     enable_mount_host_filesystem: no
+#     #default: /etc/tsg-os/${service_function_name}/proxy_prestart_script.sh
+#     prestart_script: ""
+#   service_chaining:
+#     enable_liveness_probe: yes
+#     enable_interactive_startup: no
+#     enable_prestart_script: no
+#     enable_mount_host_filesystem: no
+#     #default: /etc/tsg-os/${service_function_name}/service_chaining_prestart_script.sh
+#     prestart_script: ""
+#   shaping:
+#     enable_liveness_probe: yes
+#     enable_interactive_startup: no
+#     enable_prestart_script: no
+#     enable_mount_host_filesystem: no
+#     #default: /etc/tsg-os/${service_function_name}/shaping_prestart_script.sh
+#     prestart_script: ""
+#   inject_adapter:
+#     enable_liveness_probe: yes
+#     enable_interactive_startup: no
+#     enable_prestart_script: no
+#     enable_mount_host_filesystem: no
+#     #default: /etc/tsg-os/${service_function_name}/shaping_prestart_script.sh
+#     prestart_script: ""
+
+# session_flags:
+#   enable: yes
+
+# dos_protector:
+#   enable: no
+
+# stat_policy_enforcer:
+#   enable: yes
+
+# traffic_sketch:
+#   enable: yes
+
+# policy_sketch:
+#   enable: yes

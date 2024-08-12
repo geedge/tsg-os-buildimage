@@ -1,0 +1,234 @@
+{{- if .Values.service_chaining.enable }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-sce
+  labels:
+    app: {{ .Release.Name }}
+    component: service-chaining
+  annotations:
+    reloader.stakater.com/auto: "true"
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-service-chaining
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-service-chaining
+        vsysId: "{{ .Values.vsys_id }}"
+        serviceFunction: {{ .Release.Name }}
+        component: service-chaining
+      annotations:
+        prometheus.io/port: "9006"
+        prometheus.io/scrape: "true"
+
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      serviceAccountName: {{ .Release.Name }}
+      containers:
+      - name: sce
+        image: "registry.gdnt-cloud.website/tsg/os/sce:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/sce
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            /usr/local/bin/entrypoint.sh \
+            {{- if .Values.debug.service_chaining.enable_prestart_script }}
+            --enable_prestart \
+            {{- end }}
+            {{- if .Values.debug.service_chaining.enable_interactive_startup }}
+            --enable_interactive_startup \
+            {{- end }}
+            || echo "Failed to start."
+        ports:
+          - containerPort: 9006
+        env:
+        - name: DEPLOYMENT_NAME
+          value: {{ .Release.Name }}-service-chaining
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        securityContext:
+          privileged: true
+{{- if .Values.debug.service_chaining.enable_liveness_probe }}
+        livenessProbe:
+          tcpSocket:
+            port: 9006
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9006
+          failureThreshold: 30
+          periodSeconds: 10
+{{- end }}
+        volumeMounts:
+        - name: journal-volume
+          mountPath: /run/systemd/journal
+        - name: sce-configs-volume
+          mountPath: "/templates/values.yaml"
+          subPath: "values.yaml"
+        - name: sce-log
+          mountPath: /opt/tsg/sce/log
+        - name: bfdd-unix-socket
+          mountPath: /run/frr
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+        {{- if .Values.debug.service_chaining.enable_prestart_script }}
+        - name: prestart-dir
+          mountPath: /tmp/prestart
+        - name: service-chaining-prestart
+          mountPath: /opt/tsg/scripts/prestart.sh
+        {{- end }}
+        {{- if .Values.debug.service_chaining.enable_mount_host_filesystem }}
+        - name: host-root
+          mountPath: /host
+        {{- end }}
+        {{- include "traffic-engine.mount.mrzcpd" . | nindent 8 }}
+
+      - name: bfdd
+        image: "registry.gdnt-cloud.website/tsg/os/sce-bfdd:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/bfdd
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            /usr/local/bin/entrypoint.sh
+        env:
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: bfdd-log
+          mountPath: /opt/tsg/bfdd/log
+        - name: bfdd-unix-socket
+          mountPath: /run/frr
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+
+      initContainers:
+      - name: init-default-svc
+        image: "registry.gdnt-cloud.website/tsg/os/sce:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until nslookup kubernetes.default.svc; do echo waiting for kubernetes service; sleep 2; done
+
+      - name: init-packet-io-engine-ready
+        image: "registry.gdnt-cloud.website/tsg/os/sce:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until [ $(curl -s -o /dev/null -w "%{http_code}" http://${NODE_IP}:9086/probe) -eq 200 ]; do echo waiting for packet-io-engine ready; sleep 2; done
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+
+      - name: service-chaining-init
+        image: "registry.gdnt-cloud.website/tsg/os/sce:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ecx"
+          - |
+            {{- if .Values.sce_config.vxlan_config.endpoint_nic }}
+            ip tuntap add dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} mode tap
+            ip link set dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} up
+            ip route add {{ .Values.sce_config.vxlan_config.endpoint_netip }}/{{ .Values.sce_config.vxlan_config.endpoint_mask }} dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} table 10
+            {{- if .Values.sce_config.vxlan_config.endpoint_gateway }}
+            ip route add default via {{ .Values.sce_config.vxlan_config.endpoint_gateway }} table 10
+            {{- end }}
+            ip a a {{ .Values.sce_config.vxlan_config.endpoint_ip }}/{{ .Values.sce_config.vxlan_config.endpoint_mask }} dev {{ .Values.sce_config.vxlan_config.endpoint_nic }} noprefixroute
+            ip rule add dport 3784 table 10
+            iptables -t mangle -A PREROUTING -p udp --dport 3784 -j TTL --ttl-set 255
+            {{- end }}
+        securityContext:
+          privileged: true
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        volumeMounts:
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+
+      volumes:
+      - name: journal-volume
+        hostPath:
+          path: /run/systemd/journal
+          type: Directory
+      - name: sce-configs-volume
+        configMap:
+          name: sce-{{ .Release.Name }}
+      - name: sce-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sce/
+      - name: bfdd-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/bfdd/
+      - name: bfdd-unix-socket
+        emptyDir: {}
+      {{- include "traffic-engine.volume.mrzcpd" . | nindent 6 }}
+      {{- include "public.sync-host-timezone.volume" . | nindent 6 }}
+      {{- if .Values.debug.service_chaining.enable_prestart_script }}
+      - name: prestart-dir
+        hostPath: 
+          path: /etc/tsg-os/{{ .Release.Name }}/
+          type: DirectoryOrCreate
+      - name: service-chaining-prestart
+        hostPath:
+      {{- if .Values.debug.service_chaining.prestart_script }}
+          path: {{ .Values.debug.service_chaining.prestart_script }}
+      {{- else }}
+          path: /etc/tsg-os/{{ .Release.Name }}/service_chaining_prestart_script.sh
+      {{- end }}
+          type: FileOrCreate
+      {{- end }}
+      {{- if .Values.debug.service_chaining.enable_mount_host_filesystem }}
+      - name: host-root
+        hostPath:
+          path: /
+      {{- end }}
+{{- end }}

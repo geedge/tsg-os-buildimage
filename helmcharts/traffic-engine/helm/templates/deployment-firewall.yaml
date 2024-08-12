@@ -1,0 +1,212 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-firewall
+  labels:
+    app: {{ .Release.Name }}
+    component: firewall
+  annotations:
+    reloader.stakater.com/auto: "true"
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-firewall
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-firewall
+        vsysId: "{{ .Values.vsys_id }}"
+        serviceFunction: {{ .Release.Name }}
+        component: firewall
+        {{- if .Values.dos_protector.enable }}
+        dynamic-hostports: '8551.8552'
+        {{- end }}
+      annotations:
+        prometheus.io/port: "9010"
+        prometheus.io/scrape: "true"
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      serviceAccountName: {{ .Release.Name }}
+      containers:
+      - name: firewall
+        image: "registry.gdnt-cloud.website/tsg/os/firewall:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/sapp
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            /usr/local/bin/entrypoint.sh \
+            {{- if .Values.dos_protector.enable }}
+            --enable_dos_protector \
+            {{- end }}
+            {{- if .Values.debug.firewall.enable_prestart_script }}
+            --enable_prestart \
+            {{- end }}
+            {{- if .Values.debug.firewall.enable_interactive_startup }}
+            --enable_interactive_startup \
+            {{- end }}
+            || echo "Failed to start."
+        ports:
+          - containerPort: 51218
+          {{- if .Values.dos_protector.enable }}
+          - containerPort: 8551
+          - containerPort: 8552
+          {{- end }}
+        env:
+        - name: DEPLOYMENT_NAME
+          value: {{ .Release.Name }}-firewall
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        securityContext:
+          privileged: true
+{{- if .Values.debug.firewall.enable_liveness_probe }}
+        livenessProbe:
+          tcpSocket:
+            port: 51218
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 51218
+          failureThreshold: 90
+          periodSeconds: 10
+{{- end }}
+
+        volumeMounts:
+        - name: journal-volume
+          mountPath: /run/systemd/journal
+        - name: firewall-configs-volume
+          mountPath: "/templates/values.yaml"
+          subPath: "values.yaml"
+        - name: firewall-log
+          mountPath: /opt/tsg/sapp/log
+        - name: metrics-json-dir
+          mountPath: "/opt/tsg/sapp/metrics"
+        {{- if .Values.debug.firewall.enable_prestart_script }}
+        - name: prestart-dir
+          mountPath: /tmp/prestart
+        - name: firewall-prestart
+          mountPath: /opt/tsg/scripts/prestart.sh
+        {{- end }}
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+        {{- if .Values.debug.firewall.enable_mount_host_filesystem }}
+        - name: host-root
+          mountPath: /host
+        {{- end }}
+        {{- include "traffic-engine.mount.mrzcpd" . | nindent 8 }}
+        {{- include "public.license-support.dev-bus-usb-volume-mount" . | nindent 8 }}
+        {{- include "public.license-support.dev-shm-volume-mount" . | nindent 8 }}
+
+      - name: fieldstat-exporter
+        image: "registry.gdnt-cloud.website/tsg/os/firewall:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            ldconfig
+            python3 /opt/tsg/framework/bin/fieldstat_exporter.py prometheus -p 9010 -d /opt/tsg/sapp/metrics
+        ports:
+          - containerPort: 9010
+        securityContext:
+          privileged: true
+        livenessProbe:
+          tcpSocket:
+            port: 9010
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9010
+          failureThreshold: 5
+          periodSeconds: 10
+        volumeMounts:
+        - name: metrics-json-dir
+          mountPath: "/opt/tsg/sapp/metrics"
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+
+      initContainers:
+      - name: init-default-svc
+        image: "registry.gdnt-cloud.website/tsg/os/firewall:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until nslookup kubernetes.default.svc; do echo waiting for kubernetes service; sleep 2; done
+
+      - name: init-packet-io-engine-ready
+        image: "registry.gdnt-cloud.website/tsg/os/firewall:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until [ $(curl -s -o /dev/null -w "%{http_code}" http://${NODE_IP}:9086/probe) -eq 200 ]; do echo waiting for packet-io-engine ready; sleep 2; done
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+
+      volumes:
+      - name: journal-volume
+        hostPath:
+          path: /run/systemd/journal
+          type: Directory
+      - name: firewall-configs-volume
+        configMap:
+          name: firewall-{{ .Release.Name }}
+      - name: metrics-json-dir
+        emptyDir: {}
+      - name: firewall-log
+        hostPath: 
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sapp/
+      {{- if .Values.debug.firewall.enable_prestart_script }}
+      - name: prestart-dir
+        hostPath: 
+          path: /etc/tsg-os/{{ .Release.Name }}/
+          type: DirectoryOrCreate
+      - name: firewall-prestart
+        hostPath:
+      {{- if .Values.debug.firewall.prestart_script }}
+          path: {{ .Values.debug.firewall.prestart_script }}
+      {{- else }}
+          path: /etc/tsg-os/{{ .Release.Name }}/firewall_prestart_script.sh
+      {{- end }}
+          type: FileOrCreate
+      {{- end }}
+      {{- include "traffic-engine.volume.mrzcpd" . | nindent 6 }}
+      {{- include "public.sync-host-timezone.volume" . | nindent 6 }}
+      {{- if .Values.debug.firewall.enable_mount_host_filesystem }}
+      - name: host-root
+        hostPath:
+          path: /
+      {{- end }}
+      {{- include "public.license-support.dev-bus-usb-volume" . | nindent 6 }}
+      {{- include "public.license-support.dev-shm-volume" . | nindent 6 }}

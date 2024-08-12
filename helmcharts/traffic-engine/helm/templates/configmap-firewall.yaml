@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: firewall-{{ .Release.Name }}
+  namespace: default
+data:
+  values.yaml: |
+    app_symbol_index: {{ .Values.app_symbol_index }}
+    appsketch:
+{{ toYaml .Values.appsketch | indent 6 }}
+    decoders:
+{{ toYaml .Values.decoders | indent 6 }}
+    device:
+{{ toYaml .Values.device | indent 6 }}
+    dos_protector:
+{{ toYaml .Values.dos_protector | indent 6 }}
+    etherfabric_settings:
+{{ toYaml .Values.etherfabric_settings | indent 6 }}
+    external_resources:
+{{ toYaml .Values.external_resources | indent 6 }}
+    file_stream_record:
+{{ toYaml .Values.file_stream_record | indent 6 }}
+    firewall:
+{{ toYaml .Values.firewall | indent 6 }}
+    nic_mirror_name:
+        firewall: {{ .Values.nic_mirror_name.firewall | default "" }}
+    nic_raw_name: {{ .Values.nic_raw_name }}
+    overload_protection:
+{{ toYaml .Values.overload_protection | indent 6 }}
+    packet_capture:
+{{ toYaml .Values.packet_capture | indent 6 }}
+    policy_sketch:
+{{ toYaml .Values.policy_sketch | indent 6 }}
+    sapp_affinity:
+{{ toYaml .Values.sapp_affinity | indent 4 }}
+    session_flags:
+{{ toYaml .Values.session_flags | indent 6 }}
+    session_id_generator:
+{{ toYaml .Values.session_id_generator | indent 6 }}
+    session_manager:
+{{ toYaml .Values.session_manager | indent 6 }}
+    session_record:
+{{ toYaml .Values.session_record | indent 6 }}
+    sid:
+      inject_adapter: {{ .Values.sid.inject_adapter }}
+      proxy: {{ .Values.sid.proxy }}
+      sce: {{ .Values.sid.sce }}
+      shaping: {{ .Values.sid.shaping }}
+    stat_policy_enforcer:
+{{ toYaml .Values.stat_policy_enforcer | indent 6 }}
+    traffic_mirror:
+      enable_raw_traffic: {{ .Values.traffic_mirror.enable_raw_traffic }}
+    traffic_sketch:
+{{ toYaml .Values.traffic_sketch | indent 6 }}
+    transaction_record:
+{{ toYaml .Values.transaction_record | indent 6 }}
+    voip_record:
+{{ toYaml .Values.voip_record | indent 6 }}
+    vsys_id: {{ .Values.vsys_id }}

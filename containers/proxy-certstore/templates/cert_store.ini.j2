@@ -1,0 +1,56 @@
+{% import '/templates/macros.j2' as macros -%}
+[SYSTEM]
+#1:print on screen, 0:don't
+DEBUG_SWITCH = 1
+RUN_LOG_PATH = "conf/zlog.conf"
+
+[breakpad]
+    disable_coredump=0
+    enable_breakpad=0
+    enable_breakpad_upload=0
+    breakpad_minidump_dir="/run/certstore/crashreport"
+    breakpad_upload_tools="/opt/tsg/framework/bin/minidump_upload"
+[CONFIG]
+#Number of running threads
+thread-nu = 4
+#1 rsync, 0 sync
+mode=1
+#Local default root certificate is valid for 30 days by default
+expire_after = 30
+#Local default root certificate path
+local_debug = 1
+ca_path = ./cert/tsg-ca-v3-trust-ca.pem
+untrusted_ca_path = ./cert/tsg-ca-v3-untrust-ca.pem
+
+[MAAT]
+#Configure the load mode,
+#1: using local json
+#2: using Redis reads
+maat_json_switch=2
+#When the loading mode is sent to the network, set the scanning configuration modification interval (s).
+effective_interval=1
+#Specify the location of the configuration library table file
+table_info=./conf/table_info.conf
+#Json file path when json schema is used
+pxy_obj_keyring=./conf/pxy_obj_keyring.json
+
+[LIBEVENT]
+#Local monitor port number, default is 9991
+port = 9991
+
+[CERTSTORE_REDIS]
+#The Redis server IP address and port number where the certificate is stored locally
+ip = 127.0.0.1
+port = 6379
+
+[MAAT_REDIS]
+#Maat monitors the Redsi server IP address and port number
+
+ip = {{ macros.cm_address(external_resources.cm) }}
+port = {{ macros.cm_port(external_resources.cm) }}
+dbindex =  {{ vsys_id }}
+[stat]
+statsd_server=127.0.0.1
+statsd_port=8100
+statsd_set_prometheus_port=9002
+statsd_set_prometheus_url_path=/metrics

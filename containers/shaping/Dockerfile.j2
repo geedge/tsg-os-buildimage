@@ -1,0 +1,16 @@
+{% import 'dockerfile-macros.j2' as macros -%}
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+RUN {{ macros.install_packages(packages) }} && \
+    {{ macros.clean_after_install_packages() }}
+# files
+COPY files/zlog.conf /opt/tsg/shaping_engine/conf/
+# templates
+COPY templates/* /templates/
+# scripts
+COPY --chmod=755 entrypoint.sh /usr/local/bin/
+
+WORKDIR /opt/tsg/shaping_engine
+
+CMD ["/bin/bash"]

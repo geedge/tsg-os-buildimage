@@ -1,0 +1,144 @@
+{% import '/templates/macros.j2' as macros -%}
+[MAAT]
+PROFILE="./tsgconf/maat.conf"
+{%- if external_resources.sd.enable is defined and external_resources.sd.enable == True %}
+DYNAMIC_MAPPING_MAAT_SWITCH=1
+{%- else %}
+DYNAMIC_MAPPING_MAAT_SWITCH=0
+{%- endif %}
+
+DEVICE_TAG_FILE=/opt/tsg/etc/tsg_device_tag.json
+ACCEPT_TAGS={"tags":[{{ macros.device_tag_list(device) }}]}
+
+[TSG_LOG]
+IPFIX_SCHEMA_PROFILE=./tsgconf/firewall_logger_ipfix_schema.json
+LOGGER_SCHEMA_PROFILE=./tsgconf/firewall_logger_transmitter_schema.json
+
+TRAFFIC_VSYSTEM_ID={{ vsys_id }}
+
+{%- if firewall.logs.contains_app_id.enable == True %}
+SEND_APP_ID_SWITCH=1
+{%- else %}
+SEND_APP_ID_SWITCH=0
+{%- endif %}
+{%- if firewall.logs.contains_dns_resource_record.enable == True %}
+SEND_DNS_RR_SWITCH=1
+{%- else %}
+SEND_DNS_RR_SWITCH=0
+{%- endif %}
+
+[SYSTEM]
+DATACENTER_ID={{ session_id_generator.snowflake_worker_id_base }}
+LOG_LEVEL=30
+LOG_PATH="firewall.log"
+DEVICE_SEQ_IN_DATA_CENTER={{ session_id_generator.snowflake_worker_id_offset }}
+SERVICE_CHAINING_SID={{ sid.sce }}
+SHAPING_SID={{ sid.shaping }}
+PROXY_SID={{ sid.proxy }}
+{%- if decoders.SSL_JA3 == True %}
+GENERATE_JA3_FINGERPRINT=1
+{%- else %}
+GENERATE_JA3_FINGERPRINT=0
+{%- endif %}
+MAX_SCAN_TCP_PKT_COUNT=8
+MAX_SCAN_UDP_PKT_COUNT=8
+PERIODIC_SCAN_INTERVAL_MS=120000
+OSFP_DB_JSON_PATH=tsgconf/firewall_osfp_db.json
+L7_PROTOCOL_FILE=./tsgconf/firewall_l7_protocol.conf
+
+{% if appsketch.context_based_detector == True and appsketch.enable == True %}
+APPSKETCH_SWITCH=1
+{%- else %}
+APPSKETCH_SWITCH=0
+{%- endif %}
+
+[FIREWALL]
+# hijack, replace
+PACKET_RESPONSE_MODE=replace
+HTTP_PAGE200=./tsgconf/HTTP200.html
+HTTP_PAGE204=./tsgconf/HTTP204.html
+HTTP_PAGE403=./tsgconf/HTTP403.html
+HTTP_PAGE404=./tsgconf/HTTP404.html
+
+[FIREWALL_LOCAL_STAT]
+STAT_NAME="firewall"
+STAT_INTERVAL_TIME_S=5
+STAT_OUTPATH="metrics/firewall_local_file_stat.json"
+
+[APP_SKETCH_FEEDBACK]
+QOS=0
+PUBLISH_TOPIC="APP_SIGNATURE_ID"
+#CLIENT_ID=
+#BROKER_IP=
+#BROKER_PORT=
+
+[qdpi_detector]
+debug_swtich=30
+intput_max_packet=20
+qmdpi_engine_config=injection_mode=stream;nb_workers={{ sapp_affinity | length }};nb_flows=8000;basic_dpi_enable=1;classification_cache_enable=0;fm_flow_table_alloc_mode=0
+
+[TRAFFIC_MIRROR]
+{%- if traffic_mirror.enable_raw_traffic == True %}
+TRAFFIC_MIRROR_ENABLE=1
+{%- else %}
+TRAFFIC_MIRROR_ENABLE=0
+{%- endif %}
+NIC_NAME="{{ macros.safe_read(nic_mirror_name,"firewall") }}"
+APP_NAME="firewall-mirror-{{ app_symbol_index }}"
+DEFAULT_VLAN_ID=0
+
+[PROTO_IDENTIFY]
+MAX_IDENTIFY_PACKETS=10
+
+[SESSION_FLAGS]
+#RANDOM_LOOKING_JUDGE_LIST={"random_looking_judge_list":[ "frequency", "block_frequency", "cumulative_sums", "runs", "longest_run", "rank", "non_overlapping_template_matching", "overlapping_template_matching", "universal", "random_excursions", "random_excursions_variant", "poker_detect", "runs_distribution", "self_correlation", "binary_derivative" ]}
+FET_ENABLED=1
+RANDOM_LOOKING_UDP_IGNORE_PKTS=-1
+RANDOM_LOOKING_JUDGE_LIST={"random_looking_judge_list":[]}
+TUNNELING_PCRE_LIST={"tunneling_pcre_list":["(B|C)(d){3,5}(a|b|c|d)(A|B)b(A|B|C|D)", "(B|C)(d){3,5}(a|b|c|d)Aa(A|B|C|D)", "(B|C)(d){2}(b|c)(A|B)b(A|B|C|D)", "(B|C)(d){2}(b|c)Aa(A|B|C|D)"]}
+
+[SF_CLASSIFIER]
+SYNC_MODE=1
+
+{% if stat_policy_enforcer.enable == True -%}
+[STAT_POLICY_ENFORCER]
+CYCLE_INTERVAL_S=1
+SESSION_UPDATE_MS=250
+{%- endif %}
+
+{% if traffic_sketch.enable == True -%}
+[TRAFFIC_SKETCH]
+APP_AND_TRAFFIC_CYCLE_S=1
+APP_AND_TRAFFIC_CYCLE_UPDATE_MS=250
+TOPK_CYCLE_S=60
+TOPK_UPDATE_MS=1000
+DOS_CYCLE_S=60
+DOS_UPDATE_MS=1000
+SWITCH_TRAFFIC_SKETCH=1
+{%- endif %}
+
+{% if policy_sketch.enable == True -%}
+[POLICY_SKETCH]
+OBJECT_CYCLE_S=1
+OBJECT_UPDATE_MS=250
+RULE_HITS_CYCLE_S=1
+RULE_HITS_UPDATE_MS=250
+{%- endif %}
+
+[DOS_PROTECTOR]
+{% if dos_protector.enable == True -%}
+DOS_PROTECTOR_ENABLE=1
+OUTPUT_INTERVAL_MS=60000
+METRICS_OUTPUT_INTERVAL_MS=60000
+SWARMKV_CLUSTER_NAME="dos_protection_vsys{{ vsys_id }}"
+SWARMKV_NODE_IP="0.0.0.0"
+SWARMKV_NODE_PORT=8551
+SWARMKV_CONSUL_IP="NODE_IP_LOCATION"
+SWARMKV_CONSUL_PORT=8500
+SWARMKV_CLUSTER_ANNOUNCE_IP="NODE_IP_LOCATION"
+SWARMKV_CLUSTER_ANNOUNCE_PORT=CLUSTER_ANNOUNCE_PORT_LOCATION
+SWARMKV_HEALTH_CHECK_PORT=8552
+SWARMKV_HEALTH_CHECK_ANNOUNCE_PORT=HEALTH_CHECK_ANNOUNCE_PORT_LOCATION
+{%- else %}
+DOS_PROTECTOR_ENABLE=0
+{%- endif %}

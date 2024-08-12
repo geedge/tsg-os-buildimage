@@ -1,0 +1,4 @@
+packages:
+  - name: certstore
+    version: 3.0.5.20241018.c8bca25
+    install_command: dnf

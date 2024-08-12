@@ -1,0 +1,25 @@
+{{- if .Values.service_chaining.enable }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sce-{{ .Release.Name }}
+  namespace: default
+data:
+  values.yaml: |
+    app_symbol_index: {{ .Values.app_symbol_index }}
+    device:
+{{ toYaml .Values.device | indent 6 }}
+    external_resources:
+      cm:
+{{ toYaml .Values.external_resources.cm | indent 8 }}
+      olap:
+        kafka_brokers:
+{{ toYaml .Values.external_resources.olap.kafka_brokers | indent 10 }}
+    sce_affinity:
+{{ toYaml .Values.sce_affinity | indent 4 }}
+    sce_config:
+{{ toYaml .Values.sce_config | indent 6 }}
+    sid:
+      firewall: {{ .Values.sid.firewall }}
+    vsys_id: {{ .Values.vsys_id }}
+{{- end }}

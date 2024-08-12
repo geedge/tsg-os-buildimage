@@ -1,0 +1,77 @@
+[PLUGINFO]
+PLUGNAME=FIREWEALL
+SO_PATH=./plug/business/firewall/firewall.so
+INIT_FUNC=firewall_init
+DESTROY_FUNC=firewall_destory
+
+{%- if decoders.HTTP == True %}
+[HTTP]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_http_plug_entry
+{%- endif %}
+
+{%- if decoders.SSL == True %}
+[SSL]
+FUNC_FLAG=SSL_CLIENT_HELLO,SSL_SERVER_HELLO,SSL_APPLICATION_DATA,SSL_CERTIFICATE_DETAIL
+FUNC_NAME=firewall_ssl_plug_entry
+{%- endif %}
+
+{%- if decoders.DNS == True %}
+[DNS]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_dns_plug_entry
+{%- endif %}
+
+{%- if decoders.MAIL == True %}
+[MAIL]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_mail_plug_entry
+{%- endif %}
+
+{%- if decoders.RTP == True %}
+[RTP]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_rtp_plug_entry
+{%- endif %}
+
+{%- if decoders.SIP == True %}
+[SIP]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_sip_plug_entry
+{%- endif %}
+
+{%- if decoders.FTP == True %}
+[FTP]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_ftp_plug_entry
+{%- endif %}
+
+{%- if decoders.QUIC == True %}
+[QUIC]
+FUNC_FLAG=QUIC_CLIENT_HELLO,QUIC_SERVER_HELLO,QUIC_CACHED_CERT,QUIC_COMM_CERT,QUIC_CERT_CHAIN,QUIC_VERSION,QUIC_APPLICATION_DATA
+FUNC_NAME=firewall_quic_plug_entry
+{%- endif %}
+
+{%- if decoders.DTLS == True %}
+[DTLS]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_dtls_plug_entry
+{%- endif %}
+
+{%- if decoders.STRATUM == True %}
+[STRATUM]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_stratum_plug_entry
+{%- endif %}
+
+{%- if decoders.RDP == True %}
+[RDP]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_rdp_plug_entry
+{%- endif %}
+
+{%- if decoders.SSH == True %}
+[SSH]
+FUNC_FLAG=ALL
+FUNC_NAME=firewall_ssh_plug_entry
+{%- endif %}
