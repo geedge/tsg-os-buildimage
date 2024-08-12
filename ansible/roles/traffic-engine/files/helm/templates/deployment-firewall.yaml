@@ -212,36 +212,25 @@ spec:
           - "-ec"
           - |
             ldconfig
-            python3 /opt/tsg/framework/bin/fieldstat_exporter.py prometheus -p 9011 -d /opt/tsg/sapp/metrics
+            python3 /opt/tsg/framework/bin/fieldstat_exporter.py prometheus -p 9010 -d /opt/tsg/sapp/metrics
         ports:
-          - containerPort: 9011
+          - containerPort: 9010
         securityContext:
           privileged: true
         livenessProbe:
           tcpSocket:
-            port: 9011
+            port: 9010
           failureThreshold: 1
           timeoutSeconds: 10
         startupProbe:
           tcpSocket:
-            port: 9011
+            port: 9010
           failureThreshold: 5
           periodSeconds: 10
         volumeMounts:
         - name: metrics-json-dir
           mountPath: "/opt/tsg/sapp/metrics"
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
-
-      - name: merged-exporter
-        image: "quay.io/rebuy/exporter-merger:v0.2.0"
-        imagePullPolicy: Never
-        env:
-        - name: MERGER_URLS
-          value: http://127.0.0.1:9273/metrics http://127.0.0.1:9011/metrics
-        - name: MERGER_PORT
-          value: "9010"
-        ports:
-        - containerPort: 9010
 
       initContainers:
       - name: init-default-svc

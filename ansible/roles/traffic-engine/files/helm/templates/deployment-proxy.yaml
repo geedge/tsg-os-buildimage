@@ -172,7 +172,7 @@ spec:
         volumeMounts:
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}  
 
-      - name: prometheus-endpoint
+      - name: merged-exporter
         image: "quay.io/rebuy/exporter-merger:v0.2.0"
         imagePullPolicy: Never
         env:
