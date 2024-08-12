@@ -1,0 +1,25 @@
+{{- if .Values.shaping.enable }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shaping-{{ .Release.Name }}
+  namespace: default
+data:
+  values.yaml: |
+    app_symbol_index: {{ .Values.app_symbol_index }}
+    device:
+{{ toYaml .Values.device | indent 6 }}
+    external_resources:
+      cm:
+{{ toYaml .Values.external_resources.cm | indent 8 }}
+      olap:
+        kafka_brokers:
+{{ toYaml .Values.external_resources.olap.kafka_brokers | indent 10 }}
+    shaping_affinity:
+{{ toYaml .Values.shaping_affinity | indent 4 }}
+    shaping_config:
+{{ toYaml .Values.shaping_config | indent 6 }}
+    sid:
+      firewall: {{ .Values.sid.firewall }}
+    vsys_id: {{ .Values.vsys_id }}
+{{- end }}

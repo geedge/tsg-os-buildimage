@@ -1,0 +1,6 @@
+{% import '/templates/macros.j2' as macros -%}
+[Module]
+pcapdevice={{ nic_raw_name }}
+sendto_gdev_card={{ nic_raw_name }}
+sendto_gdev_ip={{ macros.safe_read(etherfabric_settings,"keepalive.ip") }}
+gdev_status_switch=1

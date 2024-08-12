@@ -1,0 +1,19 @@
+{% import 'dockerfile-macros.j2' as macros -%}
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+RUN {{ macros.install_packages(packages) }} && \
+    {{ macros.clean_after_install_packages() }}
+# files
+COPY files/doh.conf            /opt/tsg/tfe/conf/doh/
+COPY files/future.conf         /opt/tsg/tfe/conf/tfe/
+COPY files/tsg_diagnose_ca.pem /opt/tsg/tfe/resource/tfe/
+COPY files/zlog.conf           /opt/tsg/tfe/conf/tfe/
+# templates
+COPY templates/* /templates/
+# scripts
+COPY --chmod=755 entrypoint.sh /usr/local/bin/
+
+WORKDIR /opt/tsg/tfe
+
+CMD ["/bin/bash"]

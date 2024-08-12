@@ -1,0 +1,130 @@
+packages:
+  - name: libcjson
+    version: 1.7.12.6c09dcf
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libdocumentanalyze
+    version: 2.0.11.719a8ff
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libMESA_field_stat
+    version: 1.0.3.0de785d
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libMESA_field_stat2
+    version: 2.10.11.b2095aa
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libMESA_handle_logger
+    version: 2.0.12.1dd9e1e
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libMESA_htable
+    version: 3.10.13.bd6fc34
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libMESA_prof_load
+    version: 1.0.9.16148e7
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: librulescan
+    version: 3.0.1.6145620
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libelua
+    version: 2.0.1.7760c27
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libwiredcfg
+    version: 2.0.8.cafaf49
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libWiredLB
+    version: 2.0.6.54a039d
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libbreakpad_mini
+    version: 1.0.9.9d98968
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libMV_Sketch
+    version: 2.1.3.20231215.19725c6
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: librdkafka
+    version: 1.2.2.1218b3c
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libMESA_jump_layer
+    version: 1.0.10.6fb4738
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libswarmkv
+    version: 4.4.4.5c89f35
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libfieldstat3
+    version: 3.1.1.03491ea
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libMESA_sts
+    version: 1.0.3.d515a96
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libfieldstat4
+    version: 4.6.6.2d9b9cd
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libipfix_exporter
+    version: 1.0.6.0e73c24
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libosfp
+    version: 1.3.11.d8c406f
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: utable
+    version: 1.0.11.f3db4a4
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libmaatframe
+    version: 4.2.1.4fddb2b
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libcbd
+    version: 3.1.1.c3767f2
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: libdos_protector
+    version: 3.2.3.07c2e54
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: hasp-tools
+    version: 1.0.12.66db85d
+    install_command: dnf
+    dnf_command_options: "--nogpgcheck"

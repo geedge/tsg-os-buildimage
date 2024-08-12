@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: systemd-exporter
+  name: systemd-exporter
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  namespace: {{ .Release.Namespace }}
+
+spec:
+  ports:
+  - name: systemd-exporter-port
+    {{- if .Values.service.nodePort }}
+    nodePort: {{ .Values.service.nodePort }}
+    {{- end }}
+    port: {{ .Values.service.port }}
+    targetPort: ex-systemd-port
+  selector:
+    app: systemd-exporter
+  type: {{ .Values.service.type }}
+

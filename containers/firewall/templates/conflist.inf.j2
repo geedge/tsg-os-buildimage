@@ -1,0 +1,54 @@
+[platform]
+./plug/stellar_on_sapp/start_loader.inf
+
+[protocol]
+{%- if decoders.SOCKS == True %}
+./plug/protocol/deal_socks/deal_socks.inf
+{%- endif %}
+{%- if decoders.SIP == True %}
+./plug/protocol/sip/sip.inf
+{%- endif %}
+{%- if decoders.RTP == True %}
+./plug/protocol/rtp/rtp.inf
+{%- endif %}
+{%- if decoders.SSL == True %}
+./plug/protocol/ssl/ssl.inf
+{%- endif %}
+{%- if decoders.HTTP == True %}
+./plug/protocol/http/http.inf
+{%- endif %}
+{%- if decoders.DNS == True %}
+./plug/protocol/dns/dns.inf
+{%- endif %}
+{%- if decoders.MAIL == True %}
+./plug/protocol/mail/mail.inf
+{%- endif %}
+{%- if decoders.FTP == True %}
+./plug/protocol/ftp/ftp.inf
+{%- endif %}
+{%- if decoders.QUIC == True %}
+./plug/protocol/quic/quic.inf
+{%- endif %}
+./plug/protocol/l2tp_protocol_plug/l2tp_protocol_plug.inf
+{%- if decoders.SSH == True %}
+./plug/protocol/ssh/ssh.inf
+{%- endif %}
+{%- if decoders.STRATUM == True %}
+./plug/protocol/stratum/stratum.inf
+{%- endif %}
+{%- if decoders.RDP == True %}
+./plug/protocol/rdp/rdp.inf
+{%- endif %}
+{%- if decoders.DTLS == True %}
+./plug/protocol/dtls/dtls.inf
+{%- endif %}
+
+[business]
+{%- if firewall.enable == True %}
+./plug/business/firewall/firewall.inf
+{%- endif %}
+./plug/stellar_on_sapp/defer_loader.inf
+./plug/business/http_healthcheck/http_healthcheck.inf
+{%- if decoders.SSL == True %}
+./plug/protocol/ssl/ssl_defer.inf
+{%- endif %}

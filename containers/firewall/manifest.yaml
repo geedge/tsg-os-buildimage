@@ -1,0 +1,131 @@
+packages:
+  - name: sapp-pr
+    version: 4.3.67.07feab9
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: tcpdump_mesa
+    version: 1.0.13.6ec67f5
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+  - name: conn_telemetry
+    version: 1.0.3.4ef6df6
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: firewall
+    version: 3.5.1.d5e256a
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg"
+  - name: glimpse_detector
+    version: 3.2.0.0069e3b
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: qdpi_detector
+    version: 5.0.2.90682ec
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: dns
+    version: 2.1.7.1da8dfa
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: ftp
+    version: 1.0.16.d996236
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: http
+    version: 2.0.20.0571d0b
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: mail
+    version: 1.0.22.431a81f
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: quic
+    version: 2.0.11.1ab2559
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: ssl
+    version: 3.2.0.93d17f6
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: rtp
+    version: 1.0.7.530ac76
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: ssh
+    version: 2.1.7.b053e65
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: dtls
+    version: 2.0.5.a559144
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: mesa_sip
+    version: 2.1.1.6504027
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: deal_socks
+    version: 1.0.4.329bba3
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: stratum
+    version: 1.1.3.82ba152
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: rdp
+    version: 1.0.3.f392ffd
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: session_flags
+    version: 2.4.0.579bcde
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: stat_policy_enforcer
+    version: 3.5.1.3a39801
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: sf_classifier
+    version: 2.2.0.1f91efa
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: stellar-on-sapp
+    version: 2.1.7.4e4f933
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg"
+  - name: policy_sketch
+    version: 1.2.0.43bd6ec
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: traffic_sketch
+    version: 1.1.5.a38497d
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"
+  - name: http_healthcheck
+    version: 2.0.2.969442a
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/sapp"

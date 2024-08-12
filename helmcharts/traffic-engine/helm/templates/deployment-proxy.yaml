@@ -1,0 +1,329 @@
+{{- if and .Values.proxy.enable (ge (len .Values.tfe_affinity) 1) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-proxy
+  labels:
+    app: {{ .Release.Name }}
+    component: proxy
+  annotations:
+    reloader.stakater.com/auto: "true"
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-proxy
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-proxy
+        vsysId: "{{ .Values.vsys_id }}"
+        serviceFunction: {{ .Release.Name }}
+        component: proxy
+      annotations:
+        prometheus.io/port: "9003"
+        prometheus.io/scrape: "true"
+
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      serviceAccountName: {{ .Release.Name }}
+      containers:
+      - name: proxy
+        image: "registry.gdnt-cloud.website/tsg/os/proxy:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/tfe
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            /usr/local/bin/entrypoint.sh \
+            {{- if .Values.debug.proxy.enable_prestart_script }}
+            --enable_prestart \
+            {{- end }}
+            {{- if .Values.debug.proxy.enable_interactive_startup }}
+            --enable_interactive_startup \
+            {{- end }}
+            || echo "Failed to start."
+        ports:
+          - containerPort: 9001
+        env:
+        - name: DEPLOYMENT_NAME
+          value: {{ .Release.Name }}-proxy
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        securityContext:
+          privileged: true
+{{- if .Values.debug.proxy.enable_liveness_probe }}
+        livenessProbe:
+          tcpSocket:
+            port: 9001
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9001
+          failureThreshold: 30
+          periodSeconds: 10
+{{- end }}
+        volumeMounts:
+        - name: journal-volume
+          mountPath: /run/systemd/journal
+        - name: proxy-configs-volume
+          mountPath: "/templates/values.yaml"
+          subPath: "values.yaml"
+        - name: proxy-log
+          mountPath: /opt/tsg/tfe/log
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+        {{- if .Values.debug.proxy.enable_prestart_script }}
+        - name: prestart-dir
+          mountPath: /tmp/prestart
+        - name: proxy-prestart
+          mountPath: /opt/tsg/scripts/prestart.sh
+        {{- end }}
+        {{- if .Values.debug.proxy.enable_mount_host_filesystem }}
+        - name: host-root
+          mountPath: /host
+        {{- end }}
+        {{- include "traffic-engine.mount.mrzcpd" . | nindent 8 }}
+        {{- include "public.license-support.dev-bus-usb-volume-mount" . | nindent 8 }}
+
+      - name: certstore
+        image: "registry.gdnt-cloud.website/tsg/os/proxy-certstore:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/certstore
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            /usr/local/bin/entrypoint.sh || echo "Failed to start."
+        securityContext:
+          privileged: true
+        ports:
+          - containerPort: 9002
+        env:
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        volumeMounts:
+        - name: proxy-configs-volume
+          mountPath: "/templates/values.yaml"
+          subPath: "values.yaml"
+        - name: certstore-log
+          mountPath: /opt/tsg/certstore/logs
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+
+      - name: cert-redis
+        image: "registry.gdnt-cloud.website/tsg/os/proxy-certstore:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command: ["/usr/bin/redis-server", "/etc/cert-redis.conf"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}  
+
+      - name: merged-exporter
+        image: "quay.io/rebuy/exporter-merger:v0.2.0"
+        imagePullPolicy: Never
+        env:
+        - name: MERGER_URLS
+          value: http://127.0.0.1:9001/metrics http://127.0.0.1:9002/metrics
+        - name: MERGER_PORT
+          value: "9003"
+        ports:
+        - containerPort: 9003
+
+      initContainers:
+      - name: init-default-svc
+        image: "registry.gdnt-cloud.website/tsg/os/proxy:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until nslookup kubernetes.default.svc; do echo waiting for kubernetes service; sleep 2; done
+
+      - name: init-packet-io-engine-ready
+        image: "registry.gdnt-cloud.website/tsg/os/proxy:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            until [ $(curl -s -o /dev/null -w "%{http_code}" http://${NODE_IP}:9086/probe) -eq 200 ]; do echo waiting for packet-io-engine ready; sleep 2; done
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+
+      - name: proxy-init
+        image: "registry.gdnt-cloud.website/tsg/os/proxy:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ecx"
+          - |
+            mount -o remount,rw /sys
+            # disable rpfilter
+            sysctl -w net.ipv4.conf.all.rp_filter=0
+            sysctl -w net.ipv4.conf.default.rp_filter=0
+
+            # fs
+            sysctl -w fs.file-max=1048576
+            sysctl -w net.core.somaxconn=131072
+
+            # tcp options about TIME_WAIT
+            sysctl -w net.ipv4.tcp_fin_timeout=10
+            sysctl -w net.ipv4.tcp_tw_reuse=1
+            sysctl -w net.ipv4.tcp_max_tw_buckets=4096
+            sysctl -w net.ipv4.tcp_max_syn_backlog=131072
+
+            # bbr
+            sysctl -w net.ipv4.tcp_congestion_control=bbr
+
+            # tcp feature
+            sysctl -w net.ipv4.tcp_ecn=0
+            sysctl -w net.ipv4.tcp_sack=1
+            sysctl -w net.ipv4.tcp_timestamps=1
+
+            # disable tcp windows scaling for kernel bugs
+            sysctl -w net.ipv4.tcp_window_scaling=0
+
+            ip tuntap add dev tap0 mode tap multi_queue
+            /usr/sbin/ip link set tap0 address fe:65:b7:03:50:bd
+            /usr/sbin/ip link set tap0 up
+            /usr/sbin/ip addr flush dev tap0
+            /usr/sbin/ip addr add 172.16.241.2/30 dev tap0
+            /usr/sbin/ip neigh flush dev tap0
+            /usr/sbin/ip neigh add 172.16.241.1 lladdr 00:0e:c6:d6:72:c1 dev tap0 nud permanent
+            /usr/sbin/ip6tables -A INPUT -i tap0 -m bpf --bytecode '17,48 0 0 0,84 0 0 240,21 0 13 96,48 0 0 6,21 0 11 6,40 0 0 4,37 0 9 24,48 0 0 52,84 0 0 240,116 0 0 2,53 0 5 24,48 0 0 60,21 0 3 88,48 0 0 61,21 0 1 4,6 0 0 65535,6 0 0 0' -j NFQUEUE --queue-num 1
+            /usr/sbin/iptables -A INPUT -i tap0 -m bpf --bytecode '18,48 0 0 0,84 0 0 240,21 0 14 64,48 0 0 9,21 0 12 6,40 0 0 6,69 10 0 8191,177 0 0 0,80 0 0 12,84 0 0 240,116 0 0 2,53 0 5 24,80 0 0 20,21 0 3 88,80 0 0 21,21 0 1 4,6 0 0 65535,6 0 0 0' -j NFQUEUE --queue-num 1
+            /usr/sbin/ip rule add iif tap0 tab 100
+            /usr/sbin/ip route add local default dev lo table 100
+            /usr/sbin/ip rule add fwmark 0x65 lookup 101
+            /usr/sbin/ip route add default dev tap0 via 172.16.241.1 table 101
+            /usr/sbin/ip addr add fd00::02/64 dev tap0
+            /usr/sbin/ip -6 route add default via fd00::01
+            /usr/sbin/ip -6 rule add iif tap0 tab 102
+            /usr/sbin/ip -6 route add local default dev lo table 102
+            /usr/sbin/ip -6 neigh add fd00::01 lladdr 00:0e:c6:d6:72:c1 dev tap0 nud permanent
+
+            #decrypted traffic steering
+            /usr/sbin/ip tuntap add dev tap_c mode tap multi_queue
+            /usr/sbin/ip tuntap add dev tap_s mode tap multi_queue
+
+            /usr/sbin/ip link set tap_c address 80:61:5f:0f:97:e5
+            /usr/sbin/ip link set tap_s address 80:61:5f:0f:97:e6
+
+            /usr/sbin/ip link set tap_c up
+            /usr/sbin/ip link set tap_s up
+
+            /usr/sbin/ethtool --offload tap_c rx off tx off
+            /usr/sbin/ethtool --offload tap_s rx off tx off
+
+            /usr/sbin/ip link set tap_c up
+            /usr/sbin/ip link set tap_s up
+            /usr/sbin/ip addr flush dev tap_c
+            /usr/sbin/ip addr flush dev tap_s
+
+            /usr/sbin/ip addr add 2.2.2.2/24 dev tap_c
+            /usr/sbin/ip addr add 3.3.3.3/24 dev tap_s
+            /usr/sbin/ip -4 neigh flush dev tap_c
+            /usr/sbin/ip -4 neigh flush dev tap_s
+            /usr/sbin/ip -4 neigh add 2.2.2.1 lladdr 80:61:5f:0f:97:e6 dev tap_c nud permanent
+            /usr/sbin/ip -4 neigh add 3.3.3.1 lladdr 80:61:5f:0f:97:e5 dev tap_s nud permanent
+            /usr/sbin/ip -4 rule add fwmark 0x11 lookup 111
+            /usr/sbin/ip -4 rule add fwmark 0x22 lookup 222
+            /usr/sbin/ip -4 route add default dev tap_c via 2.2.2.1 table 111
+            /usr/sbin/ip -4 route add default dev tap_s via 3.3.3.1 table 222
+            /usr/sbin/ip -4 rule add iif tap_c tab 100
+            /usr/sbin/ip -4 rule add iif tap_s tab 100
+
+            /usr/sbin/ip addr add fd02::02/64 dev tap_c
+            /usr/sbin/ip addr add fd03::03/64 dev tap_s
+            /usr/sbin/ip -6 neigh flush dev tap_c
+            /usr/sbin/ip -6 neigh flush dev tap_s
+            /usr/sbin/ip -6 neigh add fd02::01 lladdr 80:61:5f:0f:97:e6 dev tap_c nud permanent
+            /usr/sbin/ip -6 neigh add fd03::01 lladdr 80:61:5f:0f:97:e5 dev tap_s nud permanent
+            /usr/sbin/ip -6 rule add fwmark 0x11 lookup 333
+            /usr/sbin/ip -6 rule add fwmark 0x22 lookup 444
+            /usr/sbin/ip -6 route add default dev tap_c via fd02::01 table 333
+            /usr/sbin/ip -6 route add default dev tap_s via fd03::01 table 444
+            /usr/sbin/ip -6 rule add iif tap_c tab 102
+            /usr/sbin/ip -6 rule add iif tap_s tab 102
+        securityContext:
+          privileged: true
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        volumeMounts:
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+
+      volumes:
+      - name: journal-volume
+        hostPath:
+          path: /run/systemd/journal
+          type: Directory
+      - name: proxy-configs-volume
+        configMap:
+          name: proxy-{{ .Release.Name }}
+      - name: proxy-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/tfe/
+      - name: certstore-log
+        hostPath:
+          path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/certstore/
+      {{- include "traffic-engine.volume.mrzcpd" . | nindent 6 }}
+      {{- include "public.sync-host-timezone.volume" . | nindent 6 }}
+      {{- if .Values.debug.proxy.enable_prestart_script }}
+      - name: prestart-dir
+        hostPath: 
+          path: /etc/tsg-os/{{ .Release.Name }}/
+          type: DirectoryOrCreate
+      - name: proxy-prestart
+        hostPath:
+      {{- if .Values.debug.proxy.prestart_script }}
+          path: {{ .Values.debug.proxy.prestart_script }}
+      {{- else }}
+          path: /etc/tsg-os/{{ .Release.Name }}/proxy_prestart_script.sh
+      {{- end }}
+          type: FileOrCreate
+      {{- end }}
+      {{- if .Values.debug.proxy.enable_mount_host_filesystem }}
+      - name: host-root
+        hostPath:
+          path: /
+      {{- end }}
+      {{- include "public.license-support.dev-bus-usb-volume" . | nindent 6 }}
+
+{{- end }}

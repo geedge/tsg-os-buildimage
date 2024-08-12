@@ -1,0 +1,27 @@
+{% import 'dockerfile-macros.j2' as macros -%}
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+RUN {{ macros.install_packages(packages) }} && \
+    {{ macros.clean_after_install_packages() }} && \
+    rm -rf /opt/tsg/sapp/r2 && \
+    rm -rf /opt/tsg/sapp/r3
+# files
+COPY files/quic/main.conf             /opt/tsg/sapp/conf/quic/main.conf
+COPY files/asymmetric_addr_layer.conf /opt/tsg/sapp/etc/
+COPY files/entrylist.conf             /opt/tsg/sapp/etc/
+COPY files/firewall_l7_protocol.conf  /opt/tsg/sapp/tsgconf/
+COPY files/http.conf                  /opt/tsg/sapp/conf/http/
+COPY files/necessary_plug_list.conf   /opt/tsg/sapp/etc/
+COPY files/project_list.conf          /opt/tsg/sapp/etc/
+COPY files/sapp_log.conf              /opt/tsg/sapp/etc/
+COPY files/vlan_flipping_map.conf     /opt/tsg/sapp/etc/
+COPY files/well_known_port.conf       /opt/tsg/sapp/etc/
+# templates
+COPY templates/* /templates/
+# scripts
+COPY --chmod=755 entrypoint.sh /usr/local/bin/
+
+WORKDIR /opt/tsg/sapp
+
+CMD ["/bin/bash"]

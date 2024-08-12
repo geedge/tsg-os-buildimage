@@ -1,0 +1,46 @@
+{% import 'dockerfile-macros.j2' as macros -%}
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+#RUN dnf -y upgrade --refresh rpm glibc && rm /var/lib/rpm/.rpm.lock && dnf -y upgrade dnf
+
+RUN dnf -y update && \
+    dnf -y install tcpdump \
+    numactl-libs \
+    iproute \
+    iptables \
+    procps \
+    net-tools \
+    ethtool \
+    gdb \
+    ipmitool \
+    liburing \
+    vim \
+    lrzsz \
+    libnsl \
+    perf \
+    jq \
+    perl \
+    perl-open \
+    valgrind \
+    python2 \
+    js-d3-flame-graph \
+    python3 \
+    dnsutils \
+    wireshark \
+    crudini \
+    inotify-tools \
+    jemalloc \
+    pcre2 \
+    epel-release
+
+RUN python2 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple PrettyTable==0.7.2 && \
+    python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple jinja2 prettytable tomlq toml sdnotify j2cli j2cli[yaml]
+
+RUN {{ macros.install_packages(packages) }} && \
+    {{ macros.clean_after_install_packages() }}
+
+COPY files/framework.conf  /etc/ld.so.conf.d/
+COPY files/framework.sh    /etc/profile.d/
+COPY --chmod=755 files/entrypoint_public.sh /usr/local/bin/
+COPY templates/*           /templates/

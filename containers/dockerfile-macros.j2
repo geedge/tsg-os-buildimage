@@ -1,0 +1,51 @@
+{#
+packages:
+  - name: example
+    version: 1.1.1
+    # url: https://www.example.com/download/test.rpm
+    download_command: dnf/curl
+    download_command_options: "--downloadonly --downloaddir /tmp/rpms_download"
+    download_command_override: "override the download command."
+    install_command: dnf/rpm
+    install_command_options: "--prefix /opt/tsg/framework"
+    install_command_override: "override the install command"
+#}
+
+{% macro install_packages(packages) -%}
+  {%- set generated_commands = [] -%}
+  {%- for item in packages if item.name and item.version -%}
+    {%- set rpm_version = item.name ~ "-" ~ item.version -%}
+    {%- if item.download_command_override is defined and item.download_command_override -%}
+      {%- do generated_commands.append(item.download_command_override) -%}
+    {%- else %}
+      {%- set command = '' %}
+      {%- if item.download_command is defined and item.download_command == "curl" %}
+        {%- set command = item.download_command ~ " " ~ item.curl ~ " " ~ (item.download_command_options | default('')) -%}
+      {%- endif %}
+      {%- if item.download_command is defined and item.download_command == "dnf" %}
+        {%- set command = item.download_command ~ " install -y --downloadonly --downloaddir /tmp/download " ~ rpm_version ~ " " ~ (item.download_command_options | default('')) -%}
+      {%- endif %}
+      {%- do generated_commands.append(command) if command -%}
+    {%- endif %}
+    {%- if item.install_command_override is defined and item.install_command_override -%}
+      {%- do generated_commands.append(item.install_command_override) -%}
+    {%- else %}
+      {%- set command = '' %}
+      {%- if item.install_command is defined and item.install_command == "dnf" %}
+        {%- set command = item.install_command ~ " install -y " ~ rpm_version ~ " " ~ (item.install_command_options | default('')) -%}
+      {%- endif %}
+      {%- if item.install_command is defined and item.install_command == "rpm" %}
+        {%- set command = item.install_command ~ " -ivh " ~ "/tmp/download/" ~ rpm_version ~ "* " ~ (item.install_command_options | default('')) -%}
+      {%- endif %}
+      {%- do generated_commands.append(command) if command -%}
+    {%- endif %}
+  {%- endfor -%}
+  {{ generated_commands | join(' && \\\n    ') }}
+{%- endmacro %}
+
+{% macro clean_after_install_packages() -%}
+  {%- set generated_commands = [] -%}
+  {%- do generated_commands.append("rm -rf /tmp/download") -%}
+  {%- do generated_commands.append("dnf clean all") -%}
+  {{ generated_commands | join(' && \\\n    ') }}
+{%- endmacro %}

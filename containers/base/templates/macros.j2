@@ -1,0 +1,93 @@
+{# macros.j2 #}
+{% macro cm_address(cm) -%}
+  {%- if cm.connectivity == "direct" -%}
+    {{ cm.direct.address }}
+  {%- elif cm.connectivity == "builtin" -%}
+    tsg-cm.tsg-os-system.svc
+  {%- else -%}
+    {{ cm.local_cache.cache_name ~ "-redis-master.tsg-os-system.svc" }}
+  {%- endif %}
+{%- endmacro %}
+
+{% macro cm_port(cm) -%}
+  {%- if cm.connectivity == "direct" -%}
+    {{ cm.direct.port }}
+  {%- elif cm.connectivity == "builtin" -%}
+    7002
+  {%- else -%}
+    6379
+  {%- endif %}
+{%- endmacro %}
+
+{% macro address_port_pairs_render(source, separator) -%}
+  {%- set addresses = [] -%}
+  {%- if source -%}
+    {%- for item in source -%}
+      {%- set address = item.address ~ ":" ~ item.port -%}
+      {%- do addresses.append(address) -%}
+    {%- endfor -%}
+    {{ addresses | join(separator) }}
+  {%- endif %}
+{%- endmacro %}
+
+{% macro sd_address(sd) -%}
+  {%- if sd.enable is defined and sd.enable == True -%}
+    {%- if sd.connectivity == "direct" -%}
+      {{ sd.direct.address }}
+    {%- else -%}
+      {{ sd.local_cache.cache_name ~ "-redis-master.tsg-os-system.svc" }}
+    {%- endif %}
+  {%- endif %}
+{%- endmacro %}
+
+{% macro sd_port(sd) -%}
+  {%- if sd.enable is defined and sd.enable == True -%}
+    {%- if sd.connectivity == "direct" -%}
+      {{ sd.direct.port }}
+    {%- else -%}
+      6379
+    {%- endif %}
+  {%- endif %}
+{%- endmacro %}
+
+{% macro device_tag_list(device) -%}
+    {%- set tags_list = [] -%}
+    {%- if device.tag is defined and device.tag %}
+        {%- for tag in device.tag %}
+            {%- for key, val in tag.items() %}
+                {%- set tag_json = '{"tag":"' ~ key ~ '","value":"' ~ val ~ '"}' -%}
+                {%- do tags_list.append(tag_json) -%}
+            {%- endfor %}
+        {%- endfor %}
+    {%- endif %}
+    {{ tags_list | join(',') }}
+{%- endmacro %}
+
+{% macro safe_read(data, path) -%}
+  {%- set keys = path.split('.') %} 
+  {%- set ns = namespace(value=data) %} 
+  {%- for key in keys %}
+    {%- if ns.value is mapping and key in ns.value %}
+        {%- set ns.value = ns.value[key] %}
+    {%- else %}
+        {%- set ns.value = None %}
+        {%- break %}
+    {%- endif %}
+  {%- endfor %}
+  {{- ns.value if ns.value is not none else '' }}
+{%- endmacro %}
+
+{# ref a.b.c.d using safe_read(a, "b.c.d") #}
+
+{% macro read_device_tag_value(device, key) -%}
+  {%- set ns = namespace(value='') %}
+  {%- if device.tag is defined and device.tag %}
+  {%- for tag in device.tag %}
+    {%- if tag is mapping and key in tag %}
+        {%- set ns.value = tag[key] %}
+        {%- break %}
+    {%- endif %}
+  {%- endfor %}
+  {%- endif %}
+  {{- ns.value if ns.value is not none else '' }}
+{%- endmacro %}
