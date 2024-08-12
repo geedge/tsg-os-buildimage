@@ -12,8 +12,8 @@ exit = "APP_GLIMPSE_DETECTOR_UNLOAD"
 
 [[plugin]]
 path = "./plug/business/firewall/firewall.so"
-init = "firewall_stellar_runtime_init"
-exit = "firewall_stellar_runtime_exit"
+init = "firewall_stellar_plugin_load"
+exit = "firewall_stellar_plugin_unload"
 
 [[plugin]]
 path = "./stellar_plugin/sf_classifier.so"
