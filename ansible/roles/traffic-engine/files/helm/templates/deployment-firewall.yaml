@@ -47,23 +47,8 @@ spec:
           - "-ec"
           - |
             ldconfig
-            {{- if or 
-              (eq .Values.external_resources.cm.connectivity "local_cache") 
-              (and (eq .Values.external_resources.sd.enable .Values.define_enable_val_yes) (eq .Values.external_resources.sd.connectivity "local_cache"))
-              (eq .Values.dos_protector.enable .Values.define_enable_val_yes) }}
-            {{- include "public.prepare-access-API" . | nindent 12 }}
-            {{- end }}
-            {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-            {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
-            sed -Ei -c "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
-            {{- end }}
-            {{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
-            {{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
-            {{- include "traffic-engine.global.sd.read-server-ip" . | nindent 12 }}
-            sed -Ei -c "s|SD_POLICY_LOCAL_CACHE_IP_LOCATION|${SD_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/sapp/tsgconf/maat.conf
-            {{- end }}
-            {{- end }}
             {{- if eq .Values.dos_protector.enable .Values.define_enable_val_yes }}
+            {{- include "public.prepare-access-API" . | nindent 12 }}
             until nslookup ${HOSTNAME}-8551.default.svc; do echo waiting for kubernetes service; sleep 2; done
             curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/${HOSTNAME}-8551 -o /tmp/service.txt
             export CLUSTER_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | .nodePort')
@@ -241,30 +226,6 @@ spec:
           - "-ec"
           - |
             until nslookup kubernetes.default.svc; do echo waiting for kubernetes service; sleep 2; done
-
-      {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-      - name: init-cm-svc
-        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
-        imagePullPolicy: Never
-        command:
-          - "bash"
-          - "-ec"
-          - |
-            until nslookup {{ .Values.external_resources.cm.local_cache.cache_name }}-redis-master.tsg-os-system.svc; do echo waiting for cm cache service; sleep 2; done
-      {{- end }}
-
-      {{- if eq .Values.external_resources.sd.enable .Values.define_enable_val_yes }}
-      {{- if eq .Values.external_resources.sd.connectivity "local_cache" }}
-      - name: init-sd-svc
-        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
-        imagePullPolicy: Never
-        command:
-          - "bash"
-          - "-ec"
-          - |
-            until nslookup {{ .Values.external_resources.sd.local_cache.cache_name }}-redis-master.tsg-os-system.svc; do echo waiting for sd cache service; sleep 2; done
-      {{- end }}
-      {{- end }}
 
       - name: init-packet-io-engine-ready
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"

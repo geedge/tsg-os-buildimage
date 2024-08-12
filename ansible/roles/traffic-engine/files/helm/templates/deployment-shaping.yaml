@@ -48,10 +48,6 @@ spec:
           - |
             ldconfig
             {{- include "public.prepare-access-API" . | nindent 12 }}
-            {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-            {{- include "traffic-engine.global.cm.read-server-ip" . | nindent 12 }}
-            sed -Ei -c "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/shaping_engine/conf/shaping.conf
-            {{- end }}
             until nslookup ${MY_POD_NAME}-8551.default.svc; do echo waiting for kubernetes service; sleep 2; done
             curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/${MY_POD_NAME}-8551 -o /tmp/service.txt
             export CLUSTER_ANNOUNCE_PORT=$(cat /tmp/service.txt | jq '.spec.ports[] | .nodePort')
@@ -184,18 +180,6 @@ spec:
           - "-ec"
           - |
             until nslookup kubernetes.default.svc; do echo waiting for kubernetes service; sleep 2; done
-
-
-      {{- if eq .Values.external_resources.cm.connectivity "local_cache" }}
-      - name: init-cm-svc
-        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
-        imagePullPolicy: Never
-        command:
-          - "bash"
-          - "-ec"
-          - |
-            until nslookup {{ .Values.external_resources.cm.local_cache.cache_name }}-redis-master.tsg-os-system.svc; do echo waiting for cm cache service; sleep 2; done
-      {{- end }}
 
       - name: init-packet-io-engine-ready
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
