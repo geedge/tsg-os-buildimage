@@ -62,18 +62,6 @@ spec:
           - |
             ldconfig
             cp /opt/tsg/dp_trace_telemetry/etc/dp_trace_configmap.conf /opt/tsg/dp_trace_telemetry/etc/dp_trace.conf
-            {{- if eq .Values.datapath_trace.cm.connectivity "local_cache" }}
-            export APISERVER=https://kubernetes.default.svc
-            export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
-            export NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
-            export TOKEN=$(cat ${SERVICEACCOUNT}/token)
-            export CACERT=${SERVICEACCOUNT}/ca.crt
-            curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/tsg-os-system/services/{{ .Values.datapath_trace.cm.local_cache.cache_name }}-redis-master -o /tmp/cm-cache.txt
-            export CM_POLICY_LOCAL_CACHE_IP=$(cat /tmp/cm-cache.txt  | jq -r '.spec.clusterIP')
-            echo "export CM_POLICY_LOCAL_CACHE_IP=${CM_POLICY_LOCAL_CACHE_IP}" > /etc/profile.d/cm-local-cache.sh
-            chmod 0755 /etc/profile.d/cm-local-cache.sh
-            sed -Ei -c "s|CM_POLICY_LOCAL_CACHE_IP_LOCATION|${CM_POLICY_LOCAL_CACHE_IP?}|g" /opt/tsg/dp_trace_telemetry/etc/dp_trace.conf
-            {{- end }}
             ln -sf /opt/tsg/dp_trace_telemetry/etc/dynamic/config /opt/tsg/dp_trace_telemetry/etc/dp_trace_dy.conf
             {{ template "dp_trace_telemetry.prestart" . }}
             {{ template "dp_trace_telemetry.start" . }}
@@ -178,7 +166,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-      {{- if eq .Values.datapath_trace.cm.connectivity "local_cache" }}
       - name: init-default-svc
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
@@ -187,15 +174,6 @@ spec:
           - "-ec"
           - |
             until nslookup kubernetes.default.svc; do echo waiting for kubernetes service; sleep 2; done
-      - name: init-cm-svc
-        image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"
-        imagePullPolicy: Never
-        command:
-          - "bash"
-          - "-ec"
-          - |
-            until nslookup {{ .Values.datapath_trace.cm.local_cache.cache_name }}-redis-master.tsg-os-system.svc; do echo waiting for cm cache service; sleep 2; done
-      {{- end }}
       volumes:
       - name: journal-volume
         hostPath:

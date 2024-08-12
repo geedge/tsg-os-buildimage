@@ -44,7 +44,7 @@ data:
     json_cfg_file=../etc/dp_telemetry_rules.json
     {{- if .Values.datapath_trace.cm}}
     {{- if eq .Values.datapath_trace.cm.connectivity "local_cache"}}
-    maat_redis_server=CM_POLICY_LOCAL_CACHE_IP_LOCATION
+    maat_redis_server={{ .Values.datapath_trace.cm.local_cache.cache_name }}-redis-master.tsg-os-system.svc
     maat_redis_port_range=6379
     {{- else }}
     maat_redis_server={{ .Values.datapath_trace.cm.direct.address}}
