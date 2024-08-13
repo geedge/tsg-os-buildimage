@@ -10,5 +10,5 @@ LimitNOFILE=1024
 TimeoutStartSec=10s
 Restart=always
 RestartSec=5s
-WatchdogSec=60s
+WatchdogSec=300s
 ExecStart=/usr/bin/python3 /opt/tsg/logfile-cleaner/bin/logfile-cleaner.py --daemon

@@ -409,6 +409,7 @@ class DirsFilesCleaner:
             if self._is_daemon is not True:
                 break
 
+            self._systemd_notifier.notify("WATCHDOG=1")
             for clean_interval_s in self._splited_clean_intervals_s:
                 time.sleep(clean_interval_s)
                 self._systemd_notifier.notify("WATCHDOG=1")
