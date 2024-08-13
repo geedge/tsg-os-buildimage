@@ -293,9 +293,10 @@ class ConfigReader:
         return loglevel_str
 
 class DirFileInfosReader:
-    def __init__(self, dir_path, config_reader: ConfigReader):
+    def __init__(self, dir_path, config_reader: ConfigReader, systemd_notifier):
         self._dir_path = dir_path
         self._config_reader = config_reader
+        self._systemd_notifier = systemd_notifier
         self._file_infos = []
         self._dir_usage_in_bytes = 0
         self._read()
@@ -324,6 +325,8 @@ class DirFileInfosReader:
                 is_file_open = self._is_file_open(full_path)
                 score, score_base, score_adj = self._read_files_score(full_path)
                 self._file_infos.append({"path": full_path, "score": score, "score_base": score_base, "score_adj": score_adj, "size_in_bytes": size_in_bytes, "is_matched_exclude": is_matched_exclude,"is_file_open": is_file_open})
+                if len(self._file_infos) % 100 == 1:
+                    self._systemd_notifier.notify("WATCHDOG=1")
 
     def _validate_path(self):
         if not os.path.isdir(self._dir_path):
@@ -422,7 +425,7 @@ class DirsFilesCleaner:
         if low_watermark > high_watermark:
             return
 
-        reader = DirFileInfosReader(dir_path, self._config_reader)
+        reader = DirFileInfosReader(dir_path, self._config_reader, self._systemd_notifier)
         if reader.dir_usage_in_bytes < high_watermark:
             return
 
