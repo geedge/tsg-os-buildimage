@@ -6,6 +6,8 @@ INJECT_HELM_CHART_TAR="%%INJECT_HELM_CHART_TAR%%"
 MRZCPD_HELM_CHART_TAR="%%MRZCPD_HELM_CHART_TAR%%"
 TREX_HELM_CHART_TAR="%%TREX_HELM_CHART_TAR%%"
 DP_TRACE_HELM_CHART_TAR="%%DP_TRACE_HELM_CHART_TAR%%"
+TSG_CM_HELM_CHART_TAR="%%TSG_CM_HELM_CHART_TAR%%"
+TSG_CM_CONTAINER_IMAGE_TAR="%%TSG_CM_CONTAINER_IMAGE_TAR%%"
 
 charts_dest_dir="/var/lib/rancher/k3s/server/static/charts"
 images_dest_dir="/var/lib/rancher/k3s/agent/images"
@@ -90,6 +92,12 @@ function load_images()
 
 #function define end
 
+function install_tsg_cm()
+{
+    sed -ie "s/^tsg_cm_chart_name=.*/tsg_cm_chart_name=${TSG_CM_HELM_CHART_TAR}/g" ${clixon_conf_path}
+    cp -r ${src_dir}/${TSG_CM_HELM_CHART_TAR}      ${charts_dest_dir}
+    cp -r ${src_dir}/${TSG_CM_CONTAINER_IMAGE_TAR} ${images_dest_dir}
+}
 #function exec start
 read_charts_dest_dir_from_env
 read_images_dest_dir_from_env
@@ -99,5 +107,6 @@ read_load_images_switch_from_env
 copy_charts_to_dest
 copy_images_to_dest
 replace_clixon_chart_name
+install_tsg_cm
 load_images
 #function exec end

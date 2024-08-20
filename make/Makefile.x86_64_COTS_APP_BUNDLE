@@ -24,8 +24,11 @@ DP_TRACE_HELM_FILE_PATH         := /ansible/roles/dp-trace-telemetry/files/helm
 NIC_UIO_BINDER_FILE_PATH        := /ansible/roles/k3s-install/files/nic-uio-binder.yaml
 LOG_COLLECTOR_FILE_PATH        := /ansible/roles/k3s-install/files/log-collector.yaml
 
+TSG_CM_CONTAINER_IMAGE_TAR      := tsg-cm-${OS_RELEASE_VER}-docker.tar
+TSG_CM_HELM_CHART_TAR           := tsg-cm-chart-0.1.0.tgz
 
-.PHONY: all build_dir installer clean_installer_dir prebuild_container_images build_container_images build_helm_charts build_app_bundle_bin 
+
+.PHONY: all build_dir installer clean_installer_dir prebuild_container_images build_container_images build_helm_charts build_app_bundle_bin pull_tsg_cm
 
 all: build_app_bundle_bin
 
@@ -50,6 +53,8 @@ installer: build_dir
 	sed -i -e "s/%%HELM_CHART_TAR_GLOB%%/$(HELM_CHART_TAR_GLOB)/" $(TARGET_INSTALLER_DIR)/install.sh
 	sed -i -e "s/%%NIC_UIO_BINDER_IMAGE_TAR%%/$(NIC_UIO_BINDER_IMAGE_TAR)/" $(PROJECTDIR)/$(NIC_UIO_BINDER_FILE_PATH)
 	sed -i -e "s/%%LOG_COLLECTOR_IMAGE_TAR%%/$(LOG_COLLECTOR_IMAGE_TAR)/" $(PROJECTDIR)/$(LOG_COLLECTOR_FILE_PATH)
+	sed -i -e "s/%%TSG_CM_HELM_CHART_TAR%%/$(TSG_CM_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%TSG_CM_CONTAINER_IMAGE_TAR%%/$(TSG_CM_CONTAINER_IMAGE_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
 
 prebuild_container_images:
 ifeq ($(ENABLE_LICENSE_PROTECTED),1)
@@ -73,7 +78,11 @@ build_helm_charts: build_dir
 	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(TREX_HELM_FILE_PATH)
 	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(DP_TRACE_HELM_FILE_PATH)
 
-build_app_bundle_bin: clean_installer_dir installer build_helm_charts build_container_images
+pull_tsg_cm: build_dir
+	chmod 0755 $(PROJECTDIR)/tools/build_helm_charts.sh; $(PROJECTDIR)/tools/pull_container_images.sh $(TARGET_INSTALLER_DIR) $(TSG_CM_CONTAINER_IMAGE_TAR)
+	cp -a $(PROJECTDIR)/ansible/roles/tsg-cm/files/$(TSG_CM_HELM_CHART_TAR) $(TARGET_INSTALLER_DIR)
+
+build_app_bundle_bin: clean_installer_dir installer build_helm_charts pull_tsg_cm build_container_images
 	mkdir -p $(TARGET_BUILD_DIR)/app-bundle-cook-bits
 	chmod 0755 $(TOOLSDIR)/app-bundle-cook-bits
 	$(TOOLSDIR)/app-bundle-cook-bits $(TARGET_BUILD_DIR) $(TARGET_BUILD_DIR)/app-bundle-cook-bits $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN)
