@@ -80,7 +80,7 @@ tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.9.7f4541b
 
 http_healthcheck_rpm_version:
-  http_healthcheck: http_healthcheck-2.0.1.0884451
+  http_healthcheck: http_healthcheck-2.0.2.969442a
 
 hasp_tools_rpm_version:
   hasp_tools: hasp-tools-1.0.12.66db85d

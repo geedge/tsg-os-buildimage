@@ -93,7 +93,7 @@ spec:
             exec /opt/tsg/sapp/sapp 
             {{- end }}
         ports:
-          - containerPort: 9345
+          - containerPort: 51218
           {{- if eq .Values.dos_protector.enable .Values.define_enable_val_yes }}
           - containerPort: 8551
           - containerPort: 8552
@@ -118,12 +118,12 @@ spec:
 {{- if eq .Values.debug.firewall.enable_liveness_probe .Values.define_enable_val_yes }}
         livenessProbe:
           tcpSocket:
-            port: 9345
+            port: 51218
           failureThreshold: 1
           timeoutSeconds: 10
         startupProbe:
           tcpSocket:
-            port: 9345
+            port: 51218
           failureThreshold: 90
           periodSeconds: 10
 {{- end }}

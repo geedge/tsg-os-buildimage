@@ -48,3 +48,4 @@
 ./plug/business/firewall/firewall.inf
 {{- end }}
 ./plug/stellar_on_sapp/defer_loader.inf
+./plug/business/http_healthcheck/http_healthcheck.inf

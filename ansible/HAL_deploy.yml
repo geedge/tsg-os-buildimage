@@ -94,6 +94,7 @@
     - {role: framework, tags: framework}
     - {role: sapp, tags: sapp}
     - {role: firewall, tags: firewall}
+    - {role: http_healthcheck, tags: http_healthcheck}
     - {role: hasp, tags: hasp}
 
 - hosts: x86_64_COTS-proxy
