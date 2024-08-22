@@ -49,3 +49,7 @@
 {{- end }}
 ./plug/stellar_on_sapp/defer_loader.inf
 ./plug/business/http_healthcheck/http_healthcheck.inf
+
+{{- if eq .Values.decoders.SSL .Values.define_enable_val_yes }}
+./plug/protocol/ssl/ssl_defer.inf
+{{- end }}
