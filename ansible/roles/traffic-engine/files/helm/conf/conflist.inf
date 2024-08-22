@@ -48,3 +48,7 @@
 ./plug/business/firewall/firewall.inf
 {{- end }}
 ./plug/stellar_on_sapp/defer_loader.inf
+
+{{- if eq .Values.decoders.SSL .Values.define_enable_val_yes }}
+./plug/protocol/ssl/ssl_defer.inf
+{{- end }}
