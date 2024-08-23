@@ -32,7 +32,7 @@
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
 
 - name: "execute k3s install"
-  shell: curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_SKIP_ENABLE=true INSTALL_K3S_BIN_DIR=/usr/bin INSTALL_K3S_SYSTEMD_DIR=/usr/lib/systemd/system sh -s - --flannel-backend=none --node-name=localhost --disable-helm-controller
+  shell: curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_SKIP_ENABLE=true INSTALL_K3S_BIN_DIR=/usr/bin INSTALL_K3S_SYSTEMD_DIR=/usr/lib/systemd/system sh -s - --flannel-backend=none --node-name=localhost --disable-helm-controller --disable=traefik
 
 - name: "enable k3s"
   systemd:
