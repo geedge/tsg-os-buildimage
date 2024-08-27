@@ -46,6 +46,9 @@ data:
     {{- if eq .Values.datapath_trace.cm.connectivity "local_cache"}}
     maat_redis_server={{ .Values.datapath_trace.cm.local_cache.cache_name }}-redis-master.tsg-os-system.svc
     maat_redis_port_range=6379
+    {{- else if eq .Values.datapath_trace.cm.connectivity "builtin" }}
+    maat_redis_server=tsg-cm.tsg-os-system.svc
+    maat_redis_port_range=7002
     {{- else }}
     maat_redis_server={{ .Values.datapath_trace.cm.direct.address}}
     maat_redis_port_range={{ .Values.datapath_trace.cm.direct.port}}

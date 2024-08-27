@@ -173,6 +173,8 @@ Requires "traffic-engine.volume.mrzcpd"
 {{- define "traffic-engine.global.cm.server-ip" -}}
 {{- if eq .Values.external_resources.cm.connectivity "direct" }}
 {{- print .Values.external_resources.cm.direct.address }}
+{{- else if eq .Values.external_resources.cm.connectivity "builtin" }}
+{{- print "tsg-cm.tsg-os-system.svc" }}
 {{- else }}
 {{- print .Values.external_resources.cm.local_cache.cache_name "-redis-master.tsg-os-system.svc" }}
 {{- end }}
@@ -181,6 +183,8 @@ Requires "traffic-engine.volume.mrzcpd"
 {{- define "traffic-engine.global.cm.server-port" -}}
 {{- if eq .Values.external_resources.cm.connectivity "direct" }}
 {{- print .Values.external_resources.cm.direct.port }}
+{{- else if eq .Values.external_resources.cm.connectivity "builtin" }}
+{{- print "7002" }}
 {{- else }}
 {{- print "6379" }}
 {{- end }}
