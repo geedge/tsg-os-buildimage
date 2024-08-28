@@ -245,6 +245,33 @@ append_kernel_args()
         kernel_args="${kernel_args} ${kernel_args_device_9000}"
     fi
 }
+
+remove_onie_swap()
+{
+    data_part_mount_path="/tmp/data_mount_path"
+    if cat /proc/swaps | grep -q "/dev/loop0"; then
+        swapoff /dev/loop0
+        losetup -d /dev/loop0
+        rm -rf ${data_part_mount_path}/.onie_swapfile
+    fi
+}
+
+install_onie_swap()
+{
+    data_part_mount_path="/tmp/data_mount_path"
+    mkdir -p ${data_part_mount_path}
+
+    mount ${dev_part_tsg_os_data} ${data_part_mount_path}
+
+    remove_onie_swap ${data_part_mount_path}
+
+    dd if=/dev/zero of=${data_part_mount_path}/.onie_swapfile bs=32M count=1024
+    losetup /dev/loop0 ${data_part_mount_path}/.onie_swapfile
+
+    mkswap /dev/loop0
+    swapon /dev/loop0
+}
+
 ############################### START AT HERE #########################################
 lib_dir="/lib/onie"
 . $lib_dir/onie-blkdev-common
@@ -299,6 +326,7 @@ mount -t ext4 -o defaults,rw $distro_dev $distro_mnt || {
 # bonk out on errors
 set -ex
 
+install_onie_swap
 cp -f distro-setup.sh ${distro_mnt}
 echo "Extract chroot environment ..."
 tar -xf ${CHROOT_PKG} -C ${distro_mnt}
@@ -409,7 +437,7 @@ cp -f ${grub_cfg} ${distro_mnt}/boot/grub/grub.cfg
 cat ${grub_cfg} >> ${distro_mnt}/etc/grub.d/40_onie_grub
 
 umount ${distro_mnt}
-
+remove_onie_swap
 cd /
 
 echo "TSG-OS install successfully, need to reboot."
