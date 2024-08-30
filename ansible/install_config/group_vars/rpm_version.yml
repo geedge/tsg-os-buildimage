@@ -101,7 +101,7 @@ shaping_engine_rpm_version:
   shaping_engine: shaping_engine-3.1.41.b0de64f
 
 coredump_tools_rpm_version:
-  coredump_tools: coredump-tools-1.0.17-ac91fe0
+  coredump_tools: coredump-tools-1.1.0-3d3ba73
 
 packet_adapter_rpm_version:
   packet_adapter: packet_adapter-2.0.2.4f48b59
