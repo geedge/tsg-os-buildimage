@@ -178,8 +178,8 @@
             {{- end }}
             "async": "on",
             "name": "POLICY-PACKET-TRAFFIC-FILE-STREAM-RECORD",
-            "topic": "TRAFFIC-FILE-STREAM-RECORD",
-            "client_id": "TRAFFIC-FILE-STREAM-RECORD",
+            "topic": "TRAFFIC-POLICY-CAPTURE-FILE-STREAM-RECORD",
+            "client_id": "TRAFFIC-POLICY-CAPTURE-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -197,8 +197,8 @@
             {{- end }}
             "async": "on",
             "name": "HTTP-REQ-BODY-TRAFFIC-FILE-STREAM-RECORD",
-            "topic": "TRAFFIC-FILE-STREAM-RECORD",
-            "client_id": "TRAFFIC-FILE-STREAM-RECORD",
+            "topic": "TRAFFIC-HTTP-FILE-STREAM-RECORD",
+            "client_id": "TRAFFIC-HTTP-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -216,8 +216,8 @@
             {{- end }}
             "async": "on",
             "name": "HTTP-RES-BODY-TRAFFIC-FILE-STREAM-RECORD",
-            "topic": "TRAFFIC-FILE-STREAM-RECORD",
-            "client_id": "TRAFFIC-FILE-STREAM-RECORD",
+            "topic": "TRAFFIC-HTTP-FILE-STREAM-RECORD",
+            "client_id": "TRAFFIC-HTTP-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -235,8 +235,8 @@
             {{- end }}
             "async": "on",
             "name": "MAIL-EML-TRAFFIC-FILE-STREAM-RECORD",
-            "topic": "TRAFFIC-FILE-STREAM-RECORD",
-            "client_id": "TRAFFIC-FILE-STREAM-RECORD",
+            "topic": "TRAFFIC-EML-FILE-STREAM-RECORD",
+            "client_id": "TRAFFIC-EML-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
@@ -254,8 +254,8 @@
             {{- end }}
             "async": "on",
             "name": "RTP-PACKET-TRAFFIC-FILE-STREAM-RECORD",
-            "topic": "TRAFFIC-FILE-STREAM-RECORD",
-            "client_id": "TRAFFIC-FILE-STREAM-RECORD",
+            "topic": "TRAFFIC-RTP-FILE-STREAM-RECORD",
+            "client_id": "TRAFFIC-RTP-FILE-STREAM-RECORD",
             "mode": [
                 {
                     "channel": "kafka",
