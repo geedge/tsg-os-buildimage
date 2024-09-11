@@ -266,6 +266,11 @@ install_onie_swap()
     remove_onie_swap ${data_part_mount_path}
 
     dd if=/dev/zero of=${data_part_mount_path}/.onie_swapfile bs=32M count=1024
+
+    if [ ! -e /dev/loop0 ]; then
+        mknod /dev/loop0 b 7 0
+    fi
+
     losetup /dev/loop0 ${data_part_mount_path}/.onie_swapfile
 
     mkswap /dev/loop0
