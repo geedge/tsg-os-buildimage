@@ -161,6 +161,7 @@ decoders:
   STRATUM: yes
   RDP: yes
   DTLS: yes
+  SSL_DETAIN_FRAG_CHELLO: no
 
 configHash: "defaulthash"
 
