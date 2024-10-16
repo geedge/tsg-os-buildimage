@@ -1,93 +1,66 @@
+# compile dir
+#./build/x86_64_COTS/app-bundle/
+#	/installer
+#	/cook-bits
 
-PROFILE_ID 						:= x86_64_COTS
-PROFILE_ID_IN_SHORT				:= $(subst -,$e,$(PROFILE_ID))
+# app bin dir
+#./installer
+#	install.sh
+#	helmcharts.tgz
+#	images.tar
+#	mainfest.yaml
 
-CONTAINER_IMAGES_TAR			:= traffic-engine-${OS_RELEASE_VER}-docker.tar
-TRAFFIC_ENGINE_HELM_CHART_TAR	:= traffic-engine-$(HELM_CHART_VER).tgz
-MRZCPD_HELM_CHART_TAR	        := mrzcpd-$(HELM_CHART_VER).tgz
-TREX_HELM_CHART_TAR	            := trex-$(HELM_CHART_VER).tgz
-DP_TRACE_HELM_CHART_TAR	        := datapath-trace-$(HELM_CHART_VER).tgz
-APP_BUNDLE_BIN					:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-APP-BUNDLE.bin
-INJECT_HELM_CHART_TAR           := inject-adapter-$(HELM_CHART_VER).tgz
-CONTAINER_IMAGES_TAR_GLOB		:= traffic-engine-*-docker.tar
-HELM_CHART_TAR_GLOB				:= traffic-engine-*.tgz
-NIC_UIO_BINDER_IMAGE_TAR  := ${OS_RELEASE_VER}
-LOG_COLLECTOR_IMAGE_TAR  := ${OS_RELEASE_VER}
+PROFILE_ID := x86_64_COTS
+PROFILE_ID_IN_SHORT	:= $(subst -,$e,$(PROFILE_ID))
 
-TARGET_BUILD_DIR				:= $(BUILDDIR_BASE)/$(PROFILE_ID)/containers
-TARGET_INSTALLER_DIR			:= $(TARGET_BUILD_DIR)/installer
-TRAFFIC_ENGINE_HELM_FILE_PATH   := /ansible/roles/traffic-engine/files/helm
-INJECT_ADAPTER_HELM_FILE_PATH   := /ansible/roles/packet_adapter/files/helm
-MRZCPD_HELM_FILE_PATH           := /ansible/roles/mrzcpd/files/helm
-TREX_HELM_FILE_PATH             :=/ansible/roles/trex/files/helm
-DP_TRACE_HELM_FILE_PATH         := /ansible/roles/dp-trace-telemetry/files/helm
-NIC_UIO_BINDER_FILE_PATH        := /ansible/roles/k3s-install/files/nic-uio-binder.yaml
-LOG_COLLECTOR_FILE_PATH        := /ansible/roles/k3s-install/files/log-collector.yaml
+TARGET_BUILD_DIR := $(BUILDDIR_BASE)/$(PROFILE_ID)/app-bundle
+TARGET_INSTALLER_DIR := $(TARGET_BUILD_DIR)/installer
+COOK_BITS_DIR := $(TARGET_BUILD_DIR)/cook-bits
 
-TSG_CM_CONTAINER_IMAGE_TAR      := tsg-cm-${OS_RELEASE_VER}-docker.tar
-TSG_CM_HELM_CHART_TAR           := tsg-cm-chart-0.1.0.tgz
+APP_BUNDLE_BIN := tsg-os-$(OS_RELEASE_VER)-$(PROFILE_ID_IN_SHORT)-APP-BUNDLE.bin
 
+ifeq ($(ENABLE_ALIYUN_INTERNAL_DOMAIN),1)
+$(shell sed -i -e "s/mirrors.aliyun.com/mirrors.cloud.aliyuncs.com/" $(CONFDIR)/yum-RockyLinux-8.conf)
+endif
 
-.PHONY: all build_dir installer clean_installer_dir prebuild_container_images build_container_images build_helm_charts build_app_bundle_bin pull_tsg_cm
+.PHONY: all build-app-bundle-bin install-scripts build-container-images build-helmcharts
 
-all: build_app_bundle_bin
+all: build-app-bundle-bin
 
-build_dir:
-	mkdir -p $(TARGET_BUILD_DIR)
+build-app-bundle-bin: install-scripts build-container-images build-helmcharts
+	mkdir -p $(COOK_BITS_DIR)
+	chmod 0755 $(TOOLSDIR)/app-bundle-cook-bits; \
+	$(TOOLSDIR)/app-bundle-cook-bits $(TARGET_BUILD_DIR) $(COOK_BITS_DIR) $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN)
+	sha256sum $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN).sha256sum.txt
+
+install-scripts:
 	mkdir -p $(TARGET_INSTALLER_DIR)
 
-clean_installer_dir:
-	rm -rf $(TARGET_INSTALLER_DIR)
-
-installer: build_dir
 	cp $(INSTALLERDIR)/app_bundle_install.sh $(TARGET_INSTALLER_DIR)/install.sh
 	chmod +x $(TARGET_INSTALLER_DIR)/install.sh
 
-	sed -i -e "s/%%CONTAINER_IMAGES_TAR%%/$(CONTAINER_IMAGES_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%TRAFFIC_ENGINE_HELM_CHART_TAR%%/$(TRAFFIC_ENGINE_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%INJECT_HELM_CHART_TAR%%/$(INJECT_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%MRZCPD_HELM_CHART_TAR%%/$(MRZCPD_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%TREX_HELM_CHART_TAR%%/$(TREX_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%DP_TRACE_HELM_CHART_TAR%%/$(DP_TRACE_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%CONTAINER_IMAGES_TAR_GLOB%%/$(CONTAINER_IMAGES_TAR_GLOB)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%HELM_CHART_TAR_GLOB%%/$(HELM_CHART_TAR_GLOB)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%NIC_UIO_BINDER_IMAGE_TAR%%/$(NIC_UIO_BINDER_IMAGE_TAR)/" $(PROJECTDIR)/$(NIC_UIO_BINDER_FILE_PATH)
-	sed -i -e "s/%%LOG_COLLECTOR_IMAGE_TAR%%/$(LOG_COLLECTOR_IMAGE_TAR)/" $(PROJECTDIR)/$(LOG_COLLECTOR_FILE_PATH)
-	sed -i -e "s/%%TSG_CM_HELM_CHART_TAR%%/$(TSG_CM_HELM_CHART_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
-	sed -i -e "s/%%TSG_CM_CONTAINER_IMAGE_TAR%%/$(TSG_CM_CONTAINER_IMAGE_TAR)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%CONTAINER_IMAGES_TAR%%/traffic-engine-${OS_RELEASE_VER}-docker.tar/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%TRAFFIC_ENGINE_HELM_CHART_TAR%%/traffic-engine-$(HELM_CHART_VER).tgz/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%INJECT_HELM_CHART_TAR%%/inject-adapter-$(HELM_CHART_VER).tgz/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%MRZCPD_HELM_CHART_TAR%%/mrzcpd-$(HELM_CHART_VER).tgz/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%TREX_HELM_CHART_TAR%%/trex-$(HELM_CHART_VER).tgz/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%DP_TRACE_HELM_CHART_TAR%%/datapath-trace-$(HELM_CHART_VER).tgz/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%TSG_CM_HELM_CHART_TAR%%/tsg-cm-chart-0.1.0.tgz/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%TSG_CM_CONTAINER_IMAGE_TAR%%/tsg-cm-docker.tar/" $(TARGET_INSTALLER_DIR)/install.sh
 
-prebuild_container_images:
-ifeq ($(ENABLE_LICENSE_PROTECTED),1)
-	sed -i '/sapp:/d;/mrzcpd:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
-else
-	sed -i '/sapp-pr:/d;/mrzcpd:/d' $(PROJECTDIR)/ansible/install_config/group_vars/rpm_version.yml
-endif
-ifeq ($(ENABLE_ALIYUN_INTERNAL_DOMAIN),1)
-	sed -i -e "s/mirrors.aliyun.com/mirrors.cloud.aliyuncs.com/" $(CONFDIR)/yum-RockyLinux-8.conf
-endif
+build-container-images:
+	$(MAKE) -j -C $(PROJECTDIR)/containers \
+		IMAGE_TAG=$(OS_RELEASE_VER) \
+		YUM_REPO_FILE=$(CONFDIR)/yum-RockyLinux-8.conf \
+		traffic-engine tsg-cm
+	cp -af $(PROJECTDIR)/containers/build/images/*.tar $(TARGET_INSTALLER_DIR)
 
-build_container_images: prebuild_container_images
-	chmod 0755 $(PROJECTDIR)/tools/build_container_images.sh
-	$(PROJECTDIR)/tools/build_container_images.sh $(PROJECTDIR) $(CONFDIR) $(TOOLSDIR) $(OS_RELEASE_VER) $(PROFILE_ID) $(IMAGEDIR_BASE) $(TARGET_INSTALLER_DIR) $(CONTAINER_IMAGES_TAR)
-
-build_helm_charts: build_dir
-	chmod 0755 $(PROJECTDIR)/tools/build_helm_charts.sh
-	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(TRAFFIC_ENGINE_HELM_FILE_PATH)
-	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(INJECT_ADAPTER_HELM_FILE_PATH)
-	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(MRZCPD_HELM_FILE_PATH)
-	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(TREX_HELM_FILE_PATH)
-	$(PROJECTDIR)/tools/build_helm_charts.sh $(PROJECTDIR) $(OS_RELEASE_VER) $(HELM_CHART_VER) $(TARGET_INSTALLER_DIR) $(DP_TRACE_HELM_FILE_PATH)
-
-pull_tsg_cm: build_dir
-	chmod 0755 $(PROJECTDIR)/tools/build_helm_charts.sh; $(PROJECTDIR)/tools/pull_container_images.sh $(TARGET_INSTALLER_DIR) $(TSG_CM_CONTAINER_IMAGE_TAR)
-	cp -a $(PROJECTDIR)/ansible/roles/tsg-cm/files/$(TSG_CM_HELM_CHART_TAR) $(TARGET_INSTALLER_DIR)
-
-build_app_bundle_bin: clean_installer_dir installer build_helm_charts pull_tsg_cm build_container_images
-	mkdir -p $(TARGET_BUILD_DIR)/app-bundle-cook-bits
-	chmod 0755 $(TOOLSDIR)/app-bundle-cook-bits
-	$(TOOLSDIR)/app-bundle-cook-bits $(TARGET_BUILD_DIR) $(TARGET_BUILD_DIR)/app-bundle-cook-bits $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN)
-	sha256sum $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN).sha256sum.txt
+build-helmcharts:
+	$(MAKE) -j -C $(PROJECTDIR)/helmcharts \
+		VERSION=$(HELM_CHART_VER) \
+		APP_VERSION=$(OS_RELEASE_VER) \
+		traffic-engine tsg-cm
+	cp -af $(PROJECTDIR)/helmcharts/build/helmcharts/*.tgz $(TARGET_INSTALLER_DIR)
 
 clean:
 	rm -rf $(TARGET_BUILD_DIR)
-

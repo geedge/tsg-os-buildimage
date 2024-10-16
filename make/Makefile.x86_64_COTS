@@ -80,7 +80,6 @@ add-images-into-installer-dir: builddir sysroot-verfile sysroot-ansible
 	cp $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN) $(TARGET_INSTALLER_DIR)/$(APP_BUNDLE_BIN)
 
 sysroot-archive: installer add-images-into-installer-dir add-patch-into-installer-dir sysroot-cleanup
-	cp $(IMAGEDIR_BASE)/80-tfe.conf $(TARGET_SYSROOT_DIR)/usr/lib/sysctl.d/
 	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_SYSROOT_DIR) . | pbzip2 -p9 > $(TARGET_INSTALLER_DIR)/$(CHROOT_PKG)
 
 sysroot-binary: sysroot-archive
