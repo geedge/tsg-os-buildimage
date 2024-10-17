@@ -1,7 +1,7 @@
 #image: "git.mesalab.cn:7443/mesa_platform/build-env:master"
 variables:
   GIT_STRATEGY: "clone"
-  BUILD_BASED_IMAGE_ROCKYLINUX8: "git.mesalab.cn:7443/mesa_platform/build-env:rockylinux-dindind"
+  BUILD_BASED_IMAGE_ROCKYLINUX8: "git.mesalab.cn:7443/mesa_platform/build-env:rockylinux-build-os"
   GIT_DEPTH: 1
 
 stages:
@@ -13,9 +13,6 @@ stages:
 .build_onie_bin_x86_64_COTS:
   script:
     - env | sort
-    - sed -i 's+https://download.docker.com+https://mirrors.tuna.tsinghua.edu.cn/docker-ce+' /etc/yum.repos.d/docker-ce.repo
-    - yum -y install pbzip2 python39
-    - python3.9 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple ansible
     - make DALIY_BUILD_VERSION=$DALIY_BUILD_VERSION
     - chmod +x ./tools/upload.sh
     - ./tools/upload.sh 
@@ -26,10 +23,6 @@ stages:
 .build_container_images_x86_64_COTS:
   script:
     - env | sort
-    - sed -i 's+https://download.docker.com+https://mirrors.tuna.tsinghua.edu.cn/docker-ce+' /etc/yum.repos.d/docker-ce.repo
-    - yum -y remove docker-ce
-    - yum -y install pbzip2 buildah podman python39
-    - python3.9 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple ansible
     - make DALIY_BUILD_VERSION=$DALIY_BUILD_VERSION
     - chmod +x ./tools/upload.sh
     - ./tools/upload.sh 
@@ -54,8 +47,6 @@ stages:
     paths:
       - images/
   script:
-    - sed -i 's+https://download.docker.com+https://mirrors.tuna.tsinghua.edu.cn/docker-ce+' /etc/yum.repos.d/docker-ce.repo
-    - yum install -y qemu-img qemu-kvm telnet net-tools procps-ng httpd
     - find / -name images
     - ls -lh
     - export VM_IMG_NAME=$(basename -s .bin images/*-ONIE.bin)
