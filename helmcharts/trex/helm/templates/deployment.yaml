@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trex
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: trex
+    spec:
+      hostNetwork: true
+      containers:
+      - name: trex
+        image: registry.gdnt-cloud.website/tsg/os/trex:{{ .Chart.AppVersion }}
+        command: 
+          - "bash"
+          - "-ec"
+          - |
+            /usr/local/bin/entrypoint.sh \
+            || echo "Failed to start."
+        securityContext:
+          privileged: true
+        resources: 
+          limits:
+            hugepages-1Gi: {{.Values.trex.hugepages }}Gi
+            nic-uio/trex: 1
+{{- if .Values.trex.interfaces }}
+{{- range $interface := .Values.trex.interfaces }}
+            nic-uio/{{ $interface }}: 1
+{{- end }}
+{{- end }}
+          requests:
+            hugepages-1Gi: {{.Values.trex.hugepages }}Gi
+            memory: 100Mi
+        env:
+        - name: MASTER_IOCORE
+          value: {{.Values.trex.master |quote}}
+        - name: LATENCY_IOCORE
+          value: {{.Values.trex.latency |quote}}
+        - name: CPU_AFFINITY
+          value: {{ join "," .Values.trex.cpu_affinity }}
+        - name: TREX_PATH
+          value: /opt/tsg/trex/v3.02
+        - name: TREX_HELPER_PATH
+          value: /opt/tsg/trex-helper
+        - name: PYTHONPATH
+          value: /opt/tsg/trex/v3.02/automation/trex_control_plane/interactive/
+        volumeMounts:
+        - name: dev-vfio
+          mountPath: /dev/vfio
+        - name: modules
+          mountPath: /lib/modules
+        - name: mem
+          mountPath: /dev/mem
+        - name: hugepage-1gi
+          mountPath: /var/run/trex/hugepages
+      volumes:
+      - name: mem
+        hostPath:
+          path: /dev/mem
+      - name: modules
+        hostPath: 
+          path: /lib/modules
+      - name: dev-vfio
+        hostPath:
+          path: /dev/vfio
+      - name: hugepage-1gi
+        emptyDir:
+          medium: HugePages-1Gi
+

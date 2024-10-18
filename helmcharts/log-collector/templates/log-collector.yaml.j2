@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: log-collector
+  labels:
+    app: log-collector
+  namespace: tsg-os-system
+spec:
+  selector:
+    matchLabels:
+      app: log-collector
+  template:
+    metadata:
+      labels:
+        app: log-collector
+    spec:
+      containers:
+      - name: log-collector
+        image: registry.gdnt-cloud.website/tsg/os/log-collector:{{ APP_VERSION }}
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            /usr/local/bin/entrypoint.sh \
+            || echo "Failed to start."
+        volumeMounts:
+        - name: logs
+          mountPath: /var/log/pods
+        - name: journal-volume
+          mountPath: /run/systemd/journal
+        securityContext:
+          privileged: true
+      volumes:
+      - name: logs
+        hostPath:
+          path: /var/log/pods
+          type: DirectoryOrCreate
+      - name: journal-volume
+        hostPath:
+          path: /run/systemd/journal
+          type: Directory

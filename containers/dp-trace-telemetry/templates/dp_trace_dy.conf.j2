@@ -1,0 +1,26 @@
+[dp_trace_rule]
+dp_trace_file_max_size_in_KB={{ datapath_trace.datapath_trace_file_max_size_in_KB }}
+dp_trace_merge_timeout=30
+{% if datapath_trace.rule -%}
+{% for rule in datapath_trace.rule -%}
+[dp_trace_rule:{{ rule.id }}]
+{%- if rule.enable == "yes" -%}
+enable=1
+{% endif -%}
+{%- if rule.enable == "no" -%}
+enable=0
+{% endif -%}
+{%- if rule.bpf_expr is defined -%}
+bpf_expr={{ rule.bpf_expr }}
+{% endif -%}
+{%- if rule.packet_max_count is defined -%}
+pkt_cnt_max={{ rule.packet_max_count }}
+{% endif -%}
+{%- if rule.sampling is defined -%}
+sampling={{ rule.sampling }}
+{% endif -%}
+{%- if rule.snaplen is defined -%}
+snaplen={{ rule.snaplen }}
+{% endif -%}
+{%- endfor %}
+{% endif -%}

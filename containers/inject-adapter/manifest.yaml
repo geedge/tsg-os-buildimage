@@ -1,0 +1,4 @@
+packages:
+  - name: packet_adapter
+    version: 2.0.2.4f48b59
+    install_command: dnf

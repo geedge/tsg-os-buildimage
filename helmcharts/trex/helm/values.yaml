@@ -1,0 +1,4 @@
+trex:
+  hugepages: 32Gi
+  cpu_affinity: []
+  interfaces: []

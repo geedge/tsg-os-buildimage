@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dp-trace-telemetry-{{ .Release.Name }}
+data:
+  values.yaml: |
+    datapath_trace:
+      enable: {{ toYaml .Values.datapath_trace.enable}}
+      datapath_trace_affinity:
+{{ toYaml .Values.datapath_trace.datapath_trace_affinity | indent 8 }}
+      cm:
+{{ toYaml .Values.datapath_trace.cm | indent 8 }}
+      olap:
+{{ toYaml .Values.datapath_trace.olap | indent 8 }}
+    device:
+{{ toYaml .Values.device | indent 6 }}

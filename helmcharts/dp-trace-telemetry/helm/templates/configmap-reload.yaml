@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dp-trace-telemetry-reload-{{ .Release.Name }}
+data:
+  values.yaml: |
+    datapath_trace:
+      datapath_trace_file_max_size_in_KB:
+{{ toYaml .Values.datapath_trace.datapath_trace_file_max_size_in_KB  | indent 8 }}
+      rule:
+        {{.Values.datapath_trace.rule }}

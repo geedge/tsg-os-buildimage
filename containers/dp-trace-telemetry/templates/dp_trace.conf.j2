@@ -1,0 +1,47 @@
+{% import '/templates/macros.j2' as macros -%}
+[global]
+iocore={{ datapath_trace.datapath_trace_affinity | join (',') }}
+zlog_config_path=../etc/dp_trace_zlog.conf
+dp_trace_dir=/var/lib/dp_telemetry_daemon
+{% if device and device.tags -%}
+{% for tag in device.tags -%}
+{%- if tag.data_center is defined -%}
+data_center={{ tag.data_center }}
+{% endif -%}
+{%- if tag.device_group is defined -%}
+device_group={{ tag.device_group }}
+{% endif -%}
+{%- endfor %}
+{% endif -%}
+monit_file_path=/var/run/mrzcpd/mrmonit.app.dp_trace_telemetry.saving
+
+[http_server]
+listen_addr=0.0.0.0
+listen_port=9086
+keep_alive_path=/probe
+
+[kafka]
+broker_list="{{ macros.address_port_pairs_render(datapath_trace.olap.kafka_brokers.addresses,",") }}"
+{%- if datapath_trace.olap.kafka_brokers.sasl_username is defined -%}
+sasl_username={{ datapath_trace.olap.kafka_brokers.sasl_username }}
+{% endif -%}
+{%- if datapath_trace.olap.kafka_brokers.sasl_username is defined -%}
+sasl_passwd={{ datapath_trace.olap.kafka_brokers.sasl_password }}
+{%- endif %}
+topic_name="DATAPATH-TELEMETRY-RECORD"
+
+[maat]
+maat_log_level=3
+# 0:json 1:redis
+maat_input_mode=1
+deferred_load_on=0
+table_schema=../etc/table_schema.json
+json_cfg_file=../etc/dp_telemetry_rules.json
+maat_redis_server={{ macros.cm_address(datapath_trace.cm) }}
+maat_redis_port_range={{ macros.cm_port(datapath_trace.cm) }}
+maat_redis_db_index=1
+
+[debug]
+send_ctrlbuf=0
+kafka_dump_to_log=0
+arp_pkt_has_ip_test=0

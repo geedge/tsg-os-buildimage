@@ -1,0 +1,386 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: packet-io-engine
+  labels:
+    app: packet-io-engine
+    component: packet-io-engine
+  annotations:
+    configmap.reloader.stakater.com/reload: packet-io-engine-conf
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: packet-io-engine
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: packet-io-engine
+        serviceFunction: {{ .Release.Name }}
+        component: packet-io-engine
+      annotations:
+        kubectl.kubernetes.io/default-container: packet-io-engine
+        prometheus.io/port: "9005"
+        prometheus.io/scrape: "true"
+    
+    spec:
+      shareProcessNamespace: true
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: inotify-dynamic-conf
+        image: "registry.gdnt-cloud.website/tsg/os/packet-io-engine:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            /usr/local/bin/j2 -f yaml  /templates/mrglobal.dynamic.conf.j2 /templates/values.yaml -o /opt/tsg/config/shared/mrglobal.dynamic.conf
+            WATCH_DIR="/templates/values.yaml"
+            while inotifywait -r -e modify,create "$WATCH_DIR"; do
+              echo "send HUB signal to mrzcpd"
+              /usr/local/bin/j2 -f yaml  /templates/mrglobal.dynamic.conf.j2 /templates/values.yaml -o /opt/tsg/config/shared/mrglobal.dynamic.conf
+              pkill -1 mrzcpd
+              echo "signal send"
+            done
+        volumeMounts:
+        - name: shared-dir
+          mountPath: /opt/tsg/config/shared
+        - name: packet-io-engine-reload-conf
+          mountPath: /templates/values.yaml
+          subPath: "values.yaml"
+        securityContext:
+          privileged: true
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - "bash"
+                - "-ec"
+                - |
+                  while true; do
+                    if [ -f "/opt/tsg/config/shared/mrglobal.dynamic.conf" ]; then
+                      echo "File /opt/tsg/config/shared/mrglobal.dynamic.conf exists. Exiting."
+                      exit 0
+                    fi
+                    echo "File /opt/tsg/config/shared/mrglobal.dynamic.conf does not exist. Sleeping for 2 seconds."
+                    sleep 2
+                  done
+      - name: packet-io-engine
+        image: "registry.gdnt-cloud.website/tsg/os/packet-io-engine:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/mrzcpd
+        command: 
+          - "bash"
+          - "-ec"
+          - |
+            /opt/tsg/mrzcpd/bin/mrmarch --auto
+            mount --rbind /opt/tsg/mrzcpd /mnt/packet-io-engine/mrzcpd
+
+            cp -f /etc/ld.so.conf.d/mrzcpd.conf /mnt/packet-io-engine/ld.so.conf.d/mrzcpd.conf
+            cp -f /etc/profile.d/mrzcpd.sh /mnt/packet-io-engine/profile.d/mrzcpd.sh
+            ldconfig -C /etc/ld.so.cache -r /host
+
+            ln -s /opt/tsg/mrzcpd/shared/mrglobal.dynamic.conf /opt/tsg/mrzcpd/etc/mrglobal.dynamic.conf
+            /usr/local/bin/entrypoint.sh \
+            {{- if .Values.mrzcpd.debug.enable_prestart_script }}
+            --enable_prestart \
+            {{- end }}
+            {{- if .Values.mrzcpd.debug.enable_interactive_startup }}
+            --enable_interactive_startup \
+            {{- end }}
+            || echo "Failed to start."
+        volumeMounts:
+        - name: journal-volume
+          mountPath: /run/systemd/journal
+        - name: shared-dir
+          mountPath: /opt/tsg/mrzcpd/shared
+        - name: mrzcpd
+          mountPath: /mnt/packet-io-engine/mrzcpd
+          mountPropagation: Bidirectional
+        - name: ldconfig-mrzcpd
+          mountPath: /mnt/packet-io-engine/ld.so.conf.d
+        - name: etc-profile
+          mountPath: /mnt/packet-io-engine/profile.d
+        - name: packet-io-engine-conf
+          mountPath: /templates/values.yaml
+          subPath: "values.yaml"
+        - name: run-mrzcpd
+          mountPath: /var/run/mrzcpd
+        - name: hugepages
+          mountPath: /var/run/mrzcpd/hugepages
+        - name: dpdk
+          mountPath: /var/run/dpdk
+        - name: dev-vfio
+          mountPath: /dev/vfio
+        - name: host-root
+          mountPath: /host
+          mountPropagation: HostToContainer
+        - name: localtime-node
+          mountPath: /etc/localtime
+          readOnly: true 
+        {{ template "mrzcpd.mount.prestart" . }}
+        resources: 
+          limits:
+            nic-uio/packet-io-engine: 1
+{{- if .Values.mrzcpd.interfaces }}
+{{- range $interface := .Values.mrzcpd.interfaces }}
+            nic-uio/{{ $interface.name }}: 1
+{{- end }}
+{{- end }}
+            hugepages-1Gi: {{.Values.mrzcpd.hugepages }}
+          requests:
+            memory: 100Mi
+        env:
+        - name: MLX5_GLUE_PATH
+          value: /opt/tsg/mrzcpd/lib
+        - name: DEPLOYMENT_NAME
+          value: packet-io-engine
+{{- if .Values.mrzcpd.debug.enable_liveness_probe }}
+        livenessProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+        startupProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+{{- end }}
+        lifecycle:
+          preStop:
+            exec:
+              command:
+                - "bash"
+                - "-ec"
+                - |
+                  rm -f /run/mrzcpd/mrmonit.daemon
+                  rm -f /run/mrzcpd/huge_pages/rtemap_*
+                  rm -f /run/.rte_config
+                  rm -f /run/.rte_hugepage_info
+                  rm -rf /run/.dpdk
+        securityContext:
+          privileged: true
+
+      - command:
+          - "bash"
+          - "-ec"
+          - |
+            until [ $(curl -s -o /dev/null -w "%{http_code}" http://localhost:9086/probe) -eq 200 ]; do echo waiting for packet-io-engine ready; sleep 2; done
+            /opt/tsg/mrzcpd/bin/monit_device --prometheus-client
+        image: "registry.gdnt-cloud.website/tsg/os/packet-io-engine:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        name: mrapm-device
+{{- if .Values.mrzcpd.debug.enable_liveness_probe}}
+        livenessProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+        startupProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+{{- end }}
+        volumeMounts:
+        - mountPath: /var/run/mrzcpd
+          name: run-mrzcpd
+          readOnly: true
+        - mountPath: /var/run/dpdk
+          name: dpdk
+          readOnly: true
+        - mountPath: /etc/localtime
+          name: localtime-node
+          readOnly: true
+      - command:
+          - "bash"
+          - "-ec"
+          - |
+            until [ $(curl -s -o /dev/null -w "%{http_code}" http://localhost:9086/probe) -eq 200 ]; do echo waiting for packet-io-engine ready; sleep 2; done
+            /opt/tsg/mrzcpd/bin/monit_stream --prometheus-client
+        image: "registry.gdnt-cloud.website/tsg/os/packet-io-engine:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        name: monit-stream
+{{- if .Values.mrzcpd.debug.enable_liveness_probe }}
+        livenessProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+        startupProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+{{- end }}
+        volumeMounts:
+        - mountPath: /var/run/mrzcpd
+          name: run-mrzcpd
+          readOnly: true
+        - mountPath: /var/run/dpdk
+          name: dpdk
+          readOnly: true
+        - mountPath: /etc/localtime
+          name: localtime-node
+          readOnly: true
+      - command:
+          - "bash"
+          - "-ec"
+          - |
+            until [ $(curl -s -o /dev/null -w "%{http_code}" http://localhost:9086/probe) -eq 200 ]; do echo waiting for packet-io-engine ready; sleep 2; done
+            /opt/tsg/mrzcpd/bin/monit_obp --prometheus-client
+        image: "registry.gdnt-cloud.website/tsg/os/packet-io-engine:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        name: monit-obp
+{{- if .Values.mrzcpd.debug.enable_liveness_probe }}
+        livenessProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+        startupProbe:
+          httpGet:
+            host: 127.0.0.1
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /probe
+            port: 9086
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+{{- end }}
+        volumeMounts:
+        - mountPath: /var/run/mrzcpd
+          name: run-mrzcpd
+          readOnly: true
+        - mountPath: /var/run/dpdk
+          name: dpdk
+          readOnly: true
+        - mountPath: /etc/localtime
+          name: localtime-node
+          readOnly: true
+      - env:
+        - name: MERGER_URLS
+          value: {{ .Values.mergeExporter.mergeUrls }}
+        - name: MERGER_PORT
+          value: "{{ .Values.mergeExporter.mergePort }}"
+        image: "{{ .Values.mergeExporter.image.repository }}:{{ .Values.mergeExporter.image.tag }}"
+        imagePullPolicy: {{ .Values.mergeExporter.image.pullPolicy }}
+        name: exporter-merger
+        ports:
+        - name: ex-mrzcpd-port
+          containerPort: {{ .Values.mergeExporter.mergePort }}
+          protocol: TCP
+      volumes:
+      - name: journal-volume
+        hostPath:
+          path: /run/systemd/journal
+          type: Directory
+      - name: shared-dir
+        emptyDir: {}
+      - name: prestart-dir
+        hostPath: 
+          path: /etc/tsg-os/{{ .Release.Name }}/
+          type: DirectoryOrCreate
+      - name: packet-io-engine-conf
+        configMap:
+          name: packet-io-engine-conf
+      - name: packet-io-engine-reload-conf
+        configMap:
+          name: packet-io-engine-reload-conf
+      - name: mrzcpd
+        hostPath:
+          path: /opt/tsg/mrzcpd
+          type: DirectoryOrCreate
+      - name: run-mrzcpd
+        hostPath:
+          path: /var/run/mrzcpd
+          type: DirectoryOrCreate
+      - name: hugepages
+        hostPath:
+          path: /var/run/mrzcpd/hugepages
+          type: DirectoryOrCreate
+      - name: etc-profile
+        hostPath:
+          path: /etc/profile.d
+          type: Directory
+      - name: dpdk
+        hostPath:
+          path: /var/run/dpdk
+          type: DirectoryOrCreate
+      - name: ldconfig-mrzcpd
+        hostPath:
+          path: /etc/ld.so.conf.d
+          type: Directory
+      - name: dev-vfio
+        hostPath:
+          path: /dev/vfio
+      - name: localtime-node
+        hostPath:
+          path: /etc/localtime
+      - name: host-root
+        hostPath:
+          path: /
+      {{ template "mrzcpd.volume.prestart" . }}
+      hostNetwork: true

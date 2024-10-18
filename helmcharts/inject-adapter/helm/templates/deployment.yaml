@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+    component: inject-adapter
+  annotations:
+    reloader.stakater.com/auto: "true"
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        serviceFunction: {{ .Release.Name }}
+        component: inject_adapter
+      annotations:
+        prometheus.io/port: "9009"
+        prometheus.io/scrape: "true"
+
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: inject-adapter
+        image: "registry.gdnt-cloud.website/tsg/os/inject-adapter:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        workingDir: /opt/tsg/packet_adapter
+        command:
+          - "bash"
+          - "-ec" 
+          - |
+            /usr/local/bin/entrypoint.sh \
+            {{- if .Values.debug.inject_adapter.enable_prestart_script }}
+            --enable_prestart \
+            {{- end }}
+            {{- if .Values.debug.inject_adapter.enable_interactive_startup }}
+            --enable_interactive_startup \
+            {{- end }}
+            || echo "Failed to start."
+        ports:
+          - containerPort: 9009
+        env:
+        - name: DEPLOYMENT_NAME
+          value: inject-adapter
+        - name: SERVICENAME
+          value: {{ .Release.Name }}-announce-port
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: MRZCPD_CTRLMSG_LISTEN_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OVERRIDE_SLED_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+{{- if .Values.debug.inject_adapter.enable_liveness_probe }}
+        livenessProbe:
+          tcpSocket:
+            port: 9009
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9009
+          failureThreshold: 30
+          periodSeconds: 10
+{{- end }}
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: inject-adapter
+          mountPath: "/templates/values.yaml"
+          subPath: "values.yaml"
+        - name: inject-log
+          mountPath: /opt/tsg/packet_adapter/log
+        {{ template "traffic-engine.mount.mrzcpd" . }}
+        {{ template "traffic-engine.mount.localtime" . }}
+        {{ template "traffic-engine.inject_adapter.mount.prestart" . }}
+        {{ template "traffic-engine.inject_adapter.mount.hostpath" . }}    
+      hostNetwork: true
+      volumes:
+      - name: inject-adapter
+        configMap:
+          name: inject-adapter
+      - name: prestart-dir
+        hostPath: 
+          path: /etc/tsg-os/{{ .Release.Name }}/
+          type: DirectoryOrCreate
+      - name: inject-log
+        hostPath:
+          path: /var/log/{{ .Release.Name }}/inject/
+      {{ template "traffic-engine.volume.mrzcpd" . }}
+      {{ template "traffic-engine.volume.localtime" . }}
+      {{ template "traffic-engine.inject_adapter.volume.prestart" . }}
+      {{ template "traffic-engine.volume.hostpath" . }}

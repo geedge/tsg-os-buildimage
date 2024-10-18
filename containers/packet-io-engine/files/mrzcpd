@@ -1,0 +1,3 @@
+MRZCPD_ROOT=/opt/tsg/mrzcpd
+HUGEPAGE_NUM_1G=32
+DEFAULT_UIO_MODULE="vfio_pci"
