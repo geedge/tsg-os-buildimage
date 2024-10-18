@@ -1,0 +1,4 @@
+packages:
+  - name: log-collector
+    version: 1.0.1-6df738d
+    install_command: dnf

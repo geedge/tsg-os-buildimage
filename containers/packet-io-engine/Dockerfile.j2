@@ -1,0 +1,20 @@
+{% import 'dockerfile-macros.j2' as macros -%}
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+RUN {{ macros.install_packages(packages) }} && \
+    {{ macros.clean_after_install_packages() }} && \
+    sed -Ei -c "s|/opt/mrzcpd|/opt/tsg/mrzcpd|g" /etc/profile.d/mrzcpd.sh && \
+    sed -Ei -c "s|/opt/mrzcpd|/opt/tsg/mrzcpd|g" /opt/tsg/mrzcpd/lib/pkgconfig/mrzcpd.pc
+# files
+COPY files/mrzcpd.conf /etc/ld.so.conf.d/
+COPY files/mrzcpd /etc/sysconfig/
+
+# templates
+COPY templates/* /templates/
+# scripts
+COPY --chmod=755 entrypoint.sh /usr/local/bin/
+
+WORKDIR /opt/tsg/mrzcpd/
+
+CMD ["/bin/bash"]

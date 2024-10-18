@@ -32,6 +32,11 @@ define copy_manifest
 	cp $(1)/files/*.yaml $(MANIFEST_DIR)
 endef
 
+define render_manifest_from_env
+	@mkdir -p $(MANIFEST_DIR)
+	/usr/local/bin/j2 $(1)/templates/$(2).j2 -o $(MANIFEST_DIR)/$(2)
+endef
+
 .PHONY: all clean $(HELMCHART_NAMES)
 
 all: $(HELMCHART_NAMES)

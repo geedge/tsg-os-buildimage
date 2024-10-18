@@ -139,19 +139,6 @@ spec:
           successThreshold: 1
           timeoutSeconds: 10
 {{- end }}
-
-      - env:
-        - name: MERGER_URLS
-          value: {{ .Values.mergeExporter.mergeUrls }}
-        - name: MERGER_PORT
-          value: "{{ .Values.mergeExporter.mergePort }}"
-        image: "{{ .Values.mergeExporter.image.repository }}:{{ .Values.mergeExporter.image.tag }}"
-        imagePullPolicy: {{ .Values.mergeExporter.image.pullPolicy }}
-        name: exporter-merger
-        ports:
-        - name: ex-trace-port
-          containerPort: {{ .Values.mergeExporter.mergePort }}
-          protocol: TCP
       initContainers:
       - name: init-packet-io-engine-ready
         image: "registry.gdnt-cloud.website/tsg-init:{{ .Chart.AppVersion }}"

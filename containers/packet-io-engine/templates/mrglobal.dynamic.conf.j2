@@ -1,0 +1,98 @@
+{%- for obp in obp_devices -%}
+[olp_device:{{loop.index0}}]
+name = {{ obp.name }}
+type = {{ obp.type }}
+connect = {{ obp.connect }}
+in_addr = {{ obp.address }}
+port = {{ obp.port }}
+{% for seg in obp.segment %}
+[{{obp.name}}:{{seg.id}}]
+state = {{ seg.workline}}
+heartbeat = {{ seg.heartbeat_mode }}
+heartbeat_send_interval_in_ms= {{ seg.hb_send_interval_in_ms }}
+heartbeat_timeout_interval_in_ms= {{ seg.hb_timeout_interval_in_ms}}
+heartbeat_lost_threshold = {{ seg.hb_lost_threshold }}
+nonrevertive_mode = {{ seg.nonrevertive_mode }}
+{% endfor %}
+{%- endfor %}
+{% for rule in ruleset %}
+[classifier_rule:{{ loop.index0 }}]
+{%- if rule.RuleId is defined %}
+rule_id={{ rule.RuleId }}
+{%- endif %}
+ruleset_type=0
+{%- if rule.SrcIpV4 is defined %}
+src_ip_addr_v4={{ rule.SrcIpV4 }}
+{%- if rule.SrcIpMask is defined %}
+src_ip_mask_v4={{ rule.SrcIpMask }}
+{%- endif -%}
+{%- endif -%}
+
+
+{%- if rule.DstIpV4 is defined %}
+dst_ip_addr_v4={{ rule.DstIpV4 }}
+{%- if rule.DstIpMask is defined %}
+dst_ip_mask_v4={{ rule.DstIpMask }}
+{%- endif -%}
+{%- endif -%}
+
+
+{%- if rule.SrcIpV6 is defined %}
+src_ip_addr_v6={{ rule.SrcIpV6 }}
+{%- if rule.SrcIpMask is defined %}
+src_ip_mask_v6={{ rule.SrcIpMask }}
+{%- endif -%}
+{%- endif -%}
+
+
+{%- if rule.DstIpV6 is defined %}
+dst_ip_addr_v6={{ rule.DstIpV6 }}
+{%- if rule.DstIpMask is defined %}
+dst_ip_mask_v6={{ rule.DstIpMask }}
+{%- endif -%}
+{%- endif -%}
+
+
+{%- if rule.SrcPortLow is defined %}
+src_port_start={{ rule.SrcPortLow }}
+{%- endif -%}
+
+{%- if rule.SrcPortHigh is defined %}
+src_port_end={{ rule.SrcPortHigh}}
+{%- endif -%}
+
+{%- if rule.DstPortLow is defined %}
+dst_port_start={{ rule.DstPortLow }}
+{%- endif -%}
+
+{%- if rule.DstPortHigh is defined %}
+dst_port_end={{ rule.DstPortHigh }}
+{%- endif -%}
+
+{%- if rule.Proto is defined %}
+proto={{ rule.Proto }}
+{%- endif -%}
+
+{%- if rule.Priority is defined %}
+priority={{ rule.Priority }}
+{%- endif -%}
+
+{%- if rule.Sid is defined %}
+sid={{ rule.Sid }}
+{%- endif -%}
+
+{%- if rule.VwireId is defined %}
+vwire_id={{ rule.VwireId }}
+{%- endif -%}
+
+{%- if rule.EfId is defined %}
+ef_adapter_id={{rule.EfId}}
+{%- endif -%}
+
+{%- if rule.TeraId is defined %}
+tera_adapter_id={{ rule.TeraId }}
+{%- endif %}
+action=2
+{% endfor %}
+
+[dp_trace_rule]

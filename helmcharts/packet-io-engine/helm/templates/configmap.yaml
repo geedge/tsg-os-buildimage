@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: packet-io-engine-conf
+data:
+  values.yaml: |
+    mrzcpd:
+      interfaces: 
+{{ toYaml .Values.mrzcpd.interfaces | indent 8 }}
+      virtual_interfaces: 
+{{ toYaml .Values.mrzcpd.virtual_interfaces | indent 8 }}
+      services: 
+{{ toYaml .Values.mrzcpd.services| indent 8 }}
+      virtual_wires: 
+{{ toYaml .Values.mrzcpd.virtual_wires| indent 8 }}
+      service_lb: 
+{{ toYaml .Values.mrzcpd.service_lb| indent 8 }}
+      service_chaining: 
+{{ toYaml .Values.mrzcpd.service_chaining| indent 8 }}
+      traffic_mirror: 
+{{ toYaml .Values.mrzcpd.traffic_mirror| indent 8 }}
+      distmode: 
+{{ toYaml .Values.mrzcpd.distmode| indent 8 }}
+      nf_count: 
+{{ toYaml .Values.mrzcpd.nf_count| indent 8 }}
+      nr_max_ef_adapters: 
+{{ toYaml .Values.mrzcpd.nr_max_ef_adapters| indent 8 }}
+      nr_max_vwires: 
+{{ toYaml .Values.mrzcpd.nr_max_vwires| indent 8 }}
+      nr_max_tera_adapters: 
+{{ toYaml .Values.mrzcpd.nr_max_tera_adapters| indent 8 }}
+      nr_max_link_dbs: 
+{{ toYaml .Values.mrzcpd.nr_max_link_dbs| indent 8 }}
+      debug: 
+{{ toYaml .Values.mrzcpd.debug| indent 8 }}
+      cpu_affinity: 
+{{ toYaml .Values.mrzcpd.cpu_affinity| indent 8 }}
+      hugepages: 
+{{ toYaml .Values.mrzcpd.hugepages| indent 8 }}
+      linkdb: 
+{{ toYaml .Values.mrzcpd.linkdb| indent 8 }}
+      pktmbuf_max_size: 
+{{ toYaml .Values.mrzcpd.pktmbuf_max_size| indent 8 }}
+      pktmbuf_queue_size: 
+{{ toYaml .Values.mrzcpd.pktmbuf_queue_size| indent 8 }}
+      pktmbuf_pool_create_mode: 
+{{ toYaml .Values.mrzcpd.pktmbuf_pool_create_mode| indent 8 }}
+      pktmbuf_pool_max_elements_count: 
+{{ toYaml .Values.mrzcpd.pktmbuf_pool_max_elements_count| indent 8 }}
+      enable_check_pktmbuf_leak: 
+{{ toYaml .Values.mrzcpd.enable_check_pktmbuf_leak| indent 8 }}
+      enable_poll_wait_throttle: 
+{{ toYaml .Values.mrzcpd.enable_poll_wait_throttle| indent 8 }}
+      indirect_pktmbuf: 
+{{ toYaml .Values.mrzcpd.indirect_pktmbuf| indent 8 }}

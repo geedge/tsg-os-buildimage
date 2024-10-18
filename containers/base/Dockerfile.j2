@@ -32,10 +32,17 @@ RUN dnf -y update && \
     inotify-tools \
     jemalloc \
     pcre2 \
-    epel-release
+    epel-release \
+    lshw \
+    which \
+    pciutils \
+    kmod \
+    libnl3-devel \
+    perl-generators \
+    iptables-devel
 
 RUN python2 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple PrettyTable==0.7.2 && \
-    python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple jinja2 prettytable tomlq toml sdnotify j2cli j2cli[yaml]
+    python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple jinja2 prettytable tomlq toml pyyaml argcomplete sdnotify j2cli j2cli[yaml]
 
 RUN {{ macros.install_packages(packages) }} && \
     {{ macros.clean_after_install_packages() }}

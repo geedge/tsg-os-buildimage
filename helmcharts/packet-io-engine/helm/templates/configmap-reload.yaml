@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: packet-io-engine-reload-conf
+data:
+  values.yaml: |
+    obp_devices: 
+{{ toYaml .Values.mrzcpd.obp_devices | indent 6}}
+    ruleset: 
+{{ toYaml .Values.mrzcpd.ruleset | indent 6}}

@@ -1,0 +1,4 @@
+packages:
+  - name: mlnx-ofed-user-space-only-all
+    version: 5.17.15-1.el8.x86_64.noarch
+    install_command: dnf
