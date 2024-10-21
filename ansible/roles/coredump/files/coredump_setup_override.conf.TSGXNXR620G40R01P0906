@@ -1,8 +1,0 @@
-[Coredump]
-Storage=none
-ProcessSizeMax=0G
-ExternalSizeMax=0G
-JournalSizeMax=0G
-Compress=no
-MaxUse=80
-KeepFree=80
