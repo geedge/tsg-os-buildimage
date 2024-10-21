@@ -1,51 +1,3 @@
-- hosts: 7400-MCN0-P01R01
-  remote_user: root
-  vars_files:
-    - install_config/group_vars/HAL_7400MCN0P01R01.yml
-    - install_config/group_vars/rpm_version.yml
-  roles:
-    - {role: tsg-os-provision, tags: tsg-os-provision}
-    - {role: coredump, tags: coredump}
-    - {role: system-init-7400-mcn0, tags: system-init-7400-mcn0}
-    - {role: tsg_device_tag, tags: tsg_device_tag}
-    - {role: tsg_sn, tags: tsg_sn}
-    - {role: docker, tags: docker}
-    - {role: framework, tags: framework}
-    - {role: mrzcpd, tags: mrzcpd}
-    - {role: sapp, tags: sapp}
-    - {role: kni, tags: kni}
-    - {role: firewall, tags: firewall}
-    - {role: http_healthcheck,tags: http_healthcheck}
-    - {role: redis, tags: redis}
-    - {role: maat-redis, tags: maat-redis}
-    - {role: certstore, tags: certstore}
-    - {role: telegraf, tags: telegraf}
-    - {role: sysctl, tags: sysctl}
-    - {role: exporter, tags: exporter}
-    - {role: tsg-diagnose, tags: tsg-diagnose}
-    - {role: system-init, tags: system-init}
-    - {role: consul, tags: consul}
-    - {role: hasp, tags: hasp}
-
-- hosts: 7400-MCN123-P01R01
-  remote_user: root
-  vars_files:
-    - install_config/group_vars/HAL_7400MCN123P01R01.yml
-    - install_config/group_vars/rpm_version.yml
-  roles:
-    - {role: tsg-os-provision, tags: tsg-os-provision}
-    - {role: coredump, tags: coredump}
-    - {role: system-init-7400-mcn123, tags: system-init-7400-mcn123}
-    - {role: tsg_device_tag, tags: tsg_device_tag}
-    - {role: framework, tags: framework}
-    - {role: mrzcpd, tags: mrzcpd}
-    - {role: exporter, tags: exporter}
-    - {role: tsg_sn, tags: tsg_sn}
-    - {role: tfe, tags: tfe}
-    - {role: sysctl, tags: sysctl}
-    - {role: system-init, tags: system-init}
-    - {role: hasp, tags: hasp}
-
 - hosts: x86_64_COTS
   remote_user: root
   vars_files:
@@ -53,7 +5,6 @@
     - install_config/group_vars/rpm_version.yml
   roles:
     - {role: k3s-install, tags: k3s-install}
-    - {role: coredump, tags: coredump}
     - {role: coredump-tools, tags: coredump-tools}
     - {role: clixon, tags: clixon}
     - {role: tsg-os-HAL, tags: tsg-os-HAL}
@@ -76,14 +27,6 @@
     - {role: patches-9000-NPB, tags: patches-9000-NPB}
     - {role: tsg-os-oobc, tags: tsg-os-oobc}
     - {role: tsg-os-logfile-cleaner, tags: tsg-os-logfile-cleaner}
-
-- hosts: x86_64_COTS-init
-  remote_user: root
-  vars_files:
-    - install_config/group_vars/HAL_x86_64_COTS.yml
-    - install_config/group_vars/rpm_version.yml
-  roles:
-    - {role: tsg_sn, tags: tsg_sn}
 
 - hosts: x86_64_COTS-firewall
   remote_user: root

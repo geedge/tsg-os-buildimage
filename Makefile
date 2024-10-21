@@ -114,8 +114,6 @@ all: $(PROFILE_LIST)
 	$(Q) chmod 0755 $(TOOLSDIR)/*
 	$(Q) sed -i -e 's/PULP_REPO_USERNAME/$(PULP_REPO_USERNAME)/g' $(CONFDIR)/yum-RockyLinux-8.conf
 	$(Q) sed -i -e 's/PULP_REPO_PASSWORD/$(PULP_REPO_PASSWORD)/g' $(CONFDIR)/yum-RockyLinux-8.conf
-	$(Q) sed -i -e 's/PULP_REPO_USERNAME/$(PULP_REPO_USERNAME)/g' $(CONFDIR)/yum-CentOS-7.conf
-	$(Q) sed -i -e 's/PULP_REPO_PASSWORD/$(PULP_REPO_PASSWORD)/g' $(CONFDIR)/yum-CentOS-7.conf
 	$(Q) echo "=== Building $< $(OS_RELEASE_VER) ==="
 	$(Q) echo "=== Building chart version $< $(HELM_CHART_VER) ==="
 	$(Q) $(MAKE) -f make/Makefile.$< all
