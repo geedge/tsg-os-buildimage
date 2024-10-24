@@ -117,16 +117,6 @@
     name: k3s-orphaned-pods-dir-clean.timer
     enabled: yes
 
-- name: "copy nic-uio-binder file to dest"
-  copy:
-    src: "{{ role_path }}/files/nic-uio-binder.yaml"
-    dest: /var/lib/rancher/k3s/server/manifests/
-
-- name: "copy log-collector file to dest"
-  copy:
-    src: "{{ role_path }}/files/log-collector.yaml"
-    dest: /var/lib/rancher/k3s/server/manifests/
-
 - name: "copy dynamic-hostport yaml file to k3s manifests directory"
   copy:
     src: "{{ role_path }}/files/dynamic-hostport.yaml"
@@ -138,11 +128,6 @@
     dest: /var/lib/rancher/k3s/agent/images/dynamic-hostport.tar
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
-
-- name: "copy coredns-custom yaml file to k3s manifests directory"
-  copy:
-    src: "{{ role_path }}/files/coredns-custom.yaml"
-    dest: /var/lib/rancher/k3s/server/manifests/
 
 - name: "copy k3s-reset.sh to /usr/bin"
   copy:
