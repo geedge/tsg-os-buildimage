@@ -1,3 +1,0 @@
----
-- name: "testing tsg-cm role"
-  shell: echo "testing"

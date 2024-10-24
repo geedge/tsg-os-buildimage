@@ -1,2 +1,0 @@
-[Service]
-ExecStartPre=/bin/bash -c "echo 'Sapp pre start'"
