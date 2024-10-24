@@ -1,7 +1,0 @@
----
-- name: "install log-collector"
-  yum:
-    name:
-      - "{{ log_collector_rpm_version.log_collector }}"
-    conf_file: "{{ rpm_repo_config_path }}"
-    state: present
