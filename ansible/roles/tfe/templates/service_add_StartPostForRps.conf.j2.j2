@@ -1,4 +1,0 @@
-[Service]
-{% raw %}{% for i in range( tfe_env_rps_info.rps_size ) %}
-ExecStartPost=/bin/sh -c "echo {{tfe_env_rps_info.rps_mask}} > /sys/class/net/${TFE_DEVICE_DATA_INCOMING}/queues/rx-{{i}}/rps_cpus"
-{% endfor %}{% endraw %}
