@@ -1,16 +1,15 @@
 #!/bin/sh
 
-CONTAINER_IMAGES_TAR="%%CONTAINER_IMAGES_TAR%%"
 TRAFFIC_ENGINE_HELM_CHART_TAR="%%TRAFFIC_ENGINE_HELM_CHART_TAR%%"
 INJECT_HELM_CHART_TAR="%%INJECT_HELM_CHART_TAR%%"
 MRZCPD_HELM_CHART_TAR="%%MRZCPD_HELM_CHART_TAR%%"
 TREX_HELM_CHART_TAR="%%TREX_HELM_CHART_TAR%%"
 DP_TRACE_HELM_CHART_TAR="%%DP_TRACE_HELM_CHART_TAR%%"
 TSG_CM_HELM_CHART_TAR="%%TSG_CM_HELM_CHART_TAR%%"
-TSG_CM_CONTAINER_IMAGE_TAR="%%TSG_CM_CONTAINER_IMAGE_TAR%%"
 
 charts_dest_dir="/var/lib/rancher/k3s/server/static/charts"
 images_dest_dir="/var/lib/rancher/k3s/agent/images"
+manifests_dest_dir="/var/lib/rancher/k3s/server/manifests"
 clixon_conf_path="/opt/tsg/clixon/etc/mgnt-srv.conf"
 load_images_switch="on"
 
@@ -31,6 +30,13 @@ function read_images_dest_dir_from_env()
     fi
 }
 
+function read_manifests_dest_dir_from_env()
+{
+    if [ ! -z "${APP_BUNDLE_MANIFESTS_DEST_DIR}" ]; then
+        manifests_dest_dir="${APP_BUNDLE_MANIFESTS_DEST_DIR}"
+    fi
+}
+
 function read_clixon_conf_path_from_env()
 {
     if [ ! -z "${APP_BUNDLE_CLIXON_CONF_PATH}" ]; then
@@ -45,29 +51,31 @@ function read_load_images_switch_from_env()
     fi
 }
 
-function copy_charts_to_dest()
+function install_helmcharts()
 {
     if [ -d "${charts_dest_dir}" ]; then
         mkdir -p "${charts_dest_dir}"
     fi
 
-    cp -r ${src_dir}/${TRAFFIC_ENGINE_HELM_CHART_TAR} ${charts_dest_dir}
-    cp -r ${src_dir}/${INJECT_HELM_CHART_TAR} ${charts_dest_dir}
-    cp -r ${src_dir}/${MRZCPD_HELM_CHART_TAR} ${charts_dest_dir}
-    cp -r ${src_dir}/${TREX_HELM_CHART_TAR} ${charts_dest_dir}
-    cp -r ${src_dir}/${DP_TRACE_HELM_CHART_TAR} ${charts_dest_dir}
-
+    cp -r ${src_dir}/helmcharts/* ${charts_dest_dir}
 }
 
-function copy_images_to_dest()
+function install_images()
 {
     if [ -d "${images_dest_dir}" ]; then
         mkdir -p "${images_dest_dir}"
     fi
 
-    cp -r ${src_dir}/${CONTAINER_IMAGES_TAR} ${images_dest_dir}
+    cp -r ${src_dir}/images/* ${images_dest_dir}
 }
 
+function install_mainfests()
+{
+    if [ -d "${manifests_dest_dir}" ]; then
+        mkdir -p "${manifests_dest_dir}"
+    fi
+    cp -arf ${src_dir}/manifests/* ${manifests_dest_dir}
+}
 
 function replace_clixon_chart_name()
 {
@@ -81,32 +89,28 @@ function replace_clixon_chart_name()
     sed -ie "s/^mrzcpd_chart_name=.*/mrzcpd_chart_name=${MRZCPD_HELM_CHART_TAR}/g" ${clixon_conf_path}
     sed -ie "s/^trex_chart_name=.*/trex_chart_name=${TREX_HELM_CHART_TAR}/g" ${clixon_conf_path}
     sed -ie "s/^datapath_trace_chart_name=.*/datapath_trace_chart_name=${DP_TRACE_HELM_CHART_TAR}/g" ${clixon_conf_path}
+    sed -ie "s/^tsg_cm_chart_name=.*/tsg_cm_chart_name=${TSG_CM_HELM_CHART_TAR}/g" ${clixon_conf_path}
 }
 
 function load_images()
 {
     if [ "${load_images_switch}" = "on" ]; then
-        /usr/bin/k3s ctr image import ${images_dest_dir}/${CONTAINER_IMAGES_TAR}
+        for image_tar_name in $(ls ${src_dir}/images/*.tar 2>/dev/null | sed 's#.*/##'); do
+            /usr/bin/k3s ctr image import ${images_dest_dir}/${image_tar_name}
+        done
     fi
 }
 
-#function define end
-
-function install_tsg_cm()
-{
-    sed -ie "s/^tsg_cm_chart_name=.*/tsg_cm_chart_name=${TSG_CM_HELM_CHART_TAR}/g" ${clixon_conf_path}
-    cp -r ${src_dir}/${TSG_CM_HELM_CHART_TAR}      ${charts_dest_dir}
-    cp -r ${src_dir}/${TSG_CM_CONTAINER_IMAGE_TAR} ${images_dest_dir}
-}
 #function exec start
 read_charts_dest_dir_from_env
 read_images_dest_dir_from_env
+read_manifests_dest_dir_from_env
 read_clixon_conf_path_from_env
 read_load_images_switch_from_env
 
-copy_charts_to_dest
-copy_images_to_dest
 replace_clixon_chart_name
-install_tsg_cm
+install_helmcharts
+install_images
+install_mainfests
 load_images
 #function exec end
