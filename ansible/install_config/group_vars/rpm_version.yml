@@ -53,7 +53,7 @@ framework_rpm_version:
   26_libosfp: libosfp-1.3.11.d8c406f
   27_libutable: utable-1.0.11.f3db4a4
   28_libmaatframe: libmaatframe-5.0.1.816daba
-  29_libcbd: libcbd-3.1.1.c3767f2
+  29_libcbd: libcbd-3.1.3.511cf01
   30_libdos_protector: libdos_protector-3.3.0.2c5bfc8
 
 kni_rpm_version:
