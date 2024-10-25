@@ -110,7 +110,7 @@ nic_uio_binder_rpm_version:
   nic_uio_binder: nic-uio-binder-1.0.13-3d0dc82
 
 dp_trace_rpm_version:
-  dp_trace: dp_trace_telemetry-0.3.1.e2b1aff
+  dp_trace: dp_trace_telemetry-0.3.2.90918bd
 
 log_collector_rpm_version:
   log_collector: log-collector-1.0.1-6df738d
