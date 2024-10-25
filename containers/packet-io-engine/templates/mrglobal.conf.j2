@@ -46,7 +46,7 @@ allmulticast=1
 rssmode=3
 promisc={{ interface.promisc | default(0) }}
 mtu={{ interface.mtu | default(1500) }}
-{%- if interface.role == "5" %}
+{%- if interface.role == 5 %}
 driver=1
 {%- else %}
 driver=0
@@ -77,41 +77,41 @@ rx_cores={{ interface.rxcore }}
 {% endfor %}
 # Configuration settings for network bonding (bond) functionality.
 {%- for interface in mrzcpd.virtual_interfaces %}
-  {%- if interface.type == "1" %}
+  {%- if interface.type == 1 %}
 [device:{{ interface.name }}]
-    {%- if interface.address %}
+    {%- if interface.address is defined %}
 in_addr={{ interface.address }}
 in_mask={{ interface.mask }}
-      {%- if interface.gateway %}
+      {%- if interface.gateway is defined %}
 gateway={{ interface.gateway }}
       {%- endif %}
     {%- endif %}
 rssmode=3
-    {%- if interface.promisc %}
+    {%- if interface.promisc is defined %}
 promisc={{ interface.promisc }}
     {%- endif %}
-    {%- if interface.mtu %}
+    {%- if interface.mtu is defined %}
 mtu={{ interface.mtu }}
     {%- endif %}
-    {%- if interface.role == "5" %}
+    {%- if interface.role == 5 %}
 driver=1
     {%- else %}
 driver=0
     {%- endif %}
 role={{ interface.role }}
-    {%- if interface.type %}
+    {%- if interface.type is defined %}
 type={{ interface.type }}
     {%- endif %}
-    {%- if interface.bond_mode %}
+    {%- if interface.bond_mode is defined %}
 bond_mode={{ interface.bond_mode }}
     {%- endif %}
-    {%- if interface.bond_xmit_policy %}
+    {%- if interface.bond_xmit_policy is defined %}
 bond_xmit_policy={{ interface.bond_xmit_policy }}
     {%- endif %}
-    {%- if interface.slaves %}
+    {%- if interface.slaves is defined %}
 bond_slaves={%- for slave in interface.slaves %}{%- if not loop.first %},{%- endif %}{{ slave.interface }}{%- endfor %}
     {%- endif %}
-    {%- if interface.rxcore %}
+    {%- if interface.rxcore is defined %}
 rx_cores={{ interface.rxcore }}
     {%- endif %}
   {%- endif %}
@@ -128,28 +128,28 @@ role=1
 
 # Configuration settings for the representational (represent) device.
 {%- for interface in mrzcpd.virtual_interfaces %}
-  {%- if interface.en_representor == "1" %}
+  {%- if interface.en_representor == 1 %}
 [device:{{ interface.name }}]
     {%- if interface.promisc %}
 promisc={{ interface.promisc }}
     {%- endif %}
-    {%- if interface.mtu %}
+    {%- if interface.mtu is defined %}
 mtu={{ interface.mtu }}
     {%- endif %}
-    {%- if interface.role == "5" %}
+    {%- if interface.role == 5 %}
 driver=1
     {%- else %}
 driver=0
     {%- endif %}
 role={{ interface.role }}
-    {%- if interface.vlan and interface.vlan | length > 0 %}
+    {%- if interface.vlan is defined and interface.vlan | length > 0 %}
 allow_vlan_ids={%- for vlan in interface.vlan %}{%- if not loop.first %},{%- endif %}{{ vlan.vlan_id }}{%- endfor %}
     {%- endif %}
 en_representor={{ interface.en_representor }}
-    {%- if interface.representor_ns %}
+    {%- if interface.representor_ns is defined %}
 representor_ns={{ interface.representor_ns }}
     {%- endif %}
-    {%- if interface.rxcore %}
+    {%- if interface.rxcore is defined %}
 rx_cores={{ interface.rxcore }}
     {%- endif %}
   {%- endif %}
