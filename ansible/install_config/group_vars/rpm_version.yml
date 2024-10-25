@@ -61,9 +61,9 @@ kni_rpm_version:
 
 mrzcpd_rpm_version:
   mrzcpd: mrzcpd-4.5.6.fa28206
-  mrzcpd-icelake-server: mrzcpd-icelake-server-4.8.21.2d714a5
-  mrzcpd-znver1: mrzcpd-znver1-4.8.21.2d714a5
-  mrzcpd-corei7: mrzcpd-corei7-4.8.21.2d714a5
+  mrzcpd-icelake-server: mrzcpd-icelake-server-4.8.22.43ae073
+  mrzcpd-znver1: mrzcpd-znver1-4.8.22.43ae073
+  mrzcpd-corei7: mrzcpd-corei7-4.8.22.43ae073
 
 mlnx_ofed_user_space_only_rpm_version:
   mlnx_ofed_user_space: mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch
