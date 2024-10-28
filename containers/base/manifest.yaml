@@ -90,7 +90,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libfieldstat4
-    version: 4.6.6.2d9b9cd
+    version: 4.7.0.8110a85
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
@@ -110,17 +110,17 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libmaatframe
-    version: 4.2.1.4fddb2b
+    version: 5.0.1.816daba
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libcbd
-    version: 3.1.1.c3767f2
+    version: 3.1.3.511cf01
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libdos_protector
-    version: 3.2.3.07c2e54
+    version: 3.3.2.fa4f0a4
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"

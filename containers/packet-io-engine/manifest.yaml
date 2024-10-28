@@ -3,17 +3,17 @@ packages:
     version: 5.17.15-1.el8.x86_64.noarch
     install_command: dnf
   - name: mrzcpd-icelake-server
-    version: 4.8.21.2d714a5
+    version: 4.8.22.43ae073
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/mrzcpd"
   - name: mrzcpd-znver1
-    version: 4.8.21.2d714a5
+    version: 4.8.22.43ae073
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/mrzcpd"
   - name: mrzcpd-corei7
-    version: 4.8.21.2d714a5
+    version: 4.8.22.43ae073
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/mrzcpd"
