@@ -1,2 +1,0 @@
-[MAAT]
-ACCEPT_TAGS={"tags":[{{- include "traffic-engine.device-tag-list" . }}]}
