@@ -15,9 +15,9 @@ TARGET_BUILD_DIR 		:= $(BUILDDIR_BASE)/$(PROFILE_ID)
 TARGET_INSTALLER_DIR 	:= $(TARGET_BUILD_DIR)/installer
 TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
 
-.PHONY: all builddir installer sysroot-base
+.PHONY: all builddir installer sysroot-base sysroot-binary
 
-all: sysroot-binary
+all: sysroot-base sysroot-binary
 
 builddir:
 	mkdir -p $(TARGET_BUILD_DIR)
@@ -47,3 +47,8 @@ endif
 
 sysroot-base: builddir
 	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum-RockyLinux-9.conf $(TARGET_SYSROOT_DIR) $(PROJECTDIR) $(PROFILE_ID)
+
+sysroot-binary: 
+	mkdir -p $(TARGET_BUILD_DIR)/cook-bits
+	$(TOOLSDIR)/cook-bits $(TARGET_BUILD_DIR) $(TARGET_BUILD_DIR)/cook-bits $(IMAGEDIR_BASE)/$(CHROOT_BIN)
+	sha256sum $(IMAGEDIR_BASE)/$(CHROOT_BIN) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(CHROOT_BIN).sha256sum.txt
