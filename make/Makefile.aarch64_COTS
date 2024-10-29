@@ -41,7 +41,8 @@ installer: builddir
 	sed -i -e "s/%%APP_BUNDLE_BIN%%/$(APP_BUNDLE_BIN)/" $(TARGET_INSTALLER_DIR)/install.sh
 
 ifeq ($(ENABLE_ALIYUN_INTERNAL_DOMAIN),1)
-    sed -i -e "s/mirrors.aliyun.com/mirrors.cloud.aliyuncs.com/" $(CONFDIR)/yum-RockyLinux-9.conf 
+	sed -i -e "s/mirrors.aliyun.com/mirrors.cloud.aliyuncs.com/" $(CONFDIR)/yum-RockyLinux-8.conf
+	sed -i -e "s/mirrors.aliyun.com/mirrors.cloud.aliyuncs.com/" $(CONFDIR)/yum-RockyLinux-9.conf
 endif
 
 sysroot-base: builddir
