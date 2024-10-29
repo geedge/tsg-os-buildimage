@@ -24,12 +24,11 @@ case $profile_id in
     *)
         kernel_version="error_profile_id"
         echo "Set kernel_version failed, error profile_id: $profile_id"
-        exit 1
         ;;
 esac
 
 case $profile_id in
-    "x86_64_COTS" )
+    "x86_64_COTS" | "aarch64_COTS" )
         base_package_to_install="@base @core @debugging @anaconda-tools @additional-devel @guest-agents @system-tools
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management adcli certmonger
                     ipa-client clevis-dracut clevis-udisks2 krb5-pkinit krb5-workstation sssd-polkit-rules krb5-pkinit luksmeta
@@ -52,14 +51,26 @@ set -ex
 yum -c "$yum_config" --installroot="$target" -y makecache
 
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $base_package_to_install --disablerepo='ofed'
-yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $append_package_to_install
+case $profile_id in
+    "x86_64_COTS" )
+        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $append_package_to_install
+        ;;
+    *)
+        ;;
+esac
 
 #git clone --depth 1 https://github.com/brendangregg/FlameGraph.git /opt/tools/FlameGraph/
 #git clone --depth 1 https://github.com/brendangregg/perf-tools.git /opt/tools/perf-tools/
-test -d "$target"/opt/tsg/tools/ || mkdir -p "$target"/opt/tsg/tools/
-tar -zxf $projectdir/tools/FlameGraph.tar.gz -C "$target"/opt/tsg/tools/
-tar -zxf $projectdir/tools/perf-tools.tar.gz -C "$target"/opt/tsg/tools/
-cp $projectdir/tools/run_flamegrah.sh "$target"/opt/tsg/tools/
+case $profile_id in
+    "x86_64_COTS" )
+        test -d "$target"/opt/tsg/tools/ || mkdir -p "$target"/opt/tsg/tools/
+        tar -zxf $projectdir/tools/FlameGraph.tar.gz -C "$target"/opt/tsg/tools/
+        tar -zxf $projectdir/tools/perf-tools.tar.gz -C "$target"/opt/tsg/tools/
+        cp $projectdir/tools/run_flamegrah.sh "$target"/opt/tsg/tools/
+        ;;
+    *)
+        ;;
+esac
 
 cat > "$target"/etc/sysconfig/network <<EOF
 NETWORKING=yes
@@ -99,10 +110,16 @@ chmod 0755 $target/etc/profile.d/prompt_command.sh
 rm -rf "$target"/etc/ld.so.cache
 rm -rf "$target"/var/cache/ldconfig/*
 
-cd $target/boot
-ln -sf vmlinuz-$kernel_version vmlinuz
-ln -sf initramfs-$kernel_version.img initrd.img
-cd -
+case $profile_id in
+    "x86_64_COTS" )
+        cd $target/boot
+        ln -sf vmlinuz-$kernel_version vmlinuz
+        ln -sf initramfs-$kernel_version.img initrd.img
+        cd -
+        ;;
+    *)
+        ;;
+esac
 
 cp -a /dev/null $target/dev/
 cp -a /dev/zero $target/dev/
