@@ -1,7 +1,7 @@
 #image: "git.mesalab.cn:7443/mesa_platform/build-env:master"
 variables:
   GIT_STRATEGY: "clone"
-  JOB_DOCKER_IMAGE_AARCH64: "rockylinux:8.9"
+  JOB_DOCKER_IMAGE_AARCH64: "git.mesalab.cn:7443/mesa_platform/build-env:rocky9-aarch64"
   GIT_DEPTH: 1
 
 stages:
@@ -16,7 +16,7 @@ stages:
     - ./tools/upload.sh 
   tags:
     - tsg-os-builder-aarch64
-  resource_group: global
+  resource_group: aarch64
 
 develop_build_x86_64_COTS:
   image: $JOB_DOCKER_IMAGE_AARCH64

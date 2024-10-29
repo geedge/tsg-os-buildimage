@@ -28,7 +28,7 @@ case $profile_id in
 esac
 
 case $profile_id in
-    "x86_64_COTS" | "aarch64_COTS" )
+    "x86_64_COTS" )
         base_package_to_install="@base @core @debugging @anaconda-tools @additional-devel @guest-agents @system-tools
                     @hardware-monitoring @network-file-system-client @performance @remote-system-management adcli certmonger
                     ipa-client clevis-dracut clevis-udisks2 krb5-pkinit krb5-workstation sssd-polkit-rules krb5-pkinit luksmeta
@@ -37,6 +37,17 @@ case $profile_id in
                     kernel-tools kernel-core rpm-build libtool kernel-rpm-macros python36-devel tcsh kernel-modules-extra gcc-gfortran
                     libdb-devel fuse-devel python3-Cython cmake perl-generators libstdc++-devel libmnl-devel bison flex gcc-c++
                     python3-docutils libnsl liburing hwloc-gui perl-open perl python2 js-d3-flame-graph xmlstarlet conntrack-tools crudini"
+
+        ;;
+    "aarch64_COTS" )
+        base_package_to_install="@base @core @debugging @anaconda-tools @additional-devel @guest-agents @system-tools
+                    @hardware-monitoring @network-file-system-client @performance @remote-system-management adcli certmonger
+                    ipa-client clevis-dracut clevis-udisks2 krb5-pkinit krb5-workstation sssd-polkit-rules krb5-pkinit luksmeta
+                    nscd nss-pam-ldapd grub2 epel-release efibootmgr yum-utils ipmitool OpenIPMI docker-ce docker-ce-cli
+                    containerd.io lrzsz python3 watchdog git tmux fish kernel kernel-devel kernel-tools-libs kernel-modules
+                    kernel-tools kernel-core rpm-build libtool kernel-rpm-macros tcsh kernel-modules-extra gcc-gfortran
+                    libdb-devel fuse-devel python3-Cython cmake perl-generators libstdc++-devel libmnl-devel bison flex gcc-c++
+                    python3-docutils libnsl liburing hwloc-gui perl-open perl js-d3-flame-graph xmlstarlet conntrack-tools crudini"
 
         ;;
     *)
@@ -113,6 +124,14 @@ rm -rf "$target"/var/cache/ldconfig/*
 case $profile_id in
     "x86_64_COTS" )
         cd $target/boot
+        ln -sf vmlinuz-$kernel_version vmlinuz
+        ln -sf initramfs-$kernel_version.img initrd.img
+        cd -
+        ;;
+    "aarch64_COTS" )
+        cd $target/boot
+        kernel_version=$(rpm --root $target -q kernel --qf "%{VERSION}-%{RELEASE}.%{ARCH}")
+        echo $kernel_version
         ln -sf vmlinuz-$kernel_version vmlinuz
         ln -sf initramfs-$kernel_version.img initrd.img
         cd -

@@ -45,8 +45,8 @@
     src: "{{ role_path }}/files/mrzcpd/helm"
     dest: /tmp/exporter-mrzcpd/
 
-- name: "create charts packages"
-  shell: helm package --app-version 1.0.1  --version 1.0.1 -d /var/lib/rancher/k3s/server/static/charts/  /tmp/exporter-mrzcpd/helm
+# - name: "create charts packages"
+#   shell: helm package --app-version 1.0.1  --version 1.0.1 -d /var/lib/rancher/k3s/server/static/charts/  /tmp/exporter-mrzcpd/helm
 
 # The image build by the the follow command
 # Command 1: docker pull rockylinux:8
@@ -81,8 +81,8 @@
     src: "{{ role_path }}/files/systemd/helm"
     dest: /tmp/systemd-exporter/
 
-- name: "create charts packages"
-  shell: helm package --app-version 1.0.1  --version 1.0.1 -d /var/lib/rancher/k3s/server/static/charts/  /tmp/systemd-exporter/helm
+# - name: "create charts packages"
+#   shell: helm package --app-version 1.0.1  --version 1.0.1 -d /var/lib/rancher/k3s/server/static/charts/  /tmp/systemd-exporter/helm
 
 - name: "copy systemd-exporter-crd.yaml to dest"
   copy:

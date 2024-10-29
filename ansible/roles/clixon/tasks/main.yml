@@ -7,6 +7,9 @@
 - name: "clixon: set symlink"
   shell: ln -vfs /lib64/libyaml-0.so.2.0.5 /usr/lib64/libyaml.so
 
+- name: "clixon: install pip3"
+  shell: yum install -y python3-pip
+
 - name: "clixon: install jinja-cli"
   shell: pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple jinja-cli
 

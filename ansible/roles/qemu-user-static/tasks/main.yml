@@ -1,0 +1,13 @@
+- name: "copy qemu-x86_64 file to /usr/bin"
+  copy:
+    src: "{{ role_path }}/files/qemu-x86_64-static"
+    dest: /usr/bin/
+    mode: 0755
+
+- name: "copy qemu-x86_64 conf file to /usr/lib/binfmt.d/"
+  copy:
+    src: "{{ role_path }}/files/qemu-x86_64.conf"
+    dest: /usr/lib/binfmt.d/
+
+# - name: "binfmt enable qemu-x86_64"
+#   shell: echo ':qemu-x86_64:M:0:\x7f\x45\x4c\x46\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00:\xff\xff\xff\xff\xff\xfe\xfe\xfc\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-x86_64-static:POCF' > /proc/sys/fs/binfmt_misc/register

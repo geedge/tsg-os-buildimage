@@ -211,6 +211,20 @@ install_uefi_grub()
         echo "ERROR: efibootmgr failed to create new boot variable on: $blk_dev"
         exit 1
     }
+
+    # Delete onie UEFI bootnum if machine_id is aarch64_COTS
+    if [ ${MACHINE_ID} == "aarch64_COTS" ];then
+        boot_num=$(efibootmgr -v| grep "ONIE:" | grep "HD" | awk '{ print $1 }')
+        boot_num=${boot_num#Boot}
+        # Remove trailing '*'
+        boot_num=${boot_num%\*}
+        if [ -n "$boot_num" ] ; then
+            efibootmgr --quiet --bootnum $boot_num --delete-bootnum  && return
+            echo "ERROR: Problems delete ONIE UEFI Bootnum variable"
+        else 
+            echo "INFO: ONIE UEFI Bootnum is not exist"
+        fi
+    fi
 }
 
 

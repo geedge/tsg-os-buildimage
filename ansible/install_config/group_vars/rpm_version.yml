@@ -1,13 +1,13 @@
 tsg_diagnose_rpm_version:
-  tsg_diagnose: tsg-diagnose-2.0.10.4d80fdf
+  tsg_diagnose:  tsg-diagnose-2.0.11.cce5969
 
 hasp_tools_rpm_version:
   hasp_tools: hasp-tools-1.0.12.66db85d
 
 tsg_os_clixon_rpm_version:
-  cligen: cligen-5.8.0-release
-  clixon: clixon-5.8.4-6462458
-  tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.45.57c3ba0
+  cligen: cligen-5.8.3-76634d0
+  clixon: clixon-5.8.7-70e2c25
+  tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.49.d06e237
 
 coredump_tools_rpm_version:
-  coredump_tools: coredump-tools-1.1.0-3d3ba73
+  coredump_tools: coredump-tools-1.1.2-70125ea

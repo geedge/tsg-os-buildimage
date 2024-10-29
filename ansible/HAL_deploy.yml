@@ -1,4 +1,4 @@
-- hosts: x86_64_COTS
+- hosts: aarch64_COTS
   remote_user: root
   vars_files:
     - install_config/group_vars/HAL_x86_64_COTS.yml
@@ -8,22 +8,19 @@
     - {role: coredump-tools, tags: coredump-tools}
     - {role: clixon, tags: clixon}
     - {role: tsg-os-HAL, tags: tsg-os-HAL}
-    - {role: traffic-engine, tags: traffic-engine}
-    - {role: k8s-dashboard, tags: k8s-dashboard}
-    - {role: k3s-exporter, tags: k3s-exporter}
-    - {role: tsg-diagnose, tags: tsg-diagnose}
     - {role: sysctl, tags: sysctl}
     - {role: system-init-P0906, tags: system-init-P0906}
+    - {role: sysctl, tags: sysctl}
     - {role: system-init, tags: system-init}
-    - {role: consul, tags: consul}
-    - {role: hasp, tags: hasp}
-    - {role: OFED, tags: OFED}
     - {role: sosreport, tags: sosreport}
     - {role: nm-config, tags: nm-config}
     - {role: tsg-os-logo, tags: tsg-os-logo}
-    - {role: cm-cache, tags: cm-cache}
+    # - {role: tsg-diagnose, tags: tsg-diagnose}
+    - {role: k8s-dashboard, tags: k8s-dashboard}
+    - {role: k3s-exporter, tags: k3s-exporter}
+    - {role: consul, tags: consul}
     - {role: exporter, tags: exporter}
     - {role: tuned, tags: tuned}
-    - {role: patches-9000-NPB, tags: patches-9000-NPB}
     - {role: tsg-os-oobc, tags: tsg-os-oobc}
     - {role: tsg-os-logfile-cleaner, tags: tsg-os-logfile-cleaner}
+    - {role: qemu-user-static, tags: qemu-user-static}

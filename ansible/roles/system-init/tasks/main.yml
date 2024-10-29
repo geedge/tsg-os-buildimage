@@ -15,10 +15,10 @@
     dest: /usr/lib/tmpfiles.d/chrony.conf
   tags: template
 
-- name: "disable ntpd"
-  systemd:
-    name: ntpd
-    enabled: no
+# - name: "disable ntpd"
+#   systemd:
+#     name: ntpd
+#     enabled: no
 
 #Service Optimization
 - name: "enable snmpd"
@@ -31,25 +31,25 @@
     name: snmptrapd
     enabled: yes
 
-- name: "disenable abrt-ccpp"
-  systemd:
-    name: abrt-ccpp
-    enabled: no
+# - name: "disenable abrt-ccpp"
+#   systemd:
+#     name: abrt-ccpp
+#     enabled: no
 
-- name: "disenable abrt-oops"
-  systemd:
-    name: abrt-oops
-    enabled: no
+# - name: "disenable abrt-oops"
+#   systemd:
+#     name: abrt-oops
+#     enabled: no
 
-- name: "disenable abrtd"
-  systemd:
-    name: abrtd
-    enabled: no
+# - name: "disenable abrtd"
+#   systemd:
+#     name: abrtd
+#     enabled: no
 
-- name: "disenable dmraid-activation"
-  systemd:
-    name: dmraid-activation
-    enabled: no
+# - name: "disenable dmraid-activation"
+#   systemd:
+#     name: dmraid-activation
+#     enabled: no
 
 - name: "disenable postfix"
   systemd:
@@ -99,9 +99,9 @@
     regexp: '^(F! /run/nologin 0644*)'
     replace: '#\1'
 
-- name: "Install python module"
-  shell: pip2 install -i https://pypi.tuna.tsinghua.edu.cn/simple PrettyTable==0.7.2
-  when: runtime_env == 'TSG-X-P0906'
+# - name: "Install python module"
+#   shell: pip2 install -i https://pypi.tuna.tsinghua.edu.cn/simple PrettyTable==0.7.2
+#   when: runtime_env == 'TSG-X-P0906'
 
 - name: "copy  tsg-dign to dest"
   copy:
@@ -133,7 +133,7 @@
   when: runtime_env == 'TSG-X-P0906'
 
 - name: "add dracut module to initramfs"
-  shell: dracut --force -v /boot/initramfs-5.17.15-1.el8.x86_64.img  5.17.15-1.el8.x86_64
+  shell: KERNEL=$(rpm -q kernel --qf "%{VERSION}-%{RELEASE}.%{ARCH}") && dracut --force -v /boot/initramfs-$KERNEL.img $KERNEL
   when: runtime_env == 'TSG-X-P0906'
 
 - name: "install python3 toml"

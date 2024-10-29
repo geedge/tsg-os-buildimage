@@ -28,9 +28,9 @@
   shell: cp /opt/tsg/tsg-diagnose/k8s-resource/* /var/lib/rancher/k3s/server/manifests/
   when: runtime_env == 'TSG-X-P0906'
 
-- name: "Set service function config mount path."
-  shell: sed -i 's/\/opt\/tsg\/tsg-diagnose\/share/\/opt\/tsg\/clixon\/share/g' /var/lib/rancher/k3s/server/manifests/tsg-diagnose-client.yaml
-  when: runtime_env == 'TSG-X-P0906'
+# - name: "Set service function config mount path."
+#   shell: sed -i 's/\/opt\/tsg\/tsg-diagnose\/share/\/opt\/tsg\/clixon\/share/g' /var/lib/rancher/k3s/server/manifests/tsg-diagnose-client.yaml
+#   when: runtime_env == 'TSG-X-P0906'
 
 - name: "copy iptables shell to dispatcher.d"
   copy:

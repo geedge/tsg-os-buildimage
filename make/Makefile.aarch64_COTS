@@ -15,9 +15,9 @@ TARGET_BUILD_DIR 		:= $(BUILDDIR_BASE)/$(PROFILE_ID)
 TARGET_INSTALLER_DIR 	:= $(TARGET_BUILD_DIR)/installer
 TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
 
-.PHONY: all builddir installer sysroot-base sysroot-binary
+.PHONY: all builddir installer sysroot-base sysroot-cleanup sysroot-archive sysroot-binary add-images-into-installer-dir add-patch-into-installer-dir clean
 
-all: sysroot-base sysroot-binary
+all: sysroot-binary
 
 builddir:
 	mkdir -p $(TARGET_BUILD_DIR)
@@ -48,7 +48,39 @@ endif
 sysroot-base: builddir
 	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum-RockyLinux-9.conf $(TARGET_SYSROOT_DIR) $(PROJECTDIR) $(PROFILE_ID)
 
-sysroot-binary: 
+sysroot-verfile: sysroot-base
+	sed -i -e "s/^NAME=.*/NAME=\"TSG-OS\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
+	sed -i -e "s/^VERSION=.*/VERSION=\"$(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
+	sed -i -e "s/^PRETTY_NAME=.*/PRETTY_NAME=\"TSG-OS $(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
+
+sysroot-ansible: sysroot-verfile sysroot-base
+	cp $(CONFDIR)/yum-RockyLinux-9.conf $(TARGET_SYSROOT_DIR)/tmp/ -r
+	cp /etc/resolv.conf $(TARGET_SYSROOT_DIR)/etc/ -r
+	cp $(TARGET_SYSROOT_DIR)/etc/hosts $(TARGET_SYSROOT_DIR)/tmp/ -r
+	cp /etc/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
+	$(TOOLSDIR)/ansible-HAL $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR) /tmp/yum-RockyLinux-9.conf $(OS_RELEASE_VER) $(HELM_CHART_VER)
+	cp $(TARGET_SYSROOT_DIR)/tmp/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
+	rm -rf $(TARGET_SYSROOT_DIR)/etc/resolv.conf
+
+sysroot-cleanup:
+	rm -rf $(TARGET_SYSROOT_DIR)/tmp/*
+	rm -rf $(TARGET_SYSROOT_DIR)/dev/*
+
+add-patch-into-installer-dir:
+	echo "need copy patch file"
+
+add-images-into-installer-dir: builddir sysroot-verfile sysroot-ansible
+	echo "need copy APP_BUNDLE_BIN"
+	du -sh $(TARGET_SYSROOT_DIR)
+	df -h
+
+sysroot-archive: installer add-images-into-installer-dir add-patch-into-installer-dir sysroot-cleanup
+	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_SYSROOT_DIR) . | pbzip2 -p9 > $(TARGET_INSTALLER_DIR)/$(CHROOT_PKG)
+
+sysroot-binary: sysroot-archive
 	mkdir -p $(TARGET_BUILD_DIR)/cook-bits
 	$(TOOLSDIR)/cook-bits $(TARGET_BUILD_DIR) $(TARGET_BUILD_DIR)/cook-bits $(IMAGEDIR_BASE)/$(CHROOT_BIN)
 	sha256sum $(IMAGEDIR_BASE)/$(CHROOT_BIN) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(CHROOT_BIN).sha256sum.txt
+
+clean:
+	rm -rf $(TARGET_BUILD_DIR)

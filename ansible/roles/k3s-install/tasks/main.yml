@@ -4,9 +4,17 @@
 #- name: "execute k3s install"
 #  shell: curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn INSTALL_K3S_SKIP_ENABLE=true  sh -
 
-- name: "get k3s to dest"
+# - name: "get k3s to dest"
+#   get_url:
+#     url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s
+#     dest: /usr/bin/k3s
+#     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
+#     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
+#     mode: 0755
+
+- name: "get k3s-aarch64 to dest"
   get_url:
-    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s
+    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s-arm64
     dest: /usr/bin/k3s
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
@@ -24,10 +32,17 @@
 #     src: "{{ role_path }}/files/k3s-airgap-images-amd64.tar"
 #     dest: /var/lib/rancher/k3s/agent/images/
 
-- name: "get k3s-airgap-images-amd64.tar to dest"
+# - name: "get k3s-airgap-images-amd64.tar to dest"
+#   get_url:
+#     url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s-airgap-images-amd64.tar
+#     dest: /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar
+#     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
+#     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
+
+- name: "get k3s-airgap-images-arm64.tar to dest"
   get_url:
-    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s-airgap-images-amd64.tar
-    dest: /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar
+    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s-airgap-images-arm64.tar
+    dest: /var/lib/rancher/k3s/agent/images/k3s-airgap-images-arm64.tar
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
 
@@ -67,9 +82,14 @@
     path: "/opt/cni/bin"
     state: directory
 
-- name: "unarchive cni plugin tar package"
+# - name: "unarchive cni plugin tar package"
+#   unarchive:
+#     src: "{{ role_path }}/files/cni-plugins-linux-amd64.tgz"
+#     dest: /opt/cni/bin/
+
+- name: "unarchive aarch64 cni plugin tar package"
   unarchive:
-    src: "{{ role_path }}/files/cni-plugins-linux-amd64.tgz"
+    src: "{{ role_path }}/files/cni-plugins-linux-arm64.tgz"
     dest: /opt/cni/bin/
 
 - name: "copy 10-bridge.conf to destination"
@@ -135,10 +155,17 @@
     dest: /usr/bin/
     mode: 0755
 
-- name: "download helm-controller images tar"
+# - name: "download helm-controller images tar"
+#   get_url:
+#     url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s-helm-controller-amd64.tar
+#     dest: /var/lib/rancher/k3s/agent/images/k3s-helm-controller-amd64.tar
+#     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
+#     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
+
+- name: "download helm-controller aarch64 images tar"
   get_url:
-    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s-helm-controller-amd64.tar
-    dest: /var/lib/rancher/k3s/agent/images/k3s-helm-controller-amd64.tar
+    url: https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s-helm-controller-arm64.tar
+    dest: /var/lib/rancher/k3s/agent/images/k3s-helm-controller-arm64.tar
     url_username: "{{ lookup('env', 'PULP_REPO_USERNAME') }}"
     url_password: "{{ lookup('env', 'PULP_REPO_PASSWORD') }}"
 
