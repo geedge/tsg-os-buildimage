@@ -1,86 +1,5 @@
-certstore_rpm_version:
-  certstore: certstore-3.0.7.20241025.6d72f46
-
-firewall_rpm_version:
-  conn_telemetry: conn_telemetry-1.0.3.4ef6df6
-  firewall: firewall-3.5.3.cb4bedc
-  glimpse_detector: glimpse_detector-3.2.0.0069e3b
-  qdpi_detector: qdpi_detector-5.0.4.b94b1b0
-  dns: dns-2.1.7.1da8dfa
-  ftp: ftp-1.0.16.d996236
-  http: http-2.0.20.0571d0b
-  mail: mail-1.0.22.431a81f
-  quic: quic-2.0.11.1ab2559
-  ssl: ssl-3.2.0.93d17f6
-  rtp: rtp-1.0.7.530ac76
-  ssh: ssh-2.1.7.b053e65
-  dtls: dtls-2.0.5.a559144
-  mesa_sip: mesa_sip-2.1.1.6504027
-  deal_socks: deal_socks-1.0.4.329bba3
-  stratum: stratum-1.1.3.82ba152
-  rdp: rdp-1.0.3.f392ffd
-  session_flags: session_flags-2.4.0.579bcde
-  stat_policy_enforcer: stat_policy_enforcer-3.5.2.e61c165
-  sf_classifier: sf_classifier-2.2.0.1f91efa
-  stellar-c: stellar-on-sapp-2.1.7.4e4f933
-  policy_sketch: policy_sketch-1.2.1.d57fbf0
-  traffic_sketch: traffic_sketch-1.1.6.4ce17a0
-
-framework_rpm_version:
-  00_libcjson: libcjson-1.7.12.6c09dcf
-  01_libdocumentanalyze: libdocumentanalyze-2.0.11.719a8ff
-  02_libMESA_field_stat: libMESA_field_stat-1.0.3.0de785d
-  03_libMESA_field_stat2: libMESA_field_stat2-2.10.11.b2095aa
-  04_libMESA_handle_logger: libMESA_handle_logger-2.0.12.1dd9e1e
-  05_libMESA_htable: libMESA_htable-3.10.13.bd6fc34
-  06_libMESA_prof_load: libMESA_prof_load-1.0.9.16148e7
-  07_librulescan: librulescan-3.0.1.6145620
-  08_libelua: libelua-2.0.1.7760c27
-  09_libwiredcfg: libwiredcfg-2.0.8.cafaf49
-  10_libWiredLB: libWiredLB-2.0.6.54a039d
-  11_libbreakpad_mini: libbreakpad_mini-1.0.9.9d98968
-  13_libMV_Sketch: libMV_Sketch-2.1.3.20231215.19725c6
-  14_librdkafka: librdkafka-1.2.2.1218b3c
-  15_libMESA_jump_layer: libMESA_jump_layer-1.0.10.6fb4738
-  18_libswarmkv: libswarmkv-4.4.4.5c89f35
-  19_libswarmkv-tools: libswarmkv-tools-4.4.4.5c89f35
-  20_libfieldstat3: libfieldstat3-3.1.1.03491ea
-  #21_libmaatframe: libmaatframe-4.1.33.3e1acdd
-  22_libMESA_sts: libMESA_sts-1.0.3.d515a96
-  23_libfieldstat4: libfieldstat4-4.7.0.8110a85
-  #24_libstatistics: libstatistics-2.0.20.895d68e
-  25_libipfix_exporter: libipfix_exporter-1.0.6.0e73c24
-  26_libosfp: libosfp-1.3.11.d8c406f
-  27_libutable: utable-1.0.11.f3db4a4
-  28_libmaatframe: libmaatframe-5.0.2.bc52994
-  29_libcbd: libcbd-3.1.3.511cf01
-  30_libdos_protector: libdos_protector-3.3.2.fa4f0a4
-
-kni_rpm_version:
-  kni: kni-5.1.9.9b96928
-
-mrzcpd_rpm_version:
-  mrzcpd: mrzcpd-4.5.6.fa28206
-  mrzcpd-icelake-server: mrzcpd-icelake-server-4.8.22.43ae073
-  mrzcpd-znver1: mrzcpd-znver1-4.8.22.43ae073
-  mrzcpd-corei7: mrzcpd-corei7-4.8.22.43ae073
-
-mlnx_ofed_user_space_only_rpm_version:
-  mlnx_ofed_user_space: mlnx-ofed-user-space-only-all-5.17.15-1.el8.x86_64.noarch
-
-sapp_rpm_version:
-  sapp: sapp-4.3.67.07feab9
-  tcpdump_mesa: tcpdump_mesa-1.0.13.6ec67f5
-  sapp-pr: sapp-pr-4.3.67.07feab9
-
-tfe_rpm_version:
-  tfe: tfe-4.10.5.edd0209
-
 tsg_diagnose_rpm_version:
   tsg_diagnose: tsg-diagnose-2.0.10.4d80fdf
-
-http_healthcheck_rpm_version:
-  http_healthcheck: http_healthcheck-2.0.2.969442a
 
 hasp_tools_rpm_version:
   hasp_tools: hasp-tools-1.0.12.66db85d
@@ -90,27 +9,5 @@ tsg_os_clixon_rpm_version:
   clixon: clixon-5.8.4-6462458
   tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.45.57c3ba0
 
-sce_rpm_version:
-  sce: sce-1.3.7.431ac5f
-
-bfdd_rpm_version:
-  bfdd: bfdd-1.0.3-release
-
-
-shaping_engine_rpm_version:
-  shaping_engine: shaping_engine-3.2.2.2e73009
-
 coredump_tools_rpm_version:
   coredump_tools: coredump-tools-1.1.1-291df81
-
-packet_adapter_rpm_version:
-  packet_adapter: packet_adapter-2.0.2.4f48b59
-
-nic_uio_binder_rpm_version:
-  nic_uio_binder: nic-uio-binder-1.0.13-3d0dc82
-
-dp_trace_rpm_version:
-  dp_trace: dp_trace_telemetry-0.3.2.90918bd
-
-log_collector_rpm_version:
-  log_collector: log-collector-1.0.1-6df738d
