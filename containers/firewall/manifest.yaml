@@ -15,7 +15,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: firewall
-    version: 3.5.1.d5e256a
+    version: 3.5.3.cb4bedc
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg"
@@ -25,7 +25,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: qdpi_detector
-    version: 5.0.2.90682ec
+    version: 5.0.4.b94b1b0
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
@@ -100,7 +100,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: stat_policy_enforcer
-    version: 3.5.1.3a39801
+    version: 3.5.2.e61c165
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
@@ -115,12 +115,12 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg"
   - name: policy_sketch
-    version: 1.2.0.43bd6ec
+    version: 1.2.1.d57fbf0
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: traffic_sketch
-    version: 1.1.5.a38497d
+    version: 1.1.6.4ce17a0
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
