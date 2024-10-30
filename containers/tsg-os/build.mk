@@ -1,4 +1,4 @@
-requisites_images_name := firewall proxy proxy-certstore sce sce-bfdd shaping \
+requisites_images_name := base firewall proxy proxy-certstore sce sce-bfdd shaping \
                           packet-io-engine inject-adapter trex nic-uio-binder \
                           log-collector dp-trace-telemetry
 rule_target := tsg-os
