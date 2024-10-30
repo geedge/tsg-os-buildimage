@@ -14,8 +14,6 @@ data:
 {{ toYaml .Values.device | indent 6 }}
     dos_protector:
 {{ toYaml .Values.dos_protector | indent 6 }}
-    etherfabric_settings:
-{{ toYaml .Values.etherfabric_settings | indent 6 }}
     external_resources:
 {{ toYaml .Values.external_resources | indent 6 }}
     file_stream_record:
