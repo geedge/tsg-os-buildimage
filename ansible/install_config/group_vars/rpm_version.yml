@@ -7,7 +7,7 @@ hasp_tools_rpm_version:
 tsg_os_clixon_rpm_version:
   cligen: cligen-5.8.0-release
   clixon: clixon-5.8.4-6462458
-  tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.45.57c3ba0
+  tsg-os-mgnt-srv: tsg-os-mgnt-srv-1.2.46.98d1925
 
 coredump_tools_rpm_version:
   coredump_tools: coredump-tools-1.1.1-291df81
