@@ -3,5 +3,5 @@ packages:
     version: 5.17.15-1.el8.x86_64.noarch
     install_command: dnf
   - name: dp_trace_telemetry
-    version: 0.3.2.90918bd
+    version: 0.4.1.db788a4
     install_command: dnf
