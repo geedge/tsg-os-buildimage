@@ -100,7 +100,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: stat_policy_enforcer
-    version: 3.5.2.e61c165
+    version: 3.5.3.e63ed93
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
@@ -115,7 +115,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg"
   - name: policy_sketch
-    version: 1.2.1.d57fbf0
+    version: 1.2.2.9aa0002
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
