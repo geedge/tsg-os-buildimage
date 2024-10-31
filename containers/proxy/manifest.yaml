@@ -1,6 +1,6 @@
 packages:
   - name: tfe
-    version: 4.10.5.edd0209
+    version: 4.10.6.2b7d35c
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/tfe"
