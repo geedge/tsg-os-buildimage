@@ -26,7 +26,7 @@
       {%- set address = item.address ~ ":" ~ item.port -%}
       {%- do addresses.append(address) -%}
     {%- endfor -%}
-    {{ addresses | join(separator) }}
+    {{- addresses | join(separator) }}
   {%- endif %}
 {%- endmacro %}
 
@@ -52,15 +52,15 @@
 
 {% macro device_tag_list(device) -%}
     {%- set tags_list = [] -%}
-    {%- if device.tag is defined and device.tag %}
-        {%- for tag in device.tag %}
+    {%- if device.tags is defined and device.tags %}
+        {%- for tag in device.tags %}
             {%- for key, val in tag.items() %}
                 {%- set tag_json = '{"tag":"' ~ key ~ '","value":"' ~ val ~ '"}' -%}
                 {%- do tags_list.append(tag_json) -%}
             {%- endfor %}
         {%- endfor %}
+        {{- tags_list | join(',') }}
     {%- endif %}
-    {{ tags_list | join(',') }}
 {%- endmacro %}
 
 {% macro safe_read(data, path) -%}
@@ -81,8 +81,8 @@
 
 {% macro read_device_tag_value(device, key) -%}
   {%- set ns = namespace(value='') %}
-  {%- if device.tag is defined and device.tag %}
-  {%- for tag in device.tag %}
+  {%- if device.tags is defined and device.tags %}
+  {%- for tag in device.tags %}
     {%- if tag is mapping and key in tag %}
         {%- set ns.value = tag[key] %}
         {%- break %}
