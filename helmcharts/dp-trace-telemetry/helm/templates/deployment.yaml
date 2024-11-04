@@ -43,18 +43,17 @@ spec:
           - "bash"
           - "-ec"
           - |
-            /usr/local/bin/j2 -f yaml  /templates/dp_trace_dy.conf.j2 /templates/values.yaml -o /opt/tsg/dp_trace_telemetry/share_conf/dp_trace_dy.conf
-            WATCH_DIR="/templates/values.yaml"
+            /usr/local/bin/j2 -f yaml  /templates/dp_trace_dy.conf.j2 /templates/configmap/values.yaml -o /opt/tsg/dp_trace_telemetry/share_conf/dp_trace_dy.conf
+            WATCH_DIR="/templates/configmap"
             while inotifywait -r -e modify,create "$WATCH_DIR"; do
               echo "send HUB signal to dp_trace"
-              /usr/local/bin/j2 -f yaml  /templates/dp_trace_dy.conf.j2 /templates/values.yaml -o /opt/tsg/dp_trace_telemetry/share_conf/dp_trace_dy.conf
+              /usr/local/bin/j2 -f yaml  /templates/dp_trace_dy.conf.j2 /templates/configmap/values.yaml -o /opt/tsg/dp_trace_telemetry/share_conf/dp_trace_dy.conf
               pkill -1 dp-trace-telemetry
               echo "signal send"
             done
         volumeMounts:
         - name: dp-trace-dy
-          mountPath: "/templates/values.yaml"
-          subPath: "values.yaml"
+          mountPath: "/templates/configmap"
         - name: share-config
           mountPath: /opt/tsg/dp_trace_telemetry/share_conf/
         lifecycle:

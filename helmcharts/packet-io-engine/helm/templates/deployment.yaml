@@ -43,11 +43,11 @@ spec:
           - "bash"
           - "-ec"
           - |
-            /usr/local/bin/j2 -f yaml  /templates/mrglobal.dynamic.conf.j2 /templates/values.yaml -o /opt/tsg/config/shared/mrglobal.dynamic.conf
-            WATCH_DIR="/templates/values.yaml"
+            /usr/local/bin/j2 -f yaml  /templates/mrglobal.dynamic.conf.j2 /templates/configmap/values.yaml -o /opt/tsg/config/shared/mrglobal.dynamic.conf
+            WATCH_DIR="/templates/configmap"
             while inotifywait -r -e modify,create "$WATCH_DIR"; do
               echo "send HUB signal to mrzcpd"
-              /usr/local/bin/j2 -f yaml  /templates/mrglobal.dynamic.conf.j2 /templates/values.yaml -o /opt/tsg/config/shared/mrglobal.dynamic.conf
+              /usr/local/bin/j2 -f yaml  /templates/mrglobal.dynamic.conf.j2 /templates/configmap/values.yaml -o /opt/tsg/config/shared/mrglobal.dynamic.conf
               pkill -1 mrzcpd
               echo "signal send"
             done
@@ -55,8 +55,7 @@ spec:
         - name: shared-dir
           mountPath: /opt/tsg/config/shared
         - name: packet-io-engine-reload-conf
-          mountPath: /templates/values.yaml
-          subPath: "values.yaml"
+          mountPath: /templates/configmap
         securityContext:
           privileged: true
         lifecycle:
