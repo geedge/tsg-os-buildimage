@@ -15,7 +15,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: firewall
-    version: 3.5.4.1aa2843
+    version: 3.5.5.276fb9c
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg"
