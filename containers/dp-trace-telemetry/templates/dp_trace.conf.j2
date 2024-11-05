@@ -22,12 +22,12 @@ keep_alive_path=/probe
 
 [kafka]
 broker_list="{{ macros.address_port_pairs_render(datapath_trace.olap.kafka_brokers.addresses,",") }}"
-{%- if datapath_trace.olap.kafka_brokers.sasl_username is defined -%}
+{% if datapath_trace.olap.kafka_brokers.sasl_username is defined -%}
 sasl_username={{ datapath_trace.olap.kafka_brokers.sasl_username }}
 {% endif -%}
-{%- if datapath_trace.olap.kafka_brokers.sasl_username is defined -%}
-sasl_passwd={{ datapath_trace.olap.kafka_brokers.sasl_password }}
-{%- endif %}
+{% if datapath_trace.olap.kafka_brokers.sasl_username is defined -%}
+sasl_password={{ datapath_trace.olap.kafka_brokers.sasl_password }}
+{% endif -%}
 topic_name="DATAPATH-TELEMETRY-RECORD"
 
 [maat]
