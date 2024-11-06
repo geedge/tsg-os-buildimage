@@ -105,7 +105,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: sf_classifier
-    version: 2.2.0.1f91efa
+    version: 2.2.2.10b8f01
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
