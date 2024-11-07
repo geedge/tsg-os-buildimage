@@ -1,9 +1,11 @@
 #layer name definition:  ipv4, ipv6, ethernet,vlan, arp, gre, mpls, pppoe, tcp, udp, l2tp, ppp, pptp, gtp
 #pattern: asymmetric_layer_name[layer index]
 #The symbol "*" represents any layer
+{% if firewall.inject_packet_by_mgnt_route != True -%}
 ethernet[*]
 vlan[*]
 vxlan[*]
 mpls[*]
 gre[*]
 gtp[*]
+{%- endif %}

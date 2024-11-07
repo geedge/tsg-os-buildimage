@@ -8,7 +8,6 @@ RUN {{ macros.install_packages(packages) }} && \
     rm -rf /opt/tsg/sapp/r3
 # files
 COPY files/quic/main.conf             /opt/tsg/sapp/conf/quic/main.conf
-COPY files/asymmetric_addr_layer.conf /opt/tsg/sapp/etc/
 COPY files/entrylist.conf             /opt/tsg/sapp/etc/
 COPY files/firewall_l7_protocol.conf  /opt/tsg/sapp/tsgconf/
 COPY files/http.conf                  /opt/tsg/sapp/conf/http/

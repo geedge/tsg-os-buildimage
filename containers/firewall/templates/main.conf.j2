@@ -54,7 +54,11 @@ APPSKETCH_SWITCH=0
 
 [FIREWALL]
 # hijack, replace
+{%- if firewall.inject_packet_by_mgnt_route == True %}
+PACKET_RESPONSE_MODE=hijack
+{%- else %}
 PACKET_RESPONSE_MODE=replace
+{%- endif %}
 HTTP_PAGE200=./tsgconf/HTTP200.html
 HTTP_PAGE204=./tsgconf/HTTP204.html
 HTTP_PAGE403=./tsgconf/HTTP403.html

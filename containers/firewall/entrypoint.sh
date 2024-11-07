@@ -56,6 +56,7 @@ parse_args "$@"
 
 mkdir -p /opt/tsg/etc/
 
+render_template asymmetric_addr_layer.conf.j2 /opt/tsg/sapp/etc/asymmetric_addr_layer.conf
 render_template conflist.inf.j2 /opt/tsg/sapp/plug/conflist.inf
 render_template firewall_logger_transmitter_schema.json.j2 /opt/tsg/sapp/tsgconf/firewall_logger_transmitter_schema.json
 render_template firewall.inf.j2 /opt/tsg/sapp/plug/business/firewall/firewall.inf
