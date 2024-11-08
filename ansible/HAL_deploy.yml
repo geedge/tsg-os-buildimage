@@ -24,3 +24,4 @@
     - {role: tsg-os-oobc, tags: tsg-os-oobc}
     - {role: tsg-os-logfile-cleaner, tags: tsg-os-logfile-cleaner}
     - {role: qemu-user-static, tags: qemu-user-static}
+    - {role: OFED, tags: OFED}
