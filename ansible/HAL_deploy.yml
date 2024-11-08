@@ -15,7 +15,7 @@
     - {role: sosreport, tags: sosreport}
     - {role: nm-config, tags: nm-config}
     - {role: tsg-os-logo, tags: tsg-os-logo}
-    # - {role: tsg-diagnose, tags: tsg-diagnose}
+    - {role: tsg-diagnose, tags: tsg-diagnose}
     - {role: k8s-dashboard, tags: k8s-dashboard}
     - {role: k3s-exporter, tags: k3s-exporter}
     - {role: consul, tags: consul}
