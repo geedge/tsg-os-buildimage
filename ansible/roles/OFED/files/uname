@@ -1,8 +1,13 @@
 #!/bin/sh
 
-if [ "$1" == "-r" ]
-then
-	echo KERNEL_VERSION.x86_64
+if [ "$1" == "-r" ]; then
+	# In case multiple versions of the kernel are installed here, the first version is used by default
+	# KERNEL_VERSION=$(rpm -q kernel --qf "%{VERSION}-%{RELEASE}.%{ARCH}\n"  | tail -n 1)
+	
+	# Use the rpm command to query the information of the rpm package, which requires that the package must be installed. 
+	# Use dnf info to query to avoid installing the kernel.
+	KERNEL_VERSION=$(dnf info kernel | awk '/Version/{version=$3} /Release/{release=$3} /Architecture/{arch=$3} END{print version "-" release "." arch}')
+	echo "$KERNEL_VERSION"
 else
 	/usr/bin/uname-backup $1
 fi
