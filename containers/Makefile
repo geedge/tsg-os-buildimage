@@ -53,7 +53,7 @@ endef
 
 define download_image_tar_from_url
 	curl -f -u "${PULP_REPO_USERNAME}:${PULP_REPO_PASSWORD}" \
-		-o $(IMAGE_TAR_DIR)/prometheus-docker.tar \
+		-o $(IMAGE_TAR_DIR)/$(1) \
 		https://repo.geedge.net/filerepo/install/release/tsg-container-images/$(1)
 endef
 

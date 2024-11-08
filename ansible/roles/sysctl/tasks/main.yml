@@ -1,9 +1,0 @@
-- name: "copy tsg-os sysctl.d to destination server"
-  copy:
-    src: "{{ role_path }}/files/90-tsg-os.conf"
-    dest: /usr/lib/sysctl.d/
-
-- name: "copy proxy sysctl.d to destination server"
-  copy:
-    src: "{{ role_path }}/files/80-proxy.conf"
-    dest: /usr/lib/sysctl.d/

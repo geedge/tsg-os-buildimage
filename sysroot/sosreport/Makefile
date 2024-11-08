@@ -1,0 +1,12 @@
+export CHROOT_DIR
+export TMP_FILES_DIR
+export CHROOT_SHELL
+
+.PHONY: all chroot-commands
+
+all: chroot-commands
+
+chroot-commands:
+	chroot $(CHROOT_DIR) $(CHROOT_SHELL) '\
+		install -D -m 0644 $(TMP_FILES_DIR)/* -t /usr/lib/python3.6/site-packages/sos/report/plugins/; \
+	'

@@ -1,6 +1,0 @@
-[Unit]
-Description=Poweroff Guard
-[Service]
-ExecStart=/bin/true
-[Install]
-RequiredBy=poweroff.target

@@ -16,7 +16,7 @@ TARGET_BUILD_DIR 		:= $(BUILDDIR_BASE)/$(PROFILE_ID)
 TARGET_INSTALLER_DIR 	:= $(TARGET_BUILD_DIR)/installer
 TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
 
-.PHONY: all builddir installer sysroot-base sysroot-cleanup sysroot-archive sysroot-binary add-images-into-installer-dir add-patch-into-installer-dir clean
+.PHONY: all builddir installer sysroot-base sysroot-cleanup sysroot-archive sysroot-binary clean sysroot-install build-containers build-helmcharts
 
 all: sysroot-binary
 
@@ -45,7 +45,7 @@ ifeq ($(ENABLE_ALIYUN_INTERNAL_DOMAIN),1)
 	sed -i -e "s/mirrors.aliyun.com/mirrors.cloud.aliyuncs.com/" $(CONFDIR)/yum-RockyLinux-8.conf
 endif
 
-sysroot-base: builddir
+sysroot-base: builddir installer
 	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum-RockyLinux-8.conf $(TARGET_SYSROOT_DIR) $(PROJECTDIR) $(PROFILE_ID)
 
 sysroot-verfile: sysroot-base
@@ -53,29 +53,43 @@ sysroot-verfile: sysroot-base
 	sed -i -e "s/^VERSION=.*/VERSION=\"$(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
 	sed -i -e "s/^PRETTY_NAME=.*/PRETTY_NAME=\"TSG-OS $(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
 
-sysroot-ansible: sysroot-verfile sysroot-base
-	cp $(CONFDIR)/yum-RockyLinux-8.conf $(TARGET_SYSROOT_DIR)/tmp/ -r
+sysroot-install: sysroot-base
 	cp /etc/resolv.conf $(TARGET_SYSROOT_DIR)/etc/ -r
-	cp $(TARGET_SYSROOT_DIR)/etc/hosts $(TARGET_SYSROOT_DIR)/tmp/ -r
-	cp /etc/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
-	$(TOOLSDIR)/ansible-HAL $(PROFILE_ID) $(PROJECTDIR) $(TARGET_SYSROOT_DIR) /tmp/yum-RockyLinux-8.conf $(OS_RELEASE_VER) $(HELM_CHART_VER)
-	cp $(TARGET_SYSROOT_DIR)/tmp/hosts $(TARGET_SYSROOT_DIR)/etc/ -r
+	mount --bind /etc/hosts $(TARGET_SYSROOT_DIR)/etc/hosts
+	mount --bind $(CONFDIR)/yum-RockyLinux-8.conf $(TARGET_SYSROOT_DIR)/etc/yum.conf
+	mount --bind $(CONFDIR)/yum-RockyLinux-8.conf $(TARGET_SYSROOT_DIR)/etc/dnf/dnf.conf
+	$(MAKE) -C $(PROJECTDIR)/sysroot CHROOT_DIR=$(TARGET_SYSROOT_DIR)
 	rm -rf $(TARGET_SYSROOT_DIR)/etc/resolv.conf
+	umount $(TARGET_SYSROOT_DIR)/etc/hosts
+	umount $(TARGET_SYSROOT_DIR)/etc/yum.conf
+	umount $(TARGET_SYSROOT_DIR)/etc/dnf/dnf.conf
 
-sysroot-cleanup:
+build-containers: sysroot-base
+	$(MAKE) -C $(PROJECTDIR)/containers IMAGE_TAG=$(OS_RELEASE_VER) YUM_REPO_FILE=$(CONFDIR)/yum-RockyLinux-8.conf \
+		cm-cache consul dynamic-hostport helm-controller ipmi-exporter k8s-dashboard multus-cni prometheus reloader systemd-exporter
+	mkdir -p $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images; \
+		cp -af $(PROJECTDIR)/containers/build/images/*.tar $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images
+
+build-helmcharts: sysroot-base
+	$(MAKE) -C $(PROJECTDIR)/helmcharts \
+		VERSION=$(HELM_CHART_VER) \
+		APP_VERSION=$(OS_RELEASE_VER) \
+		cm-cache consul dynamic-hostport helm-controller ipmi-exporter k8s-dashboard multus-cni ns-tsg-os-system prometheus reloader systemd-exporter
+	mkdir -p $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/server/static/charts; \
+		cp -af $(PROJECTDIR)/helmcharts/build/helmcharts/*.tgz $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/server/static/charts
+	mkdir -p $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/server/manifests; \
+		cp -af $(PROJECTDIR)/helmcharts/build/manifests/*.yaml $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/server/manifests
+
+sysroot-archive: builddir sysroot-verfile sysroot-install build-containers build-helmcharts
+	cp $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN) $(TARGET_INSTALLER_DIR)/$(APP_BUNDLE_BIN)
+	cp $(TARGET_SYSROOT_DIR)/tmp/9000_NPB/tsg-os_9000-NPB-P01R01_patch.bin $(TARGET_INSTALLER_DIR)/tsg-os_9000-NPB-P01R01_patch.bin
+	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_SYSROOT_DIR) . | pbzip2 -p9 > $(TARGET_INSTALLER_DIR)/$(CHROOT_PKG)
+
+sysroot-cleanup: sysroot-archive
 	rm -rf $(TARGET_SYSROOT_DIR)/tmp/*
 	rm -rf $(TARGET_SYSROOT_DIR)/dev/*
 
-add-patch-into-installer-dir:
-	cp $(TARGET_SYSROOT_DIR)/tmp/9000_NPB/tsg-os_9000-NPB-P01R01_patch.bin $(TARGET_INSTALLER_DIR)/tsg-os_9000-NPB-P01R01_patch.bin
-
-add-images-into-installer-dir: builddir sysroot-verfile sysroot-ansible
-	cp $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN) $(TARGET_INSTALLER_DIR)/$(APP_BUNDLE_BIN)
-
-sysroot-archive: installer add-images-into-installer-dir add-patch-into-installer-dir sysroot-cleanup
-	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_SYSROOT_DIR) . | pbzip2 -p9 > $(TARGET_INSTALLER_DIR)/$(CHROOT_PKG)
-
-sysroot-binary: sysroot-archive
+sysroot-binary: sysroot-cleanup
 	mkdir -p $(TARGET_BUILD_DIR)/cook-bits
 	$(TOOLSDIR)/cook-bits $(TARGET_BUILD_DIR) $(TARGET_BUILD_DIR)/cook-bits $(IMAGEDIR_BASE)/$(CHROOT_BIN)
 	sha256sum $(IMAGEDIR_BASE)/$(CHROOT_BIN) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(CHROOT_BIN).sha256sum.txt

@@ -1,4 +1,0 @@
-#!/bin/sh -ex
-HOST_IP=$(ip a show {{ control_and_policy.nic_name }} | grep inet | grep -v inet6 | awk '{print $2}' | awk -F '/' '{print $1}')
-echo "Log and policy nic ipv4 address:$HOST_IP"
-sed -i "s/^advertise_addr.*$/advertise_addr=\"$HOST_IP\"/g" /etc/consul.d/consul.hcl

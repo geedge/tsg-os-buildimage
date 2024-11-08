@@ -1,0 +1,15 @@
+export CHROOT_DIR
+export TMP_FILES_DIR
+export CHROOT_SHELL
+
+.PHONY: all chroot-commands
+
+all: chroot-commands
+
+chroot-commands:
+	chroot $(CHROOT_DIR) $(CHROOT_SHELL) '\
+		install -D -m 0644 $(TMP_FILES_DIR)/tuned.conf -t /etc/tuned/tsg-os-cpu-partitioning/; \
+		cd /usr/lib/python3.6/site-packages && patch -p1 -t < $(TMP_FILES_DIR)/371.patch || true; \
+		tuned-adm profile tsg-os-cpu-partitioning; \
+		sed -i "s/After=/&tsg-os-HAL.service /" /usr/lib/systemd/system/tuned.service \
+	'

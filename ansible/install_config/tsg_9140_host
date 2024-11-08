@@ -1,2 +1,0 @@
-[tsg_9140_chroot]
-/root/geedge-work/onie-5-10/tsg-os-installer/build/9000-NPB-P01R01/sysroot  ansible_connection=chroot
