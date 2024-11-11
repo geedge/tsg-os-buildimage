@@ -25,7 +25,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libMESA_htable
-    version: 3.10.13.bd6fc34
+    version: 3.10.15.16409e2
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
