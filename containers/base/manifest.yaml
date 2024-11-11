@@ -1,6 +1,6 @@
 packages:
   - name: libcjson
-    version: 1.7.12.6c09dcf
+    version: 1.7.13.fb1bdbf
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
@@ -10,17 +10,17 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libMESA_field_stat
-    version: 1.0.3.0de785d
+    version: 1.0.4.2292d4b
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libMESA_field_stat2
-    version: 2.10.11.b2095aa
+    version: 2.10.12.b45accb
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libMESA_handle_logger
-    version: 2.0.12.1dd9e1e
+    version: 2.0.13.9b9ac69
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
@@ -30,12 +30,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libMESA_prof_load
-    version: 1.0.9.16148e7
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/framework"
-  - name: librulescan
-    version: 3.0.1.6145620
+    version: 1.0.10.b3381c6
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
@@ -44,18 +39,8 @@ packages:
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
-  - name: libwiredcfg
-    version: 2.0.8.cafaf49
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/framework"
-  - name: libWiredLB
-    version: 2.0.6.54a039d
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/framework"
   - name: libbreakpad_mini
-    version: 1.0.9.9d98968
+    version: 1.0.10.1dd81c2
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
@@ -69,33 +54,18 @@ packages:
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
-  - name: libMESA_jump_layer
-    version: 1.0.10.6fb4738
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/framework"
   - name: libswarmkv
     version: 4.4.4.5c89f35
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libfieldstat3
-    version: 3.1.1.03491ea
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/framework"
-  - name: libMESA_sts
-    version: 1.0.3.d515a96
+    version: 3.1.2.e9d6763
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libfieldstat4
-    version: 4.7.0.8110a85
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/framework"
-  - name: libipfix_exporter
-    version: 1.0.6.0e73c24
+    version: 4.7.1.ebf7393
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
@@ -110,7 +80,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libmaatframe
-    version: 5.0.2.bc52994
+    version: 5.0.3.2dfcf10
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
