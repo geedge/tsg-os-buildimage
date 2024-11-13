@@ -2,11 +2,13 @@ export CHROOT_DIR
 export TMP_FILES_DIR
 export CHROOT_SHELL
 
-.PHONY: all chroot-commands
+.PHONY: x86_64_COTS AArch64_COTS install
 
-all:  chroot-commands
+x86_64_COTS: install
 
-chroot-commands:
+AArch64_COTS: install
+
+install:
 	chroot $(CHROOT_DIR) $(CHROOT_SHELL) '\
 		install -D -m 0755 $(TMP_FILES_DIR)/script/* -t /opt/tsg/tsg-os-HAL/scripts/; \
 		dnf -y install numactl; \

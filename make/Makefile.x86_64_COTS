@@ -58,14 +58,17 @@ sysroot-install: sysroot-base
 	mount --bind /etc/hosts $(TARGET_SYSROOT_DIR)/etc/hosts
 	mount --bind $(CONFDIR)/yum-RockyLinux-8.conf $(TARGET_SYSROOT_DIR)/etc/yum.conf
 	mount --bind $(CONFDIR)/yum-RockyLinux-8.conf $(TARGET_SYSROOT_DIR)/etc/dnf/dnf.conf
-	$(MAKE) -C $(PROJECTDIR)/sysroot CHROOT_DIR=$(TARGET_SYSROOT_DIR)
+	$(MAKE) -C $(PROJECTDIR)/sysroot CHROOT_DIR=$(TARGET_SYSROOT_DIR) MACHINE_ID=$(SUPPORTED_MACHINE_ID)
 	rm -rf $(TARGET_SYSROOT_DIR)/etc/resolv.conf
 	umount $(TARGET_SYSROOT_DIR)/etc/hosts
 	umount $(TARGET_SYSROOT_DIR)/etc/yum.conf
 	umount $(TARGET_SYSROOT_DIR)/etc/dnf/dnf.conf
 
 build-containers: sysroot-base
-	$(MAKE) -C $(PROJECTDIR)/containers IMAGE_TAG=$(OS_RELEASE_VER) YUM_REPO_FILE=$(CONFDIR)/yum-RockyLinux-8.conf \
+	$(MAKE) -C $(PROJECTDIR)/containers \
+		IMAGE_TAG=$(OS_RELEASE_VER) \
+		YUM_REPO_FILE=$(CONFDIR)/yum-RockyLinux-8.conf \
+		MACHINE_ID=$(SUPPORTED_MACHINE_ID) \
 		cm-cache consul dynamic-hostport helm-controller ipmi-exporter k8s-dashboard multus-cni prometheus reloader systemd-exporter
 	mkdir -p $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images; \
 		cp -af $(PROJECTDIR)/containers/build/images/*.tar $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images
@@ -74,6 +77,7 @@ build-helmcharts: sysroot-base
 	$(MAKE) -C $(PROJECTDIR)/helmcharts \
 		VERSION=$(HELM_CHART_VER) \
 		APP_VERSION=$(OS_RELEASE_VER) \
+		MACHINE_ID=$(SUPPORTED_MACHINE_ID) \
 		cm-cache consul dynamic-hostport helm-controller ipmi-exporter k8s-dashboard multus-cni ns-tsg-os-system prometheus reloader systemd-exporter
 	mkdir -p $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/server/static/charts; \
 		cp -af $(PROJECTDIR)/helmcharts/build/helmcharts/*.tgz $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/server/static/charts

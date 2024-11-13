@@ -1,5 +1,6 @@
 export VERSION
 export APP_VERSION
+export MACHINE_ID
 
 HELMCHART_NAMES := $(shell find . -maxdepth 1 -type d ! -name "build" ! -name "." | sed 's|^\./||')
 

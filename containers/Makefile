@@ -1,5 +1,6 @@
 export YUM_REPO_FILE
 export IMAGE_TAG
+export MACHINE_ID
 
 BUILD_DIR := build
 
@@ -10,14 +11,15 @@ IMAGE_TAR_DIR := $(BUILD_DIR)/images
 
 ENV_FILES := $(BUILD_DIR)/IMAGE_TAG_$(IMAGE_TAG:/=_).env
 
-ARCH := $(shell uname -m)
-
-ifeq ($(ARCH),x86_64)
+ifeq ($(MACHINE_ID),x86_64_COTS)
 IMAGE_ARCH := amd64
-else ifeq ($(ARCH),aarch64)
+BUILD_BASE_IMAGE := rockylinux:8
+else ifeq ($(ARCH),AArch64_COTS)
 IMAGE_ARCH := arm64
+BUILD_BASE_IMAGE := rockylinux:9
 else
 IMAGE_ARCH := unknown
+BUILD_BASE_IMAGE := unknown
 endif
 
 define write_env_files
@@ -51,10 +53,10 @@ define build_image_from_dockerfile
 	$(1)
 endef
 
-define download_image_tar_from_url
+define download_image_tar_from_filerepo
 	curl -f -u "${PULP_REPO_USERNAME}:${PULP_REPO_PASSWORD}" \
 		-o $(IMAGE_TAR_DIR)/$(1) \
-		https://repo.geedge.net/filerepo/install/release/tsg-container-images/$(1)
+		https://repo.geedge.net/filerepo/install/release/tsg-container-images/$(IMAGE_ARCH)/$(1)
 endef
 
 .PHONY: all clean $(IMAGE_NAMES)

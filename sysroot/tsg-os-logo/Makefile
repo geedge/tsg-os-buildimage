@@ -1,15 +1,15 @@
 export CHROOT_DIR
 export TMP_FILES_DIR
 export CHROOT_SHELL
+export KERNEL_RELEASE
 
-#KERNEL_RELEASE := $(shell chroot $(CHROOT_DIR) uname -r)
-KERNEL_RELEASE := 5.17.15-1.el8.x86_64
+.PHONY: x86_64_COTS AArch64_COTS install
 
-.PHONY: all chroot-commands
+x86_64_COTS: install
 
-all: chroot-commands
+AArch64_COTS: install
 
-chroot-commands:
+install:
 	chroot $(CHROOT_DIR) $(CHROOT_SHELL) '\
 		install -D -m 0755 /usr/bin/uname /usr/bin/uname-backup; \
 		install -D -m 0755 $(TMP_FILES_DIR)/uname /usr/bin/uname; \

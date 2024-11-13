@@ -2,11 +2,13 @@ export CHROOT_DIR
 export TMP_FILES_DIR
 export CHROOT_SHELL
 
-.PHONY: all chroot-commands
+.PHONY: x86_64_COTS AArch64_COTS install
 
-all: chroot-commands
+x86_64_COTS: install
 
-chroot-commands:
+AArch64_COTS: install
+
+install:
 	chroot $(CHROOT_DIR) $(CHROOT_SHELL) '\
 		dnf -y install tsg-diagnose-2.0.10.4d80fdf --nogpgcheck; \
 		sed -i -E "s/^(.*Defaults    secure_path =.*)$$/\1:\/opt\/tsg\/tsg-diagnose\/scripts/" /etc/sudoers; \

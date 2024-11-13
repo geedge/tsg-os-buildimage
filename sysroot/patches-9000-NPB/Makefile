@@ -2,11 +2,11 @@ export CHROOT_DIR
 export TMP_FILES_DIR
 export CHROOT_SHELL
 
-.PHONY: all chroot-commands
+.PHONY: x86_64_COTS install
 
-all:  chroot-commands
+x86_64_COTS: install
 
-chroot-commands:
+install:
 	chroot $(CHROOT_DIR) $(CHROOT_SHELL) '\
 		tar -zcvf $(TMP_FILES_DIR)/patch.tar.gz -C $(TMP_FILES_DIR)/patch/ .; \
 		cat $(TMP_FILES_DIR)/install.sh $(TMP_FILES_DIR)/patch.tar.gz > $(TMP_FILES_DIR)/tsg-os_9000-NPB-P01R01_patch.bin; \

@@ -1,11 +1,13 @@
 export CHROOT_DIR
 export CHROOT_SHELL
 
-.PHONY: all chroot-commands
+.PHONY: x86_64_COTS AArch64_COTS install
 
-all: chroot-commands
+x86_64_COTS: install
 
-chroot-commands:
+AArch64_COTS: install
+
+install:
 	chroot $(CHROOT_DIR) $(CHROOT_SHELL) '\
 		dnf -y install libyaml; \
 		ln -vfs /lib64/libyaml-0.so.2.0.5 /usr/lib64/libyaml.so; \
