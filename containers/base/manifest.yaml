@@ -5,7 +5,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libdocumentanalyze
-    version: 2.0.11.719a8ff
+    version: 2.0.12.2fc9bf4
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
