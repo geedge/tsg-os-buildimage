@@ -58,7 +58,7 @@ build-container-images:
 		YUM_REPO_FILE=$(CONFDIR)/yum-RockyLinux-8.conf \
 		MACHINE_ID=$(SUPPORTED_MACHINE_ID) \
 		tsg-os tsg-cm
-	cp -af $(PROJECTDIR)/containers/build/images/*.tar $(TARGET_IMAGES_DIR)
+	cp -af $(PROJECTDIR)/containers/build/images/*.tar.zst $(TARGET_IMAGES_DIR)
 
 build-helmcharts:
 	mkdir -p $(TARGET_HELMCHARTS_DIR)

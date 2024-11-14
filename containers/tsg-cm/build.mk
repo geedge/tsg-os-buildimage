@@ -18,5 +18,6 @@ define rule_recipes
 	done
 
 	mkdir -p $(IMAGE_TAR_DIR); \
-	podman save -o $(IMAGE_TAR_DIR)/$(rule_target)-docker.tar -m $(tsg_cm_images)
+	podman save -o $(IMAGE_TAR_DIR)/$(rule_target)-docker.tar -m $(tsg_cm_images); \
+	zstd $(IMAGE_TAR_DIR)/$(rule_target)-docker.tar --output-dir-flat=$(IMAGE_TAR_DIR) -f
 endef

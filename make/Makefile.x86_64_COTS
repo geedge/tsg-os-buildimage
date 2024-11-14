@@ -71,7 +71,7 @@ build-containers: sysroot-base
 		MACHINE_ID=$(SUPPORTED_MACHINE_ID) \
 		cm-cache consul dynamic-hostport helm-controller ipmi-exporter k8s-dashboard multus-cni prometheus reloader systemd-exporter
 	mkdir -p $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images; \
-		cp -af $(PROJECTDIR)/containers/build/images/*.tar $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images
+		cp -af $(PROJECTDIR)/containers/build/images/*.tar.zst $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images
 
 build-helmcharts: sysroot-base
 	$(MAKE) -C $(PROJECTDIR)/helmcharts \
