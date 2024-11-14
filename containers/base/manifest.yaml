@@ -45,7 +45,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libswarmkv
-    version: 4.4.4.5c89f35
+    version: 4.4.5.23a8c08
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
