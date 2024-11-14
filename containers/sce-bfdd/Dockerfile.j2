@@ -2,11 +2,7 @@
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 
-COPY files/libyang2-2.0.7-1.el8.x86_64.rpm /tmp/
-
-RUN rpm -i /tmp/libyang2-2.0.7-1.el8.x86_64.rpm && \
-    rm -rf /tmp/libyang2-2.0.7-1.el8.x86_64.rpm && \
-    {{ macros.install_packages(packages) }} && \
+RUN {{ macros.install_packages(packages) }} && \
     {{ macros.clean_after_install_packages() }}
 
 COPY --chmod=755 entrypoint.sh /usr/local/bin/
