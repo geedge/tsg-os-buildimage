@@ -125,7 +125,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: http_healthcheck
-    version: 2.0.2.969442a
+    version: 2.0.3.e6e25bd
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
