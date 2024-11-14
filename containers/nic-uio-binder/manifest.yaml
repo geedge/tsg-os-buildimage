@@ -1,4 +1,4 @@
 packages:
   - name: nic-uio-binder
-    version: 1.0.13-3d0dc82
+    version: 1.0.14-53c82fc
     install_command: dnf

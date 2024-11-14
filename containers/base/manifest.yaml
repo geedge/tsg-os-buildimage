@@ -35,7 +35,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libelua
-    version: 2.0.1.7760c27
+    version: 2.0.2.3a38114
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
@@ -45,7 +45,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libswarmkv
-    version: 4.4.4.5c89f35
+    version: 4.4.5.23a8c08
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
@@ -59,11 +59,11 @@ packages:
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
-  - name: libosfp
-    version: 1.3.11.d8c406f
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/framework"
+  # - name: libosfp
+  #   version: 1.3.11.d8c406f
+  #   download_command: dnf
+  #   install_command: rpm
+  #   install_command_options: "--prefix /opt/tsg/framework"
   - name: utable
     version: 1.0.12.70bfc65
     download_command: dnf
@@ -74,17 +74,17 @@ packages:
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
-  - name: libcbd
-    version: 3.1.5.74f35fe
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/framework"
-  - name: libdos_protector
-    version: 3.3.2.fa4f0a4
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/framework"
-  - name: hasp-tools
-    version: 1.0.12.66db85d
-    install_command: dnf
-    dnf_command_options: "--nogpgcheck"
+  # - name: libcbd
+  #   version: 3.1.5.74f35fe
+  #   download_command: dnf
+  #   install_command: rpm
+  #   install_command_options: "--prefix /opt/tsg/framework"
+  # - name: libdos_protector
+  #   version: 3.3.2.fa4f0a4
+  #   download_command: dnf
+  #   install_command: rpm
+  #   install_command_options: "--prefix /opt/tsg/framework"
+  # - name: hasp-tools
+  #   version: 1.0.12.66db85d
+  #   install_command: dnf
+  #   dnf_command_options: "--nogpgcheck"

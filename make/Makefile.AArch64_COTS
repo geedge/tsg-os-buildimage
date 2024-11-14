@@ -1,0 +1,100 @@
+PROFILE_ID 				:= AArch64_COTS
+SUPPORTED_MACHINE_ID 	:= AArch64_COTS
+KERNEL_ARGS 			:= crashkernel=512M default_hugepagesz=1G intel_iommu=on iommu=pt mitigations=off psi=1 selinux=0 coredump_filter=0x3f quiet splash transparent_hugepage=never processor.max_cstate=0 intel_idle.max_cstate=0 intel_pstate=disable
+KERNEL_ARGS_9000_NPB := console=ttyS0,115200n8 pci=realloc,assign-busses
+GRUB_SERIAL_COMMAND 	:=
+SIZE_PART_SYSROOT		:= 16384M
+SIZE_PART_UPDATE		:= 16384M
+
+PROFILE_ID_IN_SHORT		:= $(subst -,$e,$(PROFILE_ID))
+CHROOT_PKG 				:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-chroot.tar.bz2
+CHROOT_BIN 				:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-ONIE.bin
+APP_BUNDLE_BIN			:= tsg-os-${OS_RELEASE_VER}-${PROFILE_ID_IN_SHORT}-APP-BUNDLE.bin
+
+TARGET_BUILD_DIR 		:= $(BUILDDIR_BASE)/$(PROFILE_ID)
+TARGET_INSTALLER_DIR 	:= $(TARGET_BUILD_DIR)/installer
+TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
+
+.PHONY: all builddir installer sysroot-base sysroot-cleanup sysroot-archive sysroot-binary clean sysroot-install build-containers build-helmcharts
+
+all: sysroot-binary
+
+builddir:
+	mkdir -p $(TARGET_BUILD_DIR)
+
+installer: builddir
+	rm -rf $(TARGET_INSTALLER_DIR)
+	mkdir -p $(TARGET_INSTALLER_DIR)
+	cp $(INSTALLERDIR)/install.sh $(TARGET_INSTALLER_DIR)/install.sh
+	cp $(INSTALLERDIR)/distro-setup.sh $(TARGET_INSTALLER_DIR)/distro-setup.sh
+	chmod +x $(TARGET_INSTALLER_DIR)/install.sh
+	chmod +x $(TARGET_INSTALLER_DIR)/distro-setup.sh
+
+	sed -i -e "s/%%DISTR0_VER%%/$(OS_RELEASE_VER)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%MACHINE_ID%%/$(SUPPORTED_MACHINE_ID)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%CHROOT_PKG%%/$(CHROOT_PKG)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%KERNAL_ARGS%%/$(KERNEL_ARGS)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%KERNEL_ARGS_9000_NPB%%/$(KERNEL_ARGS_9000_NPB)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%GRUB_SERIAL_COMMAND%%/$(GRUB_SERIAL_COMMAND)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%SIZE_PART_SYSROOT%%/$(SIZE_PART_SYSROOT)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%SIZE_PART_UPDATE%%/$(SIZE_PART_UPDATE)/" $(TARGET_INSTALLER_DIR)/install.sh
+	sed -i -e "s/%%APP_BUNDLE_BIN%%/$(APP_BUNDLE_BIN)/" $(TARGET_INSTALLER_DIR)/install.sh
+
+ifeq ($(ENABLE_ALIYUN_INTERNAL_DOMAIN),1)
+	sed -i -e "s/mirrors.aliyun.com/mirrors.cloud.aliyuncs.com/" $(CONFDIR)/yum-RockyLinux-9.conf
+endif
+
+sysroot-base: builddir installer
+	$(TOOLSDIR)/mk-base-image $(CONFDIR)/yum-RockyLinux-9.conf $(TARGET_SYSROOT_DIR) $(PROJECTDIR) $(PROFILE_ID)
+
+sysroot-verfile: sysroot-base
+	sed -i -e "s/^NAME=.*/NAME=\"TSG-OS\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
+	sed -i -e "s/^VERSION=.*/VERSION=\"$(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
+	sed -i -e "s/^PRETTY_NAME=.*/PRETTY_NAME=\"TSG-OS $(OS_RELEASE_VER) ($(PROFILE_ID_IN_SHORT))\"/" $(TARGET_SYSROOT_DIR)/usr/lib/os-release
+
+sysroot-install: sysroot-base
+	cp /etc/resolv.conf $(TARGET_SYSROOT_DIR)/etc/ -r
+	mount --bind /etc/hosts $(TARGET_SYSROOT_DIR)/etc/hosts
+	mount --bind $(CONFDIR)/yum-RockyLinux-9.conf $(TARGET_SYSROOT_DIR)/etc/yum.conf
+	mount --bind $(CONFDIR)/yum-RockyLinux-9.conf $(TARGET_SYSROOT_DIR)/etc/dnf/dnf.conf
+	$(MAKE) -C $(PROJECTDIR)/sysroot CHROOT_DIR=$(TARGET_SYSROOT_DIR) MACHINE_ID=$(SUPPORTED_MACHINE_ID)
+	rm -rf $(TARGET_SYSROOT_DIR)/etc/resolv.conf
+	umount $(TARGET_SYSROOT_DIR)/etc/hosts
+	umount $(TARGET_SYSROOT_DIR)/etc/yum.conf
+	umount $(TARGET_SYSROOT_DIR)/etc/dnf/dnf.conf
+
+build-containers: sysroot-base
+	$(MAKE) -C $(PROJECTDIR)/containers \
+		IMAGE_TAG=$(OS_RELEASE_VER) \
+		YUM_REPO_FILE=$(CONFDIR)/yum-RockyLinux-9.conf \
+		MACHINE_ID=$(SUPPORTED_MACHINE_ID) \
+		cm-cache consul dynamic-hostport helm-controller ipmi-exporter k8s-dashboard multus-cni prometheus reloader systemd-exporter
+	mkdir -p $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images; \
+		cp -af $(PROJECTDIR)/containers/build/images/*.tar.zst $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images
+
+build-helmcharts: sysroot-base
+	$(MAKE) -C $(PROJECTDIR)/helmcharts \
+		VERSION=$(HELM_CHART_VER) \
+		APP_VERSION=$(OS_RELEASE_VER) \
+		MACHINE_ID=$(SUPPORTED_MACHINE_ID) \
+		cm-cache consul dynamic-hostport helm-controller ipmi-exporter k8s-dashboard multus-cni ns-tsg-os-system prometheus reloader systemd-exporter
+	mkdir -p $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/server/static/charts; \
+		cp -af $(PROJECTDIR)/helmcharts/build/helmcharts/*.tgz $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/server/static/charts
+	mkdir -p $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/server/manifests; \
+		cp -af $(PROJECTDIR)/helmcharts/build/manifests/*.yaml $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/server/manifests
+
+sysroot-archive: builddir sysroot-verfile sysroot-install build-containers build-helmcharts
+	cp $(IMAGEDIR_BASE)/$(APP_BUNDLE_BIN) $(TARGET_INSTALLER_DIR)/$(APP_BUNDLE_BIN)
+	tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_SYSROOT_DIR) . | pbzip2 -p9 > $(TARGET_INSTALLER_DIR)/$(CHROOT_PKG)
+
+sysroot-cleanup: sysroot-archive
+	rm -rf $(TARGET_SYSROOT_DIR)/tmp/*
+	rm -rf $(TARGET_SYSROOT_DIR)/dev/*
+
+sysroot-binary: sysroot-cleanup
+	mkdir -p $(TARGET_BUILD_DIR)/cook-bits
+	$(TOOLSDIR)/cook-bits $(TARGET_BUILD_DIR) $(TARGET_BUILD_DIR)/cook-bits $(IMAGEDIR_BASE)/$(CHROOT_BIN)
+	sha256sum $(IMAGEDIR_BASE)/$(CHROOT_BIN) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(CHROOT_BIN).sha256sum.txt
+
+clean:
+	rm -rf $(TARGET_BUILD_DIR)

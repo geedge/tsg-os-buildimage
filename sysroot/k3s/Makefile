@@ -1,6 +1,18 @@
 export CHROOT_DIR
 export TMP_FILES_DIR
 export CHROOT_SHELL
+export MACHINE_ID
+
+ifeq ($(MACHINE_ID),x86_64_COTS)
+k3s_bin := k3s
+k3s_airgap := k3s-airgap-images-amd64.tar.zst
+else ifeq ($(MACHINE_ID),AArch64_COTS)
+k3s_bin := k3s-arm64
+k3s_airgap := k3s-airgap-images-arm64.tar.zst
+else
+k3s_bin := unknown
+k3s_airgap := unknown
+endif
 
 .PHONY: x86_64_COTS AArch64_COTS install install_cni_x86_64 install_cni_aarch64
 
@@ -16,12 +28,12 @@ install:
 		sed -ie "s/SELINUX=.*/SELINUX=disabled/g" /etc/selinux/config; \
 		curl --netrc-file $(TMP_FILES_DIR)/netrc.conf \
 			-o /usr/bin/k3s \
-			https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s; \
+			https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/$(k3s_bin); \
 		chmod 0755 /usr/bin/k3s; \
 		mkdir -p /var/lib/rancher/k3s/agent/images; \
 		curl --netrc-file $(TMP_FILES_DIR)/netrc.conf \
-			-o /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar \
-			https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/k3s-airgap-images-amd64.tar; \
+			-o /var/lib/rancher/k3s/agent/images/$(k3s_airgap) \
+			https://repo.geedge.net/filerepo/install/release/os-build-files/k3s/v1.29.2/$(k3s_airgap); \
 		curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | \
 			INSTALL_K3S_MIRROR=cn INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_SKIP_ENABLE=true \
 			INSTALL_K3S_BIN_DIR=/usr/bin INSTALL_K3S_SYSTEMD_DIR=/usr/lib/systemd/system \

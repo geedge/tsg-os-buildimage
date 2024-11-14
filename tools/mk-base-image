@@ -21,6 +21,9 @@ case $profile_id in
                     $projectdir/package/kernel-ml-$kernel_version.rpm
                     $projectdir/package/kernel-ml-devel-$kernel_version.rpm"
         ;;
+    "AArch64_COTS" )
+        echo "kernel version will decided after instll."
+        ;;
     *)
         kernel_version="error_profile_id"
         echo "Set kernel_version failed, error profile_id: $profile_id"
@@ -40,6 +43,17 @@ case $profile_id in
                     python3-docutils libnsl liburing hwloc-gui perl-open perl python2 js-d3-flame-graph xmlstarlet conntrack-tools crudini"
 
         ;;
+    "AArch64_COTS" )
+        base_package_to_install="@base @core @debugging @anaconda-tools @additional-devel @guest-agents @system-tools
+                    @hardware-monitoring @network-file-system-client @performance @remote-system-management adcli certmonger
+                    ipa-client clevis-dracut clevis-udisks2 krb5-pkinit krb5-workstation sssd-polkit-rules krb5-pkinit luksmeta
+                    nscd nss-pam-ldapd grub2 epel-release efibootmgr yum-utils ipmitool OpenIPMI docker-ce docker-ce-cli
+                    containerd.io lrzsz python3 python3-pip watchdog git tmux fish kernel kernel-devel kernel-tools-libs kernel-modules
+                    kernel-tools kernel-core rpm-build libtool kernel-rpm-macros tcsh kernel-modules-extra gcc-gfortran
+                    libdb-devel fuse-devel python3-Cython cmake perl-generators libstdc++-devel libmnl-devel bison flex gcc-c++
+                    python3-docutils libnsl liburing hwloc-gui perl-open perl js-d3-flame-graph xmlstarlet conntrack-tools crudini"
+
+        ;;
     *)
         base_package_to_install="error_profile_id"
         echo "Set base_package_to_install failed, error profile_id: $profile_id"
@@ -52,7 +66,13 @@ set -ex
 yum -c "$yum_config" --installroot="$target" -y makecache
 
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $base_package_to_install --disablerepo='ofed'
-yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $append_package_to_install
+case $profile_id in
+    "x86_64_COTS" )
+        yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt install $append_package_to_install
+        ;;
+    *)
+        ;;
+esac
 
 #git clone --depth 1 https://github.com/brendangregg/FlameGraph.git /opt/tools/FlameGraph/
 #git clone --depth 1 https://github.com/brendangregg/perf-tools.git /opt/tools/perf-tools/
@@ -98,6 +118,14 @@ chmod 0755 $target/etc/profile.d/prompt_command.sh
 #  ldconfig
 rm -rf "$target"/etc/ld.so.cache
 rm -rf "$target"/var/cache/ldconfig/*
+
+case $profile_id in
+    "AArch64_COTS" )
+        kernel_version=$(rpm --root $target -q kernel --qf "%{VERSION}-%{RELEASE}.%{ARCH}")
+        ;;
+    *)
+        ;;
+esac
 
 cd $target/boot
 ln -sf vmlinuz-$kernel_version vmlinuz

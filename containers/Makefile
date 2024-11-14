@@ -13,10 +13,10 @@ ENV_FILES := $(BUILD_DIR)/IMAGE_TAG_$(IMAGE_TAG:/=_).env
 
 ifeq ($(MACHINE_ID),x86_64_COTS)
 IMAGE_ARCH := amd64
-BUILD_BASE_IMAGE := rockylinux:8
-else ifeq ($(ARCH),AArch64_COTS)
+BUILD_BASE_IMAGE := quay.io/rockylinux/rockylinux:8
+else ifeq ($(MACHINE_ID),AArch64_COTS)
 IMAGE_ARCH := arm64
-BUILD_BASE_IMAGE := rockylinux:9
+BUILD_BASE_IMAGE := quay.io/rockylinux/rockylinux:9
 else
 IMAGE_ARCH := unknown
 BUILD_BASE_IMAGE := unknown

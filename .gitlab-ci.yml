@@ -2,6 +2,7 @@
 variables:
   GIT_STRATEGY: "clone"
   BUILD_BASED_IMAGE_ROCKYLINUX8: "git.mesalab.cn:7443/mesa_platform/build-env:rockylinux-build-os"
+  BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64: "git.mesalab.cn:7443/mesa_platform/build-env:rocky9-aarch64"
   GIT_DEPTH: 1
 
 stages:
@@ -20,6 +21,17 @@ stages:
     - tsg-os-builder-el8
   resource_group: global
 
+.build_onie_bin_AArch64_COTS:
+  script:
+    - env | sort
+    - yum install -y make
+    - make DALIY_BUILD_VERSION=$DALIY_BUILD_VERSION
+    - chmod +x ./tools/upload.sh
+    - ./tools/upload.sh 
+  tags:
+    - tsg-os-builder-aarch64
+  resource_group: AArch64
+
 .build_container_images_x86_64_COTS:
   script:
     - env | sort
@@ -29,6 +41,16 @@ stages:
   tags:
     - tsg-os-builder-el8
   resource_group: global
+
+.build_container_images_AArch64_COTS:
+  script:
+    - env | sort
+    - make DALIY_BUILD_VERSION=$DALIY_BUILD_VERSION
+    - chmod +x ./tools/upload.sh
+    - ./tools/upload.sh 
+  tags:
+    - tsg-os-builder-aarch64
+  resource_group: AArch64
 
 .notify_jobs_done:
   cache:
@@ -40,6 +62,17 @@ stages:
       - ./tools/notify-jobs-done.sh
   tags:
     - tsg-os-builder-el8
+
+.notify_AArch64_jobs_done:
+  cache:
+    key: $CI_COMMIT_REF_SLUG-AArch64_COTS
+    paths:
+      - images/
+  script:
+      - chmod +x ./tools/notify-jobs-done.sh
+      - ./tools/notify-jobs-done.sh
+  tags:
+    - tsg-os-builder-aarch64
 
 .build_tsg_vm_image:
   cache:
@@ -92,6 +125,26 @@ feature_branch_build_container_images_x86_64_COTS:
     - /^rel-.*$/i
     - /^update-.*$/i
 
+feature_branch_build_container_images_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: build
+  extends: .build_container_images_AArch64_COTS
+  variables:
+    PROFILE_LIST: AArch64_COTS_APP_BUNDLE
+    DALIY_BUILD_VERSION: 1
+    ENABLE_LICENSE_PROTECTED: 0
+    ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
+  cache:
+    key: $CI_COMMIT_REF_SLUG-AArch64_COTS
+    paths:
+      - images/
+    policy: push
+  except:
+    - tags
+    - /^dev-.*$/i
+    - /^rel-.*$/i
+    - /^update-.*$/i
+
 feature_branch_build_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: merge_build
@@ -103,6 +156,25 @@ feature_branch_build_x86_64_COTS:
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
     key: $CI_COMMIT_REF_SLUG-x86_64_COTS
+    paths:
+      - images/
+  except:
+    - tags
+    - /^dev-.*$/i
+    - /^rel-.*$/i
+    - /^update-.*$/i
+
+feature_branch_build_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: merge_build
+  extends: .build_onie_bin_AArch64_COTS
+  needs: ["feature_branch_build_container_images_AArch64_COTS"]
+  variables:
+    PROFILE_LIST: AArch64_COTS
+    DALIY_BUILD_VERSION: 1
+    ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
+  cache:
+    key: $CI_COMMIT_REF_SLUG-AArch64_COTS
     paths:
       - images/
   except:
@@ -134,6 +206,16 @@ feature_branch_notify_jobs_done_x86_64_COTS:
     - /^rel-.*$/i
     - /^update-.*$/i
 
+feature_branch_notify_jobs_done_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: notify
+  extends: .notify_AArch64_jobs_done
+  except:
+    - tags
+    - /^dev-.*$/i
+    - /^rel-.*$/i
+    - /^update-.*$/i
+
 develop_build_container_images_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
@@ -155,6 +237,23 @@ develop_build_container_images_x86_64_COTS:
   only:
     - /^dev-.*$/i
 
+develop_build_container_images_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: build
+  extends: .build_container_images_AArch64_COTS
+  variables:
+    PROFILE_LIST: AArch64_COTS_APP_BUNDLE
+    DALIY_BUILD_VERSION: 1
+    ENABLE_LICENSE_PROTECTED: 0
+    ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
+  cache:
+    key: $CI_COMMIT_REF_SLUG-AArch64_COTS
+    paths:
+      - images/
+    policy: push
+  only:
+    - /^dev-.*$/i
+
 develop_build_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: merge_build
@@ -170,6 +269,25 @@ develop_build_x86_64_COTS:
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
     key: $CI_COMMIT_REF_SLUG-x86_64_COTS
+    paths:
+      - images/
+  only:
+    - /^dev-.*$/i
+
+develop_build_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: merge_build
+  extends: .build_onie_bin_AArch64_COTS
+  variables:
+    PROFILE_LIST: AArch64_COTS
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-develop
+    PULP3_FILE_DIST_NAME: tsg-os-images-develop
+    DALIY_BUILD_VERSION: 1
+    FILE_REPO_PATH: install/develop/tsg-os-images
+    ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
+  cache:
+    key: $CI_COMMIT_REF_SLUG-AArch64_COTS
     paths:
       - images/
   only:
@@ -197,6 +315,13 @@ develop_notify_jobs_done_x86_64_COTS:
   only:
     - /^dev-.*$/i
 
+develop_notify_jobs_done_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: notify
+  extends: .notify_AArch64_jobs_done
+  only:
+    - /^dev-.*$/i
+
 testing_build_container_images_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
@@ -218,6 +343,27 @@ testing_build_container_images_x86_64_COTS:
   only:
     - /^rel-.*$/i
 
+testing_build_container_images_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: build
+  extends: .build_container_images_AArch64_COTS
+  variables:
+    PROFILE_LIST: AArch64_COTS_APP_BUNDLE
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-testing
+    PULP3_FILE_DIST_NAME: tsg-os-images-testing
+    FILE_REPO_PATH: install/testing/tsg-os-images
+    DALIY_BUILD_VERSION: 1
+    ENABLE_LICENSE_PROTECTED: 1
+    ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
+  cache:
+    key: $CI_COMMIT_REF_SLUG-AArch64_COTS
+    paths:
+      - images/
+    policy: push
+  only:
+    - /^rel-.*$/i
+
 testing_build_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: merge_build
@@ -233,6 +379,26 @@ testing_build_x86_64_COTS:
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
     key: $CI_COMMIT_REF_SLUG-x86_64_COTS
+    paths:
+      - images/
+  only:
+    - /^rel-.*$/i
+
+testing_build_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: merge_build
+  needs: ["testing_build_container_images_AArch64_COTS"]
+  extends: .build_onie_bin_AArch64_COTS
+  variables:
+    PROFILE_LIST: AArch64_COTS
+    UPLOAD_TO_FILE_REPO: 1
+    PULP3_FILE_REPO_NAME: tsg-os-images-testing
+    PULP3_FILE_DIST_NAME: tsg-os-images-testing
+    FILE_REPO_PATH: install/testing/tsg-os-images
+    DALIY_BUILD_VERSION: 1
+    ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
+  cache:
+    key: $CI_COMMIT_REF_SLUG-AArch64_COTS
     paths:
       - images/
   only:
@@ -262,6 +428,15 @@ testing_notify_jobs_done_x86_64_COTS:
   only:
     - /^rel-.*$/i
 
+testing_notify_jobs_done_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: notify
+  extends: .notify_AArch64_jobs_done
+  variables:
+    ENABLE_NOTIFY_TESTING_JOBS_DONE: 1
+  only:
+    - /^rel-.*$/i
+
 rc_build_container_images_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
@@ -283,6 +458,27 @@ rc_build_container_images_x86_64_COTS:
   only:
     - /^.*-rc.*$/i
 
+rc_build_container_images_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: build
+  extends: .build_container_images_AArch64_COTS
+  variables:
+    PROFILE_LIST: AArch64_COTS_APP_BUNDLE
+    UPLOAD_TO_FILE_REPO: 1
+    DALIY_BUILD_VERSION: 0
+    PULP3_FILE_REPO_NAME: tsg-os-images-rc
+    PULP3_FILE_DIST_NAME: tsg-os-images-rc
+    FILE_REPO_PATH: install/rc/tsg-os-images
+    ENABLE_LICENSE_PROTECTED: 1
+    ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
+  cache:
+    key: $CI_COMMIT_REF_SLUG-AArch64_COTS
+    paths:
+      - images/
+    policy: push
+  only:
+    - /^.*-rc.*$/i
+
 rc_build_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: merge_build
@@ -298,6 +494,26 @@ rc_build_x86_64_COTS:
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
     key: $CI_COMMIT_REF_SLUG-x86_64_COTS
+    paths:
+      - images/
+  only:
+    - /^.*-rc.*$/i
+
+rc_build_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: merge_build
+  extends: .build_onie_bin_AArch64_COTS
+  needs: ["rc_build_container_images_AArch64_COTS"]
+  variables:
+    PROFILE_LIST: AArch64_COTS
+    UPLOAD_TO_FILE_REPO: 1
+    DALIY_BUILD_VERSION: 0
+    PULP3_FILE_REPO_NAME: tsg-os-images-rc
+    PULP3_FILE_DIST_NAME: tsg-os-images-rc
+    FILE_REPO_PATH: install/rc/tsg-os-images
+    ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
+  cache:
+    key: $CI_COMMIT_REF_SLUG-AArch64_COTS
     paths:
       - images/
   only:
@@ -327,6 +543,15 @@ rc_notify_jobs_done_x86_64_COTS:
   only:
     - /^.*-rc.*$/i
 
+rc_notify_jobs_done_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: notify
+  extends: .notify_AArch64_jobs_done
+  variables:
+    ENABLE_NOTIFY_RC_JOBS_DONE: 1
+  only:
+    - /^.*-rc.*$/i
+
 release_build_container_images_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: build
@@ -342,6 +567,29 @@ release_build_container_images_x86_64_COTS:
     ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
   cache:
     key: $CI_COMMIT_REF_SLUG-x86_64_COTS
+    paths:
+      - images/
+    policy: push
+  only:
+    - tags
+  except:
+    - /^.*-rc.*$/i
+
+release_build_container_images_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: build
+  extends: .build_container_images_AArch64_COTS
+  variables:
+    PROFILE_LIST: AArch64_COTS_APP_BUNDLE
+    UPLOAD_TO_FILE_REPO: 1
+    DALIY_BUILD_VERSION: 0
+    PULP3_FILE_REPO_NAME: tsg-os-images-release
+    PULP3_FILE_DIST_NAME: tsg-os-images-release
+    FILE_REPO_PATH: install/release/tsg-os-images
+    ENABLE_LICENSE_PROTECTED: 1
+    ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
+  cache:
+    key: $CI_COMMIT_REF_SLUG-AArch64_COTS
     paths:
       - images/
     policy: push
@@ -372,6 +620,28 @@ release_build_x86_64_COTS:
   except:
     - /^.*-rc.*$/i
 
+release_build_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: merge_build
+  extends: .build_onie_bin_AArch64_COTS
+  needs: ["release_build_container_images_AArch64_COTS"]
+  variables:
+    PROFILE_LIST: AArch64_COTS
+    UPLOAD_TO_FILE_REPO: 1
+    DALIY_BUILD_VERSION: 0
+    PULP3_FILE_REPO_NAME: tsg-os-images-release
+    PULP3_FILE_DIST_NAME: tsg-os-images-release
+    FILE_REPO_PATH: install/release/tsg-os-images
+    ENABLE_ALIYUN_INTERNAL_DOMAIN: 1
+  cache:
+    key: $CI_COMMIT_REF_SLUG-AArch64_COTS
+    paths:
+      - images/
+  only:
+    - tags
+  except:
+    - /^.*-rc.*$/i
+
 release_build_kvm_image_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: deploy
@@ -393,6 +663,17 @@ release_notify_jobs_done_x86_64_COTS:
   image: $BUILD_BASED_IMAGE_ROCKYLINUX8
   stage: notify
   extends: .notify_jobs_done
+  variables:
+    ENABLE_NOTIFY_RELEASE_JOBS_DONE: 1
+  only:
+    - tags
+  except:
+    - /^.*-rc.*$/i
+
+release_notify_jobs_done_AArch64_COTS:
+  image: $BUILD_BASED_IMAGE_ROCKYLINUX9_AARCH64
+  stage: notify
+  extends: .notify_AArch64_jobs_done
   variables:
     ENABLE_NOTIFY_RELEASE_JOBS_DONE: 1
   only:

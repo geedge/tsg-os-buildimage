@@ -3,11 +3,20 @@ export TMP_FILES_DIR
 export CHROOT_SHELL
 export KERNEL_RELEASE
 
-.PHONY: x86_64_COTS AArch64_COTS install
+.PHONY: x86_64_COTS AArch64_COTS pre-install install
 
-x86_64_COTS: install
+x86_64_COTS: pre-install install
 
 AArch64_COTS: install
+
+pre-install:
+	chroot $(CHROOT_DIR) bash -ec '\
+		systemctl disable ntpd; \
+		systemctl disable abrt-ccpp; \
+		systemctl disable abrt-oops; \
+		systemctl disable abrtd; \
+		systemctl disable dmraid-activation; \
+	'
 
 install:
 	chroot $(CHROOT_DIR) bash -ec '\
@@ -28,20 +37,15 @@ install:
 		systemctl enable sshd; \
 		systemctl enable chronyd; \
 		install -D -m 0644 $(TMP_FILES_DIR)/chrony.conf -t /usr/lib/tmpfiles.d/; \
-		systemctl disable ntpd; \
 		systemctl enable snmpd; \
 		systemctl enable snmptrapd; \
-		systemctl disable abrt-ccpp; \
-		systemctl disable abrt-oops; \
-		systemctl disable abrtd; \
-		systemctl disable dmraid-activation; \
 		systemctl disable postfix; \
 		sed -i "s/#UseDNS yes/UseDNS no/g" /etc/ssh/sshd_config; \
 		echo "export MLX5_GLUE_PATH=/opt/tsg/mrzcpd/lib" >> /etc/profile; \
 		echo "Defaults    env_keep += \"MLX5_GLUE_PATH\"" > /etc/sudoers.d/01-mrzcpd; \
 		python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple psutil; \
 		sed -i "/^F! \/run\/nologin 0644/s/^/#/" /usr/lib/tmpfiles.d/systemd-nologin.conf; \
-		pip2 install -i https://pypi.tuna.tsinghua.edu.cn/simple PrettyTable==0.7.2; \
+		python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple PrettyTable; \
 		install -D -m 0755 $(TMP_FILES_DIR)/module-setup.sh -t /usr/lib/dracut/modules.d/99overlaymount/; \
 		install -D -m 0755 $(TMP_FILES_DIR)/overlaymount.sh -t /usr/lib/dracut/modules.d/99overlaymount/; \
 		dracut --force -v /boot/initramfs-$(KERNEL_RELEASE).img $(KERNEL_RELEASE); \

@@ -5,7 +5,7 @@ CHROOT_SHELL := "bash -exc"
 KERNEL_RELEASE := $(shell chroot $(CHROOT_DIR) readlink /boot/initrd.img | sed 's/^initramfs-//;s/\.img$$//')
 
 #COMPONENT_DIRS := $(shell find . -maxdepth 1 -type d ! -name "build" ! -name "." | sed 's|^\./||')
-COMPONENT_DIRS := coredump-tools clixon cm-cache exporter hasp k3s k3s-cleaner nm-config OFED patches-9000-NPB sosreport sysctl system-init helm tsg-diagnose tsg-os-HAL tsg-os-logfile-cleaner tsg-os-logo tsg-os-oobc tuned
+COMPONENT_DIRS := coredump-tools clixon cm-cache exporter hasp k3s k3s-cleaner nm-config OFED patches-9000-NPB sosreport sysctl system-init helm tsg-diagnose tsg-os-HAL tsg-os-logfile-cleaner tsg-os-logo tsg-os-oobc tuned qemu-user-static
 
 .PHONY: all clean $(COMPONENT_DIRS)
 
