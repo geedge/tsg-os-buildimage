@@ -10,7 +10,7 @@ AArch64_COTS: install
 
 install:
 	chroot $(CHROOT_DIR) $(CHROOT_SHELL) '\
-		dnf -y install tsg-diagnose-2.0.10.4d80fdf --nogpgcheck; \
+		dnf -y install tsg-diagnose-2.0.11.3537c65 --nogpgcheck; \
 		sed -i -E "s/^(.*Defaults    secure_path =.*)$$/\1:\/opt\/tsg\/tsg-diagnose\/scripts/" /etc/sudoers; \
 		install -D -m 0644 /opt/tsg/tsg-diagnose/k8s-resource/* -t /var/lib/rancher/k3s/server/manifests/; \
 		mkdir -p /var/lib/rancher/k3s/agent/images/;\
