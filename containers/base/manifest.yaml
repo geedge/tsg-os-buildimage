@@ -35,7 +35,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libelua
-    version: 2.0.1.7760c27
+    version: 2.0.2.3a38114
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
