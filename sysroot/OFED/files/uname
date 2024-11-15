@@ -4,6 +4,6 @@ if [ "$1" == "-r" ]
 then
 	echo KERNEL_RELEASE
 else
-	/usr/bin/uname-backup $1
+	/usr/bin/uname-back-for-ofed $1
 fi
 exit 0
