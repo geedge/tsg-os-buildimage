@@ -7,12 +7,5 @@ app_symbol=PacketAdapter
 app_device={{ inject_adapter_config.inject_adapter_nic }}
 
 [stat]
-output_file=log/packet_adapter.fs2
-statsd_server=127.0.0.1
-statsd_port=8100
-# 1 : FS_OUTPUT_STATSD
-# 2 : FS_OUTPUT_INFLUX_LINE
-statsd_format=1
-statsd_cycle=2
-prometheus_listen_port=9009
-prometheus_listen_url=/packet_adapter_prometheus
+output_file=metrics/packet_adapter.json
+statsd_cycle=5
