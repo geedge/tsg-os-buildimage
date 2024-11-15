@@ -59,15 +59,8 @@ dev_endpoint_l3_ip={{ sce_config.vxlan_config.endpoint_ip }}
 # dev_endpoint_l3_mac=aa:aa:aa:aa:aa:aa
 
 [stat]
-output_file=log/sce.fs2
-statsd_server=127.0.0.1
-statsd_port=8100
-# 1 : FS_OUTPUT_STATSD
-# 2 : FS_OUTPUT_INFLUX_LINE
-statsd_format=2
-statsd_cycle=2
-prometheus_listen_port=9006
-prometheus_listen_url=/metrics
+output_file=metrics/sce.json
+statsd_cycle=5
 
 [metrics]
 output_fs_interval_ms=500
