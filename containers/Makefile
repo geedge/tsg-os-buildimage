@@ -42,16 +42,9 @@ $(BUILD_DIR)/$(1)/$(BUILD_DONE_FILE): $(shell find $(1) -type f) $(2)
 endef
 
 define build_image_from_dockerfile
-	ifeq ($(MACHINE_ID),x86_64)
-		if [ -f $(1)/manifest.yaml.x86_64 ]; then \
-			cp $(1)/manifest.yaml.x86_64 $(1)/manifest.yaml; \
-		fi
-	else ifeq ($(MACHINE_ID),aarch64)
-		if [ -f $(1)/manifest.yaml.aarch64 ]; then \
-			cp $(1)/manifest.yaml.aarch64 $(1)/manifest.yaml; \
-		fi
-	endif
-
+	if [ -f $(1)/manifest.yaml.$(MACHINE_ID) ]; then \
+		cp $(1)/manifest.yaml.$(MACHINE_ID) $(1)/manifest.yaml; \
+	fi
 	/usr/local/bin/j2 -f yaml $(1)/Dockerfile.j2 $(1)/manifest.yaml -o $(BUILD_DIR)/$(1)/Dockerfile
 	buildah build \
 	--volume /etc/hosts:/etc/hosts:ro \
