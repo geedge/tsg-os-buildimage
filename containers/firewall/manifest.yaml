@@ -55,7 +55,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: ssl
-    version: 3.2.1.c3614b5
+    version: 3.2.7.eac0375
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
