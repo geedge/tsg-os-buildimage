@@ -30,7 +30,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: dns
-    version: 2.1.7.1da8dfa
+    version: 2.1.9.123c0fe
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
