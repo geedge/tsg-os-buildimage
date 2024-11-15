@@ -1,0 +1,9 @@
+packages:
+  - name: doca-ofed-userspace
+    version: 2.8.0
+    install_command: dnf
+  - name: mrzcpd
+    version: 4.8.23.a0b7885
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/mrzcpd"
