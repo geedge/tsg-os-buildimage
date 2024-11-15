@@ -80,7 +80,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: deal_socks
-    version: 1.0.4.329bba3
+    version: 1.0.5.9ea20c3
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
