@@ -2,7 +2,7 @@ export CHROOT_DIR
 export TMP_FILES_DIR
 export CHROOT_SHELL
 
-.PHONY: x86_64_COTS install
+.PHONY: x86_64_COTS AArch64_COTS install
 
 x86_64_COTS: install
 
@@ -13,3 +13,5 @@ install:
 		chmod 0755 $(TMP_FILES_DIR)/tsg-os_9000-NPB-P01R01_patch.bin; \
 		mkdir -p /tmp/9000_NPB/; cp $(TMP_FILES_DIR)/tsg-os_9000-NPB-P01R01_patch.bin  /tmp/9000_NPB/; \
 	'
+
+AArch64_COTS:
