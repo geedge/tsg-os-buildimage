@@ -70,7 +70,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: dtls
-    version: 2.0.5.a559144
+    version: 2.0.6.b385c1b
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
