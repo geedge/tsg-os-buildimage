@@ -4,12 +4,12 @@ metadata:
   name: ipmi-exporter
   namespace: kube-system
 spec:
-  chart: https://%{KUBERNETES_API}%/static/charts/ipmi-exporter-0.1.9.tgz
+  chart: https://%{KUBERNETES_API}%/static/charts/prometheus-ipmi-exporter-0.5.0.tgz
   targetNamespace: tsg-os-system
   valuesContent: |-
-    ipmiExporter:
-      imagePullPolicy: Never
+    fullnameOverride: ipmi-exporter
+    image:
+      pullPolicy: Never
     service:
       annotations:
         prometheus.io/scrape: "true"
-    fullnameOverride: "ipmi-exporter"
