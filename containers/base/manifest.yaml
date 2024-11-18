@@ -59,11 +59,11 @@ packages:
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
-  # - name: libosfp
-  #   version: 1.3.11.d8c406f
-  #   download_command: dnf
-  #   install_command: rpm
-  #   install_command_options: "--prefix /opt/tsg/framework"
+  - name: libosfp
+    version: 1.3.12.bbec281
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
   - name: utable
     version: 1.0.12.70bfc65
     download_command: dnf
