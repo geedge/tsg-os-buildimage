@@ -115,7 +115,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg"
   - name: policy_sketch
-    version: 1.2.2.9aa0002
+    version: 1.2.3.5e38b71
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
