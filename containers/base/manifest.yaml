@@ -74,11 +74,11 @@ packages:
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
-  # - name: libcbd
-  #   version: 3.1.5.74f35fe
-  #   download_command: dnf
-  #   install_command: rpm
-  #   install_command_options: "--prefix /opt/tsg/framework"
+  - name: libcbd
+    version: 3.1.6.14628b4
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
   # - name: libdos_protector
   #   version: 3.3.2.fa4f0a4
   #   download_command: dnf
