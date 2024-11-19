@@ -139,7 +139,7 @@ spec:
       - name: cert-redis
         image: "registry.gdnt-cloud.website/tsg/os/proxy-certstore:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
-        command: ["/usr/bin/redis-server", "/etc/cert-redis.conf"]
+        command: ["/usr/bin/redis-server"]
         securityContext:
           privileged: true
         volumeMounts:
