@@ -23,7 +23,7 @@ install-aksusbd-x86_64:
 # Install aksusbd for aarch64
 install-aksusbd-aarch64:
 	chroot $(CHROOT_DIR) $(CHROOT_SHELL) '\
-		dnf -y install $(TMP_FILES_DIR)/$(AKSUSBD_RPM_ARM) --nogpgcheck --noscripts; \
+		dnf -y install $(TMP_FILES_DIR)/$(AKSUSBD_RPM_ARM) --nogpgcheck --setopt=tsflags=noscripts; \
 	'
 
 # Common installation steps
