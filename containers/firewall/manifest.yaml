@@ -90,7 +90,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: rdp
-    version: 1.0.3.f392ffd
+    version: 2.0.1.eb02e46
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
