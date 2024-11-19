@@ -54,7 +54,7 @@ spec:
             {{- end }}
             || echo "Failed to start."
         ports:
-          - containerPort: 9006
+          - containerPort: 9001
         env:
         - name: DEPLOYMENT_NAME
           value: {{ .Release.Name }}-service-chaining
@@ -75,12 +75,12 @@ spec:
 {{- if .Values.debug.service_chaining.enable_liveness_probe }}
         livenessProbe:
           tcpSocket:
-            port: 9006
+            port: 9001
           failureThreshold: 1
           timeoutSeconds: 10
         startupProbe:
           tcpSocket:
-            port: 9006
+            port: 9001
           failureThreshold: 30
           periodSeconds: 10
 {{- end }}
@@ -92,6 +92,8 @@ spec:
           subPath: "values.yaml"
         - name: sce-log
           mountPath: /opt/tsg/sce/log
+        - name: metrics-json-dir
+          mountPath: /opt/tsg/sce/metrics
         - name: bfdd-unix-socket
           mountPath: /run/frr
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
@@ -136,6 +138,34 @@ spec:
           mountPath: /opt/tsg/bfdd/log
         - name: bfdd-unix-socket
           mountPath: /run/frr
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
+
+      - name: fieldstat-exporter
+        image: "registry.gdnt-cloud.website/tsg/os/sce:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            ldconfig
+            python3 /opt/tsg/framework/bin/fieldstat_exporter.py prometheus -p 9006 -d /opt/tsg/sce/metrics
+        ports:
+          - containerPort: 9006
+        securityContext:
+          privileged: true
+        livenessProbe:
+          tcpSocket:
+            port: 9006
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9006
+          failureThreshold: 5
+          periodSeconds: 10
+        volumeMounts:
+        - name: metrics-json-dir
+          mountPath: "/opt/tsg/sce/metrics"
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       initContainers:
@@ -202,6 +232,8 @@ spec:
       - name: sce-configs-volume
         configMap:
           name: sce-{{ .Release.Name }}
+      - name: metrics-json-dir
+        emptyDir: {}
       - name: sce-log
         hostPath:
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/sce/
