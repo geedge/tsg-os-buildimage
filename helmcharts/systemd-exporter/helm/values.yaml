@@ -2,7 +2,7 @@ exporter:
   image:
     repository: quay.io/rebuy/exporter-merger
     pullPolicy: Never
-    tag: "v0.2.0"
+    tag: "latest"
   port: "9008"
   urls: "http://127.0.0.1:9558/metrics"
 

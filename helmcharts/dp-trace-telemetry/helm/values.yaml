@@ -78,7 +78,7 @@ mergeExporter:
   image:
     repository: quay.io/rebuy/exporter-merger
     pullPolicy: Never
-    tag: "v0.2.0"
+    tag: "latest"
   mergePort: "9005"
   mergeUrls: "http://127.0.0.1:8901/metrics http://127.0.0.1:8902/metrics http://127.0.0.1:8903/metrics"
 

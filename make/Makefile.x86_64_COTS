@@ -69,7 +69,7 @@ build-containers: sysroot-base
 		IMAGE_TAG=$(OS_RELEASE_VER) \
 		YUM_REPO_FILE=$(CONFDIR)/yum-RockyLinux-8.conf \
 		MACHINE_ID=$(SUPPORTED_MACHINE_ID) \
-		cm-cache consul dynamic-hostport helm-controller ipmi-exporter k8s-dashboard multus-cni prometheus reloader systemd-exporter
+		cm-cache consul dynamic-hostport helm-controller ipmi-exporter k8s-dashboard multus-cni prometheus reloader exporter-merger
 	mkdir -p $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images; \
 		cp -af $(PROJECTDIR)/containers/build/images/*.tar.zst $(TARGET_SYSROOT_DIR)/var/lib/rancher/k3s/agent/images
 

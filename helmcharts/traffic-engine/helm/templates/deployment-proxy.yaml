@@ -146,7 +146,7 @@ spec:
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}  
 
       - name: merged-exporter
-        image: "quay.io/rebuy/exporter-merger:v0.2.0"
+        image: "quay.io/rebuy/exporter-merger:latest"
         imagePullPolicy: Never
         env:
         - name: MERGER_URLS
