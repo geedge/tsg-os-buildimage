@@ -5,11 +5,12 @@ DEBUG_SWITCH = 1
 RUN_LOG_PATH = "conf/zlog.conf"
 
 [breakpad]
-    disable_coredump=0
-    enable_breakpad=0
-    enable_breakpad_upload=0
-    breakpad_minidump_dir="/run/certstore/crashreport"
-    breakpad_upload_tools="/opt/tsg/framework/bin/minidump_upload"
+disable_coredump=0
+enable_breakpad=0
+enable_breakpad_upload=0
+breakpad_minidump_dir="/run/certstore/crashreport"
+breakpad_upload_tools="/opt/tsg/framework/bin/minidump_upload"
+
 [CONFIG]
 #Number of running threads
 thread-nu = 4
@@ -49,8 +50,9 @@ port = 6379
 ip = {{ macros.cm_address(external_resources.cm) }}
 port = {{ macros.cm_port(external_resources.cm) }}
 dbindex =  {{ vsys_id }}
+
 [stat]
-statsd_server=127.0.0.1
-statsd_port=8100
-statsd_set_prometheus_port=9002
-statsd_set_prometheus_url_path=/metrics
+cycle=2
+app_name="certstore"
+outpath="metrics/certstore.fs4.json"
+

@@ -2,15 +2,12 @@
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 
-COPY files/redis-6.2.5-1.el7.remi.x86_64.rpm /tmp/
-
-RUN dnf -y install /tmp/redis-6.2.5-1.el7.remi.x86_64.rpm && \
-    rm -rf /tmp/redis-6.2.5-1.el7.remi.x86_64.rpm && \
+RUN dnf -y install redis && \
     {{ macros.install_packages(packages) }} && \
     {{ macros.clean_after_install_packages() }}
 # files
 COPY files/zlog.conf /opt/tsg/certstore/conf/
-COPY files/cert-redis.conf /etc/
+
 # templates
 COPY templates/* /templates/
 # scripts
