@@ -92,6 +92,8 @@ spec:
           subPath: "values.yaml"
         - name: proxy-log
           mountPath: /opt/tsg/tfe/log
+        - name: metrics-json-dir
+          mountPath: /opt/tsg/tfe/metrics
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
         {{- if .Values.debug.proxy.enable_prestart_script }}
         - name: prestart-dir
@@ -134,6 +136,8 @@ spec:
           subPath: "values.yaml"
         - name: certstore-log
           mountPath: /opt/tsg/certstore/logs
+        - name: metrics-json-dir
+          mountPath: /opt/tsg/certstore/metrics
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       - name: cert-redis
@@ -145,16 +149,33 @@ spec:
         volumeMounts:
         {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}  
 
-      - name: merged-exporter
-        image: "quay.io/rebuy/exporter-merger:latest"
+      - name: fieldstat-exporter
+        image: "registry.gdnt-cloud.website/tsg/os/proxy:{{ .Chart.AppVersion }}"
         imagePullPolicy: Never
-        env:
-        - name: MERGER_URLS
-          value: http://127.0.0.1:9001/metrics http://127.0.0.1:9002/metrics
-        - name: MERGER_PORT
-          value: "9003"
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            ldconfig
+            python3 /opt/tsg/framework/bin/fieldstat_exporter.py prometheus -p 9003 -d /opt/tsg/proxy/metrics
         ports:
-        - containerPort: 9003
+          - containerPort: 9003
+        securityContext:
+          privileged: true
+        livenessProbe:
+          tcpSocket:
+            port: 9003
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9003
+          failureThreshold: 5
+          periodSeconds: 10
+        volumeMounts:
+        - name: metrics-json-dir
+          mountPath: "/opt/tsg/proxy/metrics"
+        {{- include "public.sync-host-timezone.volume-mount" . | nindent 8 }}
 
       initContainers:
       - name: init-default-svc
@@ -297,6 +318,8 @@ spec:
       - name: proxy-configs-volume
         configMap:
           name: proxy-{{ .Release.Name }}
+      - name: metrics-json-dir
+        emptyDir: {}
       - name: proxy-log
         hostPath:
           path: /var/log/traffic-engine/traffic-engine-{{ .Release.Name }}/tfe/
