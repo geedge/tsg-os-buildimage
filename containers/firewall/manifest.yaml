@@ -75,7 +75,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: mesa_sip
-    version: 2.1.1.6504027
+    version: 2.1.2.33984f4
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
