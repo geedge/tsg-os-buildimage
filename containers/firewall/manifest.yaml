@@ -45,7 +45,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: mail
-    version: 1.0.22.431a81f
+    version: 1.0.23.5d800a3
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
