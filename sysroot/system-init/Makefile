@@ -3,11 +3,11 @@ export TMP_FILES_DIR
 export CHROOT_SHELL
 export KERNEL_RELEASE
 
-.PHONY: x86_64_COTS AArch64_COTS pre-install install
+.PHONY: x86_64_COTS AArch64_COTS pre-install install install_ip6_tables_conf
 
 x86_64_COTS: pre-install install
 
-AArch64_COTS: install
+AArch64_COTS: install install_ip6_tables_conf
 
 pre-install:
 	chroot $(CHROOT_DIR) bash -ec '\
@@ -51,4 +51,9 @@ install:
 		dracut --force -v /boot/initramfs-$(KERNEL_RELEASE).img $(KERNEL_RELEASE); \
 		python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple toml; \
 		python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple sdnotify; \
+	'
+
+install_ip6_tables_conf:
+	chroot $(CHROOT_DIR) bash -ec '\
+		install -D -m 0644 $(TMP_FILES_DIR)/ip6_tables.conf -t /usr/lib/modules-load.d/; \
 	'

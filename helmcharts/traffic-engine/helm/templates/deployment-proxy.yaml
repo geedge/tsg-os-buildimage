@@ -213,8 +213,6 @@ spec:
             # disable tcp windows scaling for kernel bugs
             sysctl -w net.ipv4.tcp_window_scaling=0
 
-            kernel.io_uring_disabled=0
-
             ip tuntap add dev tap0 mode tap multi_queue
             /usr/sbin/ip link set tap0 address fe:65:b7:03:50:bd
             /usr/sbin/ip link set tap0 up
