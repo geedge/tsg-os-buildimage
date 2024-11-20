@@ -60,7 +60,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: rtp
-    version: 1.0.7.530ac76
+    version: 1.0.9.ef3a8ba
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
