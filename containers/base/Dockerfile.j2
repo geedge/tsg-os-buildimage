@@ -39,6 +39,7 @@ RUN dnf -y update && \
     kmod \
     libnl3-devel \
     perl-generators \
+    librdkafka \
     iptables-devel
 
 RUN python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple jinja2 prettytable tomlq toml pyyaml argcomplete sdnotify j2cli j2cli[yaml]
