@@ -65,7 +65,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: ssh
-    version: 2.1.7.b053e65
+    version: 2.1.8.87b3e8c
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
