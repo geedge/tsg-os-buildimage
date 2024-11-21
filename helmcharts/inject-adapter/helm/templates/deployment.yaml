@@ -89,15 +89,46 @@ spec:
           subPath: "values.yaml"
         - name: inject-log
           mountPath: /opt/tsg/packet_adapter/log
+        - name: metrics-json-dir
+          mountPath: "/opt/tsg/packet_adapter/metrics"
         {{ template "traffic-engine.mount.mrzcpd" . }}
         {{ template "traffic-engine.mount.localtime" . }}
         {{ template "traffic-engine.inject_adapter.mount.prestart" . }}
-        {{ template "traffic-engine.inject_adapter.mount.hostpath" . }}    
+        {{ template "traffic-engine.inject_adapter.mount.hostpath" . }}
+      - name: fieldstat-exporter
+        image: "registry.gdnt-cloud.website/tsg/os/inject-adapter:{{ .Chart.AppVersion }}"
+        imagePullPolicy: Never
+        command:
+          - "bash"
+          - "-ec"
+          - |
+            ldconfig
+            python3 /opt/tsg/framework/bin/fieldstat_exporter.py prometheus -p 9011 -d /opt/tsg/packet_adapter/metrics
+        ports:
+          - containerPort: 9011
+        securityContext:
+          privileged: true
+        livenessProbe:
+          tcpSocket:
+            port: 9011
+          failureThreshold: 1
+          timeoutSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 9011
+          failureThreshold: 5
+          periodSeconds: 10
+        volumeMounts:
+        - name: metrics-json-dir
+          mountPath: "/opt/tsg/packet_adapter/metrics"
+        {{ template "traffic-engine.mount.localtime" . }}
       hostNetwork: true
       volumes:
       - name: inject-adapter
         configMap:
           name: inject-adapter
+      - name: metrics-json-dir
+        emptyDir: {}
       - name: prestart-dir
         hostPath: 
           path: /etc/tsg-os/{{ .Release.Name }}/
