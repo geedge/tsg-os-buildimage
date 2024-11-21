@@ -1,4 +1,4 @@
 packages:
   - name: sce
-    version: 1.4.0.1372b39
+    version: 1.4.2.c0f5e5a
     install_command: dnf

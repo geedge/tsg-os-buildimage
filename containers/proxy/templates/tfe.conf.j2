@@ -272,3 +272,9 @@ http_keepalive_enable=0
 http_keepalive_path="/metrics"
 http_keepalive_addr=192.168.41.60
 http_keepalive_port=9273
+
+[http_healthcheck_server]
+enable=1
+port=9001
+addr="0.0.0.0"
+path="/status"

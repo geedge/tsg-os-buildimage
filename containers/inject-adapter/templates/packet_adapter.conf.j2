@@ -9,3 +9,9 @@ app_device={{ inject_adapter_config.inject_adapter_nic }}
 [stat]
 output_file=metrics/packet_adapter.json
 statsd_cycle=5
+
+[http_healthcheck_server]
+enable=1
+port=9009
+addr="0.0.0.0"
+path="/status"

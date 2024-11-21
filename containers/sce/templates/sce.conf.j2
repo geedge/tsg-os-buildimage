@@ -85,3 +85,9 @@ brokerlist={{ macros.address_port_pairs_render(external_resources.olap.kafka_bro
 sasl_username={{ macros.safe_read(external_resources,"olap.kafka_brokers.sasl_username") }}
 sasl_passwd={{ macros.safe_read(external_resources,"olap.kafka_brokers.sasl_password") }}
 topic_name=POLICY-RULE-METRIC
+
+[http_healthcheck_server]
+enable=1
+port=9001
+addr="0.0.0.0"
+path="/status"
