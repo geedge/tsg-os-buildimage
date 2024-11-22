@@ -4,23 +4,13 @@ packages:
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
-  - name: tcpdump_mesa
-    version: 1.0.13.6ec67f5
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/framework"
-  - name: conn_telemetry
-    version: 1.0.3.4ef6df6
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/sapp"
   - name: firewall
     version: 3.5.8.7e5455c
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg"
   - name: glimpse_detector
-    version: 3.2.0.0069e3b
+    version: 3.2.2.b9936d8
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
