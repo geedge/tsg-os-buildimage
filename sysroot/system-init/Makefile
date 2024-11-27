@@ -20,6 +20,7 @@ pre-install:
 
 install:
 	chroot $(CHROOT_DIR) bash -ec '\
+		install -D -m 0644 $(TMP_FILES_DIR)/network.conf /etc/sysconfig/network; \
 		install -D -m 0644 $(TMP_FILES_DIR)/ipmi.conf /etc/sysconfig/ipmi; \
 		systemctl enable ipmi; \
 		install -D -m 0644 $(TMP_FILES_DIR)/watchdog.conf /etc/watchdog.conf; \

@@ -10,7 +10,8 @@ AArch64_COTS: install
 
 install:
 	chroot $(CHROOT_DIR) $(CHROOT_SHELL) '\
-		install -D -m 0755 $(TMP_FILES_DIR)/tsg-os-oobc.sh -t /etc/profile.d/; \
+		install -D -m 0644 $(TMP_FILES_DIR)/prompt_command.sh -t /etc/profile.d/; \
+		install -D -m 0644 $(TMP_FILES_DIR)/tsg-os-oobc.sh -t /etc/profile.d/; \
 		install -D -m 0755 $(TMP_FILES_DIR)/tsg-os-oobc-done -t /opt/tsg/tools/tsg-os-oobc/; \
 		install -D -m 0644 $(TMP_FILES_DIR)/service_enabled_after_oobc_done.conf -t /usr/lib/systemd/system/k3s.service.d/; \
 		install -D -m 0644 $(TMP_FILES_DIR)/service_enabled_after_oobc_done.conf -t /usr/lib/systemd/system/hasp_monitor.service.d/; \
