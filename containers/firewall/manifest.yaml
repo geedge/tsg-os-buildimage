@@ -100,7 +100,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: stellar-on-sapp
-    version: 2.1.7.4e4f933
+    version: 2.1.8.f3d4b9b
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg"
