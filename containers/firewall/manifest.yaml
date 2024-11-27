@@ -15,7 +15,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: qdpi_detector
-    version: 5.0.4.b94b1b0
+    version: 5.0.5.a57be7a
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
