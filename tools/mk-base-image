@@ -74,34 +74,6 @@ case $profile_id in
         ;;
 esac
 
-#git clone --depth 1 https://github.com/brendangregg/FlameGraph.git /opt/tools/FlameGraph/
-#git clone --depth 1 https://github.com/brendangregg/perf-tools.git /opt/tools/perf-tools/
-test -d "$target"/opt/tsg/tools/ || mkdir -p "$target"/opt/tsg/tools/
-tar -zxf $projectdir/tools/FlameGraph.tar.gz -C "$target"/opt/tsg/tools/
-tar -zxf $projectdir/tools/perf-tools.tar.gz -C "$target"/opt/tsg/tools/
-cp $projectdir/tools/run_flamegrah.sh "$target"/opt/tsg/tools/
-
-cat > "$target"/etc/sysconfig/network <<EOF
-NETWORKING=yes
-HOSTNAME=localhost.localdomain
-EOF
-
-mkdir -p $target/etc/profile.d
-
-cat > $target/etc/profile.d/prompt_command.sh << EOF
-oobc_enable_file_path="/var/lib/.tsg-os-oobc-enable"
-
-read_oobc_value()
-{
-    if [ -e "\$oobc_enable_file_path" ]; then
-        echo "(OOBC) "
-    fi
-}
-PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "\${USER}" "\${HOSTNAME%%.*}" "\${PWD/#\$HOME/\~}"; PS1="[\\\u@\\\h \$(read_oobc_value)\\\W]\\\\$ "'
-EOF
-
-chmod 0755 $target/etc/profile.d/prompt_command.sh
-
 # effectively: febootstrap-minimize --keep-zoneinfo --keep-rpmdb
 # --keep-services "$target".  Stolen from mkimage-rinse.sh
 #  locales
@@ -136,31 +108,6 @@ cp -a /dev/null $target/dev/
 cp -a /dev/zero $target/dev/
 cp -a /dev/urandom $target/dev/
 cp -a /dev/random $target/dev/
-
-
-# install ONIE helpers
-chmod 0755 $projectdir/rootconf/sysroot-bin/*
-chmod 0755 $projectdir/rootconf/sysroot-lib/*
-cp -rf $projectdir/rootconf/sysroot-bin/* $target/bin/
-cp -rf $projectdir/rootconf/sysroot-lib/* $target/lib/
-cp -rf $projectdir/rootconf/sysroot-usr/service/* $target/usr/lib/systemd/system
-cp -rf $projectdir/rootconf/sysroot-usr/sysctl/* $target/usr/lib/sysctl.d/
-
-ln -vfs --relative  $target/usr/lib/systemd/system/ldconfig.service $target/usr/lib/systemd/system/sysinit.target.wants/ldconfig.service
-
-#tty audit using pam
-if [ ! -f "$target/etc/pam.d/system-auth-local" ]; then
-    mv $target/etc/pam.d/system-auth $target/etc/pam.d/system-auth-local
-    echo "session     required      pam_tty_audit.so  enable=*" >> $target/etc/pam.d/system-auth-local
-    ln -vfs --relative $target/etc/pam.d/system-auth-local $target/etc/pam.d/system-auth
-
-fi
-
-if [ ! -f "$target/etc/pam.d/password-auth-local" ]; then
-    mv $target/etc/pam.d/password-auth $target/etc/pam.d/password-auth-local
-    echo "session     required      pam_tty_audit.so  enable=*" >> $target/etc/pam.d/password-auth-local
-    ln -vfs --relative $target/etc/pam.d/password-auth-local $target/etc/pam.d/password-auth
-fi
 
 # ansible-playbook -i tsg-9140-scripts/install_config/tsg_9140_host tsg-9140-scripts/tsg_9140_deploy.yml
 yum -c "$yum_config" --installroot="$target" -y --setopt=$setopt clean all
