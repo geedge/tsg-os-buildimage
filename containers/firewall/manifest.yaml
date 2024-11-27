@@ -89,11 +89,11 @@ packages:
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
-  - name: stat_policy_enforcer
-    version: 3.5.6.1c5f6f7
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/sapp"
+  # - name: stat_policy_enforcer
+  #   version: 3.5.6.1c5f6f7
+  #   download_command: dnf
+  #   install_command: rpm
+  #   install_command_options: "--prefix /opt/tsg/sapp"
   - name: sf_classifier
     version: 2.2.3.09887a5
     download_command: dnf
@@ -104,16 +104,16 @@ packages:
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg"
-  - name: policy_sketch
-    version: 1.2.2.9aa0002
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/sapp"
-  - name: traffic_sketch
-    version: 1.1.6.4ce17a0
-    download_command: dnf
-    install_command: rpm
-    install_command_options: "--prefix /opt/tsg/sapp"
+  # - name: policy_sketch
+  #   version: 1.2.2.9aa0002
+  #   download_command: dnf
+  #   install_command: rpm
+  #   install_command_options: "--prefix /opt/tsg/sapp"
+  # - name: traffic_sketch
+  #   version: 1.1.6.4ce17a0
+  #   download_command: dnf
+  #   install_command: rpm
+  #   install_command_options: "--prefix /opt/tsg/sapp"
   - name: http_healthcheck
     version: 2.0.3.e6e25bd
     download_command: dnf
