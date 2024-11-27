@@ -84,6 +84,11 @@ packages:
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
+  - name: libMESA_sts
+    version: 1.0.4.af7a7f0
+    download_command: dnf
+    install_command: rpm
+    install_command_options: "--prefix /opt/tsg/framework"
   # - name: hasp-tools
   #   version: 1.0.12.66db85d
   #   install_command: dnf

@@ -85,7 +85,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
   - name: session_flags
-    version: 2.4.0.579bcde
+    version: 2.4.1.5ff5575
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/sapp"
