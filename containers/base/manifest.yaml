@@ -89,7 +89,7 @@ packages:
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
-  # - name: hasp-tools
-  #   version: 1.0.12.66db85d
-  #   install_command: dnf
-  #   dnf_command_options: "--nogpgcheck"
+  - name: hasp-tools
+    version: 1.0.14.54d3e89e
+    install_command: dnf
+    dnf_command_options: "--nogpgcheck"
