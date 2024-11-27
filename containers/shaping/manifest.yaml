@@ -1,4 +1,4 @@
 packages:
   - name: shaping_engine
-    version: 3.2.2.2e73009
+    version: 3.2.3.8e6b426
     install_command: dnf
