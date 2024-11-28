@@ -77,7 +77,7 @@ rx_cores={{ interface.rxcore }}
 {% endfor %}
 # Configuration settings for network bonding (bond) functionality.
 {%- for interface in mrzcpd.virtual_interfaces %}
-  {%- if interface.type == 1 %}
+  {%- if interface.type is defined and interface.type == 1 %}
 [device:{{ interface.name }}]
     {%- if interface.address is defined %}
 in_addr={{ interface.address }}
@@ -128,9 +128,9 @@ role=1
 
 # Configuration settings for the representational (represent) device.
 {%- for interface in mrzcpd.virtual_interfaces %}
-  {%- if interface.en_representor == 1 %}
+  {%- if interface.en_representor is defined and interface.en_representor == 1 %}
 [device:{{ interface.name }}]
-    {%- if interface.promisc %}
+    {%- if interface.promisc is defined %}
 promisc={{ interface.promisc }}
     {%- endif %}
     {%- if interface.mtu is defined %}
@@ -288,7 +288,7 @@ nr_max_link_dbs={{ mrzcpd.nr_max_link_dbs | default(0) }}
 sid_start=100
 sid_end=200
 {%- for service in mrzcpd.services %}
-{%- if service.type == "etherfabric_adapter" %}
+{%- if service.type is defined and service.type == "etherfabric_adapter" %}
 [ef_adapter:{{ loop.index0 }}]
 ef_adapter_id={{ service.id }}
 {%- if service.mode == "virtual-wire" %}
@@ -327,7 +327,7 @@ obp_segment={{ virtual_wire.obp_segment }}
 sid_start=500
 sid_end=600
 {%- for service in mrzcpd.services %}
-{%- if service.type == "tera_adapter" %}
+{%- if service.type is defined and service.type == "tera_adapter" %}
 [tera_adapter:{{ loop.index0 }}]
 tera_adapter_id={{ service.id }}
 listen_device={{ service.listen_on_device | default('') }}

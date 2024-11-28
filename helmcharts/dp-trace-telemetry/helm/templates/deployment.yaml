@@ -48,7 +48,7 @@ spec:
             while inotifywait -r -e modify,create "$WATCH_DIR"; do
               echo "send HUB signal to dp_trace"
               /usr/local/bin/j2 -f yaml  /templates/dp_trace_dy.conf.j2 /templates/configmap/values.yaml -o /opt/tsg/dp_trace_telemetry/share_conf/dp_trace_dy.conf
-              pkill -1 dp-trace-telemetry
+              pkill -1 dp_trace_teleme
               echo "signal send"
             done
         volumeMounts:
