@@ -116,6 +116,10 @@ all: $(PROFILE_LIST)
 	$(Q) sed -i -e 's/PULP_REPO_PASSWORD/$(PULP_REPO_PASSWORD)/g' $(CONFDIR)/yum-RockyLinux-8.conf
 	$(Q) sed -i -e 's/PULP_REPO_USERNAME/$(PULP_REPO_USERNAME)/g' $(CONFDIR)/yum-RockyLinux-9.conf
 	$(Q) sed -i -e 's/PULP_REPO_PASSWORD/$(PULP_REPO_PASSWORD)/g' $(CONFDIR)/yum-RockyLinux-9.conf
+ifeq ($(ENABLE_ALIYUN_INTERNAL_DOMAIN),1)
+	$(Q) sed -i -e "s/mirrors.aliyun.com/mirrors.cloud.aliyuncs.com/" $(CONFDIR)/yum-RockyLinux-8.conf
+	$(Q) sed -i -e "s/mirrors.aliyun.com/mirrors.cloud.aliyuncs.com/" $(CONFDIR)/yum-RockyLinux-9.conf
+endif
 	$(Q) echo "=== Building $< $(OS_RELEASE_VER) ==="
 	$(Q) echo "=== Building chart version $< $(HELM_CHART_VER) ==="
 	$(Q) $(MAKE) -f make/Makefile.$< all

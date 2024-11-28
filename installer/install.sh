@@ -22,9 +22,6 @@ grub_serial_command="%%GRUB_SERIAL_COMMAND%%"
 DISTR0_VER="%%DISTR0_VER%%"
 MACHINE_ID="%%MACHINE_ID%%"
 CHROOT_PKG="%%CHROOT_PKG%%"
-APP_BUNDLE_BIN="%%APP_BUNDLE_BIN%%"
-HELM_CHART_TAR_GLOB="%%HELM_CHART_TAR_GLOB%%"
-CONTAINER_IMAGES_TAR_GLOB="%%CONTAINER_IMAGES_TAR_GLOB%%"
 
 size_part_tsg_os_update="%%SIZE_PART_UPDATE%%"
 size_part_tsg_os_sysroot="%%SIZE_PART_SYSROOT%%"
@@ -248,8 +245,8 @@ read_device_type()
 install_patches()
 {
     if [ ${DEVICE_TYPE} == "9000-NPB" ]; then
-        chmod 0755 ./tsg-os_9000-NPB-P01R01_patch.bin
-        cp ./tsg-os_9000-NPB-P01R01_patch.bin ${distro_mnt}/tmp
+        chmod 0755 ./machines/9000-NPB/tsg-os_9000-NPB-P01R01_patch.bin
+        cp ./machines/9000-NPB/tsg-os_9000-NPB-P01R01_patch.bin ${distro_mnt}/tmp
         chroot ${distro_mnt} /tmp/tsg-os_9000-NPB-P01R01_patch.bin
         rm ${distro_mnt}/tmp/tsg-os_9000-NPB-P01R01_patch.bin
     fi
@@ -291,6 +288,16 @@ install_onie_swap()
 
     mkswap /dev/loop0
     swapon /dev/loop0
+}
+
+install_containers_into_sysroot()
+{
+    mkdir -p ${distro_mnt}/data/var/lib/rancher/k3s/agent/images
+    cp -arf ${src_dir}/images/* ${distro_mnt}/data/var/lib/rancher/k3s/agent/images
+    mkdir -p ${distro_mnt}/data/var/lib/rancher/k3s/server/static/charts
+    cp -arf ${src_dir}/helmcharts/* ${distro_mnt}/data/var/lib/rancher/k3s/server/static/charts
+    mkdir -p ${distro_mnt}/data/var/lib/rancher/k3s/server/manifests
+    cp -arf ${src_dir}/manifests/* ${distro_mnt}/data/var/lib/rancher/k3s/server/manifests
 }
 
 ############################### START AT HERE #########################################
@@ -370,26 +377,12 @@ rm -f ${distro_mnt}/distro-setup.sh
 read_device_type
 install_patches
 append_kernel_args
+install_containers_into_sysroot
 
 [ -e ${distro_mnt}/dev/pts ] && {
    umount ${distro_mnt}/dev/pts
 }
-
-if [ -f ${APP_BUNDLE_BIN} ]; then
-    mkdir -p ${distro_mnt}/data/var/lib/rancher/k3s/agent/images
-    mkdir -p ${distro_mnt}/data/var/lib/rancher/k3s/server/static/charts
-    rm -rf ${distro_mnt}/data/var/lib/cni
-    rm -rf ${distro_mnt}/data/var/lib/rancher/k3s/agent/images/${CONTAINER_IMAGES_TAR_GLOB}
-    rm -rf ${distro_mnt}/data/var/lib/rancher/k3s/server/static/charts/${HELM_CHART_TAR_GLOB}
-    chmod 0755 ${APP_BUNDLE_BIN}
-    export APP_BUNDLE_CHARTS_DEST_DIR="${distro_mnt}/data/var/lib/rancher/k3s/server/static/charts"
-    export APP_BUNDLE_IMAGES_DEST_DIR="${distro_mnt}/data/var/lib/rancher/k3s/agent/images"
-    export APP_BUNDLE_MANIFESTS_DEST_DIR="${distro_mnt}/data/var/lib/rancher/k3s/server/manifests"
-    export APP_BUNDLE_CLIXON_CONF_PATH="${distro_mnt}/opt/tsg/clixon/etc/mgnt-srv.conf"
-    export APP_BUNDLE_LOAD_IMAGES_SWITCH="off"
-    ./${APP_BUNDLE_BIN}
-fi
-
+rm -rf ${distro_mnt}/data/var/lib/cni
 rm -rf ${distro_mnt}/data/vdisks
 
 umount ${distro_mnt}/proc
