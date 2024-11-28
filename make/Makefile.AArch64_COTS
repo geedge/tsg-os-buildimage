@@ -59,7 +59,6 @@ build-sysroot:
 		tar --exclude=*~ --exclude-backups --owner=root --group=root -c -C $(TARGET_SYSROOT_DIR) . | pbzip2 -p9 > $(TARGET_INSTALLER_DIR)/sysroot/$(CHROOT_PKG)
 
 build-container-images:
-	mkdir -p $(TARGET_IMAGES_DIR)
 	$(MAKE) -j -C $(PROJECTDIR)/containers \
 		IMAGE_TAG=$(OS_RELEASE_VER) \
 		YUM_REPO_FILE=$(YUM_REPO_FILE) \
@@ -68,8 +67,6 @@ build-container-images:
 	install -D -m 0644 $(PROJECTDIR)/containers/build/images/*.tar.zst -t $(TARGET_INSTALLER_DIR)/containers/images/
 
 build-container-helmcharts-and-manifests:
-	mkdir -p $(TARGET_HELMCHARTS_DIR)
-	mkdir -p $(TARGET_MANIFESTS_DIR)
 	$(MAKE) -j -C $(PROJECTDIR)/helmcharts \
 		VERSION=$(HELM_CHART_VER) \
 		APP_VERSION=$(OS_RELEASE_VER) \

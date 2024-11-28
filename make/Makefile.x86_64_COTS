@@ -40,7 +40,7 @@ TARGET_SYSROOT_DIR		:= $(TARGET_BUILD_DIR)/sysroot
  
 all: build-onie-bin
 
-build-onie-bin: install-scripts build-sysroot build-container-images build-container-helmcharts-and-manifests
+build-onie-bin: install-scripts build-container-images build-container-helmcharts-and-manifests build-sysroot
 	mkdir -p $(TARGET_BUILD_DIR)/cook-bits
 	$(TOOLSDIR)/cook-bits $(TARGET_BUILD_DIR) $(TARGET_BUILD_DIR)/cook-bits $(IMAGEDIR_BASE)/$(CHROOT_BIN)
 	sha256sum $(IMAGEDIR_BASE)/$(CHROOT_BIN) | awk '{print $$1}' > $(IMAGEDIR_BASE)/$(CHROOT_BIN).sha256sum.txt
