@@ -70,7 +70,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libmaatframe
-    version: 5.0.3.2dfcf10
+    version: 5.0.4.1c36e1c
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
