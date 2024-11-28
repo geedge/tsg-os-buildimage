@@ -75,7 +75,7 @@ packages:
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
   - name: libcbd
-    version: 3.1.6.14628b4
+    version: 3.1.8.edf7157
     download_command: dnf
     install_command: rpm
     install_command_options: "--prefix /opt/tsg/framework"
